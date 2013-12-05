@@ -7,8 +7,9 @@
 :Email: jlant@usgs.gov
 
 :Purpose: 
-Read, process, plot, and print information about an output file created 
-by the WATER application.
+Read, process, plot, and print information about the WATER.txt output file 
+created by the WATER application developed by Williamson, T., Ulery, R.and 
+Newson, J.
 
 """
 import os
@@ -143,9 +144,6 @@ def read_file_in(filestream):
                     'max': None,
                     'min': None
                 })
-            
-#            for parameter in data['parameters']:
-#                parameter['index'] = data['column_names'].index(parameter['name'])           
 
         if match_data_row:
             # add date to data dictionary
