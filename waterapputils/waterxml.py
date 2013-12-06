@@ -25,6 +25,7 @@ import logging
 
 # my module
 import helpers
+import deltas
 
 # xml.etree.cElementTree is parses xml files faster than xml.etree.ElementTree
 try:    
@@ -244,7 +245,7 @@ def plot_climate_parameter(parameter_name, climate_parameter, region_type, sim_i
     ax.set_title('Region Type: ' + region_type + ' Sim ID: ' + sim_id_num + ' Parameter: ' + parameter_name)
     ax.set_xlabel('Date')
     ax.set_ylabel(parameter_name + ' (' + units + ')')
-    plt.plot(dates, values, color = 'b', marker = 'o', label = parameter_name)
+    plt.plot(dates, values, color = 'b', label = parameter_name)
 
     # rotate and align the tick labels so they look better
     fig.autofmt_xdate()
@@ -386,39 +387,11 @@ def set_data(tree, element_str, element_tag_str, sim_id_num, multiplicative_fact
     """        
     for elem in tree.iter(tag = element_str):
         simid = int(elem.find('SimulID').text)
-        if simid == sim_id_num:
+        if simid == int(sim_id_num):
             for child in elem:
                 if child.tag == element_tag_str:
                      new_num = float(child.text) * multiplicative_factor
                      child.text = str(new_num)
-
-def write_deltafile(study_simulation, output_path, filename, delta_headers):
-    """   
-    Write a comma separated text file for a user to edit.
-    
-    *Parameters*:
-        study_simulation: dictionary holding data from WATERSimulation.xml file
-        output_path: string path for output text file
-        delta_headers: list of strings for the avaiable deltas
-        
-    *Return*:
-        no return
-        
-    """  
-    output_file = open(output_path + filename, 'w')
-    
-    header = ['RegionType', 'SimulID'] + delta_headers
-    txt = []
-    txt.append(header)
-    for i in range(len(study_simulation['SimulID'])):
-        region_type_str = str(study_simulation['RegionType'][i])
-        sim_id_num_str = str(study_simulation['SimulID'][i])
-        txt.append([region_type_str, sim_id_num_str, 'fillme', 'fillme'])
-    
-    for str_line in txt:
-        output_file.writelines(','.join(str_line) + '\n')
-    
-    output_file.close()
            
 def main():  
     """
@@ -499,21 +472,38 @@ def main():
                                            is_visible = False, 
                                            save_path = figs_path)                
             
-            # write out a file for the user to edit by putting in delta values
-            # for the climate parameters
-            deltas_filename = '/deltas.txt'
-            write_deltafile(study_simulation = study_simulation, output_path = deltas_path, filename = deltas_filename, 
-                            delta_headers = ['ClimaticPrecipitationSeries', 'ClimaticTemperatureSeries'])
             
-            print ''
-            print '** Please edit the file delta.txt contained in the delta directory and press Enter to continue **'
-            raw_input()
-            deltas_file = deltas_path + deltas_filename
-            deltas_data = read_deltafile(deltas_file)
-            
-            for key, value in deltas_data.iteritems():
-                print key, value       
 #            
+#            # write out a file for the user to edit by putting in delta values
+#            # for the climate parameters
+#            deltas_filename = '/deltas.txt'
+#            deltas.write_deltafile(study_simulation = study_simulation, output_path = deltas_path, filename = deltas_filename, 
+#                            delta_headers = ['ClimaticPrecipitationSeries', 'ClimaticTemperatureSeries'])
+#            
+#            print ''
+#            print '** Please edit the file delta.txt contained in the delta directory and press Enter to continue **'
+#            raw_input()
+#            deltas_file = deltas_path + deltas_filename
+#            deltas_data = deltas.read_deltafile(deltas_file)
+#            
+#            for key, value in deltas_data.iteritems():
+#                print key, value       
+            
+            # example delta dataset
+            delta_values = {
+                'ClimaticTemperatureSeries': 1.2,
+                'ClimaticPrecipitationSeries': 1.5
+            }            
+            
+            for id_num in study_simulation['SimulID']:
+                for key in delta_values:
+                    set_data(tree = water_tree, element_str = key, element_tag_str = 'SeriesValue', 
+                             sim_id_num = id_num, multiplicative_factor = delta_values[key])
+                   
+            # write out new xml file
+            output_xmlfile = dirname + '/WATERSimulation_updated_0.xml'
+            water_tree.write(output_xmlfile) 
+                
 #            # modify the xml file
 #            #temp1_updated = set_data(element_str = 'ClimaticTemperatureSeries', element_tag_str = 'SeriesValue', 
 #            #                         sim_id_num = 1, multiplicative_factor = 2)
