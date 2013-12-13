@@ -34,6 +34,159 @@ except ImportError:
     import xml.etree.ElementTree as ET
 
 
+def main():  
+    """
+    Run as a script. Prompt user for WATERSimulation.xml file, process the file, 
+    print information, and plot data. Information is printed to the screen.  
+    Plots are saved to a directory called 'figs' which is created in the same 
+    directory as the data file. A log file called 'water_error.log' is created 
+    if any errors are found in the data file.
+    
+    """ 
+
+    # open a file dialog to get file     
+    root = Tkinter.Tk() 
+    file_format = [('XML file','*.xml')]  
+    water_file = tkFileDialog.askopenfilename(title = 'Select WATER.xml file', filetypes = file_format)
+    root.destroy()
+    
+    if water_file:
+        
+        try:
+            
+            # get directory and filename from data file
+            dirname, filename = os.path.split(os.path.abspath(water_file))
+            
+            # make a directory called figs to hold the plots            
+            figs_path = dirname + '/figs'
+            if not os.path.exists(figs_path):
+                os.makedirs(figs_path)            
+            
+            # make a directory called updated_xml to hold the updated xml file             
+            deltas_path = dirname + '/deltas'
+            if not os.path.exists(deltas_path):
+                os.makedirs(deltas_path) 
+                
+            # log any errors or warnings found in file; save to data file directory
+            logging.basicConfig(filename = dirname + '/water_error.log', filemode = 'w', level=logging.DEBUG)
+            
+            # process file
+            print ''
+            print '** Processing **'
+            print water_file
+            water_tree = ET.parse(water_file)
+
+            project, study, study_simulation = get_general_info(water_tree)            
+            
+            # print 'Project' information
+            print ''
+            print '** WATER Project Information **'
+            print_info(data_dict = project, key_list = project.keys())
+            
+            # print 'Study' information
+            print ''
+            print '** WATER Study Information **'
+            print_info(data_dict = study, key_list = study.keys())
+            
+            # print 'StudySimulation' information
+            print ''
+            print '** WATER StudySimulation Information **'
+            print_info(data_dict = study_simulation, key_list = ['SimulID', 'StudyID', 'RegionType'])
+
+            # fill climate, feature, and twi information into study simulation dictionary
+            study_simulation = fill_study_simulation(tree = water_tree, study_simulation = study_simulation, key_list = ['SimulationFeatures',
+                                                                                                                         'SimulationTopographicWetnessIndex',
+                                                                                                                         'StudyUnitDischargeSeries',
+                                                                                                                         'ClimaticPrecipitationSeries',
+                                                                                                                         'ClimaticTemperatureSeries'])
+                                                                                                                         
+            print ''                                                                                                             
+            print '** Plotting **'
+            # plot climate data contained in study simulation dictionary
+            climate_parameters = ['StudyUnitDischargeSeries', 'ClimaticPrecipitationSeries', 'ClimaticTemperatureSeries']     
+            for parameter in climate_parameters:
+                for i in range(len(study_simulation['SimulID'])):
+                    plot_climate_parameter(parameter_name = parameter,
+                                           climate_parameter = study_simulation[parameter][i], 
+                                           region_type = study_simulation['RegionType'][i], 
+                                           sim_id_num = study_simulation['SimulID'][i], 
+                                           is_visible = False, 
+                                           save_path = figs_path)                
+            
+            # example delta dataset
+            delta_values = {
+                'ClimaticTemperatureSeries': {
+                    'January': 2.0,
+                    'February': 0.98,
+                    'March': 0.97,
+                    'April': 1.04,
+                    'May': 1.10,
+                    'June': 0.99,
+                    'July': 0.97,
+                    'August': 1.25,
+                    'September': 1.21,
+                    'October': 1.11,
+                    'November': 1.10,
+                    'December': 2.0
+                },
+                'ClimaticPrecipitationSeries': {
+                    'January': 2.0,
+                    'February': 0.98,
+                    'March': 0.97,
+                    'April': 1.04,
+                    'May': 1.10,
+                    'June': 0.99,
+                    'July': 0.97,
+                    'August': 1.25,
+                    'September': 1.21,
+                    'October': 1.11,
+                    'November': 1.10,
+                    'December': 2.0
+                },
+            }            
+            
+            # set the data in the xml file-
+#            for id_num in study_simulation['SimulID']:
+#                for key in delta_values:
+#                    set_data(tree = water_tree, element_str = key, element_tag_str = 'SeriesValue', 
+#                             sim_id_num = id_num, factor = delta_values[key])
+            for key in delta_values:
+                set_delta_factor(tree = water_tree, element_str = key, factor = delta_values[key], output_xmlfile = dirname + '/WATERSimulation_updated_0.xml' )            
+            
+            # write out new xml file
+            output_xmlfile = dirname + '/WATERSimulation_updated_0.xml'
+            water_tree.write(output_xmlfile) 
+                
+#            # modify the xml file
+#            #temp1_updated = set_data(element_str = 'ClimaticTemperatureSeries', element_tag_str = 'SeriesValue', 
+#            #                         sim_id_num = 1, multiplicative_factor = 2)
+#            precip1_updated = set_data(tree = water_tree, element_str = 'ClimaticPrecipitationSeries', element_tag_str = 'SeriesValue', 
+#                                     sim_id_num = 1, multiplicative_factor = 5) 
+#            # write out new xml file
+#            water_tree.write('WATERSimulation_updated.xml') 
+#         
+#            for feature in sim_features1:
+#                print feature['AttName']
+        
+    
+            # shutdown the logging system
+            logging.shutdown()
+
+        except IOError as error:
+            print 'Cannot read file!' + error.filename
+            print error.message
+            
+        except IndexError as error:
+            print 'Cannot read file! Bad file!'
+            print error.message
+            
+        except ValueError as error:
+            print error.message
+                
+    else:
+        print '** Canceled **'
+    
+
 def fill_info(tree, data_dict, element_str, key_list):
     """
     Fills a dictionary with information of interest contained in a 
@@ -369,18 +522,20 @@ def read_deltafile_in(filestream):
     
     return data
 
-def set_data(tree, element_str, element_tag_str, sim_id_num, multiplicative_factor):
+def set_data(tree, element_str, element_tag_str, sim_id_num, factor):
     """
     Set new data for a particular element tag in a particular xml element for
-    a particular simulation id number using a multiplicative factor.  
-    Multiplicative factor is applied to the particular element tag.
+    a particular simulation id number using a additive or multiplicative factor.  
+    The factor is applied to the particular element tag and is additive if 
+    the element string (element_str) is ClimaticTemperatureSeries otherwise
+    the factor is multiplicative.
     
     *Parameters:*
         tree : ElementTree object of entire xml file
         element_str : string of a particular element of interest
         element_tag_str : string of a particular element tag of interest
         sim_id_num : integer of the simulation id of interest
-        mulitplicative_factor : float factor
+        factor : float factor
     
     *Return:*
         No return
@@ -390,149 +545,55 @@ def set_data(tree, element_str, element_tag_str, sim_id_num, multiplicative_fact
         if simid == int(sim_id_num):
             for child in elem:
                 if child.tag == element_tag_str:
-                     new_num = float(child.text) * multiplicative_factor
-                     child.text = str(new_num)
-           
-def main():  
+                    if element_str == 'ClimaticTemperatureSeries':
+                        new_num = float(child.text) + factor
+                    else:
+                        new_num = float(child.text) * factor
+                        child.text = str(new_num)
+
+def set_delta_factor(tree, element_str, delta_values):
     """
-    Run as a script. Prompt user for WATERSimulation.xml file, process the file, 
-    print information, and plot data. Information is printed to the screen.  
-    Plots are saved to a directory called 'figs' which is created in the same 
-    directory as the data file. A log file called 'water_error.log' is created 
-    if any errors are found in the data file.
+    Set new data for a particular xml element for using a additive or 
+    multiplicative factor. The factor is applied to the particular element tag 
+    and is additive if the element string (element_str) is
+    'ClimaticTemperatureSeries' otherwise the factor is multiplicative.
     
-    """ 
-
-    # open a file dialog to get file     
-    root = Tkinter.Tk() 
-    file_format = [('XML file','*.xml')]  
-    water_file = tkFileDialog.askopenfilename(title = 'Select WATER.xml file', filetypes = file_format)
-    root.destroy()
+    Example delta_values with only precip (ClimaticPrecipitationSeries) deltas
     
-    if water_file:
-        
-        try:
-            
-            # get directory and filename from data file
-            dirname, filename = os.path.split(os.path.abspath(water_file))
-            
-            # make a directory called figs to hold the plots            
-            figs_path = dirname + '/figs'
-            if not os.path.exists(figs_path):
-                os.makedirs(figs_path)            
-            
-            # make a directory called figs to hold the plots            
-            deltas_path = dirname + '/deltas'
-            if not os.path.exists(deltas_path):
-                os.makedirs(deltas_path) 
-                
-            # log any errors or warnings found in file; save to data file directory
-            logging.basicConfig(filename = dirname + '/water_error.log', filemode = 'w', level=logging.DEBUG)
-            
-            # process file
-            print ''
-            print '** Processing **'
-            print water_file
-            water_tree = ET.parse(water_file)
-
-            project, study, study_simulation = get_general_info(water_tree)            
-            
-            # print 'Project' information
-            print ''
-            print '** WATER Project Information **'
-            print_info(data_dict = project, key_list = project.keys())
-            
-            # print 'Study' information
-            print ''
-            print '** WATER Study Information **'
-            print_info(data_dict = study, key_list = study.keys())
-            
-            # print 'StudySimulation' information
-            print ''
-            print '** WATER StudySimulation Information **'
-            print_info(data_dict = study_simulation, key_list = ['SimulID', 'StudyID', 'RegionType'])
-
-            # fill climate, feature, and twi information into study simulation dictionary
-            study_simulation = fill_study_simulation(tree = water_tree, study_simulation = study_simulation, key_list = ['SimulationFeatures',
-                                                                                                                         'SimulationTopographicWetnessIndex',
-                                                                                                                         'StudyUnitDischargeSeries',
-                                                                                                                         'ClimaticPrecipitationSeries',
-                                                                                                                         'ClimaticTemperatureSeries'])
-                                                                                                                         
-            print ''                                                                                                             
-            print '** Plotting **'
-            # plot climate data contained in study simulation dictionary
-            climate_parameters = ['StudyUnitDischargeSeries', 'ClimaticPrecipitationSeries', 'ClimaticTemperatureSeries']     
-            for parameter in climate_parameters:
-                for i in range(len(study_simulation['SimulID'])):
-                    plot_climate_parameter(parameter_name = parameter,
-                                           climate_parameter = study_simulation[parameter][i], 
-                                           region_type = study_simulation['RegionType'][i], 
-                                           sim_id_num = study_simulation['SimulID'][i], 
-                                           is_visible = False, 
-                                           save_path = figs_path)                
-            
-            
-#            
-#            # write out a file for the user to edit by putting in delta values
-#            # for the climate parameters
-#            deltas_filename = '/deltas.txt'
-#            deltas.write_deltafile(study_simulation = study_simulation, output_path = deltas_path, filename = deltas_filename, 
-#                            delta_headers = ['ClimaticPrecipitationSeries', 'ClimaticTemperatureSeries'])
-#            
-#            print ''
-#            print '** Please edit the file delta.txt contained in the delta directory and press Enter to continue **'
-#            raw_input()
-#            deltas_file = deltas_path + deltas_filename
-#            deltas_data = deltas.read_deltafile(deltas_file)
-#            
-#            for key, value in deltas_data.iteritems():
-#                print key, value       
-            
-            # example delta dataset
-            delta_values = {
-                'ClimaticTemperatureSeries': 1.2,
-                'ClimaticPrecipitationSeries': 1.5
-            }            
-            
-            for id_num in study_simulation['SimulID']:
-                for key in delta_values:
-                    set_data(tree = water_tree, element_str = key, element_tag_str = 'SeriesValue', 
-                             sim_id_num = id_num, multiplicative_factor = delta_values[key])
-                   
-            # write out new xml file
-            output_xmlfile = dirname + '/WATERSimulation_updated_0.xml'
-            water_tree.write(output_xmlfile) 
-                
-#            # modify the xml file
-#            #temp1_updated = set_data(element_str = 'ClimaticTemperatureSeries', element_tag_str = 'SeriesValue', 
-#            #                         sim_id_num = 1, multiplicative_factor = 2)
-#            precip1_updated = set_data(tree = water_tree, element_str = 'ClimaticPrecipitationSeries', element_tag_str = 'SeriesValue', 
-#                                     sim_id_num = 1, multiplicative_factor = 5) 
-#            # write out new xml file
-#            water_tree.write('WATERSimulation_updated.xml') 
-#         
-#            for feature in sim_features1:
-#                print feature['AttName']
-        
+        delta_values = {
+            'ClimaticPrecipitationSeries': {
+                'January': 2.0,
+                'February': 0.98,
+                'March': 0.97,
+                'April': 1.04,
+                'May': 1.10,
+                'June': 0.99,
+                'July': 0.97,
+                'August': 1.25,
+                'September': 1.21,
+                'October': 1.11,
+                'November': 1.10,
+                'December': 2.0
+            },
+        }       
+    *Parameters:*
+        tree : ElementTree object of entire xml file
+        element_str : string of a particular element of interest
+        delta_values : dictionary of delta values
     
-            # shutdown the logging system
-            logging.shutdown()
-
-        except IOError as error:
-            print 'Cannot read file!' + error.filename
-            print error.message
-            
-        except IndexError as error:
-            print 'Cannot read file! Bad file!'
-            print error.message
-            
-        except ValueError as error:
-            print error.message
-                
-    else:
-        print '** Canceled **'
-    
+    *Return:*
+        No return
+    """        
+    for elem in tree.iter(tag = element_str):
+        # try elem.find('SeriesDate') or elem.find('SeriesValue')
+        for child in elem:
+            if child.tag == 'SeriesValue':
+                if element_str == 'ClimaticTemperatureSeries':
+                    new_num = float(child.text) + factor
+                else:
+                    new_num = float(child.text) * factor
+                child.text = str(new_num)
+           
 
 if __name__ == "__main__":
     

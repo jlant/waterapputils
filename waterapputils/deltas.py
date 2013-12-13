@@ -27,16 +27,114 @@ import logging
 # my modules
 import helpers
 
+def main():  
+    """
+    Run as a script. Prompt user for delta *.txt file, process the file, 
+    print information, and plot data. Information is printed to the screen.  
+    Plots are saved to a directory called 'figs' which is created in the same 
+    directory as the data file. A log file called 'delta_error.log' is created 
+    if any errors are found in the data file.
+    
+    """ 
 
-def read_deltafile(filename):
+    # open a file dialog to get file     
+    root = Tkinter.Tk() 
+    file_format = [('Text file','*.txt')]  
+    delta_file = tkFileDialog.askopenfilename(title = 'Select Delta *.txt file', filetypes = file_format)
+    root.destroy()
+    
+    if delta_file:
+        
+        try:
+            
+            # get directory and filename from data file
+            dirname, filename = os.path.split(os.path.abspath(delta_file))
+            
+            # make a directory called figs to hold the plots            
+            figs_path = dirname + '/figs'
+            if not os.path.exists(figs_path):
+                os.makedirs(figs_path)            
+            
+            # make a directory called updated_xml to hold the updated xml file             
+            deltas_path = dirname + '/deltas'
+            if not os.path.exists(deltas_path):
+                os.makedirs(deltas_path) 
+                
+            # log any errors or warnings found in file; save to data file directory
+            logging.basicConfig(filename = dirname + '/delta_error.log', filemode = 'w', level=logging.DEBUG)
+            
+            # process file
+            print ''
+            print '** Processing **'
+            print delta_file
+            delta_data = read_file(delta_file)         
+            
+            # print 'Project' information
+            print ''
+            print '** Delta Data Information **'
+            print_info(data_dict = delta_data)
+            
+              
+            
+            # example delta dataset
+            delta_values = {
+                'ClimaticTemperatureSeries': {
+                    'January': 2.0,
+                    'February': 0.98,
+                    'March': 0.97,
+                    'April': 1.04,
+                    'May': 1.10,
+                    'June': 0.99,
+                    'July': 0.97,
+                    'August': 1.25,
+                    'September': 1.21,
+                    'October': 1.11,
+                    'November': 1.10,
+                    'December': 2.0
+                },
+                'ClimaticPrecipitationSeries': {
+                    'January': 2.0,
+                    'February': 0.98,
+                    'March': 0.97,
+                    'April': 1.04,
+                    'May': 1.10,
+                    'June': 0.99,
+                    'July': 0.97,
+                    'August': 1.25,
+                    'September': 1.21,
+                    'October': 1.11,
+                    'November': 1.10,
+                    'December': 2.0
+                },
+            }            
+            
+            # shutdown the logging system
+            logging.shutdown()
+
+        except IOError as error:
+            print 'Cannot read file!' + error.filename
+            print error.message
+            
+        except IndexError as error:
+            print 'Cannot read file! Bad file!'
+            print error.message
+            
+        except ValueError as error:
+            print error.message
+                
+    else:
+        print '** Canceled **'
+
+
+def read_file(filename):
     """    
-    Open delta.txt file, create a file object for read_deltafile_in(filestream) to process.
+    Open delta *.txt file, create a file object for read_file_in(filestream) to process.
     This function is responsible to opening the file, removing the file opening  
-    responsibility from read_deltafile_in(filestream) so that read_deltafile_in(filestream)  
+    responsibility from read_file_in(filestream) so that read_file_in(filestream)  
     can be unit tested.
     
     *Parameters:*
-		filename : string path to water text file
+		filename : string path to delta text file
     
     *Return:*
         data : dictionary holding data found in delta text file  
@@ -44,20 +142,50 @@ def read_deltafile(filename):
     """
     
     filestream = open(filename, 'r')
-    data = read_deltafile_in(filestream)
+    data = read_file_in(filestream)
     filestream.close()
     
     return data
 
-def read_deltafile_in(filestream):
+def read_file_in(filestream):
+    """    
+    Read and process a delta *.txt file. Finds any parameter and its respective data. 
+    Relevant data is put into a dictionary (see Return section). 
     
+    *Parameters:*
+        filestream: file object
+    
+    *Return:*
+        data: dictionary holding data found in delta *.txt data file
+        
+        data = {
+            
+            'column_names': None,
+                       
+            'parameters': [], 
+              
+        }      
+                
+        ** Note: The 'parameters' key contains a list of dictionaries containing
+        the parameters found in the data file; i.e.
+        
+        parameters[0] = {
+            'name': string of parameter name,
+            
+            'index': integer of column index data is located in file,
+            
+            'data': numpy array of data values,
+            
+        }        
+        
+    """ 
     # read all the lines in the filestream
     data_file = filestream.readlines()
     
-    # regular expression patterns in data file 
+    # regular expression patterns in data file
     patterns = {
-        'column_names': '([a-zA-Z].+)',
-        'data_row': '([0-9].+)'
+        'column_names': '(Model.+)',
+        'data_row': '(\w+)\t(\w+)\t(\d+)\t(.+)'
     }        
 
    # initialize a dictionary to hold all the data of interest
@@ -73,7 +201,7 @@ def read_deltafile_in(filestream):
      
         # if match is found add it to data dictionary
         if match_column_names:
-            data['column_names'] = match_column_names.group(0).split(',') 
+            data['column_names'] = match_column_names.group(0).split('\t') 
             
             for name in data['column_names']:
                 data['parameters'].append({
@@ -83,43 +211,26 @@ def read_deltafile_in(filestream):
                 })
                 
         if match_data_row:
-             for parameter in data['parameters']:
-                value = match_data_row.group(0).split(',')[parameter['index']]
-                
-                if not helpers.is_float(value):
-                    error_str = '**ERROR on ' + parameter['name'] +' Value can not be converted to a float: ' + value + '**Exiting. Bad data in file!'
-                    raise ValueError(error_str)
-                    sys.exit('**Exiting. Bad data in file!')
-                        
-                parameter['data'].append(float(value)) 
-                
+            for parameter in data['parameters']:
+                value = match_data_row.group(0).split('\t')[parameter['index']]                        
+                parameter['data'].append(value) 
+       
+    # fix duplicates for particular keys
+    key_list = ['Model', 'Scenario', 'Target', 'Variable']
+    for parameter in data['parameters']:
+        if parameter['name'] in key_list:
+            parameter['data'] = parameter['data'][0]
+        elif parameter['name'] == 'Tile':
+            pass
+        else:
+            parameter['data'] = np.array(parameter['data'], dtype = float)
     
     return data
 
-def write_deltafile(study_simulation, output_path, filename, delta_headers):
-    """   
-    Write a comma separated text file for a user to edit.
     
-    *Parameters*:
-        study_simulation: dictionary holding data from WATERSimulation.xml file
-        output_path: string path for output text file
-        delta_headers: list of strings for the avaiable deltas
-        
-    *Return*:
-        no return
-        
-    """  
-    output_file = open(output_path + filename, 'w')
+
+if __name__ == "__main__":
     
-    header = ['RegionType', 'SimulID'] + delta_headers
-    txt = []
-    txt.append(header)
-    for i in range(len(study_simulation['SimulID'])):
-        region_type_str = str(study_simulation['RegionType'][i])
-        sim_id_num_str = str(study_simulation['SimulID'][i])
-        txt.append([region_type_str, sim_id_num_str, 'fillme', 'fillme'])
-    
-    for str_line in txt:
-        output_file.writelines(','.join(str_line) + '\n')
-    
-    output_file.close()
+    # read file, print results, and plot 
+    main() 
+

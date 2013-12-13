@@ -26,9 +26,160 @@ import logging
 import helpers
 
 
+def main():  
+    """
+    Run as a script. Prompt user for WATER text file, process the file, print information, 
+    and plot data. Information is printed to the screen.  Plots are saved to a directory 
+    called 'figs' which is created in the same directory as the data file. A
+    log file called 'water_error.log' is created if any errors are found in the 
+    data file.
+    
+    """ 
+    
+    # open a file dialog to get file     
+    root = Tkinter.Tk() 
+    file_format = [('Text file','*.txt')]  
+    water_file = tkFileDialog.askopenfilename(title = 'Select WATER.txt file', filetypes = file_format)
+    root.destroy()
+    
+    if water_file:
+        
+        try:
+            # get directory and filename from data file
+            dirname, filename = os.path.split(os.path.abspath(water_file))
+            
+            # make a directory called figs to hold the plots            
+            figs_path = dirname + '/figs'
+            if not os.path.exists(figs_path):
+                os.makedirs(figs_path)            
+            
+            # log any errors or warnings found in file; save to data file directory
+            logging.basicConfig(filename = dirname + '/water_error.log', filemode = 'w', level=logging.DEBUG)
+            
+            # process file
+            print ''
+            print '** Processing **'
+            print water_file
+            water_data = read_file(water_file)
+            
+            
+            # print information
+            print ''
+            print '** USGS WATER text file Information **'
+            print_info(water_data)
+            
+            # plot parameters
+            print ''
+            print '** Plotting **'
+            print 'Plots are being saved to same directory as WATER text file.'
+            plot_data(water_data, is_visible = False, save_path = figs_path)
+
+            # shutdown the logging system
+            logging.shutdown()
+
+        except IOError as error:
+            print 'Cannot read file!' + error.filename
+            print error.message
+            
+        except IndexError as error:
+            print 'Cannot read file! Bad file!'
+            print error.message
+            
+        except ValueError as error:
+            print error.message
+            
+    else:
+        print '** Canceled **'
+
+
+def print_info(water_data):
+    """   
+    Print relevant information and contained in the water data 
+    
+    *Parameters*:
+        water_data: dictionary holding data from WATER *.txt file
+        
+    *Return*:
+        no return
+        
+    """   
+    
+    # print relevant information
+    print 'User: ', water_data['user']
+    print 'Date and time created: ', water_data['date_created']
+    print 'StationID: ', water_data['stationid']
+    
+    print 'The following are the parameters avaiable in the file:'
+    # print each parameter
+    for parameter in water_data['parameters']:
+        print parameter['name']
+
+def plot_data(water_data, is_visible = True, save_path = None):
+    """   
+    Plot each parameter contained in the water data. Save plots to a particular
+    path.
+    
+    *Parameters*:
+        water_data: dictionary holding data from WATER *.txt file
+        
+        save_path: string path to save plot(s) 
+        
+    *Return*:
+        no return
+        
+    """
+    
+    for parameter in water_data['parameters']:
+        
+        fig = plt.figure(figsize=(12,10))
+        ax = fig.add_subplot(111)
+        ax.grid(True)
+        ax.set_title(parameter['name'] + ' (' + water_data['stationid'] + ')')
+        ax.set_xlabel('Date')
+        ax.set_ylabel(parameter['name'])
+        plt.plot(water_data['dates'], parameter['data'], color = 'b', marker = 'o', label = parameter['name'])
+    
+        # rotate and align the tick labels so they look better
+        fig.autofmt_xdate()
+        
+        # use a more precise date string for the x axis locations in the
+        # toolbar
+        ax.fmt_xdata = mdates.DateFormatter('%Y-%m-%d')
+     
+        # legend; make it transparent    
+        handles, labels = ax.get_legend_handles_labels()
+        legend = ax.legend(handles, labels, fancybox = True)
+        legend.get_frame().set_alpha(0.5)
+        legend.draggable(state=True)
+        
+        # show text of mean, max, min values on graph; use matplotlib.patch.Patch properies and bbox
+        text = 'mean = %.2f\nmax = %.2f\nmin = %.2f' % (parameter['mean'], parameter['max'], parameter['min'])
+        patch_properties = {'boxstyle': 'round',
+                            'facecolor': 'wheat',
+                            'alpha': 0.5
+                            }
+                       
+        ax.text(0.05, 0.95, text, transform = ax.transAxes, fontsize = 14, 
+                verticalalignment = 'top', horizontalalignment = 'left', bbox = patch_properties)
+        
+        # save plots
+        if save_path:        
+            # set the size of the figure to be saved
+            curr_fig = plt.gcf()
+            curr_fig.set_size_inches(12, 10)
+            parameter_name = parameter['name'].split('(')[0].strip()
+            plt.savefig(save_path + '/' + water_data['stationid'] + ' - ' + parameter_name +'.png', dpi = 100)
+            
+        # show plots
+        if is_visible:
+            plt.show()
+        else:
+            plt.close()
+
+
 def read_file(filename):
     """    
-    Open WATER file, create a file object for read_file_in(filestream) to process.
+    Open WATER.txt file, create a file object for read_file_in(filestream) to process.
     This function is responsible to opening the file, removing the file opening  
     responsibility from read_file_in(filestream) so that read_file_in(filestream)  
     can be unit tested.
@@ -184,155 +335,6 @@ def read_file_in(filestream):
     
     # return data
     return data
-
-def print_info(water_data):
-    """   
-    Print relevant information and contained in the water data 
-    
-    *Parameters*:
-        water_data: dictionary holding data from WATER *.txt file
-        
-    *Return*:
-        no return
-        
-    """   
-    
-    # print relevant information
-    print 'User: ', water_data['user']
-    print 'Date and time created: ', water_data['date_created']
-    print 'StationID: ', water_data['stationid']
-    
-    print 'The following are the parameters avaiable in the file:'
-    # print each parameter
-    for parameter in water_data['parameters']:
-        print parameter['name']
-
-def plot_data(water_data, is_visible = True, save_path = None):
-    """   
-    Plot each parameter contained in the water data. Save plots to a particular
-    path.
-    
-    *Parameters*:
-        water_data: dictionary holding data from WATER *.txt file
-        
-        save_path: string path to save plot(s) 
-        
-    *Return*:
-        no return
-        
-    """
-    
-    for parameter in water_data['parameters']:
-        
-        fig = plt.figure(figsize=(12,10))
-        ax = fig.add_subplot(111)
-        ax.grid(True)
-        ax.set_title(parameter['name'] + ' (' + water_data['stationid'] + ')')
-        ax.set_xlabel('Date')
-        ax.set_ylabel(parameter['name'])
-        plt.plot(water_data['dates'], parameter['data'], color = 'b', marker = 'o', label = parameter['name'])
-    
-        # rotate and align the tick labels so they look better
-        fig.autofmt_xdate()
-        
-        # use a more precise date string for the x axis locations in the
-        # toolbar
-        ax.fmt_xdata = mdates.DateFormatter('%Y-%m-%d')
-     
-        # legend; make it transparent    
-        handles, labels = ax.get_legend_handles_labels()
-        legend = ax.legend(handles, labels, fancybox = True)
-        legend.get_frame().set_alpha(0.5)
-        legend.draggable(state=True)
-        
-        # show text of mean, max, min values on graph; use matplotlib.patch.Patch properies and bbox
-        text = 'mean = %.2f\nmax = %.2f\nmin = %.2f' % (parameter['mean'], parameter['max'], parameter['min'])
-        patch_properties = {'boxstyle': 'round',
-                            'facecolor': 'wheat',
-                            'alpha': 0.5
-                            }
-                       
-        ax.text(0.05, 0.95, text, transform = ax.transAxes, fontsize = 14, 
-                verticalalignment = 'top', horizontalalignment = 'left', bbox = patch_properties)
-        
-        # save plots
-        if save_path:        
-            # set the size of the figure to be saved
-            curr_fig = plt.gcf()
-            curr_fig.set_size_inches(12, 10)
-            parameter_name = parameter['name'].split('(')[0].strip()
-            plt.savefig(save_path + '/' + water_data['stationid'] + ' - ' + parameter_name +'.png', dpi = 100)
-            
-        # show plots
-        if is_visible:
-            plt.show()
-        else:
-            plt.close()
-
-def main():  
-    """
-    Run as a script. Prompt user for WATER text file, process the file, print information, 
-    and plot data. Information is printed to the screen.  Plots are saved to a directory 
-    called 'figs' which is created in the same directory as the data file. A
-    log file called 'water_error.log' is created if any errors are found in the 
-    data file.
-    
-    """ 
-    
-    # open a file dialog to get file     
-    root = Tkinter.Tk() 
-    file_format = [('Text file','*.txt')]  
-    water_file = tkFileDialog.askopenfilename(title = 'Select WATER.txt file', filetypes = file_format)
-    root.destroy()
-    
-    if water_file:
-        
-        try:
-            # get directory and filename from data file
-            dirname, filename = os.path.split(os.path.abspath(water_file))
-            
-            # make a directory called figs to hold the plots            
-            figs_path = dirname + '/figs'
-            if not os.path.exists(figs_path):
-                os.makedirs(figs_path)            
-            
-            # log any errors or warnings found in file; save to data file directory
-            logging.basicConfig(filename = dirname + '/water_error.log', filemode = 'w', level=logging.DEBUG)
-            
-            # process file
-            print ''
-            print '** Processing **'
-            print water_file
-            water_data = read_file(water_file)
-            
-            
-            # print information
-            print ''
-            print '** USGS WATER text file Information **'
-            print_info(water_data)
-            
-            # plot parameters
-            print ''
-            print '** Plotting **'
-            print 'Plots are being saved to same directory as WATER text file.'
-            plot_data(water_data, is_visible = False, save_path = figs_path)
-
-            # shutdown the logging system
-            logging.shutdown()
-
-        except IOError as error:
-            print 'Cannot read file!' + error.filename
-            print error.message
-            
-        except IndexError as error:
-            print 'Cannot read file! Bad file!'
-            print error.message
-            
-        except ValueError as error:
-            print error.message
-            
-    else:
-        print '** Canceled **'
     
 
 if __name__ == "__main__":
