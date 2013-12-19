@@ -26,75 +26,9 @@ import logging
 import helpers
 
 
-def main():  
-    """
-    Run as a script. Prompt user for WATER text file, process the file, print information, 
-    and plot data. Information is printed to the screen.  Plots are saved to a directory 
-    called 'figs' which is created in the same directory as the data file. A
-    log file called 'water_error.log' is created if any errors are found in the 
-    data file.
-    
-    """ 
-    
-    # open a file dialog to get file     
-    root = Tkinter.Tk() 
-    file_format = [('Text file','*.txt')]  
-    water_file = tkFileDialog.askopenfilename(title = 'Select WATER.txt file', filetypes = file_format)
-    root.destroy()
-    
-    if water_file:
-        
-        try:
-            # get directory and filename from data file
-            dirname, filename = os.path.split(os.path.abspath(water_file))
-            
-            # make a directory called figs to hold the plots            
-            figs_path = dirname + '/figs'
-            if not os.path.exists(figs_path):
-                os.makedirs(figs_path)            
-            
-            # log any errors or warnings found in file; save to data file directory
-            logging.basicConfig(filename = dirname + '/water_error.log', filemode = 'w', level=logging.DEBUG)
-            
-            # process file
-            print ''
-            print '** Processing **'
-            print water_file
-            water_data = read_file(water_file)
-            
-            
-            # print information
-            print ''
-            print '** USGS WATER text file Information **'
-            print_info(water_data)
-            
-            # plot parameters
-            print ''
-            print '** Plotting **'
-            print 'Plots are being saved to same directory as WATER text file.'
-            plot_data(water_data, is_visible = False, save_path = figs_path)
-
-            # shutdown the logging system
-            logging.shutdown()
-
-        except IOError as error:
-            print 'Cannot read file!' + error.filename
-            print error.message
-            
-        except IndexError as error:
-            print 'Cannot read file! Bad file!'
-            print error.message
-            
-        except ValueError as error:
-            print error.message
-            
-    else:
-        print '** Canceled **'
-
-
 def print_info(water_data):
     """   
-    Print relevant information and contained in the water data 
+    Print relevant information contained in the water data file.
     
     *Parameters*:
         water_data: dictionary holding data from WATER *.txt file
@@ -109,7 +43,7 @@ def print_info(water_data):
     print 'Date and time created: ', water_data['date_created']
     print 'StationID: ', water_data['stationid']
     
-    print 'The following are the parameters avaiable in the file:'
+    print 'The following are the parameters available in the file:'
     # print each parameter
     for parameter in water_data['parameters']:
         print parameter['name']
@@ -336,6 +270,64 @@ def read_file_in(filestream):
     # return data
     return data
     
+
+def main():  
+    """
+    Run as a script. Prompt user for WATER text file, process the file, print information, 
+    and plot data. Information is printed to the screen.  Plots are saved to a directory 
+    called 'figs' which is created in the same directory as the data file.
+    
+    """ 
+    
+    # open a file dialog to get file     
+    root = Tkinter.Tk() 
+    file_format = [('Text file','*.txt')]  
+    water_file = tkFileDialog.askopenfilename(title = 'Select WATER.txt file', filetypes = file_format)
+    root.destroy()
+    
+    if water_file:
+        
+        try:
+            # get directory and filename from data file
+            dirname, filename = os.path.split(os.path.abspath(water_file))
+            
+            # make a directory called figs to hold the plots            
+            figs_path = dirname + '/figs'
+            if not os.path.exists(figs_path):
+                os.makedirs(figs_path)            
+            
+            # process file
+            print ''
+            print '** Processing **'
+            print water_file
+            water_data = read_file(water_file)
+            
+            
+            # print information
+            print ''
+            print '** USGS WATER text file Information **'
+            print_info(water_data)
+            
+            # plot parameters
+            print ''
+            print '** Plotting **'
+            print 'Plots are being saved to same directory as WATER text file.'
+            plot_data(water_data, is_visible = False, save_path = figs_path)
+
+        except IOError as error:
+            print 'Cannot read file!' + error.filename
+            print error.message
+            
+        except IndexError as error:
+            print 'Cannot read file! Bad file!'
+            print error.message
+            
+        except ValueError as error:
+            print error.message
+            
+    else:
+        print '** Canceled **'
+
 
 if __name__ == "__main__":
     
