@@ -310,27 +310,28 @@ def plot_climate_parameter_comparison(parameter_name, climate_parameter_orig, cl
     dates_updated, values_updated, units_updated = get_climate_data(climate_parameter_updated)
 
     fig = plt.figure(figsize=(12,10))
-    ax = fig.add_subplot(111)
-    ax.grid(True)
-    ax.set_title('Region Type: ' + region_type + ' Sim ID: ' + sim_id_num + ' Parameter: ' + parameter_name)
-    ax.set_xlabel('Date')
-    ax.set_ylabel(parameter_name + ' (' + units_orig + ')')
-    plt.plot(dates_orig, values_orig, color = 'b', label = parameter_name + 'Orig')
-    plt.hold(True)
-    plt.plot(dates_updated, values_updated, color = 'g', label = parameter_name + 'Updated', alpha = 0.5)
-
-    # rotate and align the tick labels so they look better
-    fig.autofmt_xdate()
     
-    # use a more precise date string for the x axis locations in the
-    # toolbar
-    ax.fmt_xdata = mdates.DateFormatter('%Y-%m-%d')
- 
+    # plot original vs. updated
+    ax1 = fig.add_subplot(211)
+    ax1.grid(True)
+    ax1.set_title('Region Type: ' + region_type + ' Sim ID: ' + sim_id_num + ' Parameter: ' + parameter_name)
+    ax1.set_xlabel('Date')
+    ax1.set_ylabel(parameter_name + ' (' + units_orig + ')')
+    ax1.plot(dates_orig, values_orig, color = 'b', label = parameter_name + 'Orig', linewidth = 2)
+    ax1.hold(True)
+    ax1.plot(dates_updated, values_updated, color = 'r', label = parameter_name + 'Updated', linewidth = 2, alpha = 0.6)
+
+    # use a more precise date string for the x axis locations in the toolbar
+    ax1.fmt_xdata = mdates.DateFormatter('%Y-%m-%d')
+    
+    # rotate and align the tick labels so they look better      
+    #plt.setp(ax1.xaxis.get_majorticklabels(), rotation = 30)
+    
     # legend; make it transparent    
-    handles, labels = ax.get_legend_handles_labels()
-    legend = ax.legend(handles, labels, fancybox = True)
-    legend.get_frame().set_alpha(0.5)
-    legend.draggable(state=True)
+    handles1, labels1 = ax1.get_legend_handles_labels()
+    legend1 = ax1.legend(handles1, labels1, fancybox = True)
+    legend1.get_frame().set_alpha(0.5)
+    legend1.draggable(state=True)
     
     # show text of mean, max, min values on graph; use matplotlib.patch.Patch properies and bbox
     text = 'mean orig = %.2f\nmax orig = %.2f\nmin orig = %.2f\nmean updated = %.2f\nmax updated = %.2f\nmin updated = %.2f' % (np.mean(values_orig), np.max(values_orig), np.min(values_orig),
@@ -340,8 +341,38 @@ def plot_climate_parameter_comparison(parameter_name, climate_parameter_orig, cl
                         'alpha': 0.5
                         }
                    
-    ax.text(0.05, 0.95, text, transform = ax.transAxes, fontsize = 14, 
+    ax1.text(0.05, 0.95, text, transform = ax1.transAxes, fontsize = 14, 
             verticalalignment = 'top', horizontalalignment = 'left', bbox = patch_properties)
+    # plot difference = updated - original
+    ax2 = fig.add_subplot(212, sharex = ax1)
+    ax2.grid(True)
+    ax2.set_title('Difference: ' + parameter_name + 'Updated' + ' - ' + parameter_name + 'Orig')
+    ax2.set_xlabel('Date')
+    ax2.set_ylabel('Difference' + ' (' + units_orig + ')')
+    diff = values_updated - values_orig
+    ax2.plot(dates_orig, diff, color = 'k', label = 'Updated - Orig', linewidth = 2)
+    
+#    indices_positive = np.where(diff >= 0)
+#    indices_negative = np.where(diff <= 0)
+#    diff_positive = diff[indices_positive]
+#    diff_negative = diff[indices_negative]
+#    dates_positive = dates_orig[indices_positive]
+#    dates_negative = dates_orig[indices_negative]
+#    ax2.plot(dates_positive, diff_positive, color = 'k', label = 'Updated - Orig', linewidth = 2)
+#    ax2.hold(True)
+#    ax2.plot(dates_negative, diff_negative, color = 'gray', label = 'Updated - Orig', linewidth = 2)    
+    
+    # use a more precise date string for the x axis locations in the toolbar
+    ax2.fmt_xdata = mdates.DateFormatter('%Y-%m-%d')
+
+    # rotate and align the tick labels so they look better 
+    #plt.xticks(rotation = 30)
+    #ax2.xticks(rotation = 30)
+    #plt.setp(ax2.xaxis.get_majorticklabels(), rotation = 30)
+    
+    # rotate and align the tick labels so they look better; note that ax2 will 
+    # have the dates, but ax1 will not.
+    fig.autofmt_xdate()
     
     # save plots
     if save_path:        
@@ -556,11 +587,11 @@ def main_singlefile():
                     'March': 5.0,
                     'April': 6.0,
                     'May': 3.0,
-                    'June': 10.0,
-                    'July': 11.0,
-                    'August': 12.0,
-                    'September': 7.0,
-                    'October': 8.0,
+                    'June': -10.0,
+                    'July': -11.0,
+                    'August': -12.0,
+                    'September': -7.0,
+                    'October': -8.0,
                     'November': 9.0,
                     'December': 20.0
                 },
