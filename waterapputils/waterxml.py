@@ -286,7 +286,7 @@ def plot_climate_parameter(parameter_name, climate_parameter, region_type, sim_i
     else:
         plt.close()
 
-def plot_climate_parameter_comparison(parameter_name, climate_parameter_orig, climate_parameter_updated, region_type, sim_id_num, is_visible = True, save_path = None):
+def plot_climate_parameter_comparison(parameter_name, climate_parameter_orig, climate_parameter_updated, region_type, sim_id_num, is_visible = True, save_path = None, xml_filenames = None):
     """   
     Plot a comparison of climate parameters contained in two the study simulation 
     dictionaries.  Valid climate parameters include 'ClimaticPrecipitationSeries'
@@ -299,7 +299,8 @@ def plot_climate_parameter_comparison(parameter_name, climate_parameter_orig, cl
         region_type : string of region type; i.e. 4, 6, or 1
         sim_id_num : string of sim id numbers; i.e. 1, 2, or 3
         is_visible : boolean to show plots
-        save_path: string path to save plot(s) 
+        save_path : string path to save plot(s) 
+        xml_filenames : list of two xml filenames
 
     *Return*:
         no return
@@ -309,7 +310,7 @@ def plot_climate_parameter_comparison(parameter_name, climate_parameter_orig, cl
     dates_orig, values_orig, units_orig = get_climate_data(climate_parameter_orig)
     dates_updated, values_updated, units_updated = get_climate_data(climate_parameter_updated)
 
-    fig = plt.figure(figsize=(12,10))
+    fig = plt.figure(figsize = (12,10))
     
     # plot original vs. updated
     ax1 = fig.add_subplot(211)
@@ -317,9 +318,12 @@ def plot_climate_parameter_comparison(parameter_name, climate_parameter_orig, cl
     ax1.set_title('Region Type: ' + region_type + ' Sim ID: ' + sim_id_num + ' Parameter: ' + parameter_name)
     ax1.set_xlabel('Date')
     ax1.set_ylabel(parameter_name + ' (' + units_orig + ')')
-    ax1.plot(dates_orig, values_orig, color = 'b', label = parameter_name + 'Orig', linewidth = 2)
+    ax1.plot(dates_orig, values_orig, color = 'b', label = xml_filenames[0], linewidth = 2)
     ax1.hold(True)
-    ax1.plot(dates_updated, values_updated, color = 'r', label = parameter_name + 'Updated', linewidth = 2, alpha = 0.6)
+    ax1.plot(dates_updated, values_updated, color = 'r', label = xml_filenames[1], linewidth = 2, alpha = 0.6)
+    # increase y axis to have text and legend show up better
+    curr_ylim = ax1.get_ylim()
+    ax1.set_ylim((curr_ylim[0], curr_ylim[1] * 1.5))
 
     # use a more precise date string for the x axis locations in the toolbar
     ax1.fmt_xdata = mdates.DateFormatter('%Y-%m-%d')
@@ -334,7 +338,7 @@ def plot_climate_parameter_comparison(parameter_name, climate_parameter_orig, cl
     legend1.draggable(state=True)
     
     # show text of mean, max, min values on graph; use matplotlib.patch.Patch properies and bbox
-    text = 'mean orig = %.2f\nmax orig = %.2f\nmin orig = %.2f\nmean updated = %.2f\nmax updated = %.2f\nmin updated = %.2f' % (np.mean(values_orig), np.max(values_orig), np.min(values_orig),
+    text = 'mean = %.2f\nmax = %.2f\nmin = %.2f\n---\nmean = %.2f\nmax = %.2f\nmin = %.2f' % (np.mean(values_orig), np.max(values_orig), np.min(values_orig),
                                                                                                                                 np.mean(values_updated), np.max(values_updated), np.min(values_updated))
     patch_properties = {'boxstyle': 'round',
                         'facecolor': 'wheat',
@@ -346,7 +350,7 @@ def plot_climate_parameter_comparison(parameter_name, climate_parameter_orig, cl
     # plot difference = updated - original
     ax2 = fig.add_subplot(212, sharex = ax1)
     ax2.grid(True)
-    ax2.set_title('Difference: ' + parameter_name + 'Updated' + ' - ' + parameter_name + 'Orig')
+    ax2.set_title('Difference: ' + parameter_name)
     ax2.set_xlabel('Date')
     ax2.set_ylabel('Difference' + ' (' + units_orig + ')')
     diff = values_updated - values_orig
@@ -494,15 +498,15 @@ def main_singlefile():
     """
     Run as a script. Prompt user for WATERSimulation.xml file, process the file, 
     print information, and plot data. Information is printed to the screen.  
-    Plots are saved to a directory called 'figs' which is created in the same 
-    directory as the data file. 
+    Plots are saved to a directory called 'figs/xml_file' which is created in the  
+    same directory as the data file. 
     
     """ 
 
     # open a file dialog to get file     
     root = Tkinter.Tk() 
     file_format = [('XML file','*.xml')]  
-    water_file = tkFileDialog.askopenfilename(title = 'Select WATER.xml file', filetypes = file_format)
+    water_file = tkFileDialog.askopenfilename(title = 'Select WATER.xml file to process', filetypes = file_format)
     root.destroy()
     
     if water_file:
@@ -512,16 +516,11 @@ def main_singlefile():
             # get directory and filename from data file
             dirname, filename = os.path.split(os.path.abspath(water_file))
             
-            # make a directory called figs to hold the plots            
-            figs_path = dirname + '/figs'
+            # make a directory to hold the plots            
+            figs_path = dirname + '/figs' + '/' + filename 
             if not os.path.exists(figs_path):
                 os.makedirs(figs_path)            
-            
-            # make a directory called updated_xml to hold the updated xml file             
-            deltas_path = dirname + '/deltas'
-            if not os.path.exists(deltas_path):
-                os.makedirs(deltas_path) 
-            
+                       
             # process file
             print ''
             print '** Processing **'
@@ -564,47 +563,7 @@ def main_singlefile():
                                            sim_id_num = study_simulation['SimulID'][i], 
                                            is_visible = False, 
                                            save_path = figs_path)                
-            
-            # get deltas data and apply to precipiation and temperature timeseries
-            deltas_data = {
-                'ClimaticPrecipitationSeries': {
-                    'January': 2.0,
-                    'February': 0.98,
-                    'March': 0.97,
-                    'April': 1.04,
-                    'May': 1.10,
-                    'June': 0.99,
-                    'July': 0.97,
-                    'August': 1.25,
-                    'September': 1.21,
-                    'October': 1.11,
-                    'November': 1.10,
-                    'December': 2.0
-                },
-                'ClimaticTemperatureSeries': {
-                    'January': 20.0,
-                    'February': 10.0,
-                    'March': 5.0,
-                    'April': 6.0,
-                    'May': 3.0,
-                    'June': -10.0,
-                    'July': -11.0,
-                    'August': -12.0,
-                    'September': -7.0,
-                    'October': -8.0,
-                    'November': 9.0,
-                    'December': 20.0
-                },
-            }               
-            
-            for key in deltas_data:
-                set_delta_factor(tree = water_tree, element_str = key, delta_factors = deltas_data[key])            
-                #set_delta_factor(tree = water_tree, element_str = key, factor = delta_values[key], output_xmlfile = dirname + '/WATERSimulation_updated_0.xml' )            
-            
-            # write out new xml file
-            output_xmlfile = dirname + '/WATERSimulation_updated_delta.xml'
-            water_tree.write(output_xmlfile) 
-                
+                 
         except IOError as error:
             print 'Cannot read file!' + error.filename
             print error.message
@@ -618,20 +577,21 @@ def main_singlefile():
                 
     else:
         print '** Canceled **'
+
     
-def main_multifile():  
+def main_comparexmlfiles():  
     """
-    Run as a script. Prompt user for WATERSimulation.xml file, process the file, 
-    print information, and plot data. Information is printed to the screen.  
-    Plots are saved to a directory called 'figs_updated' which is created in the same 
-    directory as the data file. 
+    Run as a script. Prompt user for 2 WATERSimulation.xml files to compare.
+    Process the file, print information, and plot data. Information is printed
+    to the screen.  Plots are saved to a directory called 'figs/xml_comparsion'
+    which is created in the same directory as the *.xml data file. 
     
     """ 
 
     # open a file dialog to get file     
     root = Tkinter.Tk() 
     file_format = [('XML file','*.xml')]  
-    water_files = tkFileDialog.askopenfilenames(title = 'Select WATER.xml file', filetypes = file_format)
+    water_files = tkFileDialog.askopenfilenames(title = 'Select 2 WATER.xml files to compare', filetypes = file_format)
     water_files = water_files.split()
     root.destroy()
     
@@ -643,11 +603,6 @@ def main_multifile():
                 
                 # get directory and filename from data file
                 dirname, filename = os.path.split(os.path.abspath(water_file))
-                
-                # make a directory called figs to hold the plots            
-                figs_path = dirname + '/figs_updated'
-                if not os.path.exists(figs_path):
-                    os.makedirs(figs_path)            
                 
                 # process file
                 print ''
@@ -695,7 +650,19 @@ def main_multifile():
         else:
             print '** Canceled **'
         
-    # plot data
+    
+    # make a directory called figs to hold the plots
+    filenames = []
+    for water_file in water_files:                
+            # get directory and filename from data file
+            dirname, filename = os.path.split(os.path.abspath(water_file)) 
+            filenames.append(filename)
+            
+    figs_path = dirname + '/figs' + '/' + filenames[0] + '_vs_' + filenames[1]
+    if not os.path.exists(figs_path):
+        os.makedirs(figs_path)  
+        
+    # plot data                
     print ''                                                                                                             
     print '** Plotting **'
     # plot climate data contained in study simulation dictionary
@@ -708,13 +675,313 @@ def main_multifile():
                                               region_type = study_simulations[0]['RegionType'][i], 
                                               sim_id_num = study_simulations[0]['SimulID'][i], 
                                               is_visible = True, 
-                                              save_path = figs_path)                
+                                              save_path = figs_path,
+                                              xml_filenames = filenames)                
+
+
+def main_setsampledeltas():  
+    """
+    Run as a script. Prompt user for WATERSimulation.xml file, process the file, 
+    and print information. Information is printed to the screen. Set sample deltas
+    in WATERSimulation.xml file and create a new WATERSimulation.xml file called
+    WATERSimulation_updated.xml file
+    
+    Samlpe deltas used:
+            deltas_data = {
+                'ClimaticPrecipitationSeries': {
+                    'January': 2.0,
+                    'February': 0.98,
+                    'March': 0.97,
+                    'April': 1.04,
+                    'May': 1.10,
+                    'June': 0.99,
+                    'July': 0.87,
+                    'August': 0.75,
+                    'September': 0.95,
+                    'October': 0.98,
+                    'November': 1.10,
+                    'December': 2.0
+                },
+                'ClimaticTemperatureSeries': {
+                    'January': 20.0,
+                    'February': 10.0,
+                    'March': 5.0,
+                    'April': 6.0,
+                    'May': 3.0,
+                    'June': 10.0,
+                    'July': 11.0,
+                    'August': 12.0,
+                    'September': 7.0,
+                    'October': 8.0,
+                    'November': 9.0,
+                    'December': 20.0
+                },
+            }     
+    
+    """ 
+
+    # open a file dialog to get file     
+    root = Tkinter.Tk() 
+    file_format = [('XML file','*.xml')]  
+    water_file = tkFileDialog.askopenfilename(title = 'Select WATER.xml file to process and set sample deltas', filetypes = file_format)
+    root.destroy()
+    
+    if water_file:
+        
+        try:
+            
+            # get directory and filename from data file
+            dirname, filename = os.path.split(os.path.abspath(water_file))
+                       
+            # process file
+            print ''
+            print '** Processing **'
+            print water_file
+            water_tree = ET.parse(water_file)
+
+            project, study, study_simulation = get_general_info(water_tree)            
+            
+            # print 'Project' information
+            print ''
+            print '** WATER Project Information **'
+            print_info(data_dict = project, key_list = project.keys())
+            
+            # print 'Study' information
+            print ''
+            print '** WATER Study Information **'
+            print_info(data_dict = study, key_list = study.keys())
+            
+            # print 'StudySimulation' information
+            print ''
+            print '** WATER StudySimulation Information **'
+            print_info(data_dict = study_simulation, key_list = ['SimulID', 'StudyID', 'RegionType'])
+
+            # fill climate, feature, and twi information into study simulation dictionary
+            study_simulation = fill_study_simulation(tree = water_tree, study_simulation = study_simulation, key_list = ['SimulationFeatures',
+                                                                                                                         'SimulationTopographicWetnessIndex',
+                                                                                                                         'StudyUnitDischargeSeries',
+                                                                                                                         'ClimaticPrecipitationSeries',
+                                                                                                                         'ClimaticTemperatureSeries'])
+                                                                                                                                                   
+            # sample deltas data and apply to precipiation and temperature timeseries  
+            deltas_data = {
+                'ClimaticPrecipitationSeries': {
+                    'January': 2.0,
+                    'February': 0.98,
+                    'March': 0.97,
+                    'April': 1.04,
+                    'May': 1.10,
+                    'June': 0.99,
+                    'July': 0.87,
+                    'August': 0.75,
+                    'September': 0.95,
+                    'October': 0.98,
+                    'November': 1.10,
+                    'December': 2.0
+                },
+                'ClimaticTemperatureSeries': {
+                    'January': 20.0,
+                    'February': 10.0,
+                    'March': 5.0,
+                    'April': 6.0,
+                    'May': 3.0,
+                    'June': 10.0,
+                    'July': 11.0,
+                    'August': 12.0,
+                    'September': 7.0,
+                    'October': 8.0,
+                    'November': 9.0,
+                    'December': 20.0
+                },
+            }               
+            
+            for key in deltas_data:
+                set_delta_factor(tree = water_tree, element_str = key, delta_factors = deltas_data[key])            
+            
+            # write out new xml file
+            output_xmlfile = dirname + '/WATERSimulation_updated.xml'
+            water_tree.write(output_xmlfile) 
+                
+        except IOError as error:
+            print 'Cannot read file!' + error.filename
+            print error.message
+            
+        except IndexError as error:
+            print 'Cannot read file! Bad file!'
+            print error.message
+            
+        except ValueError as error:
+            print error.message
+                
+    else:
+        print '** Canceled **'
+
+def main_setdeltafile():  
+    """
+    Run as a script. Prompt user for WATERSimulation.xml file, process the file, 
+    print information, and plot data. Information is printed to the screen.  
+    Plots are saved to a directory called 'figs' which is created in the same 
+    directory as the data file. 
+    
+    """ 
+
+    # open a file dialog to get file     
+    root = Tkinter.Tk() 
+    file_format = [('XML file','*.xml')]  
+    water_file = tkFileDialog.askopenfilename(title = 'Select  WATER.xml ', filetypes = file_format)
+    root.destroy()
+    
+    if water_file:
+        
+        try:
+            
+            # get directory and filename from data file
+            dirname, filename = os.path.split(os.path.abspath(water_file))
+            
+            # make a directory called figs to hold the plots            
+            figs_path = dirname + '/figs'
+            if not os.path.exists(figs_path):
+                os.makedirs(figs_path)            
+                       
+            # process file
+            print ''
+            print '** Processing **'
+            print water_file
+            water_tree = ET.parse(water_file)
+
+            project, study, study_simulation = get_general_info(water_tree)            
+            
+            # print 'Project' information
+            print ''
+            print '** WATER Project Information **'
+            print_info(data_dict = project, key_list = project.keys())
+            
+            # print 'Study' information
+            print ''
+            print '** WATER Study Information **'
+            print_info(data_dict = study, key_list = study.keys())
+            
+            # print 'StudySimulation' information
+            print ''
+            print '** WATER StudySimulation Information **'
+            print_info(data_dict = study_simulation, key_list = ['SimulID', 'StudyID', 'RegionType'])
+
+            # fill climate, feature, and twi information into study simulation dictionary
+            study_simulation = fill_study_simulation(tree = water_tree, study_simulation = study_simulation, key_list = ['SimulationFeatures',
+                                                                                                                         'SimulationTopographicWetnessIndex',
+                                                                                                                         'StudyUnitDischargeSeries',
+                                                                                                                         'ClimaticPrecipitationSeries',
+                                                                                                                         'ClimaticTemperatureSeries'])
+                                                                                                                         
+            print ''                                                                                                             
+            print '** Plotting **'
+            # plot climate data contained in study simulation dictionary
+            climate_parameters = ['StudyUnitDischargeSeries', 'ClimaticPrecipitationSeries', 'ClimaticTemperatureSeries']     
+            for parameter in climate_parameters:
+                for i in range(len(study_simulation['SimulID'])):
+                    plot_climate_parameter(parameter_name = parameter,
+                                           climate_parameter = study_simulation[parameter][i], 
+                                           region_type = study_simulation['RegionType'][i], 
+                                           sim_id_num = study_simulation['SimulID'][i], 
+                                           is_visible = False, 
+                                           save_path = figs_path)                
+            
+            # get deltas data and apply to precipiation and temperature timeseries  
+            root = Tkinter.Tk() 
+            file_format = [('Text file','*.txt')]  
+            delta_files = tkFileDialog.askopenfilenames(title = 'Select Multiple Delta *.txt files', filetypes = file_format)
+            delta_files = delta_files.split()
+            root.destroy()
+            
+            delta_data_allfiles = []
+            for delta_file in delta_files:
+                # get directory and filename from data file
+                delta_dirname, delta_filename = os.path.split(os.path.abspath(delta_file))
+                
+                # make a directory called figs to hold the plots            
+                figs_path = dirname + '/figs'
+                if not os.path.exists(figs_path):
+                    os.makedirs(figs_path)            
+                
+                # process file
+                print ''
+                print '** Processing **'
+                print delta_file
+                delta_data = deltas.read_file(delta_file)         
+                delta_data_allfiles.append(delta_data)
+                
+                # print 'Project' information
+                print ''
+                print '** Delta Data Information **'
+                deltas.print_info(delta_data)
+                
+                # plot data
+                print ''
+                print '** Plotting **'
+                print 'Plots are being saved to same directory as data file.'
+                deltas.plot_data(delta_data, is_visible = True, save_path = figs_path)
+            
+            
+            
+            deltas_data = {
+                'ClimaticPrecipitationSeries': {
+                    'January': 2.0,
+                    'February': 0.98,
+                    'March': 0.97,
+                    'April': 1.04,
+                    'May': 1.10,
+                    'June': 0.99,
+                    'July': 0.87,
+                    'August': 0.75,
+                    'September': 0.95,
+                    'October': 0.98,
+                    'November': 1.10,
+                    'December': 2.0
+                },
+                'ClimaticTemperatureSeries': {
+                    'January': 20.0,
+                    'February': 10.0,
+                    'March': 5.0,
+                    'April': 6.0,
+                    'May': 3.0,
+                    'June': -10.0,
+                    'July': -11.0,
+                    'August': -12.0,
+                    'September': -7.0,
+                    'October': -8.0,
+                    'November': 9.0,
+                    'December': 20.0
+                },
+            }               
+            
+            for key in deltas_data:
+                set_delta_factor(tree = water_tree, element_str = key, delta_factors = deltas_data[key])            
+            
+            # write out new xml file
+            output_xmlfile = dirname + '/WATERSimulation_updated.xml'
+            water_tree.write(output_xmlfile) 
+                
+        except IOError as error:
+            print 'Cannot read file!' + error.filename
+            print error.message
+            
+        except IndexError as error:
+            print 'Cannot read file! Bad file!'
+            print error.message
+            
+        except ValueError as error:
+            print error.message
+                
+    else:
+        print '** Canceled **'
+
                 
 if __name__ == "__main__":
     
-    # read file, print results, and plot 
+    # main scripts
     #main_singlefile()
-    main_multifile()
+    #main_setsampledeltas()
+    main_comparexmlfiles()
 
 
 

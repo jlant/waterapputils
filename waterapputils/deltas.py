@@ -348,9 +348,6 @@ def main_multifile():
                 figs_path = dirname + '/figs'
                 if not os.path.exists(figs_path):
                     os.makedirs(figs_path)            
-                    
-                # log any errors or warnings found in file; save to data file directory
-                logging.basicConfig(filename = dirname + '/delta_error.log', filemode = 'w', level=logging.DEBUG)
                 
                 # process file
                 print ''
@@ -369,9 +366,6 @@ def main_multifile():
                 print '** Plotting **'
                 print 'Plots are being saved to same directory as data file.'
                 plot_data(delta_data, is_visible = False, save_path = figs_path)
-                
-                # shutdown the logging system
-                logging.shutdown()
     
             except IOError as error:
                 print 'Cannot read file!' + error.filename
