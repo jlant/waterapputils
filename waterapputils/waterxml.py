@@ -125,10 +125,12 @@ def get_climate_data(climate_parameter):
         'SeriesUnit'
     
     *Parameters*:
-        climate_parameter: list of dictionaries containing climate data 
+        climate_parameter : list of dictionaries containing climate data 
         
     *Return*:
-        no return
+        dates : numpy array of dates
+        values : numpy array of floats
+        units : string of unit for a particular climate parameter
         
     """
     dates = []
@@ -286,7 +288,7 @@ def plot_climate_parameter(parameter_name, climate_parameter, region_type, sim_i
     else:
         plt.close()
 
-def plot_climate_parameter_comparison(parameter_name, climate_parameter_orig, climate_parameter_updated, region_type, sim_id_num, is_visible = True, save_path = None, xml_filenames = None):
+def plot_climate_parameter_comparison(parameter_name, climate_parameter_a, climate_parameter_b, region_type, sim_id_num, is_visible = True, save_path = None, xml_filenames = None):
     """   
     Plot a comparison of climate parameters contained in two the study simulation 
     dictionaries.  Valid climate parameters include 'ClimaticPrecipitationSeries'
@@ -294,8 +296,8 @@ def plot_climate_parameter_comparison(parameter_name, climate_parameter_orig, cl
     
     *Parameters*:
         parameter_name : string of climate parameter
-        climate_parameter_1: list of dictionaries containing climate data
-        climate_parameter_2: list of dictionaries containing climate data
+        climate_parameter_a: list of dictionaries containing climate data
+        climate_parameter_b: list of dictionaries containing climate data
         region_type : string of region type; i.e. 4, 6, or 1
         sim_id_num : string of sim id numbers; i.e. 1, 2, or 3
         is_visible : boolean to show plots
@@ -304,11 +306,21 @@ def plot_climate_parameter_comparison(parameter_name, climate_parameter_orig, cl
 
     *Return*:
         no return
+    
+    * Note: fig.autofmt_xdate() sets and rotates the axes properly; do not need
+    to set them individually as:
+        # rotate and align the tick labels so they look better; do not      
+        plt.setp(ax1.xaxis.get_majorticklabels(), rotation = 30)    
+        
+        # rotate and align the tick labels so they look better 
+        #plt.xticks(rotation = 30) # same thing as plt.setp(...)
+        #ax2.xticks(rotation = 30) # same thing as plt.setp(...)
+        plt.setp(ax2.xaxis.get_majorticklabels(), rotation = 30)
         
     """
 
-    dates_orig, values_orig, units_orig = get_climate_data(climate_parameter_orig)
-    dates_updated, values_updated, units_updated = get_climate_data(climate_parameter_updated)
+    dates_a, values_a, units_a = get_climate_data(climate_parameter_a)
+    dates_b, values_b, units_b = get_climate_data(climate_parameter_b)
 
     fig = plt.figure(figsize = (12,10))
     
@@ -317,19 +329,16 @@ def plot_climate_parameter_comparison(parameter_name, climate_parameter_orig, cl
     ax1.grid(True)
     ax1.set_title('Region Type: ' + region_type + ' Sim ID: ' + sim_id_num + ' Parameter: ' + parameter_name)
     ax1.set_xlabel('Date')
-    ax1.set_ylabel(parameter_name + ' (' + units_orig + ')')
-    ax1.plot(dates_orig, values_orig, color = 'b', label = xml_filenames[0], linewidth = 2)
+    ax1.set_ylabel(parameter_name + ' (' + units_a + ')')
+    ax1.plot(dates_a, values_a, color = 'b', label = xml_filenames[0], linewidth = 2)
     ax1.hold(True)
-    ax1.plot(dates_updated, values_updated, color = 'r', label = xml_filenames[1], linewidth = 2, alpha = 0.6)
+    ax1.plot(dates_b, values_b, color = 'r', label = xml_filenames[1], linewidth = 2, alpha = 0.6)
     # increase y axis to have text and legend show up better
     curr_ylim = ax1.get_ylim()
     ax1.set_ylim((curr_ylim[0], curr_ylim[1] * 1.5))
 
     # use a more precise date string for the x axis locations in the toolbar
     ax1.fmt_xdata = mdates.DateFormatter('%Y-%m-%d')
-    
-    # rotate and align the tick labels so they look better      
-    #plt.setp(ax1.xaxis.get_majorticklabels(), rotation = 30)
     
     # legend; make it transparent    
     handles1, labels1 = ax1.get_legend_handles_labels()
@@ -338,8 +347,8 @@ def plot_climate_parameter_comparison(parameter_name, climate_parameter_orig, cl
     legend1.draggable(state=True)
     
     # show text of mean, max, min values on graph; use matplotlib.patch.Patch properies and bbox
-    text = 'mean = %.2f\nmax = %.2f\nmin = %.2f\n---\nmean = %.2f\nmax = %.2f\nmin = %.2f' % (np.mean(values_orig), np.max(values_orig), np.min(values_orig),
-                                                                                                                                np.mean(values_updated), np.max(values_updated), np.min(values_updated))
+    text = 'mean = %.2f\nmax = %.2f\nmin = %.2f\n---\nmean = %.2f\nmax = %.2f\nmin = %.2f' % (np.mean(values_a), np.max(values_a), np.min(values_a),
+                                                                                                                                np.mean(values_b), np.max(values_b), np.min(values_b))
     patch_properties = {'boxstyle': 'round',
                         'facecolor': 'wheat',
                         'alpha': 0.5
@@ -347,35 +356,22 @@ def plot_climate_parameter_comparison(parameter_name, climate_parameter_orig, cl
                    
     ax1.text(0.05, 0.95, text, transform = ax1.transAxes, fontsize = 14, 
             verticalalignment = 'top', horizontalalignment = 'left', bbox = patch_properties)
-    # plot difference = updated - original
+            
+    # plot difference = values_b - values_a
     ax2 = fig.add_subplot(212, sharex = ax1)
     ax2.grid(True)
     ax2.set_title('Difference: ' + parameter_name)
     ax2.set_xlabel('Date')
-    ax2.set_ylabel('Difference' + ' (' + units_orig + ')')
-    diff = values_updated - values_orig
-    ax2.plot(dates_orig, diff, color = 'k', label = 'Updated - Orig', linewidth = 2)
-    
-#    indices_positive = np.where(diff >= 0)
-#    indices_negative = np.where(diff <= 0)
-#    diff_positive = diff[indices_positive]
-#    diff_negative = diff[indices_negative]
-#    dates_positive = dates_orig[indices_positive]
-#    dates_negative = dates_orig[indices_negative]
-#    ax2.plot(dates_positive, diff_positive, color = 'k', label = 'Updated - Orig', linewidth = 2)
-#    ax2.hold(True)
-#    ax2.plot(dates_negative, diff_negative, color = 'gray', label = 'Updated - Orig', linewidth = 2)    
+    ax2.set_ylabel('Difference' + ' (' + units_a + ')')
+    diff = values_b - values_a
+    ax2.plot(dates_a, diff, color = 'k', linewidth = 2)  
     
     # use a more precise date string for the x axis locations in the toolbar
     ax2.fmt_xdata = mdates.DateFormatter('%Y-%m-%d')
-
-    # rotate and align the tick labels so they look better 
-    #plt.xticks(rotation = 30)
-    #ax2.xticks(rotation = 30)
-    #plt.setp(ax2.xaxis.get_majorticklabels(), rotation = 30)
     
     # rotate and align the tick labels so they look better; note that ax2 will 
-    # have the dates, but ax1 will not.
+    # have the dates, but ax1 will not. do not need to rotate each individual axis
+    # because this method does it
     fig.autofmt_xdate()
     
     # save plots
@@ -438,9 +434,9 @@ def set_data(tree, element_str, element_tag_str, sim_id_num, factor):
                         new_num = float(child.text) * factor
                         child.text = str(new_num)
 
-def set_delta_factor(tree, element_str, delta_factors):
+def set_factors(tree, element_str, factors):
     """
-    Set new data for a particular xml element for using a timeseries of delta  
+    Set new data for a particular xml element for using a timeseries of factor  
     values. The factors are applied to the particular element tag.  
     If the element string (element_str) is 'ClimaticTemperatureSeries'
      otherwise the factor is multiplicative.
@@ -465,7 +461,7 @@ def set_delta_factor(tree, element_str, delta_factors):
     *Parameters:*
         tree : ElementTree object of entire xml file
         element_str : string of a particular element of interest
-        delta_factors : dictionary of delta factors
+        delta_values : dictionary of delta values
     
     *Return:*
         No return
@@ -481,7 +477,7 @@ def set_delta_factor(tree, element_str, delta_factors):
         date = datetime.datetime(int(year), int(month), int(day), 0, 0, 0)
         # get the month name to match the delta_factor dictionary keys
         month_name = date.strftime('%B')
-        factor = delta_factors[month_name]
+        factor = factors[month_name]
         
         # get element value
         elem_value = elem.find('SeriesValue')
@@ -498,7 +494,7 @@ def main_singlefile():
     """
     Run as a script. Prompt user for WATERSimulation.xml file, process the file, 
     print information, and plot data. Information is printed to the screen.  
-    Plots are saved to a directory called 'figs/xml_file' which is created in the  
+    Plots are saved to a directory called 'figs/xml-figs/' which is created in the  
     same directory as the data file. 
     
     """ 
@@ -517,7 +513,7 @@ def main_singlefile():
             dirname, filename = os.path.split(os.path.abspath(water_file))
             
             # make a directory to hold the plots            
-            figs_path = dirname + '/figs' + '/' + filename 
+            figs_path = dirname + '/figs' + '/xml-figs/' + filename 
             if not os.path.exists(figs_path):
                 os.makedirs(figs_path)            
                        
@@ -583,7 +579,7 @@ def main_comparexmlfiles():
     """
     Run as a script. Prompt user for 2 WATERSimulation.xml files to compare.
     Process the file, print information, and plot data. Information is printed
-    to the screen.  Plots are saved to a directory called 'figs/xml_comparsion'
+    to the screen.  Plots are saved to a directory called 'figs/xml-figs/'
     which is created in the same directory as the *.xml data file. 
     
     """ 
@@ -658,7 +654,7 @@ def main_comparexmlfiles():
             dirname, filename = os.path.split(os.path.abspath(water_file)) 
             filenames.append(filename)
             
-    figs_path = dirname + '/figs' + '/' + filenames[0] + '_vs_' + filenames[1]
+    figs_path = dirname + '/figs' + '/xml-figs/' + filenames[0] + '_vs_' + filenames[1]
     if not os.path.exists(figs_path):
         os.makedirs(figs_path)  
         
@@ -670,8 +666,8 @@ def main_comparexmlfiles():
     for parameter in climate_parameters:
         for i in range(len(study_simulations[0]['SimulID'])):
             plot_climate_parameter_comparison(parameter_name = parameter,
-                                              climate_parameter_orig = study_simulations[0][parameter][i], 
-                                              climate_parameter_updated = study_simulations[1][parameter][i],
+                                              climate_parameter_a = study_simulations[0][parameter][i], 
+                                              climate_parameter_b = study_simulations[1][parameter][i],
                                               region_type = study_simulations[0]['RegionType'][i], 
                                               sim_id_num = study_simulations[0]['SimulID'][i], 
                                               is_visible = True, 
@@ -682,11 +678,11 @@ def main_comparexmlfiles():
 def main_setsampledeltas():  
     """
     Run as a script. Prompt user for WATERSimulation.xml file, process the file, 
-    and print information. Information is printed to the screen. Set sample deltas
+    and print information. Information is printed to the screen. Set/appply sample deltas
     in WATERSimulation.xml file and create a new WATERSimulation.xml file called
-    WATERSimulation_updated.xml file
+    WATERSimulation_sampledeltas.xml file
     
-    Samlpe deltas used:
+    Sample deltas used:
             deltas_data = {
                 'ClimaticPrecipitationSeries': {
                     'January': 2.0,
@@ -796,10 +792,10 @@ def main_setsampledeltas():
             }               
             
             for key in deltas_data:
-                set_delta_factor(tree = water_tree, element_str = key, delta_factors = deltas_data[key])            
+                set_factors(tree = water_tree, element_str = key, factors = deltas_data[key])            
             
             # write out new xml file
-            output_xmlfile = dirname + '/WATERSimulation_updated.xml'
+            output_xmlfile = dirname + '/WATERSimulation' + '_sampledeltas.xml'
             water_tree.write(output_xmlfile) 
                 
         except IOError as error:
@@ -819,9 +815,10 @@ def main_setsampledeltas():
 def main_setdeltafile():  
     """
     Run as a script. Prompt user for WATERSimulation.xml file, process the file, 
-    print information, and plot data. Information is printed to the screen.  
-    Plots are saved to a directory called 'figs' which is created in the same 
-    directory as the data file. 
+    and print information. Information is printed to the screen. Prompt user for
+    deltas file, process the file, and print information. Set/apply deltas values
+    in WATERSimulation.xml file and create a new WATERSimulation.xml file called
+    WATERSimulation_deltafile.xml file.
     
     """ 
 
@@ -837,11 +834,6 @@ def main_setdeltafile():
             
             # get directory and filename from data file
             dirname, filename = os.path.split(os.path.abspath(water_file))
-            
-            # make a directory called figs to hold the plots            
-            figs_path = dirname + '/figs'
-            if not os.path.exists(figs_path):
-                os.makedirs(figs_path)            
                        
             # process file
             print ''
@@ -873,35 +865,19 @@ def main_setdeltafile():
                                                                                                                          'ClimaticPrecipitationSeries',
                                                                                                                          'ClimaticTemperatureSeries'])
                                                                                                                          
-            print ''                                                                                                             
-            print '** Plotting **'
-            # plot climate data contained in study simulation dictionary
-            climate_parameters = ['StudyUnitDischargeSeries', 'ClimaticPrecipitationSeries', 'ClimaticTemperatureSeries']     
-            for parameter in climate_parameters:
-                for i in range(len(study_simulation['SimulID'])):
-                    plot_climate_parameter(parameter_name = parameter,
-                                           climate_parameter = study_simulation[parameter][i], 
-                                           region_type = study_simulation['RegionType'][i], 
-                                           sim_id_num = study_simulation['SimulID'][i], 
-                                           is_visible = False, 
-                                           save_path = figs_path)                
-            
             # get deltas data and apply to precipiation and temperature timeseries  
             root = Tkinter.Tk() 
             file_format = [('Text file','*.txt')]  
             delta_files = tkFileDialog.askopenfilenames(title = 'Select Multiple Delta *.txt files', filetypes = file_format)
             delta_files = delta_files.split()
             root.destroy()
-            
+                
             delta_data_allfiles = []
+            delta_values_allfiles = []
+            tiles = ['11', '12', '22']
             for delta_file in delta_files:
                 # get directory and filename from data file
                 delta_dirname, delta_filename = os.path.split(os.path.abspath(delta_file))
-                
-                # make a directory called figs to hold the plots            
-                figs_path = dirname + '/figs'
-                if not os.path.exists(figs_path):
-                    os.makedirs(figs_path)            
                 
                 # process file
                 print ''
@@ -915,50 +891,20 @@ def main_setdeltafile():
                 print '** Delta Data Information **'
                 deltas.print_info(delta_data)
                 
-                # plot data
-                print ''
-                print '** Plotting **'
-                print 'Plots are being saved to same directory as data file.'
-                deltas.plot_data(delta_data, is_visible = True, save_path = figs_path)
+                # get delta values 
+                delta_values = deltas.get_deltavalues(delta_data = delta_data, tile_list = tiles)
+                delta_values_allfiles.append(delta_values)
             
-            
-            
-            deltas_data = {
-                'ClimaticPrecipitationSeries': {
-                    'January': 2.0,
-                    'February': 0.98,
-                    'March': 0.97,
-                    'April': 1.04,
-                    'May': 1.10,
-                    'June': 0.99,
-                    'July': 0.87,
-                    'August': 0.75,
-                    'September': 0.95,
-                    'October': 0.98,
-                    'November': 1.10,
-                    'December': 2.0
-                },
-                'ClimaticTemperatureSeries': {
-                    'January': 20.0,
-                    'February': 10.0,
-                    'March': 5.0,
-                    'April': 6.0,
-                    'May': 3.0,
-                    'June': -10.0,
-                    'July': -11.0,
-                    'August': -12.0,
-                    'September': -7.0,
-                    'October': -8.0,
-                    'November': 9.0,
-                    'December': 20.0
-                },
-            }               
-            
-            for key in deltas_data:
-                set_delta_factor(tree = water_tree, element_str = key, delta_factors = deltas_data[key])            
-            
+            # set new data in xml file
+            for delta_values in delta_values_allfiles:
+                if delta_values.keys()[0] == 'Tmax':
+                    set_factors(tree = water_tree, element_str = 'ClimaticTemperatureSeries', factors = delta_values['Tmax'])
+                    
+                if delta_values.keys()[0] == 'Ppt':
+                    set_factors(tree = water_tree, element_str = 'ClimaticPrecipitationSeries', factors = delta_values['Ppt'])
+                             
             # write out new xml file
-            output_xmlfile = dirname + '/WATERSimulation_updated.xml'
+            output_xmlfile = dirname + '/WATERSimulation' + '_deltafile.xml'
             water_tree.write(output_xmlfile) 
                 
         except IOError as error:
@@ -974,14 +920,16 @@ def main_setdeltafile():
                 
     else:
         print '** Canceled **'
-
+        
                 
 if __name__ == "__main__":
     
     # main scripts
     #main_singlefile()
     #main_setsampledeltas()
+    #main_setdeltafile()
     main_comparexmlfiles()
+    
 
 
 

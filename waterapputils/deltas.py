@@ -27,12 +27,97 @@ import matplotlib.dates as mdates
 import helpers
 
 
+def get_deltavalues(delta_data, tile_list):
+    """   
+    Process and return delta data values for a list of tiles of interest. Delta 
+    values are averaged when there are multiple tiles.
+    
+    *Parameters*:
+        delta_data_list: list of dictionaries holding data from many delta data files
+        
+    *Return*:
+        delta_values: dictionary holding data for specific list of tiles; i.e.
+        
+            delta_values = {
+                'Ppt': {
+                    'January': 2.0,
+                    'February': 0.98,
+                    'March': 0.97,
+                    'April': 1.04,
+                    'May': 1.10,
+                    'June': 0.99,
+                    'July': 0.87,
+                    'August': 0.75,
+                    'September': 0.95,
+                    'October': 0.98,
+                    'November': 1.10,
+                    'December': 2.0
+                }
+            } 
+        
+    """ 
+    delta_values = {}
+    month_list = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']       
+    
+    # initialize a dictionary containing month keys and None values
+    month_dict = {}
+    for month in month_list:
+        month_dict[month] = None
+    
+    # set the initialized month dictionary as a value into specific variable key
+    variable = delta_data['Variable']
+    delta_values[variable] = month_dict
+    
+#    delta_values[variable] = {
+#        'January': None,
+#        'February': None,
+#        'March': None,
+#        'April': None,
+#        'May': None,
+#        'June': None,
+#        'July': None,
+#        'August': None,
+#        'September': None,
+#        'October': None,
+#        'November': None,
+#        'December': None
+#    }
+    
+    # get tile indices and values for a specific list of tiles
+    values = []
+    for tile in tile_list:
+        if tile in delta_data['Tile']:
+            monthly_values = []
+            tile_index = delta_data['Tile'].index(tile)
+            for month in month_list:
+                value = delta_data[month][tile_index]
+                monthly_values.append(value)
+                
+            values.append(monthly_values)
+
+        else: 
+            print tile + ' is not in delta_data[Tile] list'
+
+    # convert delta values into a numpy array; take average (axis = 0 => along columns)
+    # value for multiple tiles
+    values = np.array(values, dtype = float)
+    values_avg = np.average(values, axis = 0)
+    
+    # fill delta value dictionary with values
+    month_enum_list = list(enumerate(month_list))
+    for item in month_enum_list:
+        index = item[0]
+        month = item[1]
+        delta_values[variable][month] = values_avg[index]
+    
+    return delta_values
+
 def print_info(delta_data):
     """   
     Print relevant information contained in the delta data file. 
     
     *Parameters*:
-        delta_data: dictionary holding data from WATER *.txt file
+        delta_data: dictionary holding data fromdelta data file
         
     *Return*:
         no return
@@ -52,7 +137,7 @@ def plot_data(delta_data, is_visible = True, save_path = None):
     path.
     
     *Parameters*:
-        delta_data: dictionary holding data from WATER *.txt file
+        delta_data: dictionary holding data from delta data file
         
         save_path: string path to save plot(s) 
         
@@ -74,8 +159,7 @@ def plot_data(delta_data, is_visible = True, save_path = None):
     for tile in delta_data['Tile']:
         
         tile_index = delta_data['Tile'].index(tile)
-        month_list = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-        #month_list = [1,2,3,4,5,6,7,8,9,10,11,12]        
+        month_list = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']       
         dates = []        
         data = []
         for month in month_list:
@@ -336,6 +420,7 @@ def main_multifile():
     root.destroy()
     
     delta_data_allfiles = []
+    delta_values_allfiles = []
     for delta_file in delta_files:
         if delta_file:
             
@@ -367,6 +452,12 @@ def main_multifile():
                 print 'Plots are being saved to same directory as data file.'
                 plot_data(delta_data, is_visible = False, save_path = figs_path)
     
+                # get, process, and format data for a list of tiles
+                tiles = ['11', '12', '22']
+                delta_values = get_deltavalues(delta_data = delta_data, tile_list = tiles)
+                delta_values_allfiles.append(delta_values)
+
+                        
             except IOError as error:
                 print 'Cannot read file!' + error.filename
                 print error.message
@@ -380,7 +471,6 @@ def main_multifile():
                     
         else:
             print '** Canceled **'
-
 
 if __name__ == "__main__":
     
