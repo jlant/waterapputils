@@ -820,7 +820,7 @@ def main_setdeltafile():
                 delta_values = deltas.get_deltavalues(delta_data = delta_data, tile_list = tiles)
                 delta_values_allfiles.append(delta_values)
             
-            # set new data in xml file
+            # set new data in text file
             for delta_values in delta_values_allfiles:
                 if delta_values.keys()[0] == 'PET':
                     water_data_updated = set_factors(water_data = water_data, parameter_name = 'PET', factors = delta_values['PET'])
