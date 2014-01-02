@@ -845,7 +845,7 @@ def main_setdeltafile():
 if __name__ == "__main__":
     
     # main scripts
-    main_singlefile()
+    #main_singlefile()
     #main_setsampledeltas()
     #main_setdeltafile()
-    #main_comparetxtfiles()
+    main_comparetxtfiles()

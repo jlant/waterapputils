@@ -472,6 +472,76 @@ def main_multifile():
         else:
             print '** Canceled **'
 
+def main_shapefile():  
+    """
+    Run as a script. Prompt user for delta *.txt files, process the files, and 
+    print information. Information is printed to the screen. Prompt user for 
+    basin shapefile and climate data deltas tiled shapefile. Get the tile numbers
+    that the basin encompasses.
+    
+    """ 
+
+    # open a file dialog to get file     
+    root = Tkinter.Tk() 
+    file_format = [('Text file','*.txt')]  
+    delta_files = tkFileDialog.askopenfilenames(title = 'Select Multiple Delta *.txt files', filetypes = file_format)
+    delta_files = delta_files.split()
+    root.destroy()
+    
+    delta_data_allfiles = []
+    delta_values_allfiles = []
+    for delta_file in delta_files:
+        if delta_file:
+            
+            try:
+                
+                # get directory and filename from data file
+                dirname, filename = os.path.split(os.path.abspath(delta_file))
+                
+                # make a directory called figs to hold the plots            
+                figs_path = dirname + '/figs'
+                if not os.path.exists(figs_path):
+                    os.makedirs(figs_path)            
+                
+                # process file
+                print ''
+                print '** Processing **'
+                print delta_file
+                delta_data = read_file(delta_file)         
+                delta_data_allfiles.append(delta_data)
+                
+                # print 'Project' information
+                print ''
+                print '** Delta Data Information **'
+                print_info(delta_data)
+                
+                # plot data
+                print ''
+                print '** Plotting **'
+                print 'Plots are being saved to same directory as data file.'
+                plot_data(delta_data, is_visible = False, save_path = figs_path)
+    
+                # get, process, and format data for a list of tiles
+                tiles = ['11', '12', '22']
+                delta_values = get_deltavalues(delta_data = delta_data, tile_list = tiles)
+                delta_values_allfiles.append(delta_values)
+
+                        
+            except IOError as error:
+                print 'Cannot read file!' + error.filename
+                print error.message
+                
+            except IndexError as error:
+                print 'Cannot read file! Bad file!'
+                print error.message
+                
+            except ValueError as error:
+                print error.message
+                    
+        else:
+            print '** Canceled **'
+
+
 if __name__ == "__main__":
     
     # read file, print results, and plot 
