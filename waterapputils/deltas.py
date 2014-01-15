@@ -68,21 +68,6 @@ def get_deltavalues(delta_data, tile_list):
     variable = delta_data['Variable']
     delta_values[variable] = month_dict
     
-#    delta_values[variable] = {
-#        'January': None,
-#        'February': None,
-#        'March': None,
-#        'April': None,
-#        'May': None,
-#        'June': None,
-#        'July': None,
-#        'August': None,
-#        'September': None,
-#        'October': None,
-#        'November': None,
-#        'December': None
-#    }
-    
     # get tile indices and values for a specific list of tiles
     values = []
     for tile in tile_list:

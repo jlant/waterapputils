@@ -47,6 +47,7 @@ def get_intersectedtiles(gcm_shapefile, basin_shapefile):
         gcm_geometry = gcm_feature.GetGeometryRef()
         if basin_geometry.Intersect(gcm_geometry):    
             tiles.append(gcm_feature.GetField('Tile'))
+
         
     return tiles
 
@@ -498,8 +499,8 @@ def main_plotshapefiles():
 if __name__ == "__main__":
     
     # main scripts
-    #main_printtiles()
-    main_plotshapefiles()
+    main_printtiles()
+    #main_plotshapefiles()
 
 
 

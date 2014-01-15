@@ -155,16 +155,6 @@ def plot_parameter_comparison(parameter_name, water_data_a, water_data_b, is_vis
 
     *Return*:
         no return
-    
-    * Note: fig.autofmt_xdate() sets and rotates the axes properly; do not need
-    to set them individually as:
-        # rotate and align the tick labels so they look better; do not      
-        plt.setp(ax1.xaxis.get_majorticklabels(), rotation = 30)    
-        
-        # rotate and align the tick labels so they look better 
-        #plt.xticks(rotation = 30) # same thing as plt.setp(...)
-        #ax2.xticks(rotation = 30) # same thing as plt.setp(...)
-        plt.setp(ax2.xaxis.get_majorticklabels(), rotation = 30)
         
     """
     
