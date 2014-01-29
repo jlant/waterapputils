@@ -457,7 +457,7 @@ def main_plotshapefiles():
     root.destroy()
     
     display_field = 'Tile'
-    colors_list = ['g', 'b', 'r', 'y', 'c', 'm', 'orange', 'k']
+    colors_list = ['y', 'r', 'b', 'c', 'y', 'm', 'orange', 'k']
     colors_index = 0
     shapefile_list = []
     if shp_files:
@@ -499,8 +499,8 @@ def main_plotshapefiles():
 if __name__ == "__main__":
     
     # main scripts
-    main_printtiles()
-    #main_plotshapefiles()
+    #main_printtiles()
+    main_plotshapefiles()
 
 
 
