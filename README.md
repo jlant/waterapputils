@@ -307,24 +307,26 @@ Return to [Contents](#contents).
 Repository Layout
 -----------------
 
-	bin/						# directory containing executables
-	data/						# directory containing sample data files to use with software and associated information
-		txt-datafiles/			# directory containing sample data to use with software
-		xml-datafiles/			# directory containing sample data to use with software
+	bin/								# directory containing executables
+	data/								# directory containing sample data files to use with software and associated information
+		txt-datafiles/					# directory containing sample data to use with software
+		xml-datafiles/					# directory containing sample data to use with software
 			...
-		README.txt				# file describing sample data in datafiles/
-	docs/						# directory containing code documentation
+		README.txt						# file describing sample data in datafiles/
+	docs/								# directory containing code documentation
 		...
-		html/					# html code documentation
+		html/							# html code documentation
 		...
-	images/						# directory with sample images and screenshots
+	images/								# directory with sample images and screenshots
 		...
 	waterapputils/						# directory containing code modules
 		waterapputils.py				# main controller
-		waterapputils_views.py			# module that handles views; plotting and printing
-		waterapputils_filereader.py	# module that handles file reading and processing
-		waterapputils_helpers.py		# module that contains helper functions
-		waterapputils_webservice.py	# module that contains web service capabilities
+		helpers.py						# module that contains helper functions
+		viewers.py						# module that handles views; plotting and printing
+		txtfilereader.py				# module that handles file reading and processing
+		xmlfilereader.py				# module that handles file reading and processing
+		deltafilereader.py				# module that handles file reading and processing
+		spatial.py						# modeule that handles spatial data
 		...
 	tests/						# directory containing unit tests using nose library (https://nose.readthedocs.org/en/latest/)
 		...
