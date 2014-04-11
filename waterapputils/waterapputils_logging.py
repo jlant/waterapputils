@@ -1,5 +1,5 @@
 """
-:Module: nwispy_logging.py
+:Module: waterapputils_logging.py
 
 :Author: Jeremiah Lant, jlant@usgs.gov, U.S. Geological Survey, Kentucky Water Science Center, http://www.usgs.gov/ 
  
