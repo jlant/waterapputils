@@ -120,7 +120,7 @@ def main():
         # get files from command line arguments and process
         if args.txtfiles:
             process_txt_files(file_list = args.txtfiles, arguments = args)
-
+            sys.exit()
         if args.txtcmp:
             process_txtcmp(file_list = args.txtcmp, arguments = args)
             
@@ -161,8 +161,6 @@ def main():
         sys.exit(1)
         
 if __name__ == "__main__":
-    main()
-
-    
+    main()    
 
   

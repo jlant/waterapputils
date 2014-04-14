@@ -25,8 +25,8 @@ def print_watertxt_data(watertxt_data):
     """   
     Print information contained in the water data dictionary. 
     
-    Parameter
-    ---------
+    Parameters
+    ----------
     watertxt_data : dictionary 
         A dictionary containing data found in WATER output text file.
     
@@ -84,14 +84,12 @@ def plot_watertxt_data(watertxt_data, is_visible = True, save_path = None):
     Plot each parameter contained in the nwis data. Save plots to a particular
     path.
     
-    Parameter
-    ---------
-    nwis_data : dictionary 
-        A dictionary containing data found in data file.
-
+    Parameters
+    ----------
+    watertxtdata_data : dictionary 
+        A dictionary containing data found in WATER data file.
     is_visible : bool
-        Boolean value to show plots 
-        
+        Boolean value to show plots         
     save_path : string 
         String path to save plot(s) 
     """
@@ -199,17 +197,14 @@ def plot_watertxt_comparison(watertxt_data1, watertxt_data2, is_visible = True, 
     Plot a comparison of two parameters contained in WATER.txt data file. Save 
     plots to a particular path.
     
-    *Parameters*:
-        parameter_name : string of parameter
-        water_data_a: dictionary holding data found in WATER *.txt data file
-        water_data_b: dictionary holding data found in WATER *.txt data file
-        is_visible : boolean to show plots
-        save_path : string path to save plot(s) 
-        txt_filenames : list of two txt filenames
-
-    *Return*:
-        no return
-        
+    Parameters
+    ----------
+    watertxtdata_data : dictionary 
+        A dictionary containing data found in WATER data file.
+    is_visible : bool
+        Boolean value to show plots         
+    save_path : string 
+        String path to save plot(s) 
     """
     assert set(watertxt_data1.keys()) == set(watertxt_data2.keys()), "Parameter keys between water datasets do not match"  
     assert set(watertxt_data1["dates"]) == set(watertxt_data2["dates"]), "Dates are not equal"  
@@ -228,7 +223,8 @@ def plot_watertxt_comparison(watertxt_data1, watertxt_data2, is_visible = True, 
         ax1.plot(dates, parameter1["data"], color = "b", label = watertxt_data1["stationid"], linewidth = 2)
         ax1.hold(True)
         ax1.plot(dates, parameter2["data"], color = "g", label = watertxt_data2['stationid'], linewidth = 2)
-        ax1.fill_between(dates, parameter1["data"], parameter2["data"], facecolor = "r", alpha = 0.5)        
+        ax1.fill_between(dates, parameter1["data"], parameter2["data"], facecolor = "r", alpha = 0.5)      
+        
         # increase y axis to have text and legend show up better
         curr_ylim = ax1.get_ylim()
         ax1.set_ylim((curr_ylim[0], curr_ylim[1] * 1.5))
@@ -289,7 +285,7 @@ def plot_watertxt_comparison(watertxt_data1, watertxt_data2, is_visible = True, 
             plt.close()
             
 
-def _create_testdata(multiplicative_factor = 1, stationid = "012345"):
+def _create_test_data(multiplicative_factor = 1, stationid = "012345"):
     """ Create test data for tests """
 
     dates = [datetime.datetime(2014, 04, 01, 0, 0), datetime.datetime(2014, 04, 02, 0, 0), datetime.datetime(2014, 04, 03, 0, 0)]
@@ -363,7 +359,7 @@ def test_print_watertxt_data():
     
     print("---Testing print ---")
     
-    data = _create_testdata()
+    data = _create_test_data()
     print_watertxt_data(watertxt_data = data)
     
     print("")
@@ -373,7 +369,7 @@ def test_plot_watertxt_data():
     
     print("--- Testing plot ---")    
     
-    data = _create_testdata()
+    data = _create_test_data()
     plot_watertxt_data(watertxt_data = data, is_visible = True, save_path = None)
     
     print("Plotting completed")
@@ -384,8 +380,8 @@ def test_plot_watertxt_comprison():
     
     print("--- Testing plot ---")    
     
-    data1 = _create_testdata()
-    data2 = _create_testdata(multiplicative_factor = 2, stationid = "00000")
+    data1 = _create_test_data()
+    data2 = _create_test_data(multiplicative_factor = 2, stationid = "00000")
     plot_watertxt_comparison(watertxt_data1 = data1, watertxt_data2 = data2, is_visible = True, save_path = None)
     
     print("Plotting completed")
@@ -396,7 +392,7 @@ def main():
     
     test_print_watertxt_data()
     
-#    test_plot_watertxt_data()
+    test_plot_watertxt_data()
     
     test_plot_watertxt_comprison()    
 
