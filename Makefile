@@ -1,3 +1,3 @@
 clean:
-	rm -f nwispy/*.pyc
+	rm -f waterapputils/*.pyc
 	rm -f tests/*.pyc
