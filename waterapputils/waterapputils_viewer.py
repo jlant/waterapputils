@@ -389,6 +389,10 @@ def test_plot_watertxt_comprison():
     
 def main():
     """ Test functionality of plotting and printing file information """
+
+    print("")
+    print("RUNNING TESTS ...")
+    print("")
     
     test_print_watertxt_data()
     

@@ -1,4 +1,5 @@
 import nose.tools
+from nose import with_setup 
 
 import sys
 import numpy as np
@@ -16,7 +17,7 @@ def setup():
 
     print >> sys.stderr, "SETUP: watertxt tests"
    
-    # set up fixture with possible date strings
+    # set up fixtures 
     fixture["date_str"] = "4/9/2014"
     
     fixture["data_file_clean"] = \
@@ -28,8 +29,8 @@ def setup():
         Date:	4/9/2014 15:50:47 PM
         StationID:	012345
         Date	Discharge (cfs)	Subsurface Flow (mm/day)	Impervious Flow (mm/day)	Infiltration Excess (mm/day)	Initial Abstracted Flow (mm/day)	Overland Flow (mm/day)	PET (mm/day)	AET(mm/day)	Average Soil Root zone (mm)	Average Soil Unsaturated Zone (mm)	Snow Pack (mm)	Precipitation (mm/day)	Storage Deficit (mm/day)	Return Flow (mm/day)
-        4/1/2014	0.0	50.0	2	0	0.1	3.0	5	5	40.0	4.0	150	0.5	300.0	-5.0
-        4/2/2014	5.0	55.0	8	1.5	0.2	9.0	3	12	50.0	3.0	125	0.4	310.0	-4.5
+        4/1/2014	2.0	50.0	2	0	0.1	3.0	5	5	40.0	4.0	150	0.5	300.0	-5.0
+        4/2/2014	6.0	55.0	8	1.5	0.2	9.0	3	12	50.0	3.0	125	0.4	310.0	-4.5
         4/3/2014	10.0	45.0	2	1.5	0.3	3.0	13	13	60.0	2.0	25	0.3	350.0	-4.0
         """   
 
@@ -41,7 +42,7 @@ def setup():
         User:	jlant
         Date:	4/10/2014 00:00:00 PM
         StationID:	000000
-        Date	Discharge (cfs)	Subsurface Flow (mm/day)	
+        Date	Discharge (cfs)	Subsurface Flow (mm/day)
         4/1/2014	5.0	50.0	
         4/2/2014	10.0	55.0	
         4/3/2014		60.0	
@@ -49,28 +50,13 @@ def setup():
         4/5/2014	5.5	45.0	
         """   
 
-def teardown():
-    """ Print to standard error when all tests are finished """
-    
-    print >> sys.stderr, "TEARDOWN: nwispy_filereader tests"      
-
-
-def test_date():
-    
-    expected = datetime.datetime(2014, 4, 9, 0, 0)
-    
-    actual = watertxt.get_date(date_str = fixture["date_str"])
-
-    nose.tools.assert_equals(actual, expected)
-
-def test_data_file_clean():
-
+    # create a sample data set    
     dates = np.array([datetime.datetime(2014, 04, 01, 0, 0), 
                       datetime.datetime(2014, 04, 02, 0, 0), 
                       datetime.datetime(2014, 04, 03, 0, 0),
     ])
     
-    discharge_data = np.array([0, 5, 10])
+    discharge_data = np.array([2, 6, 10])
     subsurface_data = np.array([50, 55, 45])
     impervious_data = np.array([2, 8, 2])
     infiltration_data = np.array([0, 1.5, 1.5])
@@ -85,7 +71,7 @@ def test_data_file_clean():
     storagedeficit_data = np.array([300, 310, 350])
     returnflow_data = np.array([-5.0, -4.5, -4.0])
     
-    expected = {
+    fixture["sample_data_dict"] = {
         "user": "jlant",
         "date_created": "4/9/2014 15:50:47 PM",
         "stationid": "012345",
@@ -192,6 +178,123 @@ def test_data_file_clean():
             },
         ],  
     }
+
+
+
+def teardown():
+    """ Print to standard error when all tests are finished """
+    
+    print >> sys.stderr, "TEARDOWN: watertxt tests"      
+
+def test_get_date():
+    
+    expected = datetime.datetime(2014, 4, 9, 0, 0)
+    
+    actual = watertxt.get_date(date_str = fixture["date_str"])
+
+    nose.tools.assert_equals(actual, expected)
+    
+def test_create_parameter():
+
+    expected1 = {"name": None, "index": None, "data": [], "mean": None, "max": None, "min": None}
+    
+    parameter1 = watertxt.create_parameter()
+
+    nose.tools.assert_equals(expected1["name"], parameter1["name"])
+    nose.tools.assert_equals(expected1["index"], parameter1["index"])
+    nose.tools.assert_equals(expected1["data"], parameter1["data"])
+    nose.tools.assert_equals(expected1["mean"], parameter1["mean"])
+    nose.tools.assert_equals(expected1["max"], parameter1["max"])
+    nose.tools.assert_equals(expected1["min"], parameter1["min"])
+
+    expected2 = {"name": "discharge", "index": 0, "data": [1, 2, 3], "mean": 2, "max": 3, "min": 1}
+    
+    parameter2 = watertxt.create_parameter(name = "discharge", index = 0, data = [1, 2, 3], mean = 2, max = 3, min = 1)    
+    
+    nose.tools.assert_equals(expected2["name"], parameter2["name"])
+    nose.tools.assert_equals(expected2["index"], parameter2["index"])
+    nose.tools.assert_equals(expected2["data"], parameter2["data"])
+    nose.tools.assert_equals(expected2["mean"], parameter2["mean"])
+    nose.tools.assert_equals(expected2["max"], parameter2["max"])
+    nose.tools.assert_equals(expected2["min"], parameter2["min"])
+
+@with_setup(setup, teardown)
+def test_add_parameter():
+    """ Test add_parameter functionality """
+
+    print("--- Testing add_parameter ---") 
+    
+    wateruse_data = np.array([3.0, 2.5, -5.5])
+    expected = {"name": "Water Use (cfs)", "index": 14, "data": wateruse_data, 
+                "mean": np.mean(wateruse_data), "max": np.max(wateruse_data), "min": np.min(wateruse_data)}    
+    
+    data = watertxt.add_parameter(watertxt_data = fixture["sample_data_dict"], name = "Water Use (cfs)", param_data = np.array([3.0, 2.5, -5.5])) 
+
+    nose.tools.assert_equals(expected["name"], data["parameters"][-1]["name"])
+    nose.tools.assert_equals(expected["index"], data["parameters"][-1]["index"])
+    nose.tools.assert_almost_equals(expected["data"].all(), data["parameters"][-1]["data"].all())
+    nose.tools.assert_equals(expected["mean"], data["parameters"][-1]["mean"])
+    nose.tools.assert_equals(expected["max"], data["parameters"][-1]["max"])
+    nose.tools.assert_equals(expected["min"], data["parameters"][-1]["min"])    
+
+@with_setup(setup, teardown)
+def test_get_parameter():
+
+    subsurface_data = np.array([50., 55., 45.])
+    expected = {"name": "Subsurface Flow (mm/day)", "index": 1, "data": subsurface_data, 
+                "mean": np.mean(subsurface_data), "max": np.max(subsurface_data), "min": np.min(subsurface_data)}
+    
+    parameter = watertxt.get_parameter(watertxt_data = fixture["sample_data_dict"], name = "Subsurface Flow")
+    
+    nose.tools.assert_equals(expected["name"], parameter["name"])
+    nose.tools.assert_equals(expected["index"], parameter["index"])
+    nose.tools.assert_almost_equals(expected["data"].all(), parameter["data"].all())
+    nose.tools.assert_equals(expected["mean"], parameter["mean"])
+    nose.tools.assert_equals(expected["max"], parameter["max"])
+    nose.tools.assert_equals(expected["min"], parameter["min"]) 
+    
+@with_setup(setup, teardown)  
+def test_get_all_values():
+    
+    expected = [
+        np.array([2, 6, 10]),
+        np.array([50, 55, 45]),
+        np.array([2, 8, 2]),
+        np.array([0, 1.5, 1.5]),
+        np.array([0.1, 0.2, 0.3]),
+        np.array([3, 9, 3]),
+        np.array([5, 3, 13]),
+        np.array([5, 12, 13]),
+        np.array([40, 50, 60]),
+        np.array([4, 3, 2]),
+        np.array([150, 125, 25]),
+        np.array([0.5, 0.4, 0.3]),
+        np.array([300, 310, 350]),
+        np.array([-5, -4.5, -4]),    
+    ]
+  
+    values_all = watertxt.get_all_values(watertxt_data = fixture["sample_data_dict"])
+    
+    nose.tools.assert_almost_equals(expected[0].all(), values_all[0].all())
+    nose.tools.assert_almost_equals(expected[1].all(), values_all[1].all())
+    nose.tools.assert_almost_equals(expected[2].all(), values_all[2].all())
+    nose.tools.assert_almost_equals(expected[3].all(), values_all[3].all())
+    nose.tools.assert_almost_equals(expected[4].all(), values_all[4].all())
+    nose.tools.assert_almost_equals(expected[5].all(), values_all[5].all())    
+    nose.tools.assert_almost_equals(expected[6].all(), values_all[6].all())    
+    nose.tools.assert_almost_equals(expected[7].all(), values_all[7].all())
+    nose.tools.assert_almost_equals(expected[8].all(), values_all[8].all())
+    nose.tools.assert_almost_equals(expected[9].all(), values_all[9].all())
+    nose.tools.assert_almost_equals(expected[10].all(), values_all[10].all())
+    nose.tools.assert_almost_equals(expected[11].all(), values_all[11].all())    
+    nose.tools.assert_almost_equals(expected[12].all(), values_all[12].all())
+    nose.tools.assert_almost_equals(expected[13].all(), values_all[13].all())
+
+
+@with_setup(setup, teardown) 
+def test_data_file_clean():
+
+    expected = fixture["sample_data_dict"]    
     
     fileobj = StringIO(fixture["data_file_clean"])
     actual = watertxt.read_file_in(filestream = fileobj)

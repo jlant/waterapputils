@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-:Module: helpers.py
+:Module: nwispy_helpers.py
 
 :Author: Jeremiah Lant, jlant@usgs.gov, U.S. Geological Survey, Kentucky Water Science Center, http://www.usgs.gov/ 
 
@@ -128,12 +128,12 @@ def isfloat(value):
         
     Examples
     --------
-    >>> import helpers
-    >>> helpers.isfloat(value = "2.5")
+    >>> import nwispy_helpers
+    >>> nwispy_helpers.isfloat(value = "2.5")
     True
-    >>> helpers.isfloat(value = "hello world")
+    >>> nwispy_helpers.isfloat(value = "hello world")
     False
-    >>> helpers.isfloat(value = "5.5_")
+    >>> nwispy_helpers.isfloat(value = "5.5_")
     False
     """
     
@@ -175,7 +175,6 @@ def rmspecialchars(value):
     value = re.sub("[^A-Za-z0-9.-]+", "", value)
     
     return value
-
     
 def subset_data(dates, values, start_date, end_date):
     """   
@@ -287,12 +286,12 @@ def test_get_file_info():
 
     print("--- Testing get_file_info ---")  
     
-    filedir, filename = get_file_info(path = os.path.join(os.getcwd(), "helpers.py"))
+    filedir, filename = get_file_info(path = os.path.join(os.getcwd(), "nwispy_helpers.py"))
 
     print("File directory is:")
     print("    {}".format(filedir))
     print("File name is expected : actual")
-    print("    helpers.py : {}".format(filename))
+    print("    nwispy_helpers.py : {}".format(filename))
     print("")
 
 def test_make_directory():
@@ -310,17 +309,17 @@ def test_isfloat():
 
     print("--- Testing isfloat() ---") 
 
-    print("Floats like {} expected : actual".format(2.5))
+    print("Floats like {}\n    expected : actual".format(2.5))
     print("    True: {}".format(isfloat(2.5)))
-    print("Ints like {} expected : actual".format(2))
+    print("Ints like {}\n    expected : actual".format(2))
     print("    True: {}".format(isfloat(2)))
-    print("String floats like {} expected : actual".format("2.5"))
+    print("String floats like {}\n    expected : actual".format("2.5"))
     print("    True: {}".format(isfloat("2.5")))
-    print("String ints like {} expected : actual".format("2"))
+    print("String ints like {}\n    expected : actual".format("2"))
     print("    True: {}".format(isfloat("2")))
-    print("Regular strings like {} expected : actual".format("hello world"))
+    print("Regular strings like {}\n    expected : actual".format("hello world"))
     print("    False: {}".format(isfloat("hello world")))
-    print("Characters mixed with floats like {} expected : actual".format("2.5_"))
+    print("Characters mixed with floats like {}\n    expected : actual".format("2.5_"))
     print("    False: {}".format(isfloat("2.5_")))
     print("")
 
@@ -329,20 +328,19 @@ def test_rmspecialchars():
 
     print("--- Testing rmspecialchars() ---") 
 
-    print("Floats like {} expected : actual".format("*6.5_"))
+    print("Floats like {}\n    expected : actual".format("*6.5_"))
     print("    6.5 : {}".format(rmspecialchars("*6.5_")))
 
-    print("Empty strings like {} expected : actual".format(""))
+    print("Empty strings like {}\n    expected : actual".format(""))
     print("    : {}".format(rmspecialchars("")))
 
-    print("Floats like {} expected : actual".format("*$^**(@4.2_+-;"))
-    print("    4.2 : {}".format(rmspecialchars("*$^**(@4.2_+-;")))
+    print("Floats like {}\n    expected : actual".format("*$^**(@4.2_+;"))
+    print("    4.2 : {}".format(rmspecialchars("*$^**(@4.2_+;")))
 
-    print("Floats like {} expected : actual".format("-3.6"))
+    print("Floats like {}\n    expected : actual".format("-3.6"))
     print("    -3.6 : {}".format(rmspecialchars("-3.6")))
     
     print("")
-
 
 def test_subset_data():
     """ Test subset_data() functionality """
@@ -405,9 +403,9 @@ def test_find_start_end_dates():
     dates2 = [datetime.datetime(int(year), int(month), int(day2)) + datetime.timedelta(i) for i in range(11)]
     
     start_date, end_date = find_start_end_dates(dates1, dates2)
-    print("Start date* expected : actual")
+    print("Start date*\n    expected : actual")
     print("    2014-01-03: {}".format(start_date))
-    print("*End date* expected : actual")
+    print("*End date*\n    expected : actual")
     print("    2014-01-11: {}".format(end_date))
     print("")
 
@@ -421,9 +419,9 @@ def test_find_start_end_dates():
     dates2 = [datetime.datetime(int(year), int(month), int(day1)) + datetime.timedelta(i) for i in range(11)]
     
     start_date, end_date = find_start_end_dates(dates1, dates2)
-    print("*Start date* expected : actual")
+    print("*Start date*\n    expected : actual")
     print("    2014-01-03: {}".format(start_date))
-    print("*End date* expected : actual")
+    print("*End date*\n    expected : actual")
     print("    2014-01-11: {}".format(end_date))
     print("")
 
@@ -445,7 +443,7 @@ def test_find_start_end_dates():
         print("    PROBLEM exception was not executed")
         
     except ValueError as error:
-        print("*Value Error* expected : actual")
+        print("*Value Error*\n    expected : actual")
         print("    No matching dates for find_start_end_dates() : {}".format(error.message))
         
     
