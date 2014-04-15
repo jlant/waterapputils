@@ -290,6 +290,28 @@ def test_get_all_values():
     nose.tools.assert_almost_equals(expected[12].all(), values_all[12].all())
     nose.tools.assert_almost_equals(expected[13].all(), values_all[13].all())
 
+@with_setup(setup, teardown)
+def test_set_parameter_values():
+    """ Test set_parameter functionality """
+    
+    print("--- Testing set_parameter ---") 
+    
+    subsurface_data = np.array([100, 110, 120])
+    watertxt_data = watertxt.set_parameter_values(watertxt_data = fixture["sample_data_dict"], name = "Subsurface Flow", values = subsurface_data)
+
+    expected = {"name": "Subsurface Flow (mm/day)", "index": 1, "data": subsurface_data, 
+                "mean": np.mean(subsurface_data), "max": np.max(subsurface_data), "min": np.min(subsurface_data)}
+
+
+    updated_subsurface_data = watertxt.get_parameter(watertxt_data, name = "Subsurface Flow")
+
+    nose.tools.assert_equals(expected["name"], updated_subsurface_data["name"])
+    nose.tools.assert_equals(expected["index"], updated_subsurface_data["index"])
+    nose.tools.assert_almost_equals(expected["data"].all(), updated_subsurface_data["data"].all())
+    nose.tools.assert_equals(expected["mean"], updated_subsurface_data["mean"])
+    nose.tools.assert_equals(expected["max"], updated_subsurface_data["max"])
+    nose.tools.assert_equals(expected["min"], updated_subsurface_data["min"]) 
+
 
 @with_setup(setup, teardown) 
 def test_data_file_clean():
