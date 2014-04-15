@@ -177,6 +177,93 @@ def convert_to_float(value, helper_str = None):
             
     return value
 
+def get_delta_values(delta_data, tile_list):
+    """   
+    Process and return delta data values for a list of tiles of interest. Delta 
+    values are averaged when there are multiple tiles.
+    
+    Parameters
+    ----------
+    delta_data: list 
+        List of dictionaries holding data from many delta data files
+        
+    Returns
+    -------
+    delta_values: dictionary 
+        Dictionary holding data for a specific list of tiles
+        
+    Notes
+    -----          
+    delta_values = {
+        'Ppt': {
+            'January': 2.0,
+            'February': 0.98,
+            'March': 0.97,
+            'April': 1.04,
+            'May': 1.10,
+            'June': 0.99,
+            'July': 0.87,
+            'August': 0.75,
+            'September': 0.95,
+            'October': 0.98,
+            'November': 1.10,
+            'December': 2.0
+        }
+    }         
+    """ 
+    delta_values = {}
+    month_list = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']       
+    
+    # initialize a dictionary containing month keys and None values
+    month_dict = {}
+    for month in month_list:
+        month_dict[month] = None
+    
+    # set the initialized month dictionary as a value into specific variable key
+    variable = delta_data["Variable"]
+    delta_values[variable] = month_dict
+    
+    # get tile indices and values for a specific list of tiles
+    values = []
+    for tile in tile_list:
+        if tile in delta_data["Tile"]:
+            monthly_values = []
+            tile_index = delta_data["Tile"].index(tile)
+            for month in month_list:
+                value = delta_data[month][tile_index]
+                monthly_values.append(value)
+                
+            values.append(monthly_values)
+
+        else: 
+            logging.warn("{} tile is not in the tile list contained in delta_data.".format(tile))
+
+    # convert delta values into a numpy array; take average (axis = 0 => along columns)
+    # value for multiple tiles
+    values = np.array(values, dtype = float)
+    values_avg = np.average(values, axis = 0)
+    
+    # fill delta value dictionary with values
+    month_enum_list = list(enumerate(month_list))
+    for item in month_enum_list:
+        index = item[0]
+        month = item[1]
+        delta_values[variable][month] = values_avg[index]
+    
+    return delta_values
+
+def _create_test_data():
+    """ Create a delta data dictionary for tests """
+
+    data = {"Model": "CanESM2", "Scenario": "rcp45", "Target": "2030", "Variable": "PET", "Tile": ["11", "12", "21", "22", "31", "32"],
+            "January": [1.1, 1.2, 1.3, 1.4, 1.5, 1.6], "February": [2.7, 2.8, 2.9, 2.1, 2.2, 2.3], "March": [3.1, 3.2, 3.3, 3.4, 3.5, 3.6],
+            "April": [4.7, 4.8, 4.9, 4.1, 4.2, 4.3], "May": [5.1, 5.2, 5.3, 5.4, 5.5, 5.6], "June": [6.7, 6.8, 6.9, 6.1, 6.2, 6.3],
+            "July": [7.1, 7.2, 7.3, 7.4, 7.5, 7.6], "August": [8.7, 8.8, 8.9, 8.1, 8.2, 8.3], "September": [9.1, 9.2, 9.3, 9.4, 9.5, 9.6],
+            "October": [10.7, 10.8, 10.9, 10.1, 10.2, 10.3], "November": [11.1, 11.2, 11.3, 11.4, 11.5, 11.6], "December": [12.7, 12.8, 12.9, 12.1, 12.2, 12.3]           
+    }
+
+    return data
+
 def test_read_file_in():
     """ Test read_file_in() functionality"""
 
@@ -255,6 +342,15 @@ def test_read_file_in():
 
     print("")
 
+def test_get_delta_values():
+    """ Test get_delta_values functionality """
+    
+    print("--- Testing get_delta_values ---")
+
+    data = _create_test_data()
+    delta_values = get_delta_values(delta_data = data, tile_list = ["11", "12"])
+    print(delta_values)
+
 def main():
     """ Test functionality of reading files """
 
@@ -264,6 +360,7 @@ def main():
 
     test_read_file_in()
 
+    test_get_delta_values()
     
 if __name__ == "__main__":
     main()
