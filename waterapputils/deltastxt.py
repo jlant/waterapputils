@@ -44,7 +44,7 @@ def read_file(filename):
     read_file_in : Read data file object 
     """
     
-    filestream = open(filename, 'r')
+    filestream = open(filename, "r")
     data = read_file_in(filestream)
     filestream.close()
     
@@ -69,21 +69,21 @@ def read_file_in(filestream):
     -----          
     data = {
         
-        'Model': string of model name,
+        "Model": string of model name,
         
-        'Scenario': string of scenario name,
+        "Scenario": string of scenario name,
         
-        'Target': string of scenario name,
+        "Target": string of scenario name,
         
-        'Variable': string of variable name,
+        "Variable": string of variable name,
         
-        'Tile': list of tile numbers,
+        "Tile": list of tile numbers,
         
-        'January': array of delta values for each tile
+        "January": array of delta values for each tile
         
         . . .
         
-        'December': array of delta values for each tile
+        "December": array of delta values for each tile
             
     }         
     """ 
@@ -177,7 +177,42 @@ def convert_to_float(value, helper_str = None):
             
     return value
 
-def get_delta_values(delta_data, tile_list):
+def get_monthly_values(delta_data, tile_list):
+    """   
+    Get monthly values based on tile(s) of interest.
+    
+    Parameters
+    ----------
+    delta_data : list 
+        List of dictionaries holding data from many delta data files
+    tile_list : list
+        List of string tile values
+        
+    Returns
+    -------
+    values: numpy array
+        Array containing lists of monthly values; shape is n x 12 where n is number of tiles in tile_list   
+    """
+    month_list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]       
+    values = []
+    for tile in tile_list:
+        if tile in delta_data["Tile"]:
+            monthly_values = []
+            tile_index = delta_data["Tile"].index(tile)
+            for month in month_list:
+                value = delta_data[month][tile_index]
+                monthly_values.append(value)
+                
+            values.append(monthly_values)
+
+        else: 
+            logging.warn("{} tile is not in the tile list contained in delta_data.".format(tile)) 
+
+    values = np.array(values, dtype = float)
+
+    return values
+    
+def get_monthly_values_(delta_data, tile_list):
     """   
     Process and return delta data values for a list of tiles of interest. Delta 
     values are averaged when there are multiple tiles.
@@ -191,75 +226,115 @@ def get_delta_values(delta_data, tile_list):
     -------
     delta_values: dictionary 
         Dictionary holding data for a specific list of tiles
+    delta_values_avg: dictionary 
+        Dictionary holding averaged data for a specific list of tiles
         
     Notes
     -----          
     delta_values = {
-        'Ppt': {
-            'January': 2.0,
-            'February': 0.98,
-            'March': 0.97,
-            'April': 1.04,
-            'May': 1.10,
-            'June': 0.99,
-            'July': 0.87,
-            'August': 0.75,
-            'September': 0.95,
-            'October': 0.98,
-            'November': 1.10,
-            'December': 2.0
+        "Ppt": {
+            "January": 2.0,
+            "February": 0.98,
+            "March": 0.97,
+            "April": 1.04,
+            "May": 1.10,
+            "June": 0.99,
+            "July": 0.87,
+            "August": 0.75,
+            "September": 0.95,
+            "October": 0.98,
+            "November": 1.10,
+            "December": 2.0
         }
     }         
     """ 
     delta_values = {}
-    month_list = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']       
+    delta_values_avg = {}
+    month_list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]       
     
-    # initialize a dictionary containing month keys and None values
-    month_dict = {}
-    for month in month_list:
-        month_dict[month] = None
+#    # initialize a dictionary containing month keys and None values
+#    month_dict = {}
+#    for month in month_list:
+#        month_dict[month] = None
     
     # set the initialized month dictionary as a value into specific variable key
     variable = delta_data["Variable"]
     delta_values[variable] = month_dict
+    delta_values_avg[variable] = month_dict
     
-    # get tile indices and values for a specific list of tiles
-    values = []
-    for tile in tile_list:
-        if tile in delta_data["Tile"]:
-            monthly_values = []
-            tile_index = delta_data["Tile"].index(tile)
-            for month in month_list:
-                value = delta_data[month][tile_index]
-                monthly_values.append(value)
-                
-            values.append(monthly_values)
-
-        else: 
-            logging.warn("{} tile is not in the tile list contained in delta_data.".format(tile))
+    values, values_avg = get_monthly_values(delta_data, tile_list = tile_list)    
 
     # convert delta values into a numpy array; take average (axis = 0 => along columns)
     # value for multiple tiles
     values = np.array(values, dtype = float)
     values_avg = np.average(values, axis = 0)
-    
-    # fill delta value dictionary with values
+
+    # fill delta value dictionary with values_avg
     month_enum_list = list(enumerate(month_list))
     for item in month_enum_list:
         index = item[0]
         month = item[1]
-        delta_values[variable][month] = values_avg[index]
-    
-    return delta_values
+        delta_values_avg[variable][month] = values_avg[index]
 
+           
+    pdb.set_trace()            
+    return delta_values, delta_values_avg   
+
+def format_to_monthly_dict(values):
+    """
+    Format array of values into a dictionary with monthly keys.
+    
+    Parameters
+    ----------
+    values : numpy array
+        Array containing lists of monthly values; shape is n x 12 
+    
+    Returns
+    -------
+    values_dict : dictionary
+        Dictionary containing monthly keys with corresponding values.
+    
+    Notes
+    -----
+    {"January": [2.0, 1.0],
+     "February": [0.98, 0.99],
+     "March": [0.97, 1.10],
+     "April": [1.04, 1.02],
+     "May": [1.10, 0.99],
+     "June": [0.99, 0.98],
+     "July": [0.87, 0.75],
+     "August": [0.75, 0.95],
+     "September": [0.95, 0.9],
+     "October": [0.98, 0.8],
+     "November": [1.10, 1.05],
+     "December": [2.0, 1.10]
+    }
+    """
+    month_list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]       
+
+    assert np.shape(values)[1] == len(month_list)
+    
+    # initialize dictionary
+    values_dict = {}
+    for array in values:
+        for month in month_list:
+            values_dict[month] = []
+
+    month_enum_list = list(enumerate(month_list))
+    for value_array in values:    
+        for index, month in month_enum_list:
+            values_dict[month].append(value_array[index])
+  
+    return values_dict
+    
 def _create_test_data():
     """ Create a delta data dictionary for tests """
 
     data = {"Model": "CanESM2", "Scenario": "rcp45", "Target": "2030", "Variable": "PET", "Tile": ["11", "12", "21", "22", "31", "32"],
-            "January": [1.1, 1.2, 1.3, 1.4, 1.5, 1.6], "February": [2.7, 2.8, 2.9, 2.1, 2.2, 2.3], "March": [3.1, 3.2, 3.3, 3.4, 3.5, 3.6],
-            "April": [4.7, 4.8, 4.9, 4.1, 4.2, 4.3], "May": [5.1, 5.2, 5.3, 5.4, 5.5, 5.6], "June": [6.7, 6.8, 6.9, 6.1, 6.2, 6.3],
-            "July": [7.1, 7.2, 7.3, 7.4, 7.5, 7.6], "August": [8.7, 8.8, 8.9, 8.1, 8.2, 8.3], "September": [9.1, 9.2, 9.3, 9.4, 9.5, 9.6],
-            "October": [10.7, 10.8, 10.9, 10.1, 10.2, 10.3], "November": [11.1, 11.2, 11.3, 11.4, 11.5, 11.6], "December": [12.7, 12.8, 12.9, 12.1, 12.2, 12.3]           
+            "January": [1.3, 1.2, 1.3, 1.4, 1.5, 1.6], "February": [2.7, 2.8, 2.9, 2.3, 2.2, 2.3], "March": [3.3, 3.2, 3.3, 3.4, 3.5, 3.6],
+            "April": [4.7, 4.8, 4.9, 4.3, 4.2, 4.3], "May": [5.3, 5.2, 5.3, 5.4, 5.5, 5.6], "June": [6.7, 6.8, 6.9, 6.3, 6.2, 6.3],
+            "July": [7.3, 7.2, 7.3, 7.4, 7.5, 7.6], "August": [8.7, 8.8, 8.9, 8.3, 8.2, 8.3], "September": [9.3, 9.2, 9.3, 9.4, 9.5, 9.6],
+            "October": [10.7, 10.8, 10.9, 10.3, 10.2, 10.3], "November": [11.3, 11.2, 11.3, 11.4, 11.5, 11.6], "December": [12.7, 12.8, 12.9, 12.3, 12.2, 12.3]           
     }
 
     return data
@@ -274,10 +349,10 @@ def test_read_file_in():
     fixture["data file"] = \
         """
         Model	Scenario	Target	Variable	Tile	January	February	March	April	May	June	July	August	September	October	November	December
-        CanESM2	rcp45	2030	PET	11	1.1	2.7	3.1	4.7	5.1	6.7	7.1	8.7	9.1	10.7	11.1	12.7
+        CanESM2	rcp45	2030	PET	11	1.3	2.7	3.3	4.7	5.3	6.7	7.3	8.7	9.3	10.7	11.3	12.7
         CanESM2	rcp45	2030	PET	12	1.2	2.8	3.2	4.8	5.2	6.8	7.2	8.8	9.2	10.8	11.2	12.8
         CanESM2	rcp45	2030	PET	21	1.3	2.9	3.3	4.9	5.3	6.9	7.3	8.9	9.3	10.9	11.3	12.9
-        CanESM2	rcp45	2030	PET	22	1.4	2.1	3.4	4.1	5.4	6.1	7.4	8.1	9.4	10.1	11.4	12.1
+        CanESM2	rcp45	2030	PET	22	1.4	2.3	3.4	4.3	5.4	6.3	7.4	8.3	9.4	10.3	11.4	12.3
         CanESM2	rcp45	2030	PET	31	1.5	2.2	3.5	4.2	5.5	6.2	7.5	8.2	9.5	10.2	11.5	12.2
         CanESM2	rcp45	2030	PET	32	1.6	2.3	3.6	4.3	5.6	6.3	7.6	8.3	9.6	10.3	11.6	12.3
         """
@@ -305,40 +380,40 @@ def test_read_file_in():
     print("    ['11', '12', '21', '22', '31', '32'] : {}\n".format(data["Tile"]))
 
     print("*January*\n    expected : actual")
-    print("    [1.1, 1.2, 1.3, 1.4, 1.5, 1.6] : {}\n".format(data["January"]))
+    print("    [1.3, 1.2, 1.3, 1.4, 1.5, 1.6] : {}\n".format(data["January"]))
 
     print("*February*\n    expected : actual")
-    print("    [2.7, 2.8, 2.9, 2.1, 2.2, 2.3] : {}\n".format(data["February"]))
+    print("    [2.7, 2.8, 2.9, 2.3, 2.2, 2.3] : {}\n".format(data["February"]))
 
     print("*March*\n    expected : actual")
-    print("    [3.1, 3.2, 3.3, 3.4, 3.5, 3.6] : {}\n".format(data["March"]))
+    print("    [3.3, 3.2, 3.3, 3.4, 3.5, 3.6] : {}\n".format(data["March"]))
 
     print("*April*\n    expected : actual")
-    print("    [4.7, 4.8, 4.9, 4.1, 4.2, 4.3] : {}\n".format(data["April"]))
+    print("    [4.7, 4.8, 4.9, 4.3, 4.2, 4.3] : {}\n".format(data["April"]))
 
     print("*May*\n    expected : actual")
-    print("    [5.1, 5.2, 5.3, 5.4, 5.5, 5.6] : {}\n".format(data["May"]))   
+    print("    [5.3, 5.2, 5.3, 5.4, 5.5, 5.6] : {}\n".format(data["May"]))   
 
     print("*June*\n    expected : actual")
-    print("    [6.7, 6.8, 6.9, 6.1, 6.2, 6.3] : {}\n".format(data["June"]))   
+    print("    [6.7, 6.8, 6.9, 6.3, 6.2, 6.3] : {}\n".format(data["June"]))   
 
     print("*July*\n    expected : actual")
-    print("    [7.1, 7.2, 7.3, 7.4, 7.5, 7.6] : {}\n".format(data["July"]))   
+    print("    [7.3, 7.2, 7.3, 7.4, 7.5, 7.6] : {}\n".format(data["July"]))   
 
     print("*August*\n    expected : actual")
-    print("    [8.7, 8.8, 8.9, 8.1, 8.2, 8.3] : {}\n".format(data["August"]))   
+    print("    [8.7, 8.8, 8.9, 8.3, 8.2, 8.3] : {}\n".format(data["August"]))   
 
     print("*September*\n    expected : actual")
-    print("    [9.1, 9.2, 9.3, 9.4, 9.5, 9.6] : {}\n".format(data["September"]))   
+    print("    [9.3, 9.2, 9.3, 9.4, 9.5, 9.6] : {}\n".format(data["September"]))   
 
     print("*October*\n    expected : actual")
-    print("    [10.7, 10.8, 10.9, 10.1, 10.2, 10.3] : {}\n".format(data["October"]))   
+    print("    [10.7, 10.8, 10.9, 10.3, 10.2, 10.3] : {}\n".format(data["October"]))   
 
     print("*November*\n    expected : actual")
-    print("    [11.1, 11.2, 11.3, 11.4, 11.5, 11.6] : {}\n".format(data["November"]))   
+    print("    [11.3, 11.2, 11.3, 11.4, 11.5, 11.6] : {}\n".format(data["November"]))   
 
     print("*December*\n    expected : actual")
-    print("    [12.7, 12.8, 12.9, 12.1, 12.2, 12.3] : {}\n".format(data["December"]))   
+    print("    [12.7, 12.8, 12.9, 12.3, 12.2, 12.3] : {}\n".format(data["December"]))   
 
     print("")
 
@@ -347,10 +422,48 @@ def test_get_delta_values():
     
     print("--- Testing get_delta_values ---")
 
+    expected = {"Januaray": [1.3, 1.2], "Feburary": [2.7, 2.8], "March": [3.3, 3.2], "April": [4.7, 4.8], "May": [5.3, 5.2], "June": [6.7, 6.8],
+                "July": [7.3, 7.2], "August": [8.7, 8.8], "September": [9.3, 9.2], "October": [10.7, 10.8], "November": [11.3], "December": [12.7, 12.8]}
+       
+    print("Expected")
+    print(expected)    
+    
     data = _create_test_data()
-    delta_values = get_delta_values(delta_data = data, tile_list = ["11", "12"])
+    delta_values, delta_values_avg = get_delta_values(delta_data = data, tile_list = ["11", "12"])
+    print("Actual")
     print(delta_values)
+    print("Actual avg")
+    print(delta_values_avg)
 
+def test_get_monthly_values():
+    """ Test get_monthly_values """
+
+    data = _create_test_data()
+    values, values_avg = get_monthly_values(delta_data = data, tile_list = ["11", "12"])
+
+    print("*Values*\n    expected : actual")
+    print("    [[  1.3   2.7   3.3   4.7   5.3   6.7   7.3   8.7   9.3  10.7  11.3  12.7]\n    [  1.2   2.8   3.2   4.8   5.2   6.8   7.2   8.8   9.2  10.8  11.2  12.8]] : \n    {}".format(values))
+    
+    print("*Values average*\n    expected : actual")
+    print("    [  1.25   2.75   3.25   4.75   5.25   6.75   7.25   8.75   9.25  10.75 11.25  12.75] : \n    {}".format(values_avg))
+    
+    print("")
+    
+def test_format_to_monthly_dict():
+    """ Test format_to_monthly_dict functionality """
+
+    print("--- Testing format_to_monthly_dict ---")
+    
+    values1 = np.array([[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]])
+    
+    values2 = np.array([[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], [9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2]])    
+    
+    monthly_dict = format_to_monthly_dict(values1)    
+    
+    print(monthly_dict)
+
+    print("")
+    
 def main():
     """ Test functionality of reading files """
 
@@ -360,7 +473,13 @@ def main():
 
     test_read_file_in()
 
-    test_get_delta_values()
+    test_get_monthly_values()
+    
+    test_format_to_monthly_dict()
+
+#    test_get_delta_values()
+
+
     
 if __name__ == "__main__":
     main()
