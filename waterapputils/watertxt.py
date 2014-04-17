@@ -144,7 +144,7 @@ def read_file_in(filestream):
             for parameter in data["parameters"]:
                 value = match_data_row.group(2).split("\t")[parameter["index"]]
                 
-                value = convert_to_float(value = value, helper_str = "parameter {} on {}".format(parameter["name"], date.strftime("%Y-%m-%d_%H.%M")))                
+                value = helpers.convert_to_float(value = value, helper_str = "parameter {} on {}".format(parameter["name"], date.strftime("%Y-%m-%d_%H.%M")))                
                                        
                 parameter["data"].append(float(value)) 
             
@@ -156,7 +156,7 @@ def read_file_in(filestream):
     for parameter in data["parameters"]:
         parameter["data"] = np.array(parameter["data"])
         
-        param_mean, param_max, param_min = compute_simple_stats(data = parameter["data"])
+        param_mean, param_max, param_min = helpers.compute_simple_stats(data = parameter["data"])
         
         parameter["mean"] = param_mean
         parameter["max"] = param_max
@@ -195,86 +195,6 @@ def create_parameter(name = None, index = None, data = [], mean = None, max = No
     }    
     
     return parameter
-
-
-def compute_simple_stats(data):
-    """   
-    Compute simple statistics (mean, max, min) on a data array. Can handle nan values.
-    If the entire data array consists of only nan values, then log the error and raise a ValueError.
-    
-    Parameters
-    ----------
-    data : array
-        An array of numbers to compute simple statistics on. 
-        
-    Returns
-    -------
-    (mean, max, min) : tuple 
-        Returns a tuple of mean, max, and min stats.        
-
-    Raises
-    ------
-    ValueError
-        If data array only contains nan values.
-
-    Examples
-    --------
-    >>> import watertxt
-    >>> import numpy as np
-    >>> watertxt.compute_simple_stats([1, 2, 3, 4])
-    (2.5, 4, 1)
-    
-    >>> watertxt.compute_simple_stats([2, np.nan, 6, 1])
-    (3.0, 6.0, 1.0)
-    """    
-    # check if all values are nan
-    if not np.isnan(data).all():
-        param_mean = np.nanmean(data)
-        param_max = np.nanmax(data)
-        param_min = np.nanmin(data)
-        
-        return param_mean, param_max, param_min
-    else:
-        error_str = "*Bad data* All values are NaN. Please check data"
-        logging.warn(error_str)
-
-        raise ValueError
-
-def convert_to_float(value, helper_str = None):
-    """   
-    Convert a value to a float. If value is not a valid float, log as an error
-    with a helper_str (i.e. value"s coorsponding date) to help locate the 
-    error and replace value with a nan.
-    
-    Parameters
-    ----------
-    value : str
-        String value to convert.
-    helper_str : str
-        String message to be placed in error log if value can not be converted to a float. i.e. value"s corresponding date of occurance.
-        
-    Returns
-    -------
-    value : {float, nan}
-        Float or numpy nan value 
-    """
-    # remove any special characters present in string value
-    value = helpers.rmspecialchars(value)    
-    
-    if helpers.isfloat(value):
-        value = float(value)
-    else:        
-        if value == "":
-            error_str = "*Missing value* {}. *Solution* - Replacing with NaN value".format(helper_str)
-            logging.warn(error_str)
-            value = np.nan
-
-        else:
-            error_str = "*Bad value* {}. *Solution* - Replacing with NaN value".format(helper_str)
-            logging.warn(error_str)
-            value = np.nan
-            
-    return value
 
 def get_date(date_str):
     """   
@@ -367,7 +287,7 @@ def add_parameter(watertxt_data, name, param_data):
     watertxt_data["column_names"].append(name)
     
     # compute simple stats
-    param_mean, param_max, param_min = compute_simple_stats(data = param_data)
+    param_mean, param_max, param_min = helpers.compute_simple_stats(data = param_data)
 
     # find last index
     indices = []
@@ -447,7 +367,7 @@ def set_parameter_values(watertxt_data, name, values):
     for parameter in watertxt_data['parameters']:
         if parameter["name"].split('(')[0].strip() == name.split("(")[0].strip():
             
-            param_mean, param_max, param_min = compute_simple_stats(data = values)
+            param_mean, param_max, param_min = helpers.compute_simple_stats(data = values)
             parameter["data"] = values
             parameter["mean"] = param_mean
             parameter["max"] = param_max

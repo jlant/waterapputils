@@ -14,11 +14,9 @@ __contact__   = __author__
 
 import re
 import numpy as np
-import datetime
 import logging
 from StringIO import StringIO
-import os
-import pdb
+
 # my modules
 import helpers
 
@@ -131,7 +129,7 @@ def read_file_in(filestream):
             pass                                                            # leave Tile values as strings
         else:
             for i in range(len(parameter["data"])):                         # ensure that value is a float
-                value = convert_to_float(value = parameter["data"][i], helper_str = "parameter {}".format(parameter["name"]))                
+                value = helpers.convert_to_float(value = parameter["data"][i], helper_str = "parameter {}".format(parameter["name"]))                
                                        
                 parameter["data"][i] = float(value)
         
@@ -141,41 +139,41 @@ def read_file_in(filestream):
     # return data
     return data
        
-def convert_to_float(value, helper_str = None):
-    """   
-    Convert a value to a float. If value is not a valid float, log as an error
-    with a helper_str (i.e. value"s coorsponding date) to help locate the 
-    error and replace value with a nan.
-    
-    Parameters
-    ----------
-    value : str
-        String value to convert.
-    helper_str : str
-        String message to be placed in error log if value can not be converted to a float. i.e. value"s corresponding date of occurance.
-        
-    Returns
-    -------
-    value : {float, nan}
-        Float or numpy nan value 
-    """
-    # remove any special characters present in string value
-    value = helpers.rmspecialchars(value)    
-    
-    if helpers.isfloat(value):
-        value = float(value)
-    else:        
-        if value == "":
-            error_str = "*Missing value* {}. *Solution* - Replacing with NaN value".format(helper_str)
-            logging.warn(error_str)
-            value = np.nan
-
-        else:
-            error_str = "*Bad value* {}. *Solution* - Replacing with NaN value".format(helper_str)
-            logging.warn(error_str)
-            value = np.nan
-            
-    return value
+#def convert_to_float(value, helper_str = None):
+#    """   
+#    Convert a value to a float. If value is not a valid float, log as an error
+#    with a helper_str (i.e. value"s coorsponding date) to help locate the 
+#    error and replace value with a nan.
+#    
+#    Parameters
+#    ----------
+#    value : str
+#        String value to convert.
+#    helper_str : str
+#        String message to be placed in error log if value can not be converted to a float. i.e. value"s corresponding date of occurance.
+#        
+#    Returns
+#    -------
+#    value : {float, nan}
+#        Float or numpy nan value 
+#    """
+#    # remove any special characters present in string value
+#    value = helpers.rmspecialchars(value)    
+#    
+#    if helpers.isfloat(value):
+#        value = float(value)
+#    else:        
+#        if value == "":
+#            error_str = "*Missing value* {}. *Solution* - Replacing with NaN value".format(helper_str)
+#            logging.warn(error_str)
+#            value = np.nan
+#
+#        else:
+#            error_str = "*Bad value* {}. *Solution* - Replacing with NaN value".format(helper_str)
+#            logging.warn(error_str)
+#            value = np.nan
+#            
+#    return value
 
 def get_monthly_values(delta_data, tile_list):
     """   
@@ -214,40 +212,6 @@ def get_monthly_values(delta_data, tile_list):
             logging.warn("{} tile is not in the tile list contained in delta_data.".format(tile)) 
 
     return values
-
-def create_monthly_dict():
-    """
-    Create a dictionary containing monthly keys and empty lists as initial values
-    
-    Returns
-    -------
-    values_dict : dictionary
-        Dictionary containing monthly keys with corresponding values.
-    
-    Notes
-    -----
-    {"January": [],
-     "February": [],
-     "March": [],
-     "April": [],
-     "May": [],
-     "June": [],
-     "July": [],
-     "August": [],
-     "September": [],
-     "October": [],
-     "November": [],
-     "December": []
-    }
-    """
-    months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]       
-
-    # initialize dictionary
-    monthly_dict = {}
-    for month in months:
-        monthly_dict[month] = []
-
-    return monthly_dict
     
 def format_to_monthly_dict(values):
     """
@@ -282,7 +246,7 @@ def format_to_monthly_dict(values):
     assert np.shape(values)[1] == 12
 
     months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-    values_dict = create_monthly_dict()
+    values_dict = helpers.create_monthly_dict()
 
     month_enum_list = list(enumerate(months))
     for values_list in values:
@@ -328,7 +292,7 @@ def get_delta_values(delta_data, tile_list):
   
     # initialize avg_delta_values with keys corresponding to variable type  
     variable_type = delta_data["Variable"]
-    avg_delta_values[variable_type] = create_monthly_dict()
+    avg_delta_values[variable_type] = helpers.create_monthly_dict()
     
     # get delta values that correspond to a list of tiles
     values = get_monthly_values(delta_data, tile_list = tile_list)    
@@ -433,7 +397,7 @@ def test_read_file_in():
     print("    [12.7, 12.8, 12.9, 12.3, 12.2, 12.3] : {}\n".format(data["December"]))   
 
     print("")
-
+    
 def test_get_monthly_values():
     """ Test get_monthly_values """
 
@@ -460,14 +424,14 @@ def test_format_to_monthly_dict():
     values1_dict = format_to_monthly_dict(values1)
 
     print("*Values dictionary*\n    expected : actual")
-    print("    {'January': [1.1], 'Feburary': [2.2], 'March': [3.3], 'April': [4.4], 'May': [5.5], 'June': [6.6], 'July': [7.7], 'August': [8.8], 'September': [9.9], 'October': [10.0], 'November': [11.1], 'December': [12.2]} : \n")
+    print("    {'January': [1.1], 'February': [2.2], 'March': [3.3], 'April': [4.4], 'May': [5.5], 'June': [6.6], 'July': [7.7], 'August': [8.8], 'September': [9.9], 'October': [10.0], 'November': [11.1], 'December': [12.2]} : \n")
     print("    {}\n".format(values1_dict))                
 
     values2 = [[1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9, 10.0, 11.1, 12.2], [1.9, 2.8, 3.7, 4.6, 5.5, 6.4, 7.3, 8.2, 9.1, 10.0, 11.9, 12.8]] 
 
     values2_dict = format_to_monthly_dict(values2)
     print("*Values dictionary*\n    expected : actual")
-    print("    {'January': [1.1, 1.9], 'Feburary': [2.2, 2.8], 'March': [3.3, 3.7], 'April': [4.4, 4.6], 'May': [5.5, 5.5], 'June': [6.6, 6.4], 'July': [7.7, 7.3], 'August': [8.8, 8.2], 'September': [9.9, 9.1], 'October': [10.0, 10.0], 'November': [11.1, 11.9], 'December': [12.2, 12.8]} : \n")
+    print("    {'January': [1.1, 1.9], 'February': [2.2, 2.8], 'March': [3.3, 3.7], 'April': [4.4, 4.6], 'May': [5.5, 5.5], 'June': [6.6, 6.4], 'July': [7.7, 7.3], 'August': [8.8, 8.2], 'September': [9.9, 9.1], 'October': [10.0, 10.0], 'November': [11.1, 11.9], 'December': [12.2, 12.8]} : \n")
     print("    {}\n".format(values2_dict)) 
     
     print("")
@@ -481,7 +445,7 @@ def test_get_delta_values():
     delta_values = get_delta_values(delta_data = data, tile_list = ["11", "12"])
     
     print("*Values dictionary*\n    expected : actual")
-    print("    {'PET' : {'January': 1.25, 'Feburary': 2.75, 'March': 3.25, 'April': 4.75, 'May': 5.25, 'June': 6.75, 'July': 7.25, 'August': 8.75, 'September': 9.25, 'October': 10.75, 'November': 11.25, 'December': 12.75}} : \n")
+    print("    {'PET' : {'January': 1.25, 'February': 2.75, 'March': 3.25, 'April': 4.75, 'May': 5.25, 'June': 6.75, 'July': 7.25, 'August': 8.75, 'September': 9.25, 'October': 10.75, 'November': 11.25, 'December': 12.75}} : \n")
     print("    {}\n".format(delta_values))    
     
     
@@ -493,6 +457,8 @@ def main():
     print("")
 
     test_read_file_in()
+
+    test_create_monthly_dict()
 
     test_get_monthly_values()
     

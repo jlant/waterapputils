@@ -99,7 +99,7 @@ def plot_watertxt_data(watertxt_data, is_visible = True, save_path = None):
         fig = plt.figure(figsize=(12,10))
         ax = fig.add_subplot(111)
         ax.grid(True)
-        ax.set_title("Parameter: {}\nStationID: {}".format(parameter['name'], watertxt_data['stationid']))
+        ax.set_title("Parameter: {}\nStationID: {}".format(parameter["name"], watertxt_data["stationid"]))
         ax.set_xlabel("Date")
         ylabel = "\n".join(wrap(parameter["name"], 60))
         ax.set_ylabel(ylabel)
@@ -215,14 +215,14 @@ def plot_watertxt_comparison(watertxt_data1, watertxt_data2, is_visible = True, 
         fig = plt.figure(figsize = (12,10))
         ax1 = fig.add_subplot(211)
         ax1.grid(True)
-        ax1.set_title("Parameter: {}\n{} vs {}".format(parameter1["name"], watertxt_data1["stationid"], watertxt_data2['stationid']))
+        ax1.set_title("Parameter: {}\n{} vs {}".format(parameter1["name"], watertxt_data1["stationid"], watertxt_data2["stationid"]))
         ax1.set_xlabel("Date")
         ylabel = "\n".join(wrap(parameter1["name"], 60))
         ax1.set_ylabel(ylabel)
         
         ax1.plot(dates, parameter1["data"], color = "b", label = watertxt_data1["stationid"], linewidth = 2)
         ax1.hold(True)
-        ax1.plot(dates, parameter2["data"], color = "g", label = watertxt_data2['stationid'], linewidth = 2)
+        ax1.plot(dates, parameter2["data"], color = "g", label = watertxt_data2["stationid"], linewidth = 2)
         ax1.fill_between(dates, parameter1["data"], parameter2["data"], facecolor = "r", alpha = 0.5)      
         
         # increase y axis to have text and legend show up better
@@ -230,7 +230,7 @@ def plot_watertxt_comparison(watertxt_data1, watertxt_data2, is_visible = True, 
         ax1.set_ylim((curr_ylim[0], curr_ylim[1] * 1.5))
 
         # use a more precise date string for the x axis locations in the toolbar
-        ax1.fmt_xdata = mdates.DateFormatter('%Y-%m-%d')
+        ax1.fmt_xdata = mdates.DateFormatter("%Y-%m-%d")
         
         # legend; make it transparent    
         handles1, labels1 = ax1.get_legend_handles_labels()
@@ -239,15 +239,15 @@ def plot_watertxt_comparison(watertxt_data1, watertxt_data2, is_visible = True, 
         legend1.draggable(state=True)
         
         # show text of mean, max, min values on graph; use matplotlib.patch.Patch properies and bbox
-        text = 'mean = %.2f\nmax = %.2f\nmin = %.2f\n---\nmean = %.2f\nmax = %.2f\nmin = %.2f' % (parameter1["mean"], parameter1["max"], parameter1["min"],
+        text = "mean = %.2f\nmax = %.2f\nmin = %.2f\n---\nmean = %.2f\nmax = %.2f\nmin = %.2f" % (parameter1["mean"], parameter1["max"], parameter1["min"],
                                                                                                   parameter2["mean"], parameter2["max"], parameter2["min"])
-        patch_properties = {'boxstyle': 'round',
-                            'facecolor': 'wheat',
-                            'alpha': 0.5
+        patch_properties = {"boxstyle": "round",
+                            "facecolor": "wheat",
+                            "alpha": 0.5
                             }
                        
         ax1.text(0.05, 0.95, text, transform = ax1.transAxes, fontsize = 14, 
-                verticalalignment = 'top', horizontalalignment = 'left', bbox = patch_properties)
+                verticalalignment = "top", horizontalalignment = "left", bbox = patch_properties)
                 
         # plot difference = values_b - values_a
         ax2 = fig.add_subplot(212, sharex = ax1)
@@ -256,10 +256,10 @@ def plot_watertxt_comparison(watertxt_data1, watertxt_data2, is_visible = True, 
         ax2.set_xlabel("Date")
         ax2.set_ylabel(ylabel)
         diff = parameter2["data"] - parameter1["data"]
-        ax2.plot(dates, diff, color = 'k', linewidth = 2)  
+        ax2.plot(dates, diff, color = "k", linewidth = 2)  
         
         # use a more precise date string for the x axis locations in the toolbar
-        ax2.fmt_xdata = mdates.DateFormatter('%Y-%m-%d')
+        ax2.fmt_xdata = mdates.DateFormatter("%Y-%m-%d")
         
         # rotate and align the tick labels so they look better; note that ax2 will 
         # have the dates, but ax1 will not. do not need to rotate each individual axis
@@ -283,9 +283,108 @@ def plot_watertxt_comparison(watertxt_data1, watertxt_data2, is_visible = True, 
             plt.show()
         else:
             plt.close()
-            
 
-def _create_test_data(multiplicative_factor = 1, stationid = "012345"):
+def print_deltatxt_data(deltatxt_data):
+    """   
+    Print information contained in the delta data dictionary. 
+    
+    Parameters
+    ----------
+    watertxt_data : dictionary 
+        A dictionary containing data found in WATER output text file.
+    """   
+   
+    print("The following are the parameters and values in the file:")
+    
+    for key, value in deltatxt_data.iteritems():
+        print("{}: {}".format(key, value))
+            
+def plot_deltatxt_data(deltatxt_data, is_visible = True, save_path = None):
+    """   
+    Plot each parameter contained in the nwis data. Save plots to a particular
+    path.
+    
+    Parameters
+    ----------
+    deltatxtdata_data : dictionary 
+        A dictionary containing data found in deltas data file.
+    is_visible : bool
+        Boolean value to show plots         
+    save_path : string 
+        String path to save plot(s)
+    """
+
+    fig = plt.figure(figsize=(12,10))
+    ax = fig.add_subplot(111)
+    ax.grid(True)
+    ax.set_title("Model: " + deltatxt_data["Model"] + " Scenario: " + deltatxt_data["Scenario"] + 
+                " Target: " + deltatxt_data["Target"] + " Variable:" + deltatxt_data["Variable"])
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Delta Values")
+    
+    colors_list = ["b", "g", "r", "k", "y", "c", "m", "orange"]
+    colors_index = 0
+    for tile in deltatxt_data["Tile"]:        
+        tile_index = deltatxt_data["Tile"].index(tile)
+        month_list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]       
+        dates = []        
+        data = []
+        for month in month_list:
+            dates.append(datetime.datetime.strptime(month, "%B"))
+            data.append(deltatxt_data[month][tile_index])
+        
+        # if the number of tiles exceeds the number of colors in colors list,
+        # then randomly pick an rgb color
+        if colors_index > len(colors_list) - 1:
+            c = np.random.rand(3,)
+        else:
+            c = colors_list[colors_index]
+            
+        plt.plot(dates, data, color = c, linestyle = "-", marker = "o", label = tile)
+        plt.hold(True)
+        
+        # rotate and align the tick labels so they look better
+        fig.autofmt_xdate()
+        
+        # set the x axis to display only the month; "%B" => full month name; "%b" => abreviated month name
+        ax.xaxis.set_major_formatter(mdates.DateFormatter("%B"))
+        
+        # legend; make it transparent    
+        handles, labels = ax.get_legend_handles_labels()
+        legend = ax.legend(handles, labels, fancybox = True)
+        legend.get_frame().set_alpha(0.5)
+        legend.draggable(state=True)
+        
+        # show text of mean, max, min values on graph; use matplotlib.patch.Patch properies and bbox
+        text = "Model = %s\nScenario = %s\nTarget = %s\nVariable = %s" % (deltatxt_data["Model"], deltatxt_data["Scenario"], 
+                                                                          deltatxt_data["Target"], deltatxt_data["Variable"])
+        patch_properties = {"boxstyle": "round",
+                            "facecolor": "wheat",
+                            "alpha": 0.5
+                            }
+                       
+        ax.text(0.05, 0.95, text, transform = ax.transAxes, fontsize = 14, 
+                verticalalignment = "top", horizontalalignment = "left", bbox = patch_properties)
+        
+        colors_index += 1
+        
+    # save plots
+    if save_path:        
+        # set the size of the figure to be saved
+        curr_fig = plt.gcf()
+        curr_fig.set_size_inches(12, 10)
+        filename = deltatxt_data["Model"] + "_" + deltatxt_data["Scenario"] + "_" + deltatxt_data["Target"] + "_" + deltatxt_data["Variable"]
+        plt.savefig(save_path + "/" + filename +".png", dpi = 100)
+        
+    # show plots
+    if is_visible:
+        plt.show()
+    else:
+        plt.close()
+
+
+
+def _create_watertxt_test_data(multiplicative_factor = 1, stationid = "012345"):
     """ Create test data for tests """
 
     dates = [datetime.datetime(2014, 04, 01, 0, 0), datetime.datetime(2014, 04, 02, 0, 0), datetime.datetime(2014, 04, 03, 0, 0)]
@@ -353,36 +452,72 @@ def _create_test_data(multiplicative_factor = 1, stationid = "012345"):
             "parameters": parameters, "dates": dates}
     
     return data
+
+
+def _create_deltatxt_test_data():
+    """ Create a delta data dictionary for tests """
+
+    data = {"Model": "CanESM2", "Scenario": "rcp45", "Target": "2030", "Variable": "PET", "Tile": ["11", "12", "21", "22", "31", "32"],
+            "January": [1.3, 1.2, 1.3, 1.4, 1.5, 1.6], "February": [2.7, 2.8, 2.9, 2.3, 2.2, 2.3], "March": [3.3, 3.2, 3.3, 3.4, 3.5, 3.6],
+            "April": [4.7, 4.8, 4.9, 4.3, 4.2, 4.3], "May": [5.3, 5.2, 5.3, 5.4, 5.5, 5.6], "June": [6.7, 6.8, 6.9, 6.3, 6.2, 6.3],
+            "July": [7.3, 7.2, 7.3, 7.4, 7.5, 7.6], "August": [8.7, 8.8, 8.9, 8.3, 8.2, 8.3], "September": [9.3, 9.2, 9.3, 9.4, 9.5, 9.6],
+            "October": [10.7, 10.8, 10.9, 10.3, 10.2, 10.3], "November": [11.3, 11.2, 11.3, 11.4, 11.5, 11.6], "December": [12.7, 12.8, 12.9, 12.3, 12.2, 12.3]           
+    }
+
+    return data
+
     
 def test_print_watertxt_data():
     """ Test print output functionality """
     
-    print("---Testing print ---")
+    print("---Testing print_watertxt_data ---")
     
-    data = _create_test_data()
+    data = _create_watertxt_test_data()
     print_watertxt_data(watertxt_data = data)
     
     print("")
 
 def test_plot_watertxt_data():
-    """ Test plotting functionality """
+    """ Test plot_watertxt_data functionality """
     
-    print("--- Testing plot ---")    
+    print("--- Testing plot_watertxt_data ---")    
     
-    data = _create_test_data()
+    data = _create_watertxt_test_data()
     plot_watertxt_data(watertxt_data = data, is_visible = True, save_path = None)
     
     print("Plotting completed")
     print("")
 
 def test_plot_watertxt_comprison():
-    """ Test plotting functionality """
+    """ Test plot_watertxt_comprison functionality """
     
-    print("--- Testing plot ---")    
+    print("--- Testing plot_watertxt_comprison ---")    
     
-    data1 = _create_test_data()
-    data2 = _create_test_data(multiplicative_factor = 2, stationid = "00000")
+    data1 = _create_watertxt_test_data()
+    data2 = _create_watertxt_test_data(multiplicative_factor = 2, stationid = "00000")
     plot_watertxt_comparison(watertxt_data1 = data1, watertxt_data2 = data2, is_visible = True, save_path = None)
+    
+    print("Plotting completed")
+    print("")
+
+
+def test_print_deltatxt_data():
+    """ Test print output functionality """
+    
+    print("---Testing print_deltatxt_data ---")
+    
+    data = _create_deltatxt_test_data()
+    print_deltatxt_data(deltatxt_data = data)
+    
+    print("")
+    
+def test_plot_deltatxt_data():
+    """ Test plot_deltatxt_data functionality """
+    
+    print("--- Testing plot_deltatxt_data ---")    
+    
+    data = _create_deltatxt_test_data()
+    plot_deltatxt_data(deltatxt_data = data, is_visible = True, save_path = None)
     
     print("Plotting completed")
     print("")
@@ -394,11 +529,15 @@ def main():
     print("RUNNING TESTS ...")
     print("")
     
-    test_print_watertxt_data()
+#    test_print_watertxt_data()
+#    
+#    test_plot_watertxt_data()
     
-    test_plot_watertxt_data()
+#    test_plot_watertxt_comprison()    
+
+    test_plot_deltatxt_data()
     
-    test_plot_watertxt_comprison()    
+    test_print_deltatxt_data()
 
 if __name__ == "__main__":
     main() 

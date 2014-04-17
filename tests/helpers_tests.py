@@ -33,12 +33,39 @@ def test_isfloat():
     nose.tools.assert_equals(True, helpers.isfloat("6.25"))
     nose.tools.assert_equals(False, helpers.isfloat("2.5_"))
     nose.tools.assert_equals(False, helpers.isfloat("hello"))
-   
+
+def test_convert_to_float():
+    
+    nose.tools.assert_equals(6.25, helpers.convert_to_float("6.25", helper_str = "My help message"))
+    nose.tools.assert_equals(2.5, helpers.convert_to_float("2.5_", helper_str = "My help message"))
+    nose.tools.assert_almost_equals(np.array(np.nan).all(), np.array(helpers.convert_to_float("", helper_str = "My help message")).all())
+    nose.tools.assert_almost_equals(np.array(np.nan).all(), np.array(helpers.convert_to_float("hello", helper_str = "My help message")).all())
+
 def test_rmspecialchars():
     
     nose.tools.assert_equals("6.5", helpers.rmspecialchars("*6.5_"))
     nose.tools.assert_equals("4.25", helpers.rmspecialchars("*$^**(@4.25_+;"))    
     nose.tools.assert_equals("-4.1", helpers.rmspecialchars("-4.1")) 
+
+def test_create_monthly_dict():
+
+    expected = {"January": [], "February": [], "March": [], "April": [], "May": [], "June": [], "July": [], "August": [], "September": [], "October": [], "November": [], "December": []}
+    
+    actual = helpers.create_monthly_dict()
+
+    nose.tools.assert_equals(len(expected.keys()), len(actual.keys()))
+
+    nose.tools.assert_equals(expected["January"], actual["January"])
+    nose.tools.assert_equals(expected["February"], actual["February"])
+    nose.tools.assert_equals(expected["April"], actual["April"])
+    nose.tools.assert_equals(expected["May"], actual["May"])
+    nose.tools.assert_equals(expected["June"], actual["June"])
+    nose.tools.assert_equals(expected["July"], actual["July"])
+    nose.tools.assert_equals(expected["August"], actual["August"])
+    nose.tools.assert_equals(expected["September"], actual["September"])
+    nose.tools.assert_equals(expected["October"], actual["October"])
+    nose.tools.assert_equals(expected["November"], actual["November"])
+    nose.tools.assert_equals(expected["December"], actual["December"])
 
 def test_subset_data_dates_within_range():
     
