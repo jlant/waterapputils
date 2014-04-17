@@ -16,9 +16,8 @@ __contact__   = __author__
 import os, sys
 import argparse
 import Tkinter, tkFileDialog
-from urllib2 import URLError, HTTPError
 import logging
-
+import pdb
 # my modules
 import helpers
 import watertxt
@@ -107,10 +106,14 @@ def main():
     parser = argparse.ArgumentParser(description = "Read, process, log errors, print, and plot data from WATER  \
                                                     application output data files.") 
     group = parser.add_mutually_exclusive_group()
-    group.add_argument("-txt", "--txtfiles", nargs = "+", help = "List text data file(s) to be processed")
-    group.add_argument("-txtfd", "--txtfiledialog", action = "store_true", help = "Open a file dialog window to select data file(s).")
-    group.add_argument("-txtcmp", "--txtcmp", nargs = 2, help = "List 2 text data file(s) to be compared")
-    group.add_argument("-fd", "--filedialog", action = "store_true", help = "Open a file dialog window to select data file(s).")
+    group.add_argument("-watertxt", "--watertxtfiles", nargs = "+", help = "List WATER text data file(s) to be processed")
+    group.add_argument("-watertxtfd", "--watertxtfiledialog", action = "store_true", help = "Open a file dialog window to select WATER text data file(s).")
+    group.add_argument("-watertxtcmp", "--watertxtcmp", nargs = 2, help = "List 2 WATER text data file(s) to be compared")
+
+    group.add_argument("-deltastxt", "--txtfiles", nargs = "+", help = "List WATER text data file(s) to be processed")
+    group.add_argument("-deltastxtfd", "--txtfiledialog", action = "store_true", help = "Open a file dialog window to select WATER text data file(s).")
+
+
     parser.add_argument("-v", "--verbose", action = "store_true",  help = "Print general information about data file(s)")
     parser.add_argument("-p", "--showplot", action = "store_true",  help = "Show plots of parameters contained in data file(s)")
     args = parser.parse_args()  
@@ -118,19 +121,20 @@ def main():
     try:
         
         # get files from command line arguments and process
-        if args.txtfiles:
-            process_txt_files(file_list = args.txtfiles, arguments = args)
+        if args.watertxtfiles:
+            process_txt_files(file_list = args.watertxtfiles, arguments = args)
             sys.exit()
-        if args.txtcmp:
-            process_txtcmp(file_list = args.txtcmp, arguments = args)
-            
+        
         # get files from file dialog and process
-        elif args.txtfiledialog:
+        elif args.watertxtfiledialog:
             root = Tkinter.Tk() 
             files = tkFileDialog.askopenfilenames(title = "Select WATER Text File(s)", filetypes = [("Text file","*.txt"), ("All files", ".*")])
             root.destroy()          
             process_txt_files(file_list = root.tk.splitlist(files), arguments = args)
-           
+        
+        if args.watertxtcmp:
+            process_txtcmp(file_list = args.txtcmp, arguments = args)
+                 
         # process file(s) using standard input
         else:
             data = watertxt.read_file_in(sys.stdin) 
@@ -150,14 +154,6 @@ def main():
 
     except IndexError as error:
         logging.exception("Index: {0}".format(error.message))
-        sys.exit(1)
-
-    except URLError as error:
-        logging.exception("URLError error: {0}".format(error.code))
-        sys.exit(1)
-
-    except HTTPError as error:
-        logging.exception("HTTP error: {0}".format(error.code))
         sys.exit(1)
         
 if __name__ == "__main__":

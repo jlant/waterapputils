@@ -16,7 +16,7 @@ import re
 import numpy as np
 import logging
 from StringIO import StringIO
-
+import pdb
 # my modules
 import helpers
 
@@ -91,7 +91,7 @@ def read_file_in(filestream):
     # regular expression patterns in data file
     patterns = {
         "column_names": "(Model.+)",
-        "data_row": "(\w+)\t(\w+)\t(\d+)\t(.+)"
+        "data_row": "([a-zA-z0-9-]+)\t(\w+)\t(\d+)\t(.+)"
     }        
 
    # initialize a dictionary to hold all the data of interest
@@ -99,7 +99,7 @@ def read_file_in(filestream):
         "column_names": None,
         "parameters": []
     }      
-    
+
     # process file
     for line in data_file:     
         match_column_names = re.search(pattern = patterns["column_names"], string = line)
@@ -121,7 +121,7 @@ def read_file_in(filestream):
     # format data into a dictionary; remove duplicate text values from certain column_names, and dynamically create keys with column names
     data = {}
     duplicate_value_columns = ["Model", "Scenario", "Target", "Variable"]
-    
+
     for parameter in initial_data["parameters"]:
         if parameter["name"] in duplicate_value_columns:
             parameter["data"] = parameter["data"][0]                        # duplicate values, so just get first value
@@ -139,42 +139,6 @@ def read_file_in(filestream):
     # return data
     return data
        
-#def convert_to_float(value, helper_str = None):
-#    """   
-#    Convert a value to a float. If value is not a valid float, log as an error
-#    with a helper_str (i.e. value"s coorsponding date) to help locate the 
-#    error and replace value with a nan.
-#    
-#    Parameters
-#    ----------
-#    value : str
-#        String value to convert.
-#    helper_str : str
-#        String message to be placed in error log if value can not be converted to a float. i.e. value"s corresponding date of occurance.
-#        
-#    Returns
-#    -------
-#    value : {float, nan}
-#        Float or numpy nan value 
-#    """
-#    # remove any special characters present in string value
-#    value = helpers.rmspecialchars(value)    
-#    
-#    if helpers.isfloat(value):
-#        value = float(value)
-#    else:        
-#        if value == "":
-#            error_str = "*Missing value* {}. *Solution* - Replacing with NaN value".format(helper_str)
-#            logging.warn(error_str)
-#            value = np.nan
-#
-#        else:
-#            error_str = "*Bad value* {}. *Solution* - Replacing with NaN value".format(helper_str)
-#            logging.warn(error_str)
-#            value = np.nan
-#            
-#    return value
-
 def get_monthly_values(delta_data, tile_list):
     """   
     Get monthly values based on tile(s) of interest.
@@ -255,7 +219,7 @@ def format_to_monthly_dict(values):
   
     return values_dict
     
-def get_delta_values(delta_data, tile_list):
+def get_avg_delta_values(deltastxt_data, tile_list):
     """   
     Get monthly averaged delta data values for a specific list of tiles.
     
@@ -267,7 +231,7 @@ def get_delta_values(delta_data, tile_list):
     Returns
     -------
     avg_delta_values: dictionary 
-        Dictionary keys corresponding to delta value type (i.e. precipitation (Ppt)) holding averaged data values for a specific list of tiles.
+        Dictionary keys corresponding to delta variable type (i.e. precipitation (Ppt)) holding averaged data values for a specific list of tiles.
         
     Notes
     -----          
@@ -288,14 +252,19 @@ def get_delta_values(delta_data, tile_list):
         }
     }         
     """ 
+    # check that each tile in tile list is contained in the deltastxt_data      
+    for tile in tile_list:
+        if tile not in deltastxt_data["Tile"]:
+            raise ValueError, "{} tile is not in tile list contined in deltastxt_data".format(tile)
+
     avg_delta_values = {}
   
     # initialize avg_delta_values with keys corresponding to variable type  
-    variable_type = delta_data["Variable"]
+    variable_type = deltastxt_data["Variable"]
     avg_delta_values[variable_type] = helpers.create_monthly_dict()
     
     # get delta values that correspond to a list of tiles
-    values = get_monthly_values(delta_data, tile_list = tile_list)    
+    values = get_monthly_values(deltastxt_data, tile_list = tile_list)    
     
     # format the values into a dictionary containing monthly keys
     values_dict = format_to_monthly_dict(values)
@@ -327,7 +296,7 @@ def test_read_file_in():
 
     fixture = {}
     
-    fixture["data file"] = \
+    fixture["data_file"] = \
         """
         Model	Scenario	Target	Variable	Tile	January	February	March	April	May	June	July	August	September	October	November	December
         CanESM2	rcp45	2030	PET	11	1.3	2.7	3.3	4.7	5.3	6.7	7.3	8.7	9.3	10.7	11.3	12.7
@@ -338,15 +307,19 @@ def test_read_file_in():
         CanESM2	rcp45	2030	PET	32	1.6	2.3	3.6	4.3	5.6	6.3	7.6	8.3	9.6	10.3	11.6	12.3
         """
         
-    fileobj = StringIO(fixture["data file"])
+    fileobj = StringIO(fixture["data_file"])
     
     data = read_file_in(fileobj)
 
-    print("*Number of keys in data*\n    actual")
-    print("    17 : {}\n".format(len(data.keys())))
+    print("*Delta data*")
+    print("    {}\n".format(data))
 
-    print("*Keys in data*\n    actual")
-    print("    {}\n".format(data.keys()))
+    print("*Keys in data*\n    expected : actual")
+    print("    ['Model', 'Scenario', 'Target', 'Variable', 'Tile', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November',   'December'] : \n{}".format(data.keys()))
+    print("")
+
+    print("*Number of keys in data*\n    expected : actual")
+    print("    17 : {}\n".format(len(data.keys())))
 
     print("*Model*\n    expected : actual")
     print("    CanESM2 : {}\n".format(data["Model"]))
@@ -404,13 +377,16 @@ def test_get_monthly_values():
     print("--- Testing get_monthly_values ---")
 
     data = _create_test_data()
-    values, values_avg = get_monthly_values(delta_data = data, tile_list = ["11", "12"])
+    values = get_monthly_values(delta_data = data, tile_list = ["11", "12"])
 
-    print("*Values*\n    expected : actual")
-    print("    [[  1.3   2.7   3.3   4.7   5.3   6.7   7.3   8.7   9.3  10.7  11.3  12.7]\n    [  1.2   2.8   3.2   4.8   5.2   6.8   7.2   8.8   9.2  10.8  11.2  12.8]] : \n    {}".format(values))
-    
-    print("*Values average*\n    expected : actual")
-    print("    [  1.25   2.75   3.25   4.75   5.25   6.75   7.25   8.75   9.25  10.75 11.25  12.75] : \n    {}".format(values_avg))
+    print("*For tiles 11 and 12*\n    expected : actual")
+    print("    [[  1.3   2.7   3.3   4.7   5.3   6.7   7.3   8.7   9.3  10.7  11.3  12.7],\n    [  1.2   2.8   3.2   4.8   5.2   6.8   7.2   8.8   9.2  10.8  11.2  12.8]] : \n    {}".format(values))
+
+    values = get_monthly_values(delta_data = data, tile_list = ["12", "22"])
+
+    print("*For tiles 12 and 22*\n    expected : actual")
+    print("    [[  1.2   2.8   3.2   4.8   5.2   6.8   7.2   8.8   9.2  10.8  11.2  12.8],\n    [  1.4   2.3   3.4   4.3   5.4   6.3   7.4   8.3   9.4   10.3   11.4   12.3]] : \n    {}".format(values))
+
     
     print("")
     
@@ -436,17 +412,17 @@ def test_format_to_monthly_dict():
     
     print("")
 
-def test_get_delta_values():
+def test_get_avg_delta_values():
     """ Test get_delta_values functionality """
     
     print("--- Testing get_delta_values ---")
         
     data = _create_test_data()
-    delta_values = get_delta_values(delta_data = data, tile_list = ["11", "12"])
+    avg_delta_values = get_avg_delta_values(deltastxt_data = data, tile_list = ["11", "12"])
     
     print("*Values dictionary*\n    expected : actual")
     print("    {'PET' : {'January': 1.25, 'February': 2.75, 'March': 3.25, 'April': 4.75, 'May': 5.25, 'June': 6.75, 'July': 7.25, 'August': 8.75, 'September': 9.25, 'October': 10.75, 'November': 11.25, 'December': 12.75}} : \n")
-    print("    {}\n".format(delta_values))    
+    print("    {}\n".format(avg_delta_values))    
     
     
 def main():
@@ -458,14 +434,11 @@ def main():
 
     test_read_file_in()
 
-    test_create_monthly_dict()
-
     test_get_monthly_values()
     
     test_format_to_monthly_dict()
 
-    test_get_delta_values()
-
+    test_get_avg_delta_values()
 
     
 if __name__ == "__main__":

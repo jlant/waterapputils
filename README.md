@@ -51,11 +51,11 @@ Author
 Description
 -----------	
 *waterapputils* is a command line tool for analysing, processing, and editing output data files from the
-USGS Kentucky Water Science Center WATER application developed by Williamson, T., Ulery, R. and Newson, J., 2012.
-WATER is a graphical user interface wrapped around a variant of the rainfall-runoff model called Topmodel 
-(Topography based hydrological model) by Keith Beven, Lancaster University. The model estimates river discharge 
-and spatial soil water saturation patterns for a particular catchment basin using topographic, climatic, and geological 
-input data parameters.
+USGS Kentucky Water Science Center WATER application. WATER is a graphical user interface wrapped around a variant 
+of the rainfall-runoff model called Topmodel (Topography based hydrological model) by Keith Beven, Lancaster University. 
+The model estimates river discharge and spatial soil water saturation patterns for a particular catchment basin using 
+topographic, climatic, and geological input data parameters. The original WATER application was developed by 
+Williamson, T., Ulery, R. and Newson, J., 2012.
 
 Some sample highlights include:
 
