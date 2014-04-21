@@ -220,10 +220,7 @@ def test_create_parameter():
 
 @with_setup(setup, teardown)
 def test_add_parameter():
-    """ Test add_parameter functionality """
 
-    print("--- Testing add_parameter ---") 
-    
     wateruse_data = np.array([3.0, 2.5, -5.5])
     expected = {"name": "Water Use (cfs)", "index": 14, "data": wateruse_data, 
                 "mean": np.mean(wateruse_data), "max": np.max(wateruse_data), "min": np.min(wateruse_data)}    
@@ -507,4 +504,58 @@ def test_data_file_bad_single_parameter():
     nose.tools.assert_almost_equals(actual["parameters"][1]["max"], expected["parameters"][1]["max"])
     nose.tools.assert_almost_equals(actual["parameters"][1]["min"], expected["parameters"][1]["min"])
 
+
+@with_setup(setup, teardown) 
+def test_apply_factors():
     
+    factors = {
+        'January': 1.5,
+        'February': 2.0,
+        'March': 2.5,
+        'April': 3.0,
+        'May': 3.5,
+        'June': 4.0,
+        'July': 4.5,
+        'August': 5.5,
+        'September': 6.0,
+        'October': 6.5,
+        'November': 7.0,
+        'December': 7.5
+    }     
+
+    dates = np.array([datetime.datetime(2014, 04, 01, 0, 0), 
+                      datetime.datetime(2014, 04, 02, 0, 0), 
+                      datetime.datetime(2014, 04, 03, 0, 0)
+    ])
+   
+    updated_discharge_data = np.array([6, 18, 30])  
+ 
+    expected = {
+        "user": "jlant",
+        "date_created": "4/9/2014 15:50:47 PM",
+        "stationid": "012345",
+        "column_names": ['Discharge (cfs)', 'Subsurface Flow (mm/day)', 'Impervious Flow (mm/day)', 'Infiltration Excess (mm/day)', 'Initial Abstracted Flow (mm/day)', 'Overland Flow (mm/day)', 'PET (mm/day)', 'AET(mm/day)', 'Average Soil Root zone (mm)', 'Average Soil Unsaturated Zone (mm)', 'Snow Pack (mm)', 'Precipitation (mm/day)', 'Storage Deficit (mm/day)', 'Return Flow (mm/day)'],
+        "dates": dates,
+        "parameters": [
+            {"name": "Discharge (cfs)",
+            "index": 0,
+            "data": updated_discharge_data,
+            "mean": np.mean(updated_discharge_data),
+            "max": np.max(updated_discharge_data),
+            "min": np.min(updated_discharge_data)
+            }]
+    }
+
+    actual = watertxt.apply_factors(watertxt_data = fixture["sample_data_dict"], name = "Discharge", factors = factors)    
+    
+    nose.tools.assert_equals(expected["parameters"][0]["name"], actual["parameters"][0]["name"])
+    nose.tools.assert_equals(expected["parameters"][0]["index"], actual["parameters"][0]["index"])
+    
+    nose.tools.assert_almost_equals(actual["parameters"][0]["data"].all(), expected["parameters"][0]["data"].all())
+       
+    nose.tools.assert_almost_equals(actual["parameters"][0]["mean"], expected["parameters"][0]["mean"])
+    nose.tools.assert_almost_equals(actual["parameters"][0]["max"], expected["parameters"][0]["max"])
+    nose.tools.assert_almost_equals(actual["parameters"][0]["min"], expected["parameters"][0]["min"])
+    
+
+      
