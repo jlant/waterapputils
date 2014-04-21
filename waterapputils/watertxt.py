@@ -375,6 +375,65 @@ def set_parameter_values(watertxt_data, name, values):
 
     return watertxt_data
  
+def apply_factors(watertxt_data, name, factors):
+    """
+    Apply montly multiplicative factors to a specific parameter.
+    
+    Parameters
+    ----------
+    watertxt_data : dictionary 
+        Dictionary holding data found in WATER output text file.
+    name : string
+        String name of parameter
+    factors : dictionary
+        Dictionary holding monthly multiplicative factors
+    
+    
+    Returns
+    -------
+    watertxt_data : dictionary 
+        Dictionary holding updated data with factors applied.
+    
+    Notes
+    -----    
+    factors = {
+        'January': 2.0,
+        'February': 0.98,
+        'March': 0.97,
+        'April': 1.04,
+        'May': 1.10,
+        'June': 0.99,
+        'July': 0.97,
+        'August': 1.25,
+        'September': 1.21,
+        'October': 1.11,
+        'November': 1.10,
+        'December': 2.0
+    }  
+    """  
+    parameter = get_parameter(watertxt_data, name)
+    
+    assert len(parameter["data"]) == len(watertxt_data["dates"]), "Length of {} parameter values does not match length of date values".format(name)
+    
+    new_values = []
+    for i in range(len(watertxt_data["dates"])):
+        date = watertxt_data["dates"][i]
+        
+        # match the month from the date value to the factor dictionary key
+        month = date.strftime("%B")     # get month 
+        factor = factors[month]         # get the factor that corresponds to a specific month 
+        
+        # apply factor
+        new_value = parameter["data"][i] * factor
+        new_values.append(new_value)
+            
+    new_values = np.array(new_values)
+
+    # set new values in water_data    
+    watertxt_data = set_parameter_values(watertxt_data, name, values = new_values)
+
+    return watertxt_data      
+
 
 def _create_test_data(multiplicative_factor = 1, stationid = "012345", with_wateruse = False):
     """ Create test data for tests """
@@ -685,6 +744,50 @@ def test_read_file_in():
         print("    {} {} {} {} {} {}".format(parameter["name"], parameter["index"], parameter["data"], parameter["mean"], parameter["max"], parameter["min"]))    
     print("")
 
+
+def test_apply_factors():
+    """ Test apply_factors functionality """
+
+    print("--- Testing apply_factors ---") 
+
+    factors = {
+        'January': 1.5,
+        'February': 2.0,
+        'March': 2.5,
+        'April': 3.0,
+        'May': 3.5,
+        'June': 4.0,
+        'July': 4.5,
+        'August': 5.5,
+        'September': 6.0,
+        'October': 6.5,
+        'November': 7.0,
+        'December': 7.5
+    }     
+    
+    param_name = "Discharge"
+    month = "April"
+
+    print("*Factor used*\n    expected : actual")
+    print("    3.0 : {}".format(factors[month]))
+    print("")
+    
+    data = _create_test_data()
+    
+    parameter = get_parameter(watertxt_data = data, name = param_name)
+    
+    print("*Parameter BEFORE applied factors*\n    actual name, index, data, mean, max, min")
+    print("    {} {} {} {} {} {}".format(parameter["name"], parameter["index"], parameter["data"], parameter["mean"], parameter["max"], parameter["min"]))    
+    print("")
+    
+    watertxt_data = apply_factors(watertxt_data = data, name = param_name, factors = factors)    
+
+    parameter = get_parameter(watertxt_data = data, name = param_name)
+    
+    print("*Parameter BEFORE applied factors*\n    actual name, index, data, mean, max, min")
+    print("    {} {} {} {} {} {}".format(parameter["name"], parameter["index"], parameter["data"], parameter["mean"], parameter["max"], parameter["min"]))    
+
+    print("")    
     
 def test_write_file():
     """ Test write_txtfile functionality """
@@ -703,7 +806,7 @@ def test_write_file():
     write_file(watertxt_data = data , save_path = os.getcwd(), filename = "WATER_wateruse.txt") 
     
     print("Created 3 files {} and {} in current working directory. Please check for proper writing".format("WATER.txt", "WATER_new_discharge_data.txt" , "WATER_wateruse.txt")) 
-    print("")
+    print("")    
     
 def main():
     """ Test functionality of reading files """
@@ -727,6 +830,8 @@ def main():
     test_read_file_in()
 
     test_write_file()
+
+    test_apply_factors()
     
 if __name__ == "__main__":
     main()
