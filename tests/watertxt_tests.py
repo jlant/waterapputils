@@ -180,6 +180,46 @@ def setup():
     }
 
 
+    dates_all_months = np.array([datetime.datetime(2014, 1, 1, 0, 0), 
+                      datetime.datetime(2014, 2, 1, 0, 0), 
+                      datetime.datetime(2014, 3, 1, 0, 0),
+                      datetime.datetime(2014, 4, 1, 0, 0), 
+                      datetime.datetime(2014, 5, 1, 0, 0), 
+                      datetime.datetime(2014, 6, 1, 0, 0),
+                      datetime.datetime(2014, 7, 1, 0, 0), 
+                      datetime.datetime(2014, 8, 1, 0, 0), 
+                      datetime.datetime(2014, 9, 1, 0, 0),
+                      datetime.datetime(2014, 10, 1, 0, 0), 
+                      datetime.datetime(2014, 11, 1, 0, 0), 
+                      datetime.datetime(2014, 12, 1, 0, 0)]
+    )
+    
+    discharge_data_all_months = np.array([3, 6, 10, 12, 15, 16, 18, 15, 11, 7, 5, 2])
+    subsurface_data_all_months = np.array([50, 55, 45, 40, 35, 30, 25, 20, 15, 20, 25, 30])
+       
+    fixture["sample_data_dict_all_months"] = {
+        "user": "jlant",
+        "date_created": "4/9/2014 15:50:47 PM",
+        "stationid": "012345",
+        "column_names": ['Discharge (cfs)', 'Subsurface Flow (mm/day)', 'Impervious Flow (mm/day)', 'Infiltration Excess (mm/day)', 'Initial Abstracted Flow (mm/day)', 'Overland Flow (mm/day)', 'PET (mm/day)', 'AET(mm/day)', 'Average Soil Root zone (mm)', 'Average Soil Unsaturated Zone (mm)', 'Snow Pack (mm)', 'Precipitation (mm/day)', 'Storage Deficit (mm/day)', 'Return Flow (mm/day)'],
+        "dates": dates_all_months,
+        "parameters": [
+            {"name": "Discharge (cfs)",
+            "index": 0,
+            "data": discharge_data_all_months,
+            "mean": np.mean(discharge_data_all_months),
+            "max": np.max(discharge_data_all_months),
+            "min": np.min(discharge_data_all_months)
+            },
+            {"name": "Subsurface Flow (mm/day)",
+            "index": 1,
+            "data": subsurface_data_all_months,
+            "mean": np.mean(subsurface_data_all_months),
+            "max": np.max(subsurface_data_all_months),
+            "min": np.min(subsurface_data_all_months)
+            }
+        ],  
+    }
 
 def teardown():
     """ Print to standard error when all tests are finished """
@@ -506,7 +546,7 @@ def test_data_file_bad_single_parameter():
 
 
 @with_setup(setup, teardown) 
-def test_apply_factors():
+def test_apply_factors_single_parameter():
     
     factors = {
         'January': 1.5,
@@ -558,4 +598,78 @@ def test_apply_factors():
     nose.tools.assert_almost_equals(actual["parameters"][0]["min"], expected["parameters"][0]["min"])
     
 
+def test_apply_factors_multi_parameters():
+    
+    factors = {
+        'January': 1.5,
+        'February': 2.0,
+        'March': 2.5,
+        'April': 3.0,
+        'May': 3.5,
+        'June': 4.0,
+        'July': 4.5,
+        'August': 5.5,
+        'September': 6.0,
+        'October': 6.5,
+        'November': 7.0,
+        'December': 7.5
+    }     
+
+    dates = np.array([datetime.datetime(2014, 1, 1, 0, 0), 
+                      datetime.datetime(2014, 2, 1, 0, 0), 
+                      datetime.datetime(2014, 3, 1, 0, 0),
+                      datetime.datetime(2014, 4, 1, 0, 0), 
+                      datetime.datetime(2014, 5, 1, 0, 0), 
+                      datetime.datetime(2014, 6, 1, 0, 0),
+                      datetime.datetime(2014, 7, 1, 0, 0), 
+                      datetime.datetime(2014, 8, 1, 0, 0), 
+                      datetime.datetime(2014, 9, 1, 0, 0),
+                      datetime.datetime(2014, 10, 1, 0, 0), 
+                      datetime.datetime(2014, 11, 1, 0, 0), 
+                      datetime.datetime(2014, 12, 1, 0, 0)]
+    )
+
+    discharge_data_all_months = np.array([4.5, 12, 25, 36, 52.5, 64, 81, 82.5, 66, 45.5, 35, 15])
+    subsurface_data_all_months = np.array([75, 110, 112.5, 120, 122.5, 120, 112.5, 110, 90, 130, 175, 225])
       
+    expected = {
+        "user": "jlant",
+        "date_created": "4/9/2014 15:50:47 PM",
+        "stationid": "012345",
+        "column_names": ['Discharge (cfs)', 'Subsurface Flow (mm/day)', 'Impervious Flow (mm/day)', 'Infiltration Excess (mm/day)', 'Initial Abstracted Flow (mm/day)', 'Overland Flow (mm/day)', 'PET (mm/day)', 'AET(mm/day)', 'Average Soil Root zone (mm)', 'Average Soil Unsaturated Zone (mm)', 'Snow Pack (mm)', 'Precipitation (mm/day)', 'Storage Deficit (mm/day)', 'Return Flow (mm/day)'],
+        "dates": dates,
+        "parameters": [
+            {"name": "Discharge (cfs)",
+            "index": 0,
+            "data": discharge_data_all_months,
+            "mean": np.mean(discharge_data_all_months),
+            "max": np.max(discharge_data_all_months),
+            "min": np.min(discharge_data_all_months)
+            },
+            {"name": "Subsurface Flow (mm/day)",
+            "index": 1,
+            "data": subsurface_data_all_months,
+            "mean": np.mean(subsurface_data_all_months),
+            "max": np.max(subsurface_data_all_months),
+            "min": np.min(subsurface_data_all_months)
+            }
+        ],  
+    }  
+
+    actual_q = watertxt.apply_factors(watertxt_data = fixture["sample_data_dict_all_months"], name = "Discharge", factors = factors)    
+    actual_s = watertxt.apply_factors(watertxt_data = fixture["sample_data_dict_all_months"], name = "Subsurface Flow", factors = factors)
+    
+    nose.tools.assert_equals(actual_q["parameters"][0]["name"], expected["parameters"][0]["name"])
+    nose.tools.assert_equals(actual_q["parameters"][0]["index"], expected["parameters"][0]["index"])    
+    nose.tools.assert_equals(actual_s["parameters"][1]["name"], expected["parameters"][1]["name"])
+    nose.tools.assert_equals(actual_s["parameters"][1]["index"], expected["parameters"][1]["index"])
+    
+    nose.tools.assert_almost_equals(actual_q["parameters"][0]["data"].all(), expected["parameters"][0]["data"].all())
+    nose.tools.assert_almost_equals(actual_s["parameters"][1]["data"].all(), expected["parameters"][1]["data"].all())
+       
+    nose.tools.assert_almost_equals(actual_q["parameters"][0]["mean"], expected["parameters"][0]["mean"])
+    nose.tools.assert_almost_equals(actual_q["parameters"][0]["max"], expected["parameters"][0]["max"])
+    nose.tools.assert_almost_equals(actual_q["parameters"][0]["min"], expected["parameters"][0]["min"])               
+    nose.tools.assert_almost_equals(actual_s["parameters"][1]["mean"], expected["parameters"][1]["mean"])
+    nose.tools.assert_almost_equals(actual_s["parameters"][1]["max"], expected["parameters"][1]["max"])
+    nose.tools.assert_almost_equals(actual_s["parameters"][1]["min"], expected["parameters"][1]["min"])

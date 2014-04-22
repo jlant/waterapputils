@@ -411,7 +411,7 @@ def apply_factors(watertxt_data, name, factors):
         'December': 2.0
     }  
     """  
-    parameter = get_parameter(watertxt_data, name)
+    parameter = get_parameter(watertxt_data, name) 
     
     assert len(parameter["data"]) == len(watertxt_data["dates"]), "Length of {} parameter values does not match length of date values".format(name)
     
