@@ -401,12 +401,12 @@ def test_get_file_info():
 
     print("--- Testing get_file_info ---")  
     
-    filedir, filename = get_file_info(path = os.path.join(os.getcwd(), "nwispy_helpers.py"))
+    filedir, filename = get_file_info(path = os.path.join(os.getcwd(), "helpers.py"))
 
     print("File directory is:")
     print("    {}".format(filedir))
     print("File name is expected : actual")
-    print("    nwispy_helpers.py : {}".format(filename))
+    print("    helpers.py : {}".format(filename))
     print("")
 
 def test_make_directory():

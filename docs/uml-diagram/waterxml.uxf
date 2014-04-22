@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="12.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>320</x>
+      <y>60</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>get_xml_data</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>220</x>
+      <y>190</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>fill_dict</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>430</x>
+      <y>190</y>
+      <w>150</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>fill_simulation_dict</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>360</x>
+      <y>310</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>fill_dict</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>230</x>
+      <y>60</y>
+      <w>140</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>30;130;120;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>370</x>
+      <y>60</y>
+      <w>160</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>140;130;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>380</x>
+      <y>190</y>
+      <w>140</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>30;120;120;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>580</x>
+      <y>310</y>
+      <w>160</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>get_simulation_data</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>500</x>
+      <y>190</y>
+      <w>140</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>120;120;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>530</x>
+      <y>70</y>
+      <w>220</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>Fill simuulation dictionary.
+Contains most of the data of interest:
+    * SimulationFeatures
+    * StudyUnitDischargeSeries
+    * ClimaticPrecipitationSeries
+    * ClimaticTemperatureSeries
+    
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>630</x>
+      <y>200</y>
+      <w>220</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Get the following simulation data:
+    * SimulationFeatures
+    * StudyUnitDischargeSeries
+    * ClimaticPrecipitationSeries
+    * ClimaticTemperatureSeries    
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>120</x>
+      <y>100</y>
+      <w>150</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Fill general information 
+in project and study 
+dictionaries
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>280</x>
+      <y>230</y>
+      <w>160</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>Fill general information
+in simulation dictionary
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>30</x>
+      <y>430</y>
+      <w>160</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>get_timeseries_data</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>210</x>
+      <y>430</y>
+      <w>140</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>Get timeseries data 
+parameters from 
+simulation dictionary
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>30</x>
+      <y>520</y>
+      <w>160</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>get_series_date</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>210</x>
+      <y>520</y>
+      <w>140</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>Get date as datetime
+object
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>80</x>
+      <y>430</y>
+      <w>50</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>30;90;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>30</x>
+      <y>660</y>
+      <w>160</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>apply_factors</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>20</x>
+      <y>790</y>
+      <w>160</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>get_series_date</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>70</x>
+      <y>660</y>
+      <w>50</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>30;130;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>210</x>
+      <y>660</y>
+      <w>200</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>Apply monthly factors to
+the following simulation data:
+    * SimulationFeatures
+    * StudyUnitDischargeSeries
+    * ClimaticPrecipitationSeries
+    * ClimaticTemperatureSeries  
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>210</x>
+      <y>790</y>
+      <w>140</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>Get date as datetime
+object
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

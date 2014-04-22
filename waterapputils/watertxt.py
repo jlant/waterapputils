@@ -377,7 +377,7 @@ def set_parameter_values(watertxt_data, name, values):
  
 def apply_factors(watertxt_data, name, factors):
     """
-    Apply montly multiplicative factors to a specific parameter.
+    Apply monthly multiplicative factors to a specific parameter.
     
     Parameters
     ----------
@@ -387,8 +387,7 @@ def apply_factors(watertxt_data, name, factors):
         String name of parameter
     factors : dictionary
         Dictionary holding monthly multiplicative factors
-    
-    
+       
     Returns
     -------
     watertxt_data : dictionary 
@@ -419,7 +418,7 @@ def apply_factors(watertxt_data, name, factors):
     for i in range(len(watertxt_data["dates"])):
         date = watertxt_data["dates"][i]
         
-        # match the month from the date value to the factor dictionary key
+        # match the month from the date value to the factors dictionary key
         month = date.strftime("%B")     # get month 
         factor = factors[month]         # get the factor that corresponds to a specific month 
         
@@ -782,15 +781,15 @@ def test_apply_factors():
     
     watertxt_data = apply_factors(watertxt_data = data, name = param_name, factors = factors)    
 
-    parameter = get_parameter(watertxt_data = data, name = param_name)
-    
-    print("*Parameter BEFORE applied factors*\n    actual name, index, data, mean, max, min")
+    parameter = get_parameter(watertxt_data = watertxt_data, name = param_name)
+
+    print("*Parameter AFTER applied factors*\n    actual name, index, data, mean, max, min")
     print("    {} {} {} {} {} {}".format(parameter["name"], parameter["index"], parameter["data"], parameter["mean"], parameter["max"], parameter["min"]))    
 
     print("")    
     
 def test_write_file():
-    """ Test write_txtfile functionality """
+    """ Test write_file functionality """
 
     print("--- Testing write_file ---") 
     
@@ -805,11 +804,11 @@ def test_write_file():
     data = _create_test_data(with_wateruse = True)
     write_file(watertxt_data = data , save_path = os.getcwd(), filename = "WATER_wateruse.txt") 
     
-    print("Created 3 files {} and {} in current working directory. Please check for proper writing".format("WATER.txt", "WATER_new_discharge_data.txt" , "WATER_wateruse.txt")) 
+    print("Created 3 files {}, {}, and {} in current working directory. Please check for proper writing".format("WATER.txt", "WATER_new_discharge_data.txt" , "WATER_wateruse.txt")) 
     print("")    
     
 def main():
-    """ Test functionality of reading files """
+    """ Test functionality of watertxt """
 
     print("")
     print("RUNNING TESTS ...")

@@ -523,7 +523,7 @@ def test_plot_deltas_data():
     print("")
     
 def main():
-    """ Test functionality of plotting and printing file information """
+    """ Test functionality of waterapputils_viewer """
 
     print("")
     print("RUNNING TESTS ...")

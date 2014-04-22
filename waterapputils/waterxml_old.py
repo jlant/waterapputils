@@ -419,9 +419,9 @@ def set_data(tree, element_str, element_tag_str, sim_id_num, factor):
             for child in elem:
                 if child.tag == element_tag_str:
                     if element_str == 'ClimaticTemperatureSeries':
-                        new_num = float(child.text) + factor
+                        new_num = float(child.text) + factor    # additive
                     else:
-                        new_num = float(child.text) * factor
+                        new_num = float(child.text) * factor    # multiplicative
                         child.text = str(new_num)
 
 def set_factors(tree, element_str, factors):
