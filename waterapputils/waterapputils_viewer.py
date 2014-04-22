@@ -222,8 +222,8 @@ def plot_watertxt_comparison(watertxt_data1, watertxt_data2, is_visible = True, 
         
         ax1.plot(dates, parameter1["data"], color = "b", label = watertxt_data1["stationid"], linewidth = 2)
         ax1.hold(True)
-        ax1.plot(dates, parameter2["data"], color = "g", label = watertxt_data2["stationid"], linewidth = 2)
-        ax1.fill_between(dates, parameter1["data"], parameter2["data"], facecolor = "r", alpha = 0.5)      
+        ax1.plot(dates, parameter2["data"], color = "r", label = watertxt_data2["stationid"], linewidth = 2, alpha = 0.75)
+#        ax1.fill_between(dates, parameter1["data"], parameter2["data"], facecolor = "r", alpha = 0.5)      
         
         # increase y axis to have text and legend show up better
         curr_ylim = ax1.get_ylim()
@@ -284,7 +284,7 @@ def plot_watertxt_comparison(watertxt_data1, watertxt_data2, is_visible = True, 
         else:
             plt.close()
 
-def print_deltatxt_data(deltatxt_data):
+def print_deltas_data(deltas_data):
     """   
     Print information contained in the delta data dictionary. 
     
@@ -296,17 +296,17 @@ def print_deltatxt_data(deltatxt_data):
    
     print("The following are the parameters and values in the file:")
     
-    for key, value in deltatxt_data.iteritems():
+    for key, value in deltas_data.iteritems():
         print("{}: {}".format(key, value))
             
-def plot_deltatxt_data(deltatxt_data, is_visible = True, save_path = None):
+def plot_deltas_data(deltas_data, is_visible = True, save_path = None):
     """   
     Plot each parameter contained in the nwis data. Save plots to a particular
     path.
     
     Parameters
     ----------
-    deltatxtdata_data : dictionary 
+    deltasdata_data : dictionary 
         A dictionary containing data found in deltas data file.
     is_visible : bool
         Boolean value to show plots         
@@ -317,21 +317,21 @@ def plot_deltatxt_data(deltatxt_data, is_visible = True, save_path = None):
     fig = plt.figure(figsize=(12,10))
     ax = fig.add_subplot(111)
     ax.grid(True)
-    ax.set_title("Model: " + deltatxt_data["Model"] + " Scenario: " + deltatxt_data["Scenario"] + 
-                " Target: " + deltatxt_data["Target"] + " Variable:" + deltatxt_data["Variable"])
+    ax.set_title("Model: " + deltas_data["Model"] + " Scenario: " + deltas_data["Scenario"] + 
+                " Target: " + deltas_data["Target"] + " Variable:" + deltas_data["Variable"])
     ax.set_xlabel("Date")
     ax.set_ylabel("Delta Values")
     
     colors_list = ["b", "g", "r", "k", "y", "c", "m", "orange"]
     colors_index = 0
-    for tile in deltatxt_data["Tile"]:        
-        tile_index = deltatxt_data["Tile"].index(tile)
+    for tile in deltas_data["Tile"]:        
+        tile_index = deltas_data["Tile"].index(tile)
         month_list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]       
         dates = []        
         data = []
         for month in month_list:
             dates.append(datetime.datetime.strptime(month, "%B"))
-            data.append(deltatxt_data[month][tile_index])
+            data.append(deltas_data[month][tile_index])
         
         # if the number of tiles exceeds the number of colors in colors list,
         # then randomly pick an rgb color
@@ -356,8 +356,8 @@ def plot_deltatxt_data(deltatxt_data, is_visible = True, save_path = None):
         legend.draggable(state=True)
         
         # show text of mean, max, min values on graph; use matplotlib.patch.Patch properies and bbox
-        text = "Model = %s\nScenario = %s\nTarget = %s\nVariable = %s" % (deltatxt_data["Model"], deltatxt_data["Scenario"], 
-                                                                          deltatxt_data["Target"], deltatxt_data["Variable"])
+        text = "Model = %s\nScenario = %s\nTarget = %s\nVariable = %s" % (deltas_data["Model"], deltas_data["Scenario"], 
+                                                                          deltas_data["Target"], deltas_data["Variable"])
         patch_properties = {"boxstyle": "round",
                             "facecolor": "wheat",
                             "alpha": 0.5
@@ -373,7 +373,7 @@ def plot_deltatxt_data(deltatxt_data, is_visible = True, save_path = None):
         # set the size of the figure to be saved
         curr_fig = plt.gcf()
         curr_fig.set_size_inches(12, 10)
-        filename = deltatxt_data["Model"] + "_" + deltatxt_data["Scenario"] + "_" + deltatxt_data["Target"] + "_" + deltatxt_data["Variable"]
+        filename = deltas_data["Model"] + "_" + deltas_data["Scenario"] + "_" + deltas_data["Target"] + "_" + deltas_data["Variable"]
         plt.savefig(save_path + "/" + filename +".png", dpi = 100)
         
     # show plots
@@ -454,7 +454,7 @@ def _create_watertxt_test_data(multiplicative_factor = 1, stationid = "012345"):
     return data
 
 
-def _create_deltatxt_test_data():
+def _create_deltas_test_data():
     """ Create a delta data dictionary for tests """
 
     data = {"Model": "CanESM2", "Scenario": "rcp45", "Target": "2030", "Variable": "PET", "Tile": ["11", "12", "21", "22", "31", "32"],
@@ -501,23 +501,23 @@ def test_plot_watertxt_comprison():
     print("")
 
 
-def test_print_deltatxt_data():
+def test_print_deltas_data():
     """ Test print output functionality """
     
-    print("---Testing print_deltatxt_data ---")
+    print("---Testing print_deltas_data ---")
     
-    data = _create_deltatxt_test_data()
-    print_deltatxt_data(deltatxt_data = data)
+    data = _create_deltas_test_data()
+    print_deltas_data(deltas_data = data)
     
     print("")
     
-def test_plot_deltatxt_data():
-    """ Test plot_deltatxt_data functionality """
+def test_plot_deltas_data():
+    """ Test plot_deltas_data functionality """
     
-    print("--- Testing plot_deltatxt_data ---")    
+    print("--- Testing plot_deltas_data ---")    
     
-    data = _create_deltatxt_test_data()
-    plot_deltatxt_data(deltatxt_data = data, is_visible = True, save_path = None)
+    data = _create_deltas_test_data()
+    plot_deltas_data(deltas_data = data, is_visible = True, save_path = None)
     
     print("Plotting completed")
     print("")
@@ -535,9 +535,9 @@ def main():
     
 #    test_plot_watertxt_comprison()    
 
-    test_plot_deltatxt_data()
+    test_plot_deltas_data()
     
-    test_print_deltatxt_data()
+    test_print_deltas_data()
 
 if __name__ == "__main__":
     main() 

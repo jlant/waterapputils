@@ -23,6 +23,7 @@ import helpers
 import watertxt
 import waterapputils_viewer
 import waterapputils_logging
+import deltas
 
 def process_txt_files(file_list, arguments):
     """    
@@ -30,7 +31,7 @@ def process_txt_files(file_list, arguments):
 
     Parameters
     ----------
-    file_list : list of str
+    file_list : list 
         List of files to parse, process, and plot.        
     arguments : argparse object
         An argparse object containing user options.                    
@@ -64,7 +65,7 @@ def process_txtcmp(file_list, arguments):
 
     Parameters
     ----------
-    file_list : list of str
+    file_list : list 
         List of files to parse, process, and plot.        
     arguments : argparse object
         An argparse object containing user options.                    
@@ -96,6 +97,50 @@ def process_txtcmp(file_list, arguments):
     # close error logging
     waterapputils_logging.remove_loggers()
 
+def apply_deltas(file_list, arguments):
+    """    
+    Apply delta factors to a WATER *.txt file
+
+    Parameters
+    ----------
+    file_list : list 
+        List of files to parse, process, and plot.        
+    arguments : argparse object
+        An argparse object containing user options.                    
+    """
+    watertxt_file = file_list[0]
+    delta_file = file_list[1]
+                
+    water_filedir, water_filename = helpers.get_file_info(watertxt_file)
+    delta_filedir, delta_filename = helpers.get_file_info(delta_file)
+      
+    # create output directory     
+#    outputdirpath = helpers.make_directory(path = water_filedir, directory_name = "-".join([water_filename.split(".txt")[0], "with", delta_filename.split(".txt")[0] , "applied", "output"]))      
+    
+    # initialize error logging
+    waterapputils_logging.initialize_loggers(output_dir = water_filedir)        
+    
+    # read data
+    watertxt_data = watertxt.read_file(watertxt_file)  
+    deltas_data = deltas.read_file(delta_file) 
+    
+    # calculate average deltas for a list of tiles
+    avg_delta_values = deltas.calculate_avg_delta_values(deltas_data = deltas_data, tile_list = ["31", "32"])
+    
+    for key, value in avg_delta_values.iteritems():
+        # apply deltas
+        watertxt_data_with_deltas = watertxt.apply_factors(watertxt_data = watertxt_data, name = key, factors = avg_delta_values[key])
+
+    watertxt.write_file(watertxt_data = watertxt_data_with_deltas, save_path = water_filedir, filename = "-".join([water_filename.split(".txt")[0], "with", delta_filename.split(".txt")[0] , "applied.txt"]))
+           
+    # print data
+    if arguments.verbose: 
+        waterapputils_viewer.print_watertxt_data(watertxt_data)  
+        waterapputils_viewer.print_watertxt_data(watertxt_data_with_deltas)  
+
+    # close error logging
+    waterapputils_logging.remove_loggers()
+
 def main():  
     """
     Run program based on user input arguments. Program will automatically process file(s) supplied,
@@ -108,11 +153,9 @@ def main():
     group = parser.add_mutually_exclusive_group()
     group.add_argument("-watertxt", "--watertxtfiles", nargs = "+", help = "List WATER text data file(s) to be processed")
     group.add_argument("-watertxtfd", "--watertxtfiledialog", action = "store_true", help = "Open a file dialog window to select WATER text data file(s).")
-    group.add_argument("-watertxtcmp", "--watertxtcmp", nargs = 2, help = "List 2 WATER text data file(s) to be compared")
+    group.add_argument("-watertxtcmp", "--watertxtcompare", nargs = 2, help = "List 2 WATER text data file(s) to be compared")
 
-    group.add_argument("-deltastxt", "--txtfiles", nargs = "+", help = "List WATER text data file(s) to be processed")
-    group.add_argument("-deltastxtfd", "--txtfiledialog", action = "store_true", help = "Open a file dialog window to select WATER text data file(s).")
-
+    group.add_argument("-applydeltas", "--applydeltasdata", nargs = 2, help = "List WATER text data file followed by delta file to be applied.")
 
     parser.add_argument("-v", "--verbose", action = "store_true",  help = "Print general information about data file(s)")
     parser.add_argument("-p", "--showplot", action = "store_true",  help = "Show plots of parameters contained in data file(s)")
@@ -132,8 +175,11 @@ def main():
             root.destroy()          
             process_txt_files(file_list = root.tk.splitlist(files), arguments = args)
         
-        if args.watertxtcmp:
-            process_txtcmp(file_list = args.txtcmp, arguments = args)
+        elif args.watertxtcompare:
+            process_txtcmp(file_list = args.watertxtcompare, arguments = args)
+
+        elif args.applydeltasdata:
+            apply_deltas(file_list = args.applydeltasdata, arguments = args)
                  
         # process file(s) using standard input
         else:
