@@ -695,6 +695,83 @@ def test_fill_simulation_dict():
     print("    {}".format(simulation["ClimaticTemperatureSeries"][0][1]))    
     print("") 
 
+
+def test_get_xml_data():
+    """ Test get_xml_data """
+
+    print("--- Testing get_xml_data ---")     
+
+    xml_tree = _create_test_data()
+    
+    project, study, simulation = get_xml_data(waterxml_tree = xml_tree)
+
+    print("*Project dictionary*\n    expected : actual")
+    print("    {'UserName': 'jlant', 'ProjName': 'my-project', 'ProjID': '1', 'DateCreated': '2014-04-22T10:00:00.0000-00:00'}  :\n ")
+    print("    {}".format(project))
+    print("")
+
+    print("*Study dictionary*\n    expected : actual")
+    print("    {'StudyLocDecDeg': '40.5, -75.9', 'StudyDescription': 'Test simulation', 'StudyID': '1'}  :\n ")
+    print("    {}".format(study))
+    print("")
+
+    print("*Study simulation*\n")
+    for key, value in simulation.iteritems():
+        if key == "SimulID":
+            print("    *SimulID*\n    expected : actual")
+            print("        ['1'] : {}\n".format(value))
+        elif key == "StudyID":
+            print("    *StudyID*\n    expected : actual")
+            print("        ['1'] : {}\n".format(value))        
+        elif key == "RegionType":
+            print("    *RegionType*\n    expected : actual")
+            print("        ['4'] : {}\n".format(value)) 
+        elif key == "SimulationFeatures":
+            print("    *Simulation SimulationFeatures*\n    expected : actual")
+            print("        {'SimulID': '1', 'AttCode': '1', 'AttMinVal': '90.0', 'AttName': 'Study Unit Total Area', 'AttUnits': '(sq Km)', 'AttDescription': ' Study unit total area', 'AttUnitsCode': '303', 'AttMaxVal': '110.0', 'AttID': '1', 'AttstdDev': '0', 'AttMeanVal': '100.0'} : \n")
+            print("        {}\n".format(simulation["SimulationFeatures"][0][0]))              
+            print("")
+            print("    expected : actual")
+            print("        {'SimulID': '1', 'AttCode': '37', 'AttMinVal': '4', 'AttName': 'Total Estimated Stream Area', 'AttUnits': '(sq Km)', 'AttDescription': 'Estimated area of stream coverage', 'AttUnitsCode': '303', 'AttMaxVal': '6', 'AttID': '2', 'AttstdDev': '0', 'AttMeanVal': '5'} : \n")
+            print("        {}\n".format(simulation["SimulationFeatures"][0][1])) 
+        elif key == "SimulationTopographicWetnessIndex":
+            print("    *Simulation SimulationTopographicWetnessIndex*\n    expected : actual")
+            print("        {'BinID': '1', 'SimulID': '1', 'BinValueMean': '3.1', 'BinValueFraction': '0.002'} : \n")
+            print("        {}".format(simulation["SimulationTopographicWetnessIndex"][0][0]))    
+            print("")
+            print("     expected : actual")
+            print("        {'BinID': '2', 'SimulID': '1', 'BinValueMean': '4.2', 'BinValueFraction': '0.005'} : \n")
+            print("        {}".format(simulation["SimulationTopographicWetnessIndex"][0][1]))    
+            print("")
+        elif key == "Simulation StudyUnitDischargeSeries":
+            print("    *Simulation StudyUnitDischargeSeries*\n    expected : actual")
+            print("        {'SeriesID': '1', 'SeriesDate': '2014-01-01T00:00:00-05:00', 'SeriesUnitsCode': '54', 'SimulID': '1', 'SeriesValue': '100.0', 'SeriesUnit': 'mm per day'} : \n")
+            print("        {}".format(simulation["StudyUnitDischargeSeries"][0][0]))    
+            print("")
+            print("    expected : actual")
+            print("    {'SeriesID': '2', 'SeriesDate': '2014-01-02T00:00:00-05:00', 'SeriesUnitsCode': '54', 'SimulID': '1', 'SeriesValue': '110.0', 'SeriesUnit': 'mm per day'} : \n")
+            print("    {}".format(simulation["StudyUnitDischargeSeries"][0][1]))    
+            print("") 
+        elif key == "Simulation ClimaticPrecipitationSeries":
+            print("*Simulation ClimaticPrecipitationSeries*\n    expected : actual")
+            print("    {'SeriesID': '1', 'SeriesDate': '2014-01-01T00:00:00-05:00', 'SeriesUnitsCode': '4', 'SimulID': '1', 'SeriesValue': '3.0', 'SeriesUnit': 'mm'} : \n")
+            print("    {}".format(simulation["ClimaticPrecipitationSeries"][0][0]))    
+            print("")
+            print("    expected : actual")
+            print("    {'SeriesID': '2', 'SeriesDate': '2014-01-02T00:00:00-05:00', 'SeriesUnitsCode': '4', 'SimulID': '1', 'SeriesValue': '4.5', 'SeriesUnit': 'mm'} : \n")
+            print("    {}".format(simulation["ClimaticPrecipitationSeries"][0][1]))    
+            print("") 
+        elif key == "Simulation ClimaticTemperatureSeries":        
+            print("*Simulation ClimaticTemperatureSeries*\n    expected : actual")
+            print("    {'SeriesID': '1', 'SeriesDate': '2014-01-01T00:00:00-05:00', 'SeriesUnitsCode': '31', 'SimulID': '1', 'SeriesValue': '11.1', 'SeriesUnit': 'Celsius'} : \n")
+            print("    {}".format(simulation["ClimaticTemperatureSeries"][0][0]))    
+            print("")
+            print("    expected : actual")
+            print("    {'SeriesID': '2', 'SeriesDate': '2014-01-02T00:00:00-05:00', 'SeriesUnitsCode': '31', 'SimulID': '1', 'SeriesValue': '12.2', 'SeriesUnit': 'Celsius'} : \n")
+            print("    {}".format(simulation["ClimaticTemperatureSeries"][0][1]))    
+            print("")
+
+
 def test_get_topographic_wetness_index_data():
     """ Test get_topographic_wetness_index_data """
 
@@ -937,7 +1014,8 @@ def test_write_file():
 
     print("Created 2 files {} and {} in current working directory. Please check for proper writing".format("WATERSimulation.xml", "WATERSimulation_sampledeltas.xml")) 
     print("")  
-    
+
+
 def main():
     """ Test functionality waterxml.py """
 
@@ -954,6 +1032,8 @@ def main():
     test_fill_dict()
 
     test_fill_simulation_dict()
+
+    test_get_xml_data()
 
     test_get_topographic_wetness_index_data()
     

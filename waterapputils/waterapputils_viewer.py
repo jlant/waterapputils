@@ -15,11 +15,14 @@ __contact__   = __author__
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from textwrap import wrap
-
+from StringIO import StringIO
 import datetime
 import numpy as np
 import os
 import pdb
+
+# my modules
+import waterxml
         
 def print_watertxt_data(watertxt_data):
     """   
@@ -66,7 +69,7 @@ def print_watertxt_data(watertxt_data):
     
     # print relevant information
     print("")
-    print("--- DATA FILE INFORMATION ---")
+    print("--- WATER TEXT FILE INFORMATION ---")
     print("User: {}".format(watertxt_data["user"]))
     print("Date created: {}".format(watertxt_data["date_created"]))
     print("StationID: {}".format(watertxt_data["stationid"]))
@@ -382,7 +385,47 @@ def plot_deltas_data(deltas_data, is_visible = True, save_path = None):
     else:
         plt.close()
 
+def print_waterxml_data(waterxml_tree):
+    """   
+    Print information and data contained in the water xml tree. 
+    
+    Parameters
+    ----------
+    waterxml_tree : dictionary 
+        A dictionary containing data found in WATER output text file.
+    
+    """  
+    # print relevant information
+    print("")
+    print("--- WATER XML FILE INFORMATION ---")
+    
+    project, study, simulation = waterxml.get_xml_data(waterxml_tree = waterxml_tree)
 
+    print("Project Information:")
+    print("    {}\n".format(project))
+
+    print("Study Information:")
+    print("    {}\n".format(study))
+       
+    print("Simulation Information:\n")
+    for key, value in simulation.iteritems():
+        if key == "SimulID":
+            print("    SimulID:")
+            print("        {}\n".format(value))
+        elif key == "StudyID":
+            print("    StudyID:")
+            print("        {}\n".format(value))        
+        elif key == "RegionType":
+            print("    RegionType:")
+            print("    {}\n".format(value))     
+        elif key in ["SimulationFeatures", "SimulationTopographicWetnessIndex", "StudyUnitDischargeSeries", "ClimaticPrecipitationSeries", "ClimaticTemperatureSeries"]:
+            print("    {}".format(key))
+            for i in range(len(value)):
+                for j in range(len(value[i])):
+                    print("")
+                    for k, v in value[i][j].iteritems():
+                        print("        {} : {}".format(k, v))
+                print("")    
 
 def _create_watertxt_test_data(multiplicative_factor = 1, stationid = "012345"):
     """ Create test data for tests """
@@ -466,6 +509,133 @@ def _create_deltas_test_data():
 
     return data
 
+def _create_waterxml_test_data():
+    """ Create test data to use with tests """
+    
+    fixture = {}
+    
+    fixture["data file"] = \
+        """
+        <Project>
+            <ProjID>1</ProjID>
+            <UserName>jlant</UserName>
+            <DateCreated>2014-04-22T10:00:00.0000-00:00</DateCreated>
+            <ProjName>my-project</ProjName>
+            <Study>
+                <StudyID>1</StudyID>
+                <ProjID>1</ProjID>
+                <StudyLocDecDeg>40.5, -75.9</StudyLocDecDeg>
+                <StudyXLocation>1600000.0</StudyXLocation>
+                <StudyYLocation>2100000.0</StudyYLocation>
+                <StudyDescription>Test simulation</StudyDescription>
+                <IsPointApproved>true</IsPointApproved>
+                <IsDelineated>true</IsDelineated>
+                <IsStudyApproved>true</IsStudyApproved>
+                <StudySimulation>
+                    <SimulID>1</SimulID>
+                    <StudyID>1</StudyID>
+                    <RegionType>4</RegionType>
+                    <isInitialized>true</isInitialized>
+                    <isLoaded>true</isLoaded>
+                    <isCompleted>false</isCompleted>
+                    <SimulationFeatures>
+                        <AttID>1</AttID>
+                        <SimulID>1</SimulID>
+                        <AttName>Study Unit Total Area</AttName>
+                        <AttCode>1</AttCode>
+                        <AttMeanVal>100.0</AttMeanVal>
+                        <AttMinVal>90.0</AttMinVal>
+                        <AttMaxVal>110.0</AttMaxVal>
+                        <AttstdDev>0</AttstdDev>
+                        <AttDescription> Study unit total area</AttDescription>
+                        <AttUnitsCode>303</AttUnitsCode>
+                        <AttUnits>(sq Km)</AttUnits>
+                    </SimulationFeatures>
+                    <SimulationFeatures>
+                        <AttID>2</AttID>
+                        <SimulID>1</SimulID>
+                        <AttName>Total Estimated Stream Area</AttName>
+                        <AttCode>37</AttCode>
+                        <AttMeanVal>5</AttMeanVal>
+                        <AttMinVal>4</AttMinVal>
+                        <AttMaxVal>6</AttMaxVal>
+                        <AttstdDev>0</AttstdDev>
+                        <AttDescription>Estimated area of stream coverage</AttDescription>
+                        <AttUnitsCode>303</AttUnitsCode>
+                        <AttUnits>(sq Km)</AttUnits>
+                    </SimulationFeatures>
+                    <SimulationTopographicWetnessIndex>                        
+                        <BinID>1</BinID>
+                        <SimulID>1</SimulID>
+                        <BinValueMean>3.1</BinValueMean>
+                        <BinValueFraction>0.002</BinValueFraction>                    
+                    </SimulationTopographicWetnessIndex>
+                    <SimulationTopographicWetnessIndex>                        
+                        <BinID>2</BinID>
+                        <SimulID>1</SimulID>
+                        <BinValueMean>4.2</BinValueMean>
+                        <BinValueFraction>0.005</BinValueFraction>                    
+                    </SimulationTopographicWetnessIndex>
+                    <StudyUnitDischargeSeries>                        
+                        <SeriesID>1</SeriesID>
+                        <SimulID>1</SimulID>
+                        <SeriesDate>2014-01-01T00:00:00-05:00</SeriesDate>
+                        <SeriesValue>100.0</SeriesValue>
+                        <SeriesUnitsCode>54</SeriesUnitsCode>
+                        <SeriesUnit>mm per day</SeriesUnit>                    
+                    </StudyUnitDischargeSeries>
+                    <StudyUnitDischargeSeries>                        
+                        <SeriesID>2</SeriesID>
+                        <SimulID>1</SimulID>
+                        <SeriesDate>2014-01-02T00:00:00-05:00</SeriesDate>
+                        <SeriesValue>110.0</SeriesValue>
+                        <SeriesUnitsCode>54</SeriesUnitsCode>
+                        <SeriesUnit>mm per day</SeriesUnit>                    
+                    </StudyUnitDischargeSeries>
+                    <ClimaticPrecipitationSeries>                        
+                        <SeriesID>1</SeriesID>
+                        <SimulID>1</SimulID>
+                        <SeriesDate>2014-01-01T00:00:00-05:00</SeriesDate>
+                        <SeriesValue>3.0</SeriesValue>
+                        <SeriesUnitsCode>4</SeriesUnitsCode>
+                        <SeriesUnit>mm</SeriesUnit>                    
+                    </ClimaticPrecipitationSeries>
+                    <ClimaticPrecipitationSeries>                        
+                        <SeriesID>2</SeriesID>
+                        <SimulID>1</SimulID>
+                        <SeriesDate>2014-01-02T00:00:00-05:00</SeriesDate>
+                        <SeriesValue>4.5</SeriesValue>
+                        <SeriesUnitsCode>4</SeriesUnitsCode>
+                        <SeriesUnit>mm</SeriesUnit>                    
+                    </ClimaticPrecipitationSeries>
+                    <ClimaticTemperatureSeries>                        
+                        <SeriesID>1</SeriesID>
+                        <SimulID>1</SimulID>
+                        <SeriesDate>2014-01-01T00:00:00-05:00</SeriesDate>
+                        <SeriesValue>11.1</SeriesValue>
+                        <SeriesUnitsCode>31l</SeriesUnitsCode>
+                        <SeriesUnit>Celsius</SeriesUnit>                    
+                    </ClimaticTemperatureSeries>
+                    <ClimaticTemperatureSeries>                        
+                        <SeriesID>2</SeriesID>
+                        <SimulID>1</SimulID>
+                        <SeriesDate>2014-01-02T00:00:00-05:00</SeriesDate>
+                        <SeriesValue>12.2</SeriesValue>
+                        <SeriesUnitsCode>31</SeriesUnitsCode>
+                        <SeriesUnit>Celsius</SeriesUnit>                    
+                    </ClimaticTemperatureSeries>
+                </StudySimulation>             
+            </Study>
+        </Project>
+        """
+        
+    fileobj = StringIO(fixture["data file"])
+    
+    xml_tree = waterxml.read_file(fileobj)  
+
+    return xml_tree    
+
+
     
 def test_print_watertxt_data():
     """ Test print output functionality """
@@ -521,6 +691,14 @@ def test_plot_deltas_data():
     
     print("Plotting completed")
     print("")
+
+def test_print_waterxml_data():
+    """ Test print_waterxml_data """
+    
+    print("--- print_waterxml_data ---")     
+
+    xml_tree = _create_waterxml_test_data()
+    print_waterxml_data(waterxml_tree = xml_tree)
     
 def main():
     """ Test functionality of waterapputils_viewer """
@@ -528,16 +706,31 @@ def main():
     print("")
     print("RUNNING TESTS ...")
     print("")
-    
-#    test_print_watertxt_data()
-#    
-#    test_plot_watertxt_data()
-    
-#    test_plot_watertxt_comprison()    
 
-    test_plot_deltas_data()
-    
-    test_print_deltas_data()
+#    ans_print_watertxt_data = raw_input("Do you want to test print_watertxt_data()? y/n ")
+#    if ans_print_watertxt_data == "y":
+#        test_print_watertxt_data()
+#
+#    ans_plot_watertxt_data = raw_input("Do you want to test plot_watertxt_data()? y/n ")
+#    if ans_plot_watertxt_data == "y":
+#        test_plot_watertxt_data()
+#        
+#    ans_plot_watertxt_comprison = raw_input("Do you want to test plot_watertxt_comprison()? y/n ")
+#    if ans_plot_watertxt_comprison == "y":
+#        test_plot_watertxt_comprison()
+#
+#    ans_print_deltas_data = raw_input("Do you want to test print_deltas_data()? y/n ")
+#    if ans_print_deltas_data == "y":
+#        test_print_deltas_data() 
+#    
+#    ans_plot_deltas_data = raw_input("Do you want to test plot_deltas_data()? y/n ")
+#    if ans_plot_deltas_data == "y":
+#        test_plot_deltas_data() 
+
+    ans_print_waterxml_data = raw_input("Do you want to test print_waterxml_data()? y/n ")
+    if ans_print_waterxml_data == "y":
+        test_print_waterxml_data() 
+
 
 if __name__ == "__main__":
     main() 
