@@ -46,6 +46,18 @@
                         <AttUnitsCode>303</AttUnitsCode>
                         <AttUnits>(sq Km)</AttUnits>
                     </SimulationFeatures>
+                    <SimulationTopographicWetnessIndex>                        
+                        <BinID>1</BinID>
+                        <SimulID>1</SimulID>
+                        <BinValueMean>3.1</BinValueMean>
+                        <BinValueFraction>0.002</BinValueFraction>                    
+                    </SimulationTopographicWetnessIndex>
+                    <SimulationTopographicWetnessIndex>                        
+                        <BinID>2</BinID>
+                        <SimulID>1</SimulID>
+                        <BinValueMean>4.2</BinValueMean>
+                        <BinValueFraction>0.005</BinValueFraction>                    
+                    </SimulationTopographicWetnessIndex>
                     <StudyUnitDischargeSeries>                        
                         <SeriesID>1</SeriesID>
                         <SimulID>1</SimulID>
@@ -83,7 +95,7 @@
                         <SimulID>1</SimulID>
                         <SeriesDate>2014-01-01T00:00:00-05:00</SeriesDate>
                         <SeriesValue>11.1</SeriesValue>
-                        <SeriesUnitsCode>31l</SeriesUnitsCode>
+                        <SeriesUnitsCode>31</SeriesUnitsCode>
                         <SeriesUnit>Celsius</SeriesUnit>                    
                     </ClimaticTemperatureSeries>
                     <ClimaticTemperatureSeries>                        

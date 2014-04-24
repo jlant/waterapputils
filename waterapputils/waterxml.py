@@ -265,9 +265,58 @@ def get_series_date(date_time):
     
     return date
 
+def get_topographic_wetness_index_data(simulation_dict):
+    """   
+    Get bin id, bin mean value, and bin fraction for topographic wetness index data contained in the 
+    simulation dictionary. '
+    
+    Parameters
+    ----------
+    simulation_dict : dictionary 
+        Dictionary containing keys that match particular children in the simulation element
+        
+    Returns
+    -------
+    bin_ids : numpy array
+        Array of float values
+    bin_value_means : numpy array
+        Array of float values
+    bin_value_fractions : numpy array
+        Array of float values
+
+    Notes
+    -----
+    Each topographic wetness index parameter has the following xml elements:
+    'BinID'
+    'SimulID'
+    'BinValueMean'
+    'BinValueFraction'        
+    """
+    bin_ids = []
+    bin_value_means = []
+    bin_value_fractions = []     
+    for i in range(len(simulation_dict["SimulID"])):                            # loop for each simulation id
+        parameter = simulation_dict["SimulationTopographicWetnessIndex"][i]       # get the topographic wetness index for a particular simulation id
+        for j in range(len(parameter)):                                         # loop for each parameter dictionary for a particular simulation id          
+            bin_id = parameter[j]["BinID"]
+            bin_value_mean = parameter[j]["BinValueMean"]
+            bin_value_fraction = parameter[j]["BinValueFraction"]
+            
+            bin_ids.append(bin_id)
+            bin_value_means.append(bin_value_mean)            
+            bin_value_fractions.append(bin_value_fraction)
+    
+    bin_ids = np.array(bin_ids, dtype = float)    
+    bin_value_means = np.array(bin_value_means, dtype = float)
+    bin_value_fractions = np.array(bin_value_fractions, dtype = float)
+    
+    return bin_ids, bin_value_means, bin_value_fractions
+
+
+    
 def get_timeseries_data(simulation_dict, timeseries_key):
     """   
-    Get dates, values, and units from timeseries parameters contained in the 
+    Get dates, values, and units for timeseries parameters contained in the 
     simulation dictionary. '
     
     Parameters
@@ -448,6 +497,18 @@ def _create_test_data():
                         <AttUnitsCode>303</AttUnitsCode>
                         <AttUnits>(sq Km)</AttUnits>
                     </SimulationFeatures>
+                    <SimulationTopographicWetnessIndex>                        
+                        <BinID>1</BinID>
+                        <SimulID>1</SimulID>
+                        <BinValueMean>3.1</BinValueMean>
+                        <BinValueFraction>0.002</BinValueFraction>                    
+                    </SimulationTopographicWetnessIndex>
+                    <SimulationTopographicWetnessIndex>                        
+                        <BinID>2</BinID>
+                        <SimulID>1</SimulID>
+                        <BinValueMean>4.2</BinValueMean>
+                        <BinValueFraction>0.005</BinValueFraction>                    
+                    </SimulationTopographicWetnessIndex>
                     <StudyUnitDischargeSeries>                        
                         <SeriesID>1</SeriesID>
                         <SimulID>1</SimulID>
@@ -598,6 +659,15 @@ def test_fill_simulation_dict():
     print("    {}".format(simulation["SimulationFeatures"][0][1]))    
     print("")
 
+    print("*Simulation SimulationTopographicWetnessIndex*\n    expected : actual")
+    print("    {'BinID': '1', 'SimulID': '1', 'BinValueMean': '3.1', 'BinValueFraction': '0.002'} : \n")
+    print("    {}".format(simulation["SimulationTopographicWetnessIndex"][0][0]))    
+    print("")
+    print("    expected : actual")
+    print("    {'BinID': '2', 'SimulID': '1', 'BinValueMean': '4.2', 'BinValueFraction': '0.005'} : \n")
+    print("    {}".format(simulation["SimulationTopographicWetnessIndex"][0][1]))    
+    print("")
+
     print("*Simulation StudyUnitDischargeSeries*\n    expected : actual")
     print("    {'SeriesID': '1', 'SeriesDate': '2014-01-01T00:00:00-05:00', 'SeriesUnitsCode': '54', 'SimulID': '1', 'SeriesValue': '100.0', 'SeriesUnit': 'mm per day'} : \n")
     print("    {}".format(simulation["StudyUnitDischargeSeries"][0][0]))    
@@ -624,6 +694,34 @@ def test_fill_simulation_dict():
     print("    {'SeriesID': '2', 'SeriesDate': '2014-01-02T00:00:00-05:00', 'SeriesUnitsCode': '31', 'SimulID': '1', 'SeriesValue': '12.2', 'SeriesUnit': 'Celsius'} : \n")
     print("    {}".format(simulation["ClimaticTemperatureSeries"][0][1]))    
     print("") 
+
+def test_get_topographic_wetness_index_data():
+    """ Test get_topographic_wetness_index_data """
+
+    print("--- get_topographic_wetness_index_data ---")     
+
+    xml_tree = _create_test_data()
+    
+    simulation = create_simulation_dict()
+
+    simulation = fill_simulation_dict(waterxml_tree = xml_tree, simulation_dict = simulation)
+
+    bin_ids, bin_value_means, bin_value_fractions = get_topographic_wetness_index_data(simulation_dict = simulation)
+
+
+    print("*SimulationTopographicWetnessIndex BinID*\n    expected : actual")
+    print("    [1. 2.] :")
+    print("    {}".format(bin_ids))    
+    print("")
+
+    print("*SimulationTopographicWetnessIndex BinValueMean*\n    expected : actual")
+    print("    [3.1 4.2 ] : ")
+    print("    {}".format(bin_value_means))    
+    print("")
+
+    print("*SimulationTopographicWetnessIndex BinValueFraction*\n    expected : actual")
+    print("    [0.002 0.005] : {}".format(bin_value_fractions))    
+    print("")
 
 def test_get_timeseries_data():
     """ Test get_timeseries_data """
@@ -688,18 +786,18 @@ def test_apply_factors():
     print("--- Testing apply_factors ---") 
 
     factors = {
-        'January': 2.0,
-        'February': 2.25,
-        'March': 2.5,
-        'April': 3.0,
-        'May': 3.5,
-        'June': 4.0,
-        'July': 4.5,
-        'August': 5.5,
-        'September': 6.0,
-        'October': 6.5,
-        'November': 7.0,
-        'December': 7.5
+        "January": 2.0,
+        "February": 2.25,
+        "March": 2.5,
+        "April": 3.0,
+        "May": 3.5,
+        "June": 4.0,
+        "July": 4.5,
+        "August": 5.5,
+        "September": 6.0,
+        "October": 6.5,
+        "November": 7.0,
+        "December": 7.5
     }     
     
     month = "January"
@@ -807,7 +905,6 @@ def test_apply_factors():
     print("    Celsius : {}".format(t_units_updated))    
     print("")    
 
-    print(simulation_updated)
 
 def test_write_file():
     """ Test write_file functionality """
@@ -815,18 +912,18 @@ def test_write_file():
     print("--- Testing write_file ---") 
 
     factors = {
-        'January': 2.0,
-        'February': 2.25,
-        'March': 2.5,
-        'April': 3.0,
-        'May': 3.5,
-        'June': 4.0,
-        'July': 4.5,
-        'August': 5.5,
-        'September': 6.0,
-        'October': 6.5,
-        'November': 7.0,
-        'December': 7.5
+        "January": 2.0,
+        "February": 2.25,
+        "March": 2.5,
+        "April": 3.0,
+        "May": 3.5,
+        "June": 4.0,
+        "July": 4.5,
+        "August": 5.5,
+        "September": 6.0,
+        "October": 6.5,
+        "November": 7.0,
+        "December": 7.5
     } 
     
     xml_tree = _create_test_data()
@@ -857,6 +954,8 @@ def main():
     test_fill_dict()
 
     test_fill_simulation_dict()
+
+    test_get_topographic_wetness_index_data()
     
     test_get_timeseries_data()
 

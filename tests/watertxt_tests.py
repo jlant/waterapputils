@@ -601,18 +601,18 @@ def test_apply_factors_single_parameter():
 def test_apply_factors_multi_parameters():
     
     factors = {
-        'January': 1.5,
-        'February': 2.0,
-        'March': 2.5,
-        'April': 3.0,
-        'May': 3.5,
-        'June': 4.0,
-        'July': 4.5,
-        'August': 5.5,
-        'September': 6.0,
-        'October': 6.5,
-        'November': 7.0,
-        'December': 7.5
+        "January": 1.5,
+        "February": 2.0,
+        "March": 2.5,
+        "April": 3.0,
+        "May": 3.5,
+        "June": 4.0,
+        "July": 4.5,
+        "August": 5.5,
+        "September": 6.0,
+        "October": 6.5,
+        "November": 7.0,
+        "December": 7.5
     }     
 
     dates = np.array([datetime.datetime(2014, 1, 1, 0, 0), 
