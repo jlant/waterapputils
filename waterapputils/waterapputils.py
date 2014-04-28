@@ -21,6 +21,7 @@ import pdb
 # my modules
 import helpers
 import watertxt
+import waterxml
 import waterapputils_viewer
 import waterapputils_logging
 import deltas
@@ -51,6 +52,40 @@ def process_txt_files(file_list, arguments):
 
         # plot data                            
         waterapputils_viewer.plot_watertxt_data(data, is_visible = arguments.showplot, save_path = outputdirpath)             
+
+        # print data
+        if arguments.verbose: 
+            waterapputils_viewer.print_watertxt_data(data)  
+
+        # close error logging
+        waterapputils_logging.remove_loggers()
+
+def process_xml_files(file_list, arguments):
+    """    
+    Process a list of WATER xml files according to options contained in arguments parameter.
+
+    Parameters
+    ----------
+    file_list : list 
+        List of files to parse, process, and plot.        
+    arguments : argparse object
+        An argparse object containing user options.                    
+    """
+    for f in file_list:
+                
+        filedir, filename = helpers.get_file_info(f)
+          
+        # create output directory     
+        outputdirpath = helpers.make_directory(path = filedir, directory_name = "-".join([filename.split(".xml")[0], "output"]))      
+        
+        # initialize error logging
+        waterapputils_logging.initialize_loggers(output_dir = outputdirpath)        
+        
+        # read data
+        data = waterxml.read_file(f)  
+
+        # plot data                            
+        waterapputils_viewer.plot_waterxml_timeseries_data(data, is_visible = arguments.showplot, save_path = outputdirpath)             
 
         # print data
         if arguments.verbose: 
@@ -115,7 +150,7 @@ def apply_deltas(file_list, arguments):
     delta_filedir, delta_filename = helpers.get_file_info(delta_file)
       
     # create output directory     
-#    outputdirpath = helpers.make_directory(path = water_filedir, directory_name = "-".join([water_filename.split(".txt")[0], "with", delta_filename.split(".txt")[0] , "applied", "output"]))      
+    outputdirpath = helpers.make_directory(path = water_filedir, directory_name = "-".join([water_filename.split(".txt")[0], "with", delta_filename.split(".txt")[0] , "applied", "output"]))      
     
     # initialize error logging
     waterapputils_logging.initialize_loggers(output_dir = water_filedir)        
@@ -155,6 +190,11 @@ def main():
     group.add_argument("-watertxtfd", "--watertxtfiledialog", action = "store_true", help = "Open a file dialog window to select WATER text data file(s).")
     group.add_argument("-watertxtcmp", "--watertxtcompare", nargs = 2, help = "List 2 WATER text data file(s) to be compared")
 
+    group.add_argument("-waterxml", "--waterxmlfiles", nargs = "+", help = "List WATER xml data file(s) to be processed")
+    group.add_argument("-waterxmlfd", "--waterxmlfiledialog", action = "store_true", help = "Open a file dialog window to select WATER xml data file(s).")
+
+
+
     group.add_argument("-applydeltas", "--applydeltasdata", nargs = 2, help = "List WATER text data file followed by delta file to be applied.")
 
     parser.add_argument("-v", "--verbose", action = "store_true",  help = "Print general information about data file(s)")
@@ -177,6 +217,17 @@ def main():
         
         elif args.watertxtcompare:
             process_txtcmp(file_list = args.watertxtcompare, arguments = args)
+
+        if args.waterxmlfiles:
+            process_xml_files(file_list = args.waterxmlfiles, arguments = args)
+            sys.exit()
+        
+        # get files from file dialog and process
+        elif args.waterxmlfiledialog:
+            root = Tkinter.Tk() 
+            files = tkFileDialog.askopenfilenames(title = "Select WATER XML File(s)", filetypes = [("XML file","*.xml"), ("All files", ".*")])
+            root.destroy()          
+            process_xml_files(file_list = root.tk.splitlist(files), arguments = args)
 
         elif args.applydeltasdata:
             apply_deltas(file_list = args.applydeltasdata, arguments = args)

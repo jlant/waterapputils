@@ -1,0 +1,205 @@
+<Project>
+	<ProjID>1</ProjID>
+	<UserName>jlant</UserName>
+	<DateCreated>2014-04-22T10:00:00.0000-00:00</DateCreated>
+	<ProjName>my-project</ProjName>
+	<Study>
+		<StudyID>1</StudyID>
+		<ProjID>1</ProjID>
+		<StudyLocDecDeg>40.5, -75.9</StudyLocDecDeg>
+		<StudyXLocation>1600000.0</StudyXLocation>
+		<StudyYLocation>2100000.0</StudyYLocation>
+		<StudyDescription>Test simulation</StudyDescription>
+		<IsPointApproved>true</IsPointApproved>
+		<IsDelineated>true</IsDelineated>
+		<IsStudyApproved>true</IsStudyApproved>
+		<StudySimulation>
+			<SimulID>1</SimulID>
+			<StudyID>1</StudyID>
+			<RegionType>4</RegionType>
+			<isInitialized>true</isInitialized>
+			<isLoaded>true</isLoaded>
+			<isCompleted>false</isCompleted>
+			<SimulationFeatures>
+				<AttID>1</AttID>
+				<SimulID>1</SimulID>
+				<AttName>Study Unit Total Area</AttName>
+				<AttCode>1</AttCode>
+				<AttMeanVal>100.0</AttMeanVal>
+				<AttMinVal>90.0</AttMinVal>
+				<AttMaxVal>110.0</AttMaxVal>
+				<AttstdDev>0</AttstdDev>
+				<AttDescription> Study unit total area</AttDescription>
+				<AttUnitsCode>303</AttUnitsCode>
+				<AttUnits>(sq Km)</AttUnits>
+			</SimulationFeatures>
+			<SimulationFeatures>
+				<AttID>2</AttID>
+				<SimulID>1</SimulID>
+				<AttName>Total Estimated Stream Area</AttName>
+				<AttCode>37</AttCode>
+				<AttMeanVal>5</AttMeanVal>
+				<AttMinVal>4</AttMinVal>
+				<AttMaxVal>6</AttMaxVal>
+				<AttstdDev>0</AttstdDev>
+				<AttDescription>Estimated area of stream coverage</AttDescription>
+				<AttUnitsCode>303</AttUnitsCode>
+				<AttUnits>(sq Km)</AttUnits>
+			</SimulationFeatures>
+			<SimulationTopographicWetnessIndex>                        
+				<BinID>1</BinID>
+				<SimulID>1</SimulID>
+				<BinValueMean>3.1</BinValueMean>
+				<BinValueFraction>0.002</BinValueFraction>                    
+			</SimulationTopographicWetnessIndex>
+			<SimulationTopographicWetnessIndex>                        
+				<BinID>2</BinID>
+				<SimulID>1</SimulID>
+				<BinValueMean>4.2</BinValueMean>
+				<BinValueFraction>0.005</BinValueFraction>                    
+			</SimulationTopographicWetnessIndex>
+			<StudyUnitDischargeSeries>                        
+				<SeriesID>1</SeriesID>
+				<SimulID>1</SimulID>
+				<SeriesDate>2014-01-01T00:00:00-05:00</SeriesDate>
+				<SeriesValue>100.0</SeriesValue>
+				<SeriesUnitsCode>54</SeriesUnitsCode>
+				<SeriesUnit>mm per day</SeriesUnit>                    
+			</StudyUnitDischargeSeries>
+			<StudyUnitDischargeSeries>                        
+				<SeriesID>2</SeriesID>
+				<SimulID>1</SimulID>
+				<SeriesDate>2014-01-02T00:00:00-05:00</SeriesDate>
+				<SeriesValue>110.0</SeriesValue>
+				<SeriesUnitsCode>54</SeriesUnitsCode>
+				<SeriesUnit>mm per day</SeriesUnit>                    
+			</StudyUnitDischargeSeries>
+			<ClimaticPrecipitationSeries>                        
+				<SeriesID>1</SeriesID>
+				<SimulID>1</SimulID>
+				<SeriesDate>2014-01-01T00:00:00-05:00</SeriesDate>
+				<SeriesValue>3.0</SeriesValue>
+				<SeriesUnitsCode>4</SeriesUnitsCode>
+				<SeriesUnit>mm</SeriesUnit>                    
+			</ClimaticPrecipitationSeries>
+			<ClimaticPrecipitationSeries>                        
+				<SeriesID>2</SeriesID>
+				<SimulID>1</SimulID>
+				<SeriesDate>2014-01-02T00:00:00-05:00</SeriesDate>
+				<SeriesValue>4.5</SeriesValue>
+				<SeriesUnitsCode>4</SeriesUnitsCode>
+				<SeriesUnit>mm</SeriesUnit>                    
+			</ClimaticPrecipitationSeries>
+			<ClimaticTemperatureSeries>                        
+				<SeriesID>1</SeriesID>
+				<SimulID>1</SimulID>
+				<SeriesDate>2014-01-01T00:00:00-05:00</SeriesDate>
+				<SeriesValue>11.1</SeriesValue>
+				<SeriesUnitsCode>31</SeriesUnitsCode>
+				<SeriesUnit>Celsius</SeriesUnit>                    
+			</ClimaticTemperatureSeries>
+			<ClimaticTemperatureSeries>                        
+				<SeriesID>2</SeriesID>
+				<SimulID>1</SimulID>
+				<SeriesDate>2014-01-02T00:00:00-05:00</SeriesDate>
+				<SeriesValue>12.2</SeriesValue>
+				<SeriesUnitsCode>31</SeriesUnitsCode>
+				<SeriesUnit>Celsius</SeriesUnit>                    
+			</ClimaticTemperatureSeries>
+		</StudySimulation>             
+		<StudySimulation>
+			<SimulID>2</SimulID>
+			<StudyID>1</StudyID>
+			<RegionType>4</RegionType>
+			<isInitialized>true</isInitialized>
+			<isLoaded>true</isLoaded>
+			<isCompleted>false</isCompleted>
+			<SimulationFeatures>
+				<AttID>1</AttID>
+				<SimulID>2</SimulID>
+				<AttName>Study Unit Total Area</AttName>
+				<AttCode>1</AttCode>
+				<AttMeanVal>100.0</AttMeanVal>
+				<AttMinVal>90.0</AttMinVal>
+				<AttMaxVal>110.0</AttMaxVal>
+				<AttstdDev>0</AttstdDev>
+				<AttDescription> Study unit total area</AttDescription>
+				<AttUnitsCode>303</AttUnitsCode>
+				<AttUnits>(sq Km)</AttUnits>
+			</SimulationFeatures>
+			<SimulationFeatures>
+				<AttID>2</AttID>
+				<SimulID>2</SimulID>
+				<AttName>Total Estimated Stream Area</AttName>
+				<AttCode>37</AttCode>
+				<AttMeanVal>5</AttMeanVal>
+				<AttMinVal>4</AttMinVal>
+				<AttMaxVal>6</AttMaxVal>
+				<AttstdDev>0</AttstdDev>
+				<AttDescription>Estimated area of stream coverage</AttDescription>
+				<AttUnitsCode>303</AttUnitsCode>
+				<AttUnits>(sq Km)</AttUnits>
+			</SimulationFeatures>
+			<SimulationTopographicWetnessIndex>                        
+				<BinID>1</BinID>
+				<SimulID>2</SimulID>
+				<BinValueMean>3.1</BinValueMean>
+				<BinValueFraction>0.002</BinValueFraction>                    
+			</SimulationTopographicWetnessIndex>
+			<SimulationTopographicWetnessIndex>                        
+				<BinID>2</BinID>
+				<SimulID>2</SimulID>
+				<BinValueMean>4.2</BinValueMean>
+				<BinValueFraction>0.005</BinValueFraction>                    
+			</SimulationTopographicWetnessIndex>
+			<StudyUnitDischargeSeries>                        
+				<SeriesID>1</SeriesID>
+				<SimulID>2</SimulID>
+				<SeriesDate>2014-01-01T00:00:00-05:00</SeriesDate>
+				<SeriesValue>100.0</SeriesValue>
+				<SeriesUnitsCode>54</SeriesUnitsCode>
+				<SeriesUnit>mm per day</SeriesUnit>                    
+			</StudyUnitDischargeSeries>
+			<StudyUnitDischargeSeries>                        
+				<SeriesID>2</SeriesID>
+				<SimulID>2</SimulID>
+				<SeriesDate>2014-01-02T00:00:00-05:00</SeriesDate>
+				<SeriesValue>110.0</SeriesValue>
+				<SeriesUnitsCode>54</SeriesUnitsCode>
+				<SeriesUnit>mm per day</SeriesUnit>                    
+			</StudyUnitDischargeSeries>
+			<ClimaticPrecipitationSeries>                        
+				<SeriesID>1</SeriesID>
+				<SimulID>2</SimulID>
+				<SeriesDate>2014-01-01T00:00:00-05:00</SeriesDate>
+				<SeriesValue>3.0</SeriesValue>
+				<SeriesUnitsCode>4</SeriesUnitsCode>
+				<SeriesUnit>mm</SeriesUnit>                    
+			</ClimaticPrecipitationSeries>
+			<ClimaticPrecipitationSeries>                        
+				<SeriesID>2</SeriesID>
+				<SimulID>2</SimulID>
+				<SeriesDate>2014-01-02T00:00:00-05:00</SeriesDate>
+				<SeriesValue>4.5</SeriesValue>
+				<SeriesUnitsCode>4</SeriesUnitsCode>
+				<SeriesUnit>mm</SeriesUnit>                    
+			</ClimaticPrecipitationSeries>
+			<ClimaticTemperatureSeries>                        
+				<SeriesID>1</SeriesID>
+				<SimulID>2</SimulID>
+				<SeriesDate>2014-01-01T00:00:00-05:00</SeriesDate>
+				<SeriesValue>11.1</SeriesValue>
+				<SeriesUnitsCode>31</SeriesUnitsCode>
+				<SeriesUnit>Celsius</SeriesUnit>                    
+			</ClimaticTemperatureSeries>
+			<ClimaticTemperatureSeries>                        
+				<SeriesID>2</SeriesID>
+				<SimulID>2</SimulID>
+				<SeriesDate>2014-01-02T00:00:00-05:00</SeriesDate>
+				<SeriesValue>12.2</SeriesValue>
+				<SeriesUnitsCode>31</SeriesUnitsCode>
+				<SeriesUnit>Celsius</SeriesUnit>                    
+			</ClimaticTemperatureSeries>
+		</StudySimulation>             
+	</Study>
+</Project>

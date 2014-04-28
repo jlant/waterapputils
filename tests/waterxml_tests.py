@@ -19,7 +19,7 @@ def setup():
    
     # set up fixtures 
  
-    fixture["data_file"] = \
+    fixture["data_file1"] = \
         """
         <Project>
             <ProjID>1</ProjID>
@@ -134,9 +134,221 @@ def setup():
         </Project>
         """
 
-    fileobj = StringIO(fixture["data_file"])
+    fixture["data_file2"] = \
+        """
+        <Project>
+            <ProjID>1</ProjID>
+            <UserName>jlant</UserName>
+            <DateCreated>2014-04-22T10:00:00.0000-00:00</DateCreated>
+            <ProjName>my-project</ProjName>
+            <Study>
+                <StudyID>1</StudyID>
+                <ProjID>1</ProjID>
+                <StudyLocDecDeg>40.5, -75.9</StudyLocDecDeg>
+                <StudyXLocation>1600000.0</StudyXLocation>
+                <StudyYLocation>2100000.0</StudyYLocation>
+                <StudyDescription>Test simulation</StudyDescription>
+                <IsPointApproved>true</IsPointApproved>
+                <IsDelineated>true</IsDelineated>
+                <IsStudyApproved>true</IsStudyApproved>
+                <StudySimulation>
+                    <SimulID>1</SimulID>
+                    <StudyID>1</StudyID>
+                    <RegionType>4</RegionType>
+                    <isInitialized>true</isInitialized>
+                    <isLoaded>true</isLoaded>
+                    <isCompleted>false</isCompleted>
+                    <SimulationFeatures>
+                        <AttID>1</AttID>
+                        <SimulID>1</SimulID>
+                        <AttName>Study Unit Total Area</AttName>
+                        <AttCode>1</AttCode>
+                        <AttMeanVal>100.0</AttMeanVal>
+                        <AttMinVal>90.0</AttMinVal>
+                        <AttMaxVal>110.0</AttMaxVal>
+                        <AttstdDev>0</AttstdDev>
+                        <AttDescription> Study unit total area</AttDescription>
+                        <AttUnitsCode>303</AttUnitsCode>
+                        <AttUnits>(sq Km)</AttUnits>
+                    </SimulationFeatures>
+                    <SimulationFeatures>
+                        <AttID>2</AttID>
+                        <SimulID>1</SimulID>
+                        <AttName>Total Estimated Stream Area</AttName>
+                        <AttCode>37</AttCode>
+                        <AttMeanVal>5</AttMeanVal>
+                        <AttMinVal>4</AttMinVal>
+                        <AttMaxVal>6</AttMaxVal>
+                        <AttstdDev>0</AttstdDev>
+                        <AttDescription>Estimated area of stream coverage</AttDescription>
+                        <AttUnitsCode>303</AttUnitsCode>
+                        <AttUnits>(sq Km)</AttUnits>
+                    </SimulationFeatures>
+                    <SimulationTopographicWetnessIndex>                        
+                        <BinID>1</BinID>
+                        <SimulID>1</SimulID>
+                        <BinValueMean>3.1</BinValueMean>
+                        <BinValueFraction>0.002</BinValueFraction>                    
+                    </SimulationTopographicWetnessIndex>
+                    <SimulationTopographicWetnessIndex>                        
+                        <BinID>2</BinID>
+                        <SimulID>1</SimulID>
+                        <BinValueMean>4.2</BinValueMean>
+                        <BinValueFraction>0.005</BinValueFraction>                    
+                    </SimulationTopographicWetnessIndex>
+                    <StudyUnitDischargeSeries>                        
+                        <SeriesID>1</SeriesID>
+                        <SimulID>1</SimulID>
+                        <SeriesDate>2014-01-01T00:00:00-05:00</SeriesDate>
+                        <SeriesValue>100.0</SeriesValue>
+                        <SeriesUnitsCode>54</SeriesUnitsCode>
+                        <SeriesUnit>mm per day</SeriesUnit>                    
+                    </StudyUnitDischargeSeries>
+                    <StudyUnitDischargeSeries>                        
+                        <SeriesID>2</SeriesID>
+                        <SimulID>1</SimulID>
+                        <SeriesDate>2014-01-02T00:00:00-05:00</SeriesDate>
+                        <SeriesValue>110.0</SeriesValue>
+                        <SeriesUnitsCode>54</SeriesUnitsCode>
+                        <SeriesUnit>mm per day</SeriesUnit>                    
+                    </StudyUnitDischargeSeries>
+                    <ClimaticPrecipitationSeries>                        
+                        <SeriesID>1</SeriesID>
+                        <SimulID>1</SimulID>
+                        <SeriesDate>2014-01-01T00:00:00-05:00</SeriesDate>
+                        <SeriesValue>3.0</SeriesValue>
+                        <SeriesUnitsCode>4</SeriesUnitsCode>
+                        <SeriesUnit>mm</SeriesUnit>                    
+                    </ClimaticPrecipitationSeries>
+                    <ClimaticPrecipitationSeries>                        
+                        <SeriesID>2</SeriesID>
+                        <SimulID>1</SimulID>
+                        <SeriesDate>2014-01-02T00:00:00-05:00</SeriesDate>
+                        <SeriesValue>4.5</SeriesValue>
+                        <SeriesUnitsCode>4</SeriesUnitsCode>
+                        <SeriesUnit>mm</SeriesUnit>                    
+                    </ClimaticPrecipitationSeries>
+                    <ClimaticTemperatureSeries>                        
+                        <SeriesID>1</SeriesID>
+                        <SimulID>1</SimulID>
+                        <SeriesDate>2014-01-01T00:00:00-05:00</SeriesDate>
+                        <SeriesValue>11.1</SeriesValue>
+                        <SeriesUnitsCode>31</SeriesUnitsCode>
+                        <SeriesUnit>Celsius</SeriesUnit>                    
+                    </ClimaticTemperatureSeries>
+                    <ClimaticTemperatureSeries>                        
+                        <SeriesID>2</SeriesID>
+                        <SimulID>1</SimulID>
+                        <SeriesDate>2014-01-02T00:00:00-05:00</SeriesDate>
+                        <SeriesValue>12.2</SeriesValue>
+                        <SeriesUnitsCode>31</SeriesUnitsCode>
+                        <SeriesUnit>Celsius</SeriesUnit>                    
+                    </ClimaticTemperatureSeries>
+                </StudySimulation>             
+                <StudySimulation>
+                    <SimulID>2</SimulID>
+                    <StudyID>1</StudyID>
+                    <RegionType>4</RegionType>
+                    <isInitialized>true</isInitialized>
+                    <isLoaded>true</isLoaded>
+                    <isCompleted>false</isCompleted>
+                    <SimulationFeatures>
+                        <AttID>1</AttID>
+                        <SimulID>2</SimulID>
+                        <AttName>Study Unit Total Area</AttName>
+                        <AttCode>1</AttCode>
+                        <AttMeanVal>100.0</AttMeanVal>
+                        <AttMinVal>90.0</AttMinVal>
+                        <AttMaxVal>110.0</AttMaxVal>
+                        <AttstdDev>0</AttstdDev>
+                        <AttDescription> Study unit total area</AttDescription>
+                        <AttUnitsCode>303</AttUnitsCode>
+                        <AttUnits>(sq Km)</AttUnits>
+                    </SimulationFeatures>
+                    <SimulationFeatures>
+                        <AttID>2</AttID>
+                        <SimulID>2</SimulID>
+                        <AttName>Total Estimated Stream Area</AttName>
+                        <AttCode>37</AttCode>
+                        <AttMeanVal>5</AttMeanVal>
+                        <AttMinVal>4</AttMinVal>
+                        <AttMaxVal>6</AttMaxVal>
+                        <AttstdDev>0</AttstdDev>
+                        <AttDescription>Estimated area of stream coverage</AttDescription>
+                        <AttUnitsCode>303</AttUnitsCode>
+                        <AttUnits>(sq Km)</AttUnits>
+                    </SimulationFeatures>
+                    <SimulationTopographicWetnessIndex>                        
+                        <BinID>1</BinID>
+                        <SimulID>2</SimulID>
+                        <BinValueMean>3.1</BinValueMean>
+                        <BinValueFraction>0.002</BinValueFraction>                    
+                    </SimulationTopographicWetnessIndex>
+                    <SimulationTopographicWetnessIndex>                        
+                        <BinID>2</BinID>
+                        <SimulID>2</SimulID>
+                        <BinValueMean>4.2</BinValueMean>
+                        <BinValueFraction>0.005</BinValueFraction>                    
+                    </SimulationTopographicWetnessIndex>
+                    <StudyUnitDischargeSeries>                        
+                        <SeriesID>1</SeriesID>
+                        <SimulID>2</SimulID>
+                        <SeriesDate>2014-01-01T00:00:00-05:00</SeriesDate>
+                        <SeriesValue>100.0</SeriesValue>
+                        <SeriesUnitsCode>54</SeriesUnitsCode>
+                        <SeriesUnit>mm per day</SeriesUnit>                    
+                    </StudyUnitDischargeSeries>
+                    <StudyUnitDischargeSeries>                        
+                        <SeriesID>2</SeriesID>
+                        <SimulID>2</SimulID>
+                        <SeriesDate>2014-01-02T00:00:00-05:00</SeriesDate>
+                        <SeriesValue>110.0</SeriesValue>
+                        <SeriesUnitsCode>54</SeriesUnitsCode>
+                        <SeriesUnit>mm per day</SeriesUnit>                    
+                    </StudyUnitDischargeSeries>
+                    <ClimaticPrecipitationSeries>                        
+                        <SeriesID>1</SeriesID>
+                        <SimulID>2</SimulID>
+                        <SeriesDate>2014-01-01T00:00:00-05:00</SeriesDate>
+                        <SeriesValue>3.0</SeriesValue>
+                        <SeriesUnitsCode>4</SeriesUnitsCode>
+                        <SeriesUnit>mm</SeriesUnit>                    
+                    </ClimaticPrecipitationSeries>
+                    <ClimaticPrecipitationSeries>                        
+                        <SeriesID>2</SeriesID>
+                        <SimulID>2</SimulID>
+                        <SeriesDate>2014-01-02T00:00:00-05:00</SeriesDate>
+                        <SeriesValue>4.5</SeriesValue>
+                        <SeriesUnitsCode>4</SeriesUnitsCode>
+                        <SeriesUnit>mm</SeriesUnit>                    
+                    </ClimaticPrecipitationSeries>
+                    <ClimaticTemperatureSeries>                        
+                        <SeriesID>1</SeriesID>
+                        <SimulID>2</SimulID>
+                        <SeriesDate>2014-01-01T00:00:00-05:00</SeriesDate>
+                        <SeriesValue>11.1</SeriesValue>
+                        <SeriesUnitsCode>31</SeriesUnitsCode>
+                        <SeriesUnit>Celsius</SeriesUnit>                    
+                    </ClimaticTemperatureSeries>
+                    <ClimaticTemperatureSeries>                        
+                        <SeriesID>2</SeriesID>
+                        <SimulID>2</SimulID>
+                        <SeriesDate>2014-01-02T00:00:00-05:00</SeriesDate>
+                        <SeriesValue>12.2</SeriesValue>
+                        <SeriesUnitsCode>31</SeriesUnitsCode>
+                        <SeriesUnit>Celsius</SeriesUnit>                    
+                    </ClimaticTemperatureSeries>
+                </StudySimulation>             
+            </Study>
+        </Project>
+        """
 
-    fixture["xml_tree"] = waterxml.read_file(fileobj)     
+
+    fileobj1 = StringIO(fixture["data_file1"])
+    fileobj2 = StringIO(fixture["data_file2"])
+
+    fixture["xml_tree1"] = waterxml.read_file(fileobj1)  
+    fixture["xml_tree2"] = waterxml.read_file(fileobj2)     
     
     fixture["factors"] = {"January": 2.0,
                           "February": 2.25,
@@ -202,8 +414,8 @@ def test_fill_dict():
     project = waterxml.create_project_dict() 
     study = waterxml.create_study_dict()
     
-    actual_project = waterxml.fill_dict(waterxml_tree = fixture["xml_tree"], data_dict = project, element = "Project", keys = project.keys())
-    actual_study = waterxml.fill_dict(waterxml_tree = fixture["xml_tree"], data_dict = study, element = "Study", keys = study.keys())
+    actual_project = waterxml.fill_dict(waterxml_tree = fixture["xml_tree1"], data_dict = project, element = "Project", keys = project.keys())
+    actual_study = waterxml.fill_dict(waterxml_tree = fixture["xml_tree1"], data_dict = study, element = "Study", keys = study.keys())
 
     nose.tools.assert_equals(expected_project["ProjID"], actual_project["ProjID"])
     nose.tools.assert_equals(expected_project["UserName"], actual_project["UserName"])
@@ -235,7 +447,7 @@ def test_fill_simulation_dict():
     
     simulation = waterxml.create_simulation_dict()
 
-    actual = waterxml.fill_simulation_dict(waterxml_tree = fixture["xml_tree"], simulation_dict = simulation)
+    actual = waterxml.fill_simulation_dict(waterxml_tree = fixture["xml_tree1"], simulation_dict = simulation)
  
     nose.tools.assert_equals(expected["SimulID"], actual["SimulID"])
     nose.tools.assert_equals(expected["StudyID"], actual["StudyID"])
@@ -246,107 +458,196 @@ def test_fill_simulation_dict():
     nose.tools.assert_equals(expected["ClimaticPrecipitationSeries"], actual["ClimaticPrecipitationSeries"]) 
     nose.tools.assert_equals(expected["ClimaticTemperatureSeries"], actual["ClimaticTemperatureSeries"])     
 
-def test_get_topographic_wetness_index_data():
+def test_get_topographic_wetness_index_data_file1():
 
-    expected = {"bin_ids": np.array([1., 2.]),
-                "bin_value_means": np.array([3.1, 4.2]),
-                "bin_value_fractions": np.array([0.002, 0.005])}
+    expected = {"bin_ids": [np.array([1., 2.])],
+                "bin_value_means": [np.array([3.1, 4.2])],
+                "bin_value_fractions": [np.array([0.002, 0.005])]}
     
     simulation = waterxml.create_simulation_dict()
 
-    simulation = waterxml.fill_simulation_dict(waterxml_tree = fixture["xml_tree"], simulation_dict = simulation)
+    simulation = waterxml.fill_simulation_dict(waterxml_tree = fixture["xml_tree1"], simulation_dict = simulation)
 
     actual = {}
     actual["bin_ids"], actual["bin_value_means"], actual["bin_value_fractions"] = waterxml.get_topographic_wetness_index_data(simulation_dict = simulation)
 
-    nose.tools.assert_equals(expected["bin_ids"].all(), actual["bin_ids"].all())
-    nose.tools.assert_equals(expected["bin_value_means"].all(), actual["bin_value_means"].all())
-    nose.tools.assert_equals(expected["bin_value_fractions"].all(), actual["bin_value_fractions"].all())
-       
-def test_get_timeseries_data():
+    nose.tools.assert_equals(len(expected["bin_ids"]), len(actual["bin_ids"]))
+    nose.tools.assert_equals(len(expected["bin_value_means"]), len(actual["bin_value_means"]))
+    nose.tools.assert_equals(len(expected["bin_value_fractions"]), len(actual["bin_value_fractions"]))
 
-    expected = {"q_dates": np.array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)]),
-                "p_dates": np.array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)]),
-                "t_dates": np.array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)]),
+    nose.tools.assert_equals(expected["bin_ids"][0].all(), actual["bin_ids"][0].all())
+    nose.tools.assert_equals(expected["bin_value_means"][0].all(), actual["bin_value_means"][0].all())
+    nose.tools.assert_equals(expected["bin_value_fractions"][0].all(), actual["bin_value_fractions"][0].all())
+
+def test_get_topographic_wetness_index_data_file2():
+
+    expected = {"bin_ids": [np.array([1., 2.]), np.array([1., 2.])],
+                "bin_value_means": [np.array([3.1, 4.2]), np.array([3.1, 4.2])],
+                "bin_value_fractions": [np.array([0.002, 0.005]), np.array([0.002, 0.005])]}
+    
+    simulation = waterxml.create_simulation_dict()
+
+    simulation = waterxml.fill_simulation_dict(waterxml_tree = fixture["xml_tree2"], simulation_dict = simulation)
+
+    actual = {}
+    actual["bin_ids"], actual["bin_value_means"], actual["bin_value_fractions"] = waterxml.get_topographic_wetness_index_data(simulation_dict = simulation)
+
+    nose.tools.assert_equals(len(expected["bin_ids"]), len(actual["bin_ids"]))
+    nose.tools.assert_equals(len(expected["bin_value_means"]), len(actual["bin_value_means"]))
+    nose.tools.assert_equals(len(expected["bin_value_fractions"]), len(actual["bin_value_fractions"]))
+
+    nose.tools.assert_equals(expected["bin_ids"][0].all(), actual["bin_ids"][0].all())
+    nose.tools.assert_equals(expected["bin_value_means"][0].all(), actual["bin_value_means"][0].all())
+    nose.tools.assert_equals(expected["bin_value_fractions"][0].all(), actual["bin_value_fractions"][0].all())
+
+    nose.tools.assert_equals(len(expected["bin_ids"]), len(actual["bin_ids"]))
+    nose.tools.assert_equals(len(expected["bin_value_means"]), len(actual["bin_value_means"]))
+    nose.tools.assert_equals(len(expected["bin_value_fractions"]), len(actual["bin_value_fractions"]))
+
+    nose.tools.assert_equals(expected["bin_ids"][1].all(), actual["bin_ids"][1].all())
+    nose.tools.assert_equals(expected["bin_value_means"][1].all(), actual["bin_value_means"][1].all())
+    nose.tools.assert_equals(expected["bin_value_fractions"][1].all(), actual["bin_value_fractions"][1].all())
+       
+def test_get_timeseries_data_file1():
+
+    expected = {"q_dates": [np.array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)])],
+                "p_dates": [np.array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)])],
+                "t_dates": [np.array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)])],
                 
-                "q_values": np.array([100.0, 110.0]),
-                "p_values": np.array([3, 4.5]),
-                "t_values": np.array([11.1, 12.2]),           
+                "q_values": [np.array([100.0, 110.0])],
+                "p_values": [np.array([3, 4.5])],
+                "t_values": [np.array([11.1, 12.2])],           
             
-                "q_units": "mm per day",
-                "p_units": "mm",
-                "t_units": "Celsius"
+                "q_units": ["mm per day"],
+                "p_units": ["mm"],
+                "t_units": ["Celsius"]
                 }
     
     simulation = waterxml.create_simulation_dict()
 
-    simulation = waterxml.fill_simulation_dict(waterxml_tree = fixture["xml_tree"], simulation_dict = simulation)
+    simulation = waterxml.fill_simulation_dict(waterxml_tree = fixture["xml_tree1"], simulation_dict = simulation)
 
     actual = {}
     actual["q_dates"], actual["q_values"], actual["q_units"] = waterxml.get_timeseries_data(simulation_dict = simulation, timeseries_key = "StudyUnitDischargeSeries")
     actual["p_dates"], actual["p_values"], actual["p_units"] = waterxml.get_timeseries_data(simulation_dict = simulation, timeseries_key = "ClimaticPrecipitationSeries")
     actual["t_dates"], actual["t_values"], actual["t_units"] = waterxml.get_timeseries_data(simulation_dict = simulation, timeseries_key = "ClimaticTemperatureSeries")
 
-    nose.tools.assert_equals(expected["q_dates"].all(), actual["q_dates"].all())
-    nose.tools.assert_equals(expected["p_dates"].all(), actual["p_dates"].all())
-    nose.tools.assert_equals(expected["t_dates"].all(), actual["t_dates"].all())
+    nose.tools.assert_equals(len(expected["q_dates"]), len(actual["q_dates"]))
+    nose.tools.assert_equals(len(expected["p_dates"]), len(actual["p_dates"]))
+    nose.tools.assert_equals(len(expected["t_dates"]), len(actual["t_dates"]))
 
-    nose.tools.assert_almost_equals(expected["q_values"].all(), actual["q_values"].all())
-    nose.tools.assert_almost_equals(expected["p_values"].all(), actual["p_values"].all())
-    nose.tools.assert_almost_equals(expected["t_values"].all(), actual["t_values"].all())
+    nose.tools.assert_equals(expected["q_dates"][0].all(), actual["q_dates"][0].all())
+    nose.tools.assert_equals(expected["p_dates"][0].all(), actual["p_dates"][0].all())
+    nose.tools.assert_equals(expected["t_dates"][0].all(), actual["t_dates"][0].all())
 
-    nose.tools.assert_equals(expected["q_units"], actual["q_units"])
-    nose.tools.assert_equals(expected["p_units"], actual["p_units"])
-    nose.tools.assert_equals(expected["t_units"], actual["t_units"])
+    nose.tools.assert_almost_equals(expected["q_values"][0].all(), actual["q_values"][0].all())
+    nose.tools.assert_almost_equals(expected["p_values"][0].all(), actual["p_values"][0].all())
+    nose.tools.assert_almost_equals(expected["t_values"][0].all(), actual["t_values"][0].all())
+
+    nose.tools.assert_equals(expected["q_units"][0], actual["q_units"][0])
+    nose.tools.assert_equals(expected["p_units"][0], actual["p_units"][0])
+    nose.tools.assert_equals(expected["t_units"][0], actual["t_units"][0])
+
+def test_get_timeseries_data_file2():
+
+    expected = {"q_dates": [np.array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)]), np.array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)])],
+                "p_dates": [np.array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)]), np.array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)])],
+                "t_dates": [np.array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)]), np.array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)])],
+                
+                "q_values": [np.array([100.0, 110.0]), np.array([100.0, 110.0])],
+                "p_values": [np.array([3, 4.5]), np.array([3, 4.5])],
+                "t_values": [np.array([11.1, 12.2]), np.array([11.1, 12.2])],           
+            
+                "q_units": ["mm per day", "mm per day"],
+                "p_units": ["mm", "mm"],
+                "t_units": ["Celsius", "Celsius"]
+                }
+    
+    simulation = waterxml.create_simulation_dict()
+
+    simulation = waterxml.fill_simulation_dict(waterxml_tree = fixture["xml_tree2"], simulation_dict = simulation)
+
+    actual = {}
+    actual["q_dates"], actual["q_values"], actual["q_units"] = waterxml.get_timeseries_data(simulation_dict = simulation, timeseries_key = "StudyUnitDischargeSeries")
+    actual["p_dates"], actual["p_values"], actual["p_units"] = waterxml.get_timeseries_data(simulation_dict = simulation, timeseries_key = "ClimaticPrecipitationSeries")
+    actual["t_dates"], actual["t_values"], actual["t_units"] = waterxml.get_timeseries_data(simulation_dict = simulation, timeseries_key = "ClimaticTemperatureSeries")
+
+    nose.tools.assert_equals(len(expected["q_dates"]), len(actual["q_dates"]))
+    nose.tools.assert_equals(len(expected["p_dates"]), len(actual["p_dates"]))
+    nose.tools.assert_equals(len(expected["t_dates"]), len(actual["t_dates"]))
+
+    nose.tools.assert_equals(expected["q_dates"][0].all(), actual["q_dates"][0].all())
+    nose.tools.assert_equals(expected["p_dates"][0].all(), actual["p_dates"][0].all())
+    nose.tools.assert_equals(expected["t_dates"][0].all(), actual["t_dates"][0].all())
+
+    nose.tools.assert_almost_equals(expected["q_values"][0].all(), actual["q_values"][0].all())
+    nose.tools.assert_almost_equals(expected["p_values"][0].all(), actual["p_values"][0].all())
+    nose.tools.assert_almost_equals(expected["t_values"][0].all(), actual["t_values"][0].all())
+
+    nose.tools.assert_equals(expected["q_units"][0], actual["q_units"][0])
+    nose.tools.assert_equals(expected["p_units"][0], actual["p_units"][0])
+    nose.tools.assert_equals(expected["t_units"][0], actual["t_units"][0])
+
+    nose.tools.assert_equals(expected["q_dates"][1].all(), actual["q_dates"][1].all())
+    nose.tools.assert_equals(expected["p_dates"][1].all(), actual["p_dates"][1].all())
+    nose.tools.assert_equals(expected["t_dates"][1].all(), actual["t_dates"][1].all())
+
+    nose.tools.assert_almost_equals(expected["q_values"][1].all(), actual["q_values"][1].all())
+    nose.tools.assert_almost_equals(expected["p_values"][1].all(), actual["p_values"][1].all())
+    nose.tools.assert_almost_equals(expected["t_values"][1].all(), actual["t_values"][1].all())
+
+    nose.tools.assert_equals(expected["q_units"][1], actual["q_units"][1])
+    nose.tools.assert_equals(expected["p_units"][1], actual["p_units"][1])
+    nose.tools.assert_equals(expected["t_units"][1], actual["t_units"][1])
 
 def test_apply_factors():
     
-    expected = {"q_dates": np.array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)]),
-                "p_dates": np.array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)]),
-                "t_dates": np.array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)]),
+    expected = {"q_dates": [np.array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)])],
+                "p_dates": [np.array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)])],
+                "t_dates": [np.array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)])],
                 
-                "q_values": np.array([200.0, 220.0]),
-                "p_values": np.array([6, 9.]),
-                "t_values": np.array([13.1, 14.2]),           
+                "q_values": [np.array([200.0, 220.0])],
+                "p_values": [np.array([6, 9.])],
+                "t_values": [np.array([13.1, 14.2])],           
             
-                "q_units": "mm per day",
-                "p_units": "mm",
-                "t_units": "Celsius"
+                "q_units": ["mm per day"],
+                "p_units": ["mm"],
+                "t_units": ["Celsius"]
                 }
 
 
     
     simulation = waterxml.create_simulation_dict()
 
-    simulation = waterxml.fill_simulation_dict(waterxml_tree = fixture["xml_tree"], simulation_dict = simulation)
+    simulation = waterxml.fill_simulation_dict(waterxml_tree = fixture["xml_tree1"], simulation_dict = simulation)
 
     q_dates, q_values, q_units = waterxml.get_timeseries_data(simulation_dict = simulation, timeseries_key = "StudyUnitDischargeSeries")
     p_dates, p_values, p_units = waterxml.get_timeseries_data(simulation_dict = simulation, timeseries_key = "ClimaticPrecipitationSeries")
     t_dates, t_values, t_units = waterxml.get_timeseries_data(simulation_dict = simulation, timeseries_key = "ClimaticTemperatureSeries")
     
-    waterxml.apply_factors(waterxml_tree = fixture["xml_tree"], element = "StudyUnitDischargeSeries", factors = fixture["factors"])
-    waterxml.apply_factors(waterxml_tree = fixture["xml_tree"], element = "ClimaticPrecipitationSeries", factors = fixture["factors"])
-    waterxml.apply_factors(waterxml_tree = fixture["xml_tree"], element = "ClimaticTemperatureSeries", factors = fixture["factors"])
+    waterxml.apply_factors(waterxml_tree = fixture["xml_tree1"], element = "StudyUnitDischargeSeries", factors = fixture["factors"])
+    waterxml.apply_factors(waterxml_tree = fixture["xml_tree1"], element = "ClimaticPrecipitationSeries", factors = fixture["factors"])
+    waterxml.apply_factors(waterxml_tree = fixture["xml_tree1"], element = "ClimaticTemperatureSeries", factors = fixture["factors"])
 
     simulation_updated = waterxml.create_simulation_dict()
 
-    simulation_updated = waterxml.fill_simulation_dict(waterxml_tree = fixture["xml_tree"], simulation_dict = simulation_updated)
+    simulation_updated = waterxml.fill_simulation_dict(waterxml_tree = fixture["xml_tree1"], simulation_dict = simulation_updated)
     
     actual = {}
     actual["q_dates"], actual["q_values"], actual["q_units"] = waterxml.get_timeseries_data(simulation_dict = simulation, timeseries_key = "StudyUnitDischargeSeries")
     actual["p_dates"], actual["p_values"], actual["p_units"] = waterxml.get_timeseries_data(simulation_dict = simulation, timeseries_key = "ClimaticPrecipitationSeries")
     actual["t_dates"], actual["t_values"], actual["t_units"] = waterxml.get_timeseries_data(simulation_dict = simulation, timeseries_key = "ClimaticTemperatureSeries")
 
-    nose.tools.assert_equals(expected["q_dates"].all(), actual["q_dates"].all())
-    nose.tools.assert_equals(expected["p_dates"].all(), actual["p_dates"].all())
-    nose.tools.assert_equals(expected["t_dates"].all(), actual["t_dates"].all())
+    nose.tools.assert_equals(expected["q_dates"][0].all(), actual["q_dates"][0].all())
+    nose.tools.assert_equals(expected["p_dates"][0].all(), actual["p_dates"][0].all())
+    nose.tools.assert_equals(expected["t_dates"][0].all(), actual["t_dates"][0].all())
 
-    nose.tools.assert_almost_equals(expected["q_values"].all(), actual["q_values"].all())
-    nose.tools.assert_almost_equals(expected["p_values"].all(), actual["p_values"].all())
-    nose.tools.assert_almost_equals(expected["t_values"].all(), actual["t_values"].all())
+    nose.tools.assert_almost_equals(expected["q_values"][0].all(), actual["q_values"][0].all())
+    nose.tools.assert_almost_equals(expected["p_values"][0].all(), actual["p_values"][0].all())
+    nose.tools.assert_almost_equals(expected["t_values"][0].all(), actual["t_values"][0].all())
 
-    nose.tools.assert_equals(expected["q_units"], actual["q_units"])
-    nose.tools.assert_equals(expected["p_units"], actual["p_units"])
-    nose.tools.assert_equals(expected["t_units"], actual["t_units"])
+    nose.tools.assert_equals(expected["q_units"][0], actual["q_units"][0])
+    nose.tools.assert_equals(expected["p_units"][0], actual["p_units"][0])
+    nose.tools.assert_equals(expected["t_units"][0], actual["t_units"][0])
     
              

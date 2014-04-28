@@ -296,19 +296,26 @@ def get_topographic_wetness_index_data(simulation_dict):
     bin_value_means = []
     bin_value_fractions = []     
     for i in range(len(simulation_dict["SimulID"])):                            # loop for each simulation id
-        parameter = simulation_dict["SimulationTopographicWetnessIndex"][i]       # get the topographic wetness index for a particular simulation id
+        bin_id = []
+        bin_value_mean = []
+        bin_value_fraction = []                            
+        parameter = simulation_dict["SimulationTopographicWetnessIndex"][i]     # get the topographic wetness index for a particular simulation id
         for j in range(len(parameter)):                                         # loop for each parameter dictionary for a particular simulation id          
-            bin_id = parameter[j]["BinID"]
-            bin_value_mean = parameter[j]["BinValueMean"]
-            bin_value_fraction = parameter[j]["BinValueFraction"]
+            idnum = parameter[j]["BinID"]
+            mean = parameter[j]["BinValueMean"]
+            fraction = parameter[j]["BinValueFraction"]
             
-            bin_ids.append(bin_id)
-            bin_value_means.append(bin_value_mean)            
-            bin_value_fractions.append(bin_value_fraction)
-    
-    bin_ids = np.array(bin_ids, dtype = float)    
-    bin_value_means = np.array(bin_value_means, dtype = float)
-    bin_value_fractions = np.array(bin_value_fractions, dtype = float)
+            bin_id.append(idnum)
+            bin_value_mean.append(mean)            
+            bin_value_fraction.append(fraction)
+
+        bin_id = np.array(bin_id, dtype = float)    
+        bin_value_mean = np.array(bin_value_mean, dtype = float)
+        bin_value_fraction = np.array(bin_value_fraction, dtype = float)
+
+        bin_ids.append(bin_id)
+        bin_value_means.append(bin_value_mean)            
+        bin_value_fractions.append(bin_value_fraction)
     
     return bin_ids, bin_value_means, bin_value_fractions
 
@@ -316,8 +323,9 @@ def get_topographic_wetness_index_data(simulation_dict):
     
 def get_timeseries_data(simulation_dict, timeseries_key):
     """   
-    Get dates, values, and units for timeseries parameters contained in the 
-    simulation dictionary. '
+    Get dates, values, and units for a timeseries for all 'SimulID' contained in the 
+    simulation dictionary. Return lists of dates, values, and units which correspond to
+    the number of simulations
     
     Parameters
     ----------
@@ -328,12 +336,12 @@ def get_timeseries_data(simulation_dict, timeseries_key):
         
     Returns
     -------
-    dates : numpy array
-        Array of datetime objects
-    values : numpy array
-        Array of float values
-    units : string
-        String unit
+    dates : list
+        list of numpy arrays of datetime objects
+    values : list
+        list of numpy arrays of float values
+    units : list
+        list of strings
 
     Notes
     -----
@@ -346,29 +354,46 @@ def get_timeseries_data(simulation_dict, timeseries_key):
     'SeriesDate'
     'SeriesValue'
     'SeriesUnitCode'
-    'SeriesUnit'        
+    'SeriesUnit' 
+
+    The original structure of the WATER *.xml unfortunately has lots of repeated data across SimulID's
+    The original *.xml structure repeats each timeseries 3 times since there are always 3 SimulID's.
+    This is why the *.xml has such a large size.
+    
+    For example, for StudyUnitDischargeSeries if there were 2 dates and 2 corresponding values, there would be 3 repeated arrays of data each corresponding to a particular SimulID
+    
+    "SimulID" = ['1', '2', '3']    
+    dates = [array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0), array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0) ]       
+    values = [array([ 100.,  110.]), array([ 100.,  110.]), array([ 100.,  110.])]
+    units = ['mm per day', 'mm per day', 'mm per day']
     """
     
     assert timeseries_key in ["StudyUnitDischargeSeries", "ClimaticPrecipitationSeries", "ClimaticTemperatureSeries"], "Key {} not a valid timeseries parameter name".format(timeseries_key)
-    
+
     dates = []
     values = []
     units = []     
     for i in range(len(simulation_dict["SimulID"])):        # loop for each simulation id
+        date = []
+        value = []
+        unit = []
         parameter = simulation_dict[timeseries_key][i]      # get the timeseries parameter for a particular simulation id
         for j in range(len(parameter)):                     # loop for each parameter dictionary for a particular simulation id
-            date = get_series_date(date_time = parameter[j]["SeriesDate"])           
+            d = get_series_date(date_time = parameter[j]["SeriesDate"])                       
+            v = parameter[j]['SeriesValue']
+            u = parameter[j]['SeriesUnit']
             
-            value = parameter[j]['SeriesValue']
-            unit = parameter[j]['SeriesUnit']
+            date.append(d)
+            value.append(v)            
+            unit.append(u)
             
-            dates.append(date)
-            values.append(value)            
-            units.append(unit)
-    
-    dates = np.array(dates)    
-    values = np.array(values, dtype = float)
-    units = units[0]
+        date = np.array(date)    
+        value = np.array(value, dtype = float)
+        unit = unit[0]
+          
+        dates.append(date)
+        values.append(value)
+        units.append(unit)
     
     return dates, values, units
 
@@ -447,7 +472,7 @@ def _create_test_data():
     
     fixture = {}
     
-    fixture["data file"] = \
+    fixture["data_file"] = \
         """
         <Project>
             <ProjID>1</ProjID>
@@ -562,7 +587,7 @@ def _create_test_data():
         </Project>
         """
         
-    fileobj = StringIO(fixture["data file"])
+    fileobj = StringIO(fixture["data_file"])
     
     xml_tree = read_file(fileobj)  
 
@@ -787,17 +812,18 @@ def test_get_topographic_wetness_index_data():
 
 
     print("*SimulationTopographicWetnessIndex BinID*\n    expected : actual")
-    print("    [1. 2.] :")
+    print("    [array([ 1.,  2.])] :")
     print("    {}".format(bin_ids))    
     print("")
 
     print("*SimulationTopographicWetnessIndex BinValueMean*\n    expected : actual")
-    print("    [3.1 4.2 ] : ")
+    print("    [array([ 3.1,  4.2])] : ")
     print("    {}".format(bin_value_means))    
     print("")
 
     print("*SimulationTopographicWetnessIndex BinValueFraction*\n    expected : actual")
-    print("    [0.002 0.005] : {}".format(bin_value_fractions))    
+    print("    [array([ 0.002,  0.005])] : ")
+    print("    {}".format(bin_value_fractions))    
     print("")
 
 def test_get_timeseries_data():
@@ -816,45 +842,45 @@ def test_get_timeseries_data():
     t_dates, t_values, t_units = get_timeseries_data(simulation_dict = simulation, timeseries_key = "ClimaticTemperatureSeries")
 
     print("*StudyUnitDischargeSeries Dates*\n    expected : actual")
-    print("    [datetime.datetime(2014, 1, 1, 0, 0) datetime.datetime(2014, 1, 2, 0, 0)] :")
+    print("        [array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)] :")
     print("    {}".format(q_dates))    
     print("")
 
     print("*StudyUnitDischargeSeries Values*\n    expected : actual")
-    print("    [100.0 110.0 ] : ")
+    print("    [array([ 100.,  110.])] : ")
     print("    {}".format(q_values))    
     print("")
 
     print("*StudyUnitDischargeSeries Units*\n    expected : actual")
-    print("    mm per day : {}".format(q_units))    
+    print("    ['mm per day'] : {}".format(q_units))    
     print("")
 
     print("*ClimaticPrecipitationSeries Dates*\n    expected : actual")
-    print("    [datetime.datetime(2014, 1, 1, 0, 0) datetime.datetime(2014, 1, 2, 0, 0)] :")
+    print("    [array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)] :")
     print("    {}".format(p_dates))    
     print("")
 
     print("*ClimaticPrecipitationSeries Values*\n    expected : actual")
-    print("    [3. 4.5 ] : ")
+    print("    [array([ 3. ,  4.5])] : ")
     print("    {}".format(p_values))    
     print("")
 
     print("*ClimaticPrecipitationSeries Units*\n    expected : actual")
-    print("    mm : {}".format(p_units))    
+    print("    ['mm'] : {}".format(p_units))    
     print("")
 
     print("*ClimaticTemperatureSeries Dates*\n    expected : actual")
-    print("    [datetime.datetime(2014, 1, 1, 0, 0) datetime.datetime(2014, 1, 2, 0, 0)] :")
+    print("    [array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)] :")
     print("    {}".format(t_dates))    
     print("")
 
     print("*ClimaticTemperatureSeries Values*\n    expected : actual")
-    print("    [11.1 12.2 ] : ")
+    print("    [array([ 11.1,  12.2])] : ")
     print("    {}".format(t_values))    
     print("")
 
     print("*ClimaticTemperatureSeries Units*\n    expected : actual")
-    print("    Celsius : {}".format(t_units))    
+    print("    ['Celsius'] : {}".format(t_units))    
     print("")
                
 def test_apply_factors():
@@ -906,80 +932,80 @@ def test_apply_factors():
     t_dates_updated, t_values_updated, t_units_updated = get_timeseries_data(simulation_dict = simulation_updated, timeseries_key = "ClimaticTemperatureSeries")
 
     print("*StudyUnitDischargeSeries Dates BEFORE applied factors*\n    expected : actual")
-    print("    [datetime.datetime(2014, 1, 1, 0, 0) datetime.datetime(2014, 1, 2, 0, 0)] :")
+    print("    [array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)] :")
     print("    {}".format(q_dates))    
     print("")
     print("*StudyUnitDischargeSeries Dates AFTER applied factor {}*\n    expected : actual".format(factors[month]))
-    print("    [datetime.datetime(2014, 1, 1, 0, 0) datetime.datetime(2014, 1, 2, 0, 0)] :")
+    print("    [array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)] :")
     print("    {}".format(q_dates_updated))    
     print("")
     
     print("*StudyUnitDischargeSeries Values BEFORE applied factors*\n    expected : actual")
-    print("    [100.0 110.0 ] : ")
+    print("    [array([ 100.,  110.])] : ")
     print("    {}".format(q_values))    
     print("")
     print("*StudyUnitDischargeSeries Values AFTER applied factors {}*\n    expected : actual".format(factors[month]))
-    print("    [200.0 220.0 ] : ")
+    print("    [array([ 200.,  220.])] : ")
     print("    {}".format(q_values_updated))    
     print("")
     
     print("*StudyUnitDischargeSeries Units BEFORE applied factors*\n    expected : actual")
-    print("    mm per day : {}".format(q_units))    
+    print("    ['mm per day'] : {}".format(q_units))    
     print("")
     print("*StudyUnitDischargeSeries Units AFTER applied factors {}*\n    expected : actual".format(factors[month]))
-    print("    mm per day : {}".format(q_units_updated))    
+    print("    ['mm per day'] : {}".format(q_units_updated))    
     print("")  
 
 
     print("*ClimaticPrecipitationSeries Dates BEFORE applied factors*\n    expected : actual")
-    print("    [datetime.datetime(2014, 1, 1, 0, 0) datetime.datetime(2014, 1, 2, 0, 0)] :")
+    print("    [array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)] :")
     print("    {}".format(p_dates))    
     print("")
     print("*ClimaticPrecipitationSeries Dates AFTER applied factors {}*\n    expected : actual".format(factors[month]))
-    print("    [datetime.datetime(2014, 1, 1, 0, 0) datetime.datetime(2014, 1, 2, 0, 0)] :")
+    print("    [array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)] :")
     print("    {}".format(p_dates_updated))    
     print("")
     
     print("*ClimaticPrecipitationSeries Values BEFORE applied factors*\n    expected : actual")
-    print("    [3. 4.5 ] : ")
+    print("    [array([ 3. ,  4.5])] : ")
     print("    {}".format(p_values))    
     print("")
     print("*ClimaticPrecipitationSeries Values AFTER applied factors {}*\n    expected : actual".format(factors[month]))
-    print("    [6. 9. ] : ")
+    print("    [array([ 6.,  9.])] : ")
     print("    {}".format(p_values_updated))    
     print("")
     
     print("*ClimaticPrecipitationSeries Units BEFORE applied factors*\n    expected : actual")
-    print("    mm : {}".format(p_units))    
+    print("    ['mm'] : {}".format(p_units))    
     print("")
     print("*ClimaticPrecipitationSeries Units AFTER applied factors {}*\n    expected : actual".format(factors[month]))
-    print("    mm : {}".format(p_units_updated))    
+    print("   ['mm'] : {}".format(p_units_updated))    
     print("")
 
 
     print("*ClimaticTemperatureSeries Dates BEFORE applied factors*\n    expected : actual")
-    print("    [datetime.datetime(2014, 1, 1, 0, 0) datetime.datetime(2014, 1, 2, 0, 0)] :")
+    print("    [array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)] :")
     print("    {}".format(t_dates))    
     print("")
     print("*ClimaticTemperatureSeries Dates AFTER applied factors {}*\n    expected : actual".format(factors[month]))
-    print("    [datetime.datetime(2014, 1, 1, 0, 0) datetime.datetime(2014, 1, 2, 0, 0)] :")
+    print("    [array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)] :")
     print("    {}".format(t_dates_updated))    
     print("")
     
     print("*ClimaticTemperatureSeries Values BEFORE applied factors*\n    expected : actual")
-    print("    [11.1 12.2 ] : ")
+    print("    [array([ 11.1,  12.2])] : ")
     print("    {}".format(t_values))    
     print("")
     print("*ClimaticTemperatureSeries Values AFTER applied factors {}*\n    expected : actual".format(factors[month]))
-    print("    [13.1  14.2 ] : ")
+    print("    [array([ 13.1,  14.2])] : ")
     print("    {}".format(t_values_updated))    
     print("")
     
     print("*ClimaticTemperatureSeries Units BEFORE applied factors*\n    expected : actual")
-    print("    Celsius : {}".format(t_units))    
+    print("    ['Celsius'] : {}".format(t_units))    
     print("") 
     print("*ClimaticTemperatureSeries Units AFTER applied factors {}*\n    expected : actual".format(factors[month]))
-    print("    Celsius : {}".format(t_units_updated))    
+    print("    ['Celsius'] : {}".format(t_units_updated))    
     print("")    
 
 
