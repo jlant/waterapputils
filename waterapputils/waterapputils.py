@@ -133,6 +133,44 @@ def process_xml_files(file_list, arguments):
         # close error logging
         waterapputils_logging.remove_loggers()
 
+def process_xmlcmp(file_list, arguments):
+    """    
+    Compare two WATER XML files according to options contained in arguments parameter.
+
+    Parameters
+    ----------
+    file_list : list 
+        List of files to parse, process, and plot.        
+    arguments : argparse object
+        An argparse object containing user options.                    
+    """
+    waterxml_file1 = file_list[0]
+    waterxml_file2 = file_list[1]
+                
+    filedir1, filename1 = helpers.get_file_info(waterxml_file1)
+    filedir2, filename2 = helpers.get_file_info(waterxml_file2)
+      
+    # create output directory     
+    outputdirpath = helpers.make_directory(path = filedir1, directory_name = "-".join([filename1.split(".txt")[0], filename2.split(".txt")[0] , "comparison", "output"]))      
+    
+    # initialize error logging
+    waterapputils_logging.initialize_loggers(output_dir = outputdirpath)        
+    
+    # read data
+    waterxml_data1 = waterxml.read_file(waterxml_file1)  
+    waterxml_data2 = waterxml.read_file(waterxml_file2) 
+    
+    # plot data                            
+    waterapputils_viewer.plot_waterxml_timeseries_comparison(waterxml_data1, waterxml_data2, is_visible = arguments.showplot, save_path = outputdirpath) 
+            
+    # print data
+    if arguments.verbose: 
+        waterapputils_viewer.print_watertxt_data(waterxml_data1)  
+        waterapputils_viewer.print_watertxt_data(waterxml_data2)  
+
+    # close error logging
+    waterapputils_logging.remove_loggers()
+
 def apply_deltas(file_list, arguments):
     """    
     Apply delta factors to a WATER *.txt file
@@ -193,7 +231,7 @@ def main():
 
     group.add_argument("-waterxml", "--waterxmlfiles", nargs = "+", help = "List WATER xml data file(s) to be processed")
     group.add_argument("-waterxmlfd", "--waterxmlfiledialog", action = "store_true", help = "Open a file dialog window to select WATER xml data file(s).")
-
+    group.add_argument("-waterxmlcmp", "--waterxmlcompare", nargs = 2, help = "List 2 WATER xml data file(s) to be compared")
 
 
     group.add_argument("-applydeltas", "--applydeltasdata", nargs = 2, help = "List WATER text data file followed by delta file to be applied.")
@@ -229,6 +267,9 @@ def main():
             files = tkFileDialog.askopenfilenames(title = "Select WATER XML File(s)", filetypes = [("XML file","*.xml"), ("All files", ".*")])
             root.destroy()          
             process_xml_files(file_list = root.tk.splitlist(files), arguments = args)
+
+        elif args.waterxmlcompare:
+            process_xmlcmp(file_list = args.waterxmlcompare, arguments = args)
 
         elif args.applydeltasdata:
             apply_deltas(file_list = args.applydeltasdata, arguments = args)
