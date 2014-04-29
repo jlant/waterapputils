@@ -427,6 +427,66 @@ def print_waterxml_data(waterxml_tree):
                 print("")    
 
 
+def plot_waterxml_topographic_wetness_index_data(waterxml_tree, is_visible = True, save_path = None):
+    """   
+    Plot histogram of topographic_wetness_index data from the WATER *.xml file.
+    
+    Parameters
+    ----------
+    waterxml_data : dictionary 
+        A dictionary containing data found in WATER *.xml data file.
+    is_visible : bool
+        Boolean value to show plots         
+    save_path : string 
+        String path to save plot(s)      
+    """
+    twi_str = "Topographic Wetness Index"     
+    
+    project, study, simulation = waterxml.get_xml_data(waterxml_tree = waterxml_tree)       
+
+    for i in range(len(simulation["SimulID"])):
+ 
+        region_type = simulation["RegionType"][i]
+        sim_id = simulation["SimulID"][i]
+
+        # get the bin_ids, bin_value_means, and bin_value_fractions - these are lists each of which contain arrays corresponding to each SimulID 
+        bin_ids, bin_value_means, bin_value_fractions = waterxml.get_topographic_wetness_index_data(simulation_dict = simulation)
+
+        fig = plt.figure(figsize=(12,10))
+        ax = fig.add_subplot(111)
+        ax.grid(True)
+        ax.set_title("{}\nRegion Type: {}\nSimulation ID: {}".format(twi_str, region_type, sim_id))
+        ax.set_xlabel("Bin Ids")
+        ax.set_ylabel("Bin Value Means")   
+
+        hist, bins = np.histogram(bin_value_means)
+        
+        width = 0.7 * (bin_ids[i][1] - bin_ids[i][0])
+        plt.bar(bin_ids[i], bin_value_means[i], width = width, align = "center", label = twi_str) 
+    
+        # legend; make it transparent    
+        handles, labels = ax.get_legend_handles_labels()
+        legend = ax.legend(handles, labels, fancybox = True)
+        legend.get_frame().set_alpha(0.5)
+        legend.draggable(state=True)
+        
+        # save plots
+        if save_path:        
+            # set the size of the figure to be saved
+            curr_fig = plt.gcf()
+            curr_fig.set_size_inches(12, 10)
+            
+            # split the parameter name to not include units because some units contain / character which Python interprets as an escape character
+            filename = "-".join([project["UserName"], project["ProjName"], twi_str, region_type, sim_id])  + ".png"           
+            filepath = os.path.join(save_path, filename)
+            plt.savefig(filepath, dpi = 100)                        
+          
+        # show plots
+        if is_visible:
+            plt.show()
+        else:
+            plt.close()
+            
 def plot_waterxml_timeseries_data(waterxml_tree, is_visible = True, save_path = None):
     """   
     Plot timeseries data from the WATER *.xml file.  The timeseries data are contained 
@@ -434,8 +494,6 @@ def plot_waterxml_timeseries_data(waterxml_tree, is_visible = True, save_path = 
     discharge - from xml element called "StudyUnitDischargeSeries", 
     precipitation - from xml element called "ClimaticPrecipitationSeries",
     temperature = from xml element called "ClimaticTemperatureSeries"
-    
-    Plots are saved to the 
     
     Parameters
     ----------
@@ -1009,6 +1067,14 @@ def test_plot_waterxml_timeseries_data():
 
     xml_tree = _create_waterxml_test_data()
     plot_waterxml_timeseries_data(waterxml_tree = xml_tree, is_visible = True, save_path = None)    
+
+def test_plot_waterxml_topographic_wetness_index_data():
+    """ Test plot_waterxml_topographic_wetness_index_data """
+    
+    print("--- plot_waterxml_topographic_wetness_index_data ---")     
+
+    xml_tree = _create_waterxml_test_data()
+    plot_waterxml_topographic_wetness_index_data(waterxml_tree = xml_tree, is_visible = True, save_path = None) 
     
 def main():
     """ Test functionality of waterapputils_viewer """
@@ -1037,13 +1103,17 @@ def main():
 #    if ans_plot_deltas_data == "y":
 #        test_plot_deltas_data() 
 
-    ans_print_waterxml_data = raw_input("Do you want to test print_waterxml_data()? y/n ")
-    if ans_print_waterxml_data == "y":
-        test_print_waterxml_data() 
+#    ans_print_waterxml_data = raw_input("Do you want to test print_waterxml_data()? y/n ")
+#    if ans_print_waterxml_data == "y":
+#        test_print_waterxml_data() 
+#
+#    ans_plot_waterxml_timeseries_data = raw_input("Do you want to test plot_waterxml_timeseries_data? y/n ")
+#    if ans_plot_waterxml_timeseries_data == "y":
+#        test_plot_waterxml_timeseries_data() 
 
-    ans_plot_waterxml_timeseries_data = raw_input("Do you want to test plot_waterxml_timeseries_data? y/n ")
-    if ans_plot_waterxml_timeseries_data == "y":
-        test_plot_waterxml_timeseries_data() 
+    ans_plot_waterxml_topographic_wetness_index_data = raw_input("Do you want to test plot_waterxml_topographic_wetness_index_data? y/n ")
+    if ans_plot_waterxml_topographic_wetness_index_data == "y":
+        test_plot_waterxml_topographic_wetness_index_data() 
 
 if __name__ == "__main__":
     main() 
