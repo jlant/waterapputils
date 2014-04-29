@@ -704,41 +704,6 @@ def plot_waterxml_timeseries_comparison(waterxml_tree1, waterxml_tree2, is_visib
             else:
                 plt.close()
 
-"""
-
-            
-    # plot difference = values_b - values_a
-    ax2 = fig.add_subplot(212, sharex = ax1)
-    ax2.grid(True)
-    ax2.set_title('Difference: ' + parameter_name)
-    ax2.set_xlabel('Date')
-    ax2.set_ylabel('Difference' + ' (' + units_a + ')')
-    diff = values_b - values_a
-    ax2.plot(dates_a, diff, color = 'k', linewidth = 2)  
-    
-    # use a more precise date string for the x axis locations in the toolbar
-    ax2.fmt_xdata = mdates.DateFormatter('%Y-%m-%d')
-    
-    # rotate and align the tick labels so they look better; note that ax2 will 
-    # have the dates, but ax1 will not. do not need to rotate each individual axis
-    # because this method does it
-    fig.autofmt_xdate()
-    
-    # save plots
-    if save_path:        
-        # set the size of the figure to be saved
-        curr_fig = plt.gcf()
-        curr_fig.set_size_inches(12, 10)
-        plt.savefig(save_path + '/' + 'comparison_' + 'regiontype_' + region_type + '_' + 'simid_' + sim_id_num + '_' + parameter_name +'.png', dpi = 100)
-        
-    # show plots
-    if is_visible:
-        plt.show()
-    else:
-        plt.close()
-"""
-
-
 def _create_watertxt_test_data(multiplicative_factor = 1, stationid = "012345"):
     """ Create test data for tests """
 

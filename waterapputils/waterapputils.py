@@ -151,7 +151,8 @@ def process_xmlcmp(file_list, arguments):
     filedir2, filename2 = helpers.get_file_info(waterxml_file2)
       
     # create output directory     
-    outputdirpath = helpers.make_directory(path = filedir1, directory_name = "-".join([filename1.split(".txt")[0], filename2.split(".txt")[0] , "comparison", "output"]))      
+    outputdirpath = helpers.make_directory(path = filedir1, directory_name = "-".join([filename1.split(".xml")[0], filename2.split(".xml")[0] , "comparison", "output"]))      
+#    outputdirpath = helpers.make_directory(path = filedir1, directory_name = "-".join(["comparison", "output"]))    
     
     # initialize error logging
     waterapputils_logging.initialize_loggers(output_dir = outputdirpath)        
@@ -171,9 +172,10 @@ def process_xmlcmp(file_list, arguments):
     # close error logging
     waterapputils_logging.remove_loggers()
 
-def apply_deltas(file_list, arguments):
+def apply_deltas_to_txt(file_list, arguments):
     """    
-    Apply delta factors to a WATER *.txt file
+    Apply delta factors to a WATER *.txt file. The new file created is saved to the same
+    directory as the *.txt file.
 
     Parameters
     ----------
@@ -187,10 +189,7 @@ def apply_deltas(file_list, arguments):
                 
     water_filedir, water_filename = helpers.get_file_info(watertxt_file)
     delta_filedir, delta_filename = helpers.get_file_info(delta_file)
-      
-    # create output directory     
-    outputdirpath = helpers.make_directory(path = water_filedir, directory_name = "-".join([water_filename.split(".txt")[0], "with", delta_filename.split(".txt")[0] , "applied", "output"]))      
-    
+          
     # initialize error logging
     waterapputils_logging.initialize_loggers(output_dir = water_filedir)        
     
@@ -215,6 +214,50 @@ def apply_deltas(file_list, arguments):
     # close error logging
     waterapputils_logging.remove_loggers()
 
+def apply_deltas_to_xml(file_list, arguments):
+    """    
+    Apply delta factors to a WATER *.xml file. The new file created is saved to the same
+    directory as the *.xml file.
+
+    Parameters
+    ----------
+    file_list : list 
+        List of files to parse, process, and plot.        
+    arguments : argparse object
+        An argparse object containing user options.                    
+    """
+    waterxml_file = file_list[0]
+    delta_file = file_list[1]
+                
+    water_filedir, water_filename = helpers.get_file_info(waterxml_file)
+    delta_filedir, delta_filename = helpers.get_file_info(delta_file)
+          
+    # initialize error logging
+    waterapputils_logging.initialize_loggers(output_dir = water_filedir)        
+    
+    # read data
+    waterxml_data = waterxml.read_file(waterxml_file)  
+    deltas_data = deltas.read_file(delta_file) 
+    
+    # calculate average deltas for a list of tiles
+    avg_delta_values = deltas.calculate_avg_delta_values(deltas_data = deltas_data, tile_list = ["31", "32"])
+
+    # apply deltas
+    for key, value in avg_delta_values.iteritems():
+        if key == "Ppt":
+            waterxml.apply_factors(waterxml_tree = waterxml_data, element = "ClimaticPrecipitationSeries", factors = avg_delta_values[key])
+        elif key == "Tmax":
+            waterxml.apply_factors(waterxml_tree = waterxml_data, element = "ClimaticTemperatureSeries", factors = avg_delta_values[key])
+
+    waterxml.write_file(waterxml_tree = waterxml_data, save_path = water_filedir, filename = "-".join([water_filename.split(".xml")[0], "with", delta_filename.split(".txt")[0] , "applied.xml"]))
+           
+    # print data
+    if arguments.verbose: 
+        waterapputils_viewer.print_watertxt_data(waterxml_data)  
+
+    # close error logging
+    waterapputils_logging.remove_loggers()
+
 def main():  
     """
     Run program based on user input arguments. Program will automatically process file(s) supplied,
@@ -233,8 +276,8 @@ def main():
     group.add_argument("-waterxmlfd", "--waterxmlfiledialog", action = "store_true", help = "Open a file dialog window to select WATER xml data file(s).")
     group.add_argument("-waterxmlcmp", "--waterxmlcompare", nargs = 2, help = "List 2 WATER xml data file(s) to be compared")
 
-
-    group.add_argument("-applydeltas", "--applydeltasdata", nargs = 2, help = "List WATER text data file followed by delta file to be applied.")
+    group.add_argument("-applydeltastxt", "--applydeltasdatatxt", nargs = 2, help = "List WATER text data file followed by delta file to be applied.")
+    group.add_argument("-applydeltasxml", "--applydeltasdataxml", nargs = 2, help = "List WATER xml data file followed by delta file to be applied.")
 
     parser.add_argument("-v", "--verbose", action = "store_true",  help = "Print general information about data file(s)")
     parser.add_argument("-p", "--showplot", action = "store_true",  help = "Show plots of parameters contained in data file(s)")
@@ -271,8 +314,11 @@ def main():
         elif args.waterxmlcompare:
             process_xmlcmp(file_list = args.waterxmlcompare, arguments = args)
 
-        elif args.applydeltasdata:
-            apply_deltas(file_list = args.applydeltasdata, arguments = args)
+        elif args.applydeltasdatatxt:
+            apply_deltas_to_txt(file_list = args.applydeltasdatatxt, arguments = args)
+
+        elif args.applydeltasdataxml:
+            apply_deltas_to_xml(file_list = args.applydeltasdataxml, arguments = args)
                  
         # process file(s) using standard input
         else:
