@@ -60,40 +60,6 @@ def process_txt_files(file_list, arguments):
         # close error logging
         waterapputils_logging.remove_loggers()
 
-def process_xml_files(file_list, arguments):
-    """    
-    Process a list of WATER xml files according to options contained in arguments parameter.
-
-    Parameters
-    ----------
-    file_list : list 
-        List of files to parse, process, and plot.        
-    arguments : argparse object
-        An argparse object containing user options.                    
-    """
-    for f in file_list:
-                
-        filedir, filename = helpers.get_file_info(f)
-          
-        # create output directory     
-        outputdirpath = helpers.make_directory(path = filedir, directory_name = "-".join([filename.split(".xml")[0], "output"]))      
-        
-        # initialize error logging
-        waterapputils_logging.initialize_loggers(output_dir = outputdirpath)        
-        
-        # read data
-        data = waterxml.read_file(f)  
-
-        # plot data                            
-        waterapputils_viewer.plot_waterxml_timeseries_data(data, is_visible = arguments.showplot, save_path = outputdirpath)             
-
-        # print data
-        if arguments.verbose: 
-            waterapputils_viewer.print_watertxt_data(data)  
-
-        # close error logging
-        waterapputils_logging.remove_loggers()
-
 def process_txtcmp(file_list, arguments):
     """    
     Compare two WATER text files according to options contained in arguments parameter.
@@ -131,6 +97,41 @@ def process_txtcmp(file_list, arguments):
 
     # close error logging
     waterapputils_logging.remove_loggers()
+
+def process_xml_files(file_list, arguments):
+    """    
+    Process a list of WATER xml files according to options contained in arguments parameter.
+
+    Parameters
+    ----------
+    file_list : list 
+        List of files to parse, process, and plot.        
+    arguments : argparse object
+        An argparse object containing user options.                    
+    """
+    for f in file_list:
+                
+        filedir, filename = helpers.get_file_info(f)
+          
+        # create output directory     
+        outputdirpath = helpers.make_directory(path = filedir, directory_name = "-".join([filename.split(".xml")[0], "output"]))      
+        
+        # initialize error logging
+        waterapputils_logging.initialize_loggers(output_dir = outputdirpath)        
+        
+        # read data
+        data = waterxml.read_file(f)  
+
+        # plot data                            
+        waterapputils_viewer.plot_waterxml_timeseries_data(data, is_visible = arguments.showplot, save_path = outputdirpath)             
+        waterapputils_viewer.plot_waterxml_topographic_wetness_index_data(data, is_visible = arguments.showplot, save_path = outputdirpath) 
+        
+        # print data
+        if arguments.verbose: 
+            waterapputils_viewer.print_watertxt_data(data)  
+
+        # close error logging
+        waterapputils_logging.remove_loggers()
 
 def apply_deltas(file_list, arguments):
     """    

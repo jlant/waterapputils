@@ -453,23 +453,22 @@ def plot_waterxml_topographic_wetness_index_data(waterxml_tree, is_visible = Tru
         bin_ids, bin_value_means, bin_value_fractions = waterxml.get_topographic_wetness_index_data(simulation_dict = simulation)
 
         fig = plt.figure(figsize=(12,10))
-        ax = fig.add_subplot(111)
-        ax.grid(True)
-        ax.set_title("{}\nRegion Type: {}\nSimulation ID: {}".format(twi_str, region_type, sim_id))
-        ax.set_xlabel("Bin Ids")
-        ax.set_ylabel("Bin Value Means")   
-
-        hist, bins = np.histogram(bin_value_means)
-        
+        ax1 = fig.add_subplot(211)
+        ax1.grid(True)
+        ax1.set_title("{}\nRegion Type: {}\nSimulation ID: {}".format(twi_str, region_type, sim_id))
+        ax1.set_xlabel("Bin Ids")
+        ax1.set_ylabel("Bin Value Means")   
+       
         width = 0.7 * (bin_ids[i][1] - bin_ids[i][0])
-        plt.bar(bin_ids[i], bin_value_means[i], width = width, align = "center", label = twi_str) 
+        ax1.bar(bin_ids[i], bin_value_means[i], width = width, align = "center", label = "Bin Value Means") 
     
-        # legend; make it transparent    
-        handles, labels = ax.get_legend_handles_labels()
-        legend = ax.legend(handles, labels, fancybox = True)
-        legend.get_frame().set_alpha(0.5)
-        legend.draggable(state=True)
-        
+        ax2 = fig.add_subplot(212)
+        ax2.grid(True)
+        ax2.set_xlabel("Bin Ids")
+        ax2.set_ylabel("Bin Value Fractions")   
+       
+        ax2.bar(bin_ids[i], bin_value_fractions[i], width = width, align = "center", label = "Bin Value Fractions") 
+                
         # save plots
         if save_path:        
             # set the size of the figure to be saved
