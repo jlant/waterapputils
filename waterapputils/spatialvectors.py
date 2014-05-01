@@ -65,45 +65,41 @@ def test_get_intersected_field_values():
 
     print("--- Testing get_intersected_field_values() ---")  
 
-    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin_proj_wgs/testbasin_proj_wgs.shp"))
+    # expected values to test with actual values
+    expected = {}
+    expected["canes_tiles"] = ['31', '32', '21', '11']    
+    expected["gfdl_tiles"] = ['41', '42', '31', '32', '21']
+    expected["giss_tiles"] = ['41', '42', '31', '22']
+    expected["ncar_tiles"] = ['82', '83', '84', '72', '73', '74', '62', '63', '64', '52', '53', '42', '43', '32', '22'] 
 
+    # paths to files
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin_proj_wgs/testbasin_proj_wgs.shp"))
     canes_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/CanES_proj_wgs.shp"))
     gfdl_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/GFDL_proj_wgs.shp"))
     giss_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/GISS_proj_wgs.shp"))
     ncar_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/NCAR_proj_wgs.shp"))
 
     # Open the shapefiles
-    basin_shapefile = osgeo.ogr.Open(basin_file)
-    
+    basin_shapefile = osgeo.ogr.Open(basin_file)    
     canes_shapefile = osgeo.ogr.Open(canes_file)
     gfdl_shapefile = osgeo.ogr.Open(gfdl_file)
     giss_shapefile = osgeo.ogr.Open(giss_file)
     ncar_shapefile = osgeo.ogr.Open(ncar_file)
-    
-    canes_tiles = get_intersected_field_values(intersector = basin_shapefile, intersectee = canes_shapefile, intersectee_field = "Tile")    
-    gfdl_tiles = get_intersected_field_values(intersector = basin_shapefile, intersectee = gfdl_shapefile, intersectee_field = "Tile")
-    giss_tiles = get_intersected_field_values(intersector = basin_shapefile, intersectee = giss_shapefile, intersectee_field = "Tile")
-    ncar_tiles = get_intersected_field_values(intersector = basin_shapefile, intersectee = ncar_shapefile, intersectee_field = "Tile")
+
+    # actual values    
+    actual = {}
+    actual["canes_tiles"] = get_intersected_field_values(intersector = basin_shapefile, intersectee = canes_shapefile, intersectee_field = "Tile")    
+    actual["gfdl_tiles"] = get_intersected_field_values(intersector = basin_shapefile, intersectee = gfdl_shapefile, intersectee_field = "Tile")
+    actual["giss_tiles"] = get_intersected_field_values(intersector = basin_shapefile, intersectee = giss_shapefile, intersectee_field = "Tile")
+    actual["ncar_tiles"] = get_intersected_field_values(intersector = basin_shapefile, intersectee = ncar_shapefile, intersectee_field = "Tile")
 
     for shapefile in [basin_shapefile, canes_shapefile, gfdl_shapefile, giss_shapefile, ncar_shapefile]:
-        shapefile.Destroy()
-
-    print("*CanES Tiles*")
-    assert canes_tiles == ['31', '32', '21', '11'], "fixme"
-    print("    expected: ['31', '32', '21', '11']")
-    print("    actual:   {}\n".format(canes_tiles))
-
-    print("*GFDL Tiles*")
-    print("    expected: ['41', '42', '31', '32', '21']")
-    print("    actual:   {}\n".format(gfdl_tiles))
-
-    print("*GISS Tiles*")
-    print("    expected: ['41', '42', '31', '21']")
-    print("    actual:   {}\n".format(giss_tiles))
-
-    print("*NCAR Tiles*")
-    print("    expected: ['82', '83', '84', '72', '73', '74', '62', '63', '64', '52', '53', '42', '43', '32', '22']")
-    print("    actual:   {}\n".format(ncar_tiles))
+        shapefile.Destroy()  
+    
+    for key in actual.keys():
+        assert expected[key] ==  actual[key], "For key {}, expected tiles {} do not equal actual tiles {}".format(key, expected[key], actual[key])
+        print("    expected: {}".format(expected[key]))
+        print("    actual:   {}\n".format(actual[key]))   
     
 def main():
     """ Test functionality geospatialvectors.py """
