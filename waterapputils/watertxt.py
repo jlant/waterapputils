@@ -510,103 +510,90 @@ def _create_test_data(multiplicative_factor = 1, stationid = "012345", with_wate
 
     return data
 
+
+def _print_test_info(expected, actual):
+
+    for key in actual.keys():
+        try:
+             assert expected[key] == actual[key], "For key * {} *, expected value(s) * {} * do not equal actual value(s) * {} *".format(key, expected[key], actual[key])
+        except:
+            for i in range(len(actual[key])):
+                assert expected[key][i].all() ==  actual[key][i].all(), "For key * {} * and index * {} *, expected value(s) * {} * do not equal actual value(s) * {} *".format(key, i, expected[key], actual[key])                          
+                             
+        print("    expected: {}".format(expected[key]))
+        print("    actual:   {}\n".format(actual[key]))      
+
+
 def test_create_parameter():
     """ Test the create_parameter funtionality"""
 
-    print("--- Testing create_parameter ---")
+    print("--- Testing create_parameter() ---")
+
+    # expected values to test with actual values
+    expected1 = {"name": None, "index": None, "data": [], "mean": None, "max": None, "min": None}
+    expected2 = {"name": "discharge", "index": 0, "data": [1, 2, 3], "mean": 2, "max": 3, "min": 1} 
     
-    parameter = create_parameter()
-    
-    print("*Name*\n    expected : actual")
-    print("    None : {}".format(parameter["name"]))
-    print("*Index*\n    expected : actual")
-    print("    None : {}".format(parameter["index"]))    
-    print("*Data*\n    expected : actual")
-    print("    [] : {}".format(parameter["data"]))
-    print("*Mean, Max, Min*\n    expected : actual")
-    print("    None, None, None : {}, {}, {}".format(parameter["mean"], parameter["max"], parameter["min"]))
-    print("")
-    
-    parameter = create_parameter(name = "discharge", index = 0, data = [1, 2, 3], mean = 2, max = 3, min = 1)    
-    
-    print("*Name*\n    expected : actual")
-    print("    discharge : {}".format(parameter["name"]))
-    print("*Index*\n    expected : actual")
-    print("    0 : {}".format(parameter["index"]))    
-    print("*Data* expected : actual")
-    print("    [1, 2, 3] : {}".format(parameter["data"]))
-    print("*Mean, Max, Min*\n    expected : actual")
-    print("    2, 3, 1 : {}, {}, {}".format(parameter["mean"], parameter["max"], parameter["min"]))
-    print("")  
+    # actual values
+    actual1 = create_parameter()
+    actual2 = create_parameter(name = "discharge", index = 0, data = [1, 2, 3], mean = 2, max = 3, min = 1)    
+
+    # print results
+    _print_test_info(expected = expected1, actual = actual1)
+    _print_test_info(expected = expected2, actual = actual2)   
 
 def test_get_date():
     """ Test the get_date functionality """
     
     print("--- Testing get_date() ---")
-    
-    date1 = get_date(date_str = "4/9/2014")
-    print("*Date*\n    expected : actual")
-    print("    2014-04-09 00:00:00 : {}".format(date1))
-    
-    print("") 
 
+    # expected values to test with actual values
+    expected = {"date": datetime.datetime(2014, 4, 9, 0, 0)}
 
+    # actual values
+    actual = {"date": get_date(date_str = "4/9/2014")}
+
+    # print results
+    _print_test_info(expected = expected, actual = actual)
+   
 def test_get_all_values():
     """ Test get_dict_values functionality """
 
-    print("--- Testing get_all_values ---") 
-    
-    data = _create_test_data()
-    values_all = get_all_values(watertxt_data = data)
-    
-    print("*Data*\n    expected")
-    print("    [  2.   6.  10.]")
-    print("    [ 50.  55.  45.]")
-    print("    [ 2.  8.  2.]")
-    print("    [ 0.   1.5  1.5]")
-    print("    [ 0.1  0.2  0.3]")
-    print("    [ 3.  9.  3.]")
-    print("    [  5.   3.  13.]")
-    print("    [  5.  12.  13.]")
-    print("    [ 40.  50.  60.]")
-    print("    [ 4.  3.  2.]")
-    print("    [ 150.  125.   25.]")
-    print("    [ 0.5  0.4  0.3]")
-    print("    [ 300.  310.  350.]")
-    print("    [  -5.   -4.5   -4.0]")
-    print("")    
-    
-    print("*Data*\n    actual")
-    for data_array in values_all:
-        print("    {}".format(data_array))
-    
-    print("")
+    print("--- Testing get_all_values() ---") 
 
+    # expected values to test with actual values
+    expected = {"values_all": [np.array([2, 6, 10]),       np.array([50, 55, 45]),     np.array([2, 8, 2]), 
+                               np.array([0, 1.5, 1.5]),    np.array([0.1, 0.2, 0.3]),  np.array([3, 9, 3]),
+                               np.array([5, 3, 13]),       np.array([5, 12, 13]),      np.array([40, 50, 60]),
+                               np.array([4, 3, 2]),        np.array([150, 125, 25]),   np.array([0.5, 0.4, 0.3]),                            
+                               np.array([300, 310, 350]),  np.array([-5, -4.5, -4])]
+    }
+
+    # create test data
+    data = _create_test_data()
+
+    # actual values
+    actual = {"values_all": get_all_values(watertxt_data = data)}
+
+    # print results
+    _print_test_info(expected = expected, actual = actual)
+    
 def test_get_parameter():
     """ Test get_parameter functionality """
 
-    print("--- Testing get_parameter ---") 
-    
+    print("--- Testing get_parameter() ---") 
+
+    # expected values to test with actual values
+    subsurface_data = np.array([50, 55, 45])
+    expected = {"name": "Subsurface Flow (mm/day)", "index": 1, "data": subsurface_data, "mean": np.mean(subsurface_data), "max": np.max(subsurface_data), "min": np.min(subsurface_data)}
+
+    # create test data
     data = _create_test_data()
-    parameter = get_parameter(watertxt_data = data, name = "Subsurface Flow")
     
-    print("*Added parameter name*\n    estimated : actual")    
-    print("   Subsurface Flow (mm/day) : {}\n".format(parameter["name"]))
+    # actual values
+    actual = get_parameter(watertxt_data = data, name = "Subsurface Flow")  
 
-    print("*Added parameter index*\n    estimated : actual")    
-    print("    1 : {}\n".format(parameter["index"]))
-
-    print("*Added parameter data*\n    estimated : actual")    
-    print("    [50.0 55. 45.] : {}\n".format(parameter["data"]))
-
-    print("*Added parameter mean*\n    estimated : actual")    
-    print("    50.0 : {}\n".format(parameter["mean"]))
-
-    print("*Added parameter max*\n    estimated : actual")    
-    print("    55.0 : {}\n".format(parameter["max"]))
-
-    print("*Added parameter min*\n    estimated : actual")    
-    print("    45.0 : {}\n".format(parameter["min"]))
+    # print results
+    _print_test_info(expected = expected, actual = actual)
 
 def test_add_parameter():
     """ Test add_parameter functionality """
