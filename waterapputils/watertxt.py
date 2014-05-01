@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-:Module: txtfilereader.py
+:Module: watertxt.py
 
 :Author: Jeremiah Lant, jlant@usgs.gov, U.S. Geological Survey, Kentucky Water Science Center, http://www.usgs.gov/  
 
-:Synopsis: Handles reading, processing, and logging errors in WATER output text data files.
+:Synopsis: Handles reading, writing, processing, and logging errors in WATER output text data files.
 """
 
 __author__   = "Jeremiah Lant, jlant@usgs.gov, U.S. Geological Survey, Kentucky Water Science Center."

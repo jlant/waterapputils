@@ -151,8 +151,7 @@ def process_xmlcmp(file_list, arguments):
     filedir2, filename2 = helpers.get_file_info(waterxml_file2)
       
     # create output directory     
-    outputdirpath = helpers.make_directory(path = filedir1, directory_name = "-".join([filename1.split(".xml")[0], filename2.split(".xml")[0] , "comparison", "output"]))      
-#    outputdirpath = helpers.make_directory(path = filedir1, directory_name = "-".join(["comparison", "output"]))    
+    outputdirpath = helpers.make_directory(path = filedir1, directory_name = "-".join([filename1.split(".xml")[0], filename2.split(".xml")[0] , "comparison", "output"]))         
     
     # initialize error logging
     waterapputils_logging.initialize_loggers(output_dir = outputdirpath)        
