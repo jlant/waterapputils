@@ -512,14 +512,15 @@ def _create_test_data(multiplicative_factor = 1, stationid = "012345", with_wate
 
 
 def _print_test_info(expected, actual):
-
+    """ For testing purposes, assert that expected values and actual values match. """
     for key in actual.keys():
         try:
              assert expected[key] == actual[key], "For key * {} *, expected value(s) * {} * do not equal actual value(s) * {} *".format(key, expected[key], actual[key])
         except:
             for i in range(len(actual[key])):
                 assert expected[key][i].all() ==  actual[key][i].all(), "For key * {} * and index * {} *, expected value(s) * {} * do not equal actual value(s) * {} *".format(key, i, expected[key], actual[key])                          
-                             
+        
+        print("*{}*".format(key))                     
         print("    expected: {}".format(expected[key]))
         print("    actual:   {}\n".format(actual[key]))      
 
@@ -679,16 +680,16 @@ def test_read_file_in():
     expected_storagedeficit = {"name": "Storage Deficit (mm/day)", "index": 12, "data": storagedeficit_data, "mean": np.mean(storagedeficit_data), "max": np.max(storagedeficit_data), "min": np.min(storagedeficit_data)}
     expected_returnflow = {"name": "Return Flow (mm/day)", "index": 13, "data": returnflow_data, "mean": np.mean(returnflow_data), "max": np.max(returnflow_data), "min": np.min(returnflow_data)}     
 
-        
-    expected = {
-        "user": "jlant",
-        "date_created": "4/9/2014 15:50:47 PM",
-        "stationid": "012345",
-        "column_names": ['Discharge (cfs)', 'Subsurface Flow (mm/day)', 'Impervious Flow (mm/day)', 'Infiltration Excess (mm/day)', 'Initial Abstracted Flow (mm/day)', 'Overland Flow (mm/day)', 'PET (mm/day)', 'AET(mm/day)', 'Average Soil Root zone (mm)', 'Average Soil Unsaturated Zone (mm)', 'Snow Pack (mm)', 'Precipitation (mm/day)', 'Storage Deficit (mm/day)', 'Return Flow (mm/day)'],
-        "dates": dates}
+    expected = {}        
+    expected["user"] = "jlant"
+    expected["date_created"] = "4/9/2014 15:50:47 PM"
+    expected["stationid"] = "012345"
+    expected["column_names"] = ['Discharge (cfs)', 'Subsurface Flow (mm/day)', 'Impervious Flow (mm/day)', 'Infiltration Excess (mm/day)', 'Initial Abstracted Flow (mm/day)', 
+                                 'Overland Flow (mm/day)', 'PET (mm/day)', 'AET(mm/day)', 'Average Soil Root zone (mm)', 'Average Soil Unsaturated Zone (mm)',
+                                 'Snow Pack (mm)', 'Precipitation (mm/day)', 'Storage Deficit (mm/day)', 'Return Flow (mm/day)']
+    expected["dates"] = list(dates)
 
     fixture = {}
-    
     fixture["data_file"] = \
         """
          ------------------------------------------------------------------------------
@@ -708,64 +709,46 @@ def test_read_file_in():
     # actual values    
     data = read_file_in(fileobj)
     
-    # actual values
+    actual = {}
+    actual["user"] = data["user"]
+    actual["date_created"] = data["date_created"]
+    actual["stationid"] = data["stationid"]
+    actual["column_names"] = data["column_names"]
+    actual["dates"] = list(data["dates"])
+    
     actual_discharge = get_parameter(watertxt_data = data, name = "Discharge")  
     actual_subsurface = get_parameter(watertxt_data = data, name = "Subsurface Flow")  
+    actual_impervious = get_parameter(watertxt_data = data, name = "Impervious Flow") 
+    actual_infiltration = get_parameter(watertxt_data = data, name = "Infiltration Excess") 
+    actual_initialabstracted = get_parameter(watertxt_data = data, name = "Initial Abstracted Flow") 
+    actual_overlandflow = get_parameter(watertxt_data = data, name = "Overland Flow") 
+    actual_pet = get_parameter(watertxt_data = data, name = "PET") 
+    actual_aet = get_parameter(watertxt_data = data, name = "AET") 
+    actual_avgesoilrootzone = get_parameter(watertxt_data = data, name = "Average Soil Root zone")
+    actual_avgsoilunsaturatedzone = get_parameter(watertxt_data = data, name = "Average Soil Unsaturated Zone")
+    actual_snowpack = get_parameter(watertxt_data = data, name = "Snow Pack")
+    actual_precipitation = get_parameter(watertxt_data = data, name = "Precipitation")
+    actual_storagedeficit = get_parameter(watertxt_data = data, name = "Storage Deficit")
+    actual_returnflow = get_parameter(watertxt_data = data, name = "Return Flow")
 
     # print results
+    _print_test_info(expected, actual)
+    
     _print_test_info(expected = expected_discharge, actual = actual_discharge)
     _print_test_info(expected = expected_subsurface, actual = actual_subsurface)
-
-#    print("*User*\n    expected : actual")
-#    print("    jlant : {}".format(data["user"]))
-#    print("")
-#
-#    print("*Date created*\n    expected : actual")
-#    print("    4/9/2014 15:50:47 PM : {}".format(data["date_created"]))
-#    print("")
-#
-#    print("*StationID*\n    expected : actual")
-#    print("    012345 : {}".format(data["stationid"]))
-#    print("")
-#
-#    print("*Column names*\n    expected : actual")
-#    print("    ['Discharge (cfs)', 'Subsurface Flow (mm/day)', 'Impervious Flow (mm/day)', 'Infiltration Excess (mm/day)', 'Initial Abstracted Flow (mm/day)', 'Overland Flow (mm/day)', 'PET (mm/day)', 'AET(mm/day)', 'Average Soil Root zone (mm)', 'Average Soil Unsaturated Zone (mm)', 'Snow Pack (mm)', 'Precipitation (mm/day)', 'Storage Deficit (mm/day)', 'Return Flow (mm/day)'] : \n    {}".format(data["column_names"]))
-#    print("")
-#
-#    print("*Dates type*\n    expected : actual")
-#    print("    numpy.ndarray : {}".format(type(data["dates"]))) 
-#    print("")   
-#    
-#    print("*Dates*\n    expected : actual")
-#    print("    [datetime.datetime(2014, 4, 1, 0, 0) datetime.datetime(2014, 4, 2, 0, 0) datetime.datetime(2014, 4, 3, 0, 0)] : \n    {}".format(data["dates"]))
-#    print("")
-#    
-#    print("*Data type*\n    expected : actual")
-#    print("    numpy.ndarray : {}".format(type(data["parameters"][0]["data"])))    
-#    print("")
-#
-#    print("*Parameters*\n    expected name, index, data, mean, max, min")
-#    print("    Discharge (cfs) 0 [  0.   nan  10.] 5.0 10.0 0.0")
-#    print("    Subsurface Flow (mm/day) 1 [ 50.  55.  45.] 50.0 55.0 45.0")
-#    print("    Impervious Flow (mm/day) 2 [ 2.  8.  2.] 4.0 8.0 2.0")
-#    print("    Infiltration Excess (mm/day) 3 [ 0.   1.5  1.5] 1.0 1.5 0.0")
-#    print("    Initial Abstracted Flow (mm/day) 4 [ 0.1  0.2  0.3] 0.2 0.3 0.1")
-#    print("    Overland Flow (mm/day) 5 [ 3.  9.  3.] 5.0 9.0 3.0")
-#    print("    PET (mm/day) 6 [  5.   3.  13.] 7.0 13.0 3.0")
-#    print("    AET(mm/day) 7 [  5.  12.  13.] 10.0 13.0 5.0")
-#    print("    Average Soil Root zone (mm) 8 [ 40.  50.  60.] 50.0 60.0 40.0")
-#    print("    Average Soil Unsaturated Zone (mm) 9 [ 4.  3.  2.] 3.0 4.0 2.0")
-#    print("    Snow Pack (mm) 10 [ 150.  125.   25.] 100.0 150.0 25.0")
-#    print("    Precipitation (mm/day) 11 [ 0.5  0.4  0.3] 0.4 0.5 0.3")
-#    print("    Storage Deficit (mm/day) 12 [ 300.  310.  350.] 320.0 350.0 300.0")
-#    print("    Return Flow (mm/day) 13 [  -5.   -4.5   -4.0] -4.5.0 -5.0 -4.0")
-#    print("")
-#    
-#
-#    print("*Parameters*\n    actual name, index, data, mean, max, min")
-#    for parameter in data["parameters"]:
-#        print("    {} {} {} {} {} {}".format(parameter["name"], parameter["index"], parameter["data"], parameter["mean"], parameter["max"], parameter["min"]))    
-#    print("")
+    _print_test_info(expected = expected_impervious, actual = actual_impervious)
+    _print_test_info(expected = expected_infiltration, actual = actual_infiltration)
+    _print_test_info(expected = expected_initialabstracted, actual = actual_initialabstracted)
+    _print_test_info(expected = expected_overlandflow, actual = actual_overlandflow)
+    _print_test_info(expected = expected_pet, actual = actual_pet)
+    _print_test_info(expected = expected_aet, actual = actual_aet)
+    _print_test_info(expected = expected_avgesoilrootzone, actual = actual_avgesoilrootzone)                        
+    _print_test_info(expected = expected_avgsoilunsaturatedzone, actual = actual_avgsoilunsaturatedzone)
+    _print_test_info(expected = expected_avgsoilunsaturatedzone, actual = actual_avgsoilunsaturatedzone)
+    _print_test_info(expected = expected_snowpack, actual = actual_snowpack)    
+    _print_test_info(expected = expected_precipitation, actual = actual_precipitation)    
+    _print_test_info(expected = expected_storagedeficit, actual = actual_storagedeficit)    
+    _print_test_info(expected = expected_returnflow, actual = actual_returnflow) 
 
 
 def test_apply_factors():
@@ -773,6 +756,14 @@ def test_apply_factors():
 
     print("--- Testing apply_factors ---") 
 
+    # expected values to test with actual values
+    discharge_data = np.array([6, 18, 30])
+    expected = {"name": "Discharge (cfs)", "index": 0, "data": discharge_data, "mean": np.mean(discharge_data), "max": np.max(discharge_data), "min": np.min(discharge_data)}
+
+    # create test data
+    data = _create_test_data()
+
+    # create factors
     factors = {
         'January': 1.5,
         'February': 2.0,
@@ -786,31 +777,18 @@ def test_apply_factors():
         'October': 6.5,
         'November': 7.0,
         'December': 7.5
-    }     
-    
-    param_name = "Discharge"
-    month = "April"
+    }  
 
-    print("*Factor used*\n    expected : actual")
-    print("    3.0 : {}".format(factors[month]))
-    print("")
+    # apply factors
+    data = apply_factors(watertxt_data = data, name = "Discharge", factors = factors)    
     
-    data = _create_test_data()
-    
-    parameter = get_parameter(watertxt_data = data, name = param_name)
-    
-    print("*Parameter BEFORE applied factors*\n    actual name, index, data, mean, max, min")
-    print("    {} {} {} {} {} {}".format(parameter["name"], parameter["index"], parameter["data"], parameter["mean"], parameter["max"], parameter["min"]))    
-    print("")
-    
-    watertxt_data = apply_factors(watertxt_data = data, name = param_name, factors = factors)    
-
-    parameter = get_parameter(watertxt_data = watertxt_data, name = param_name)
-
-    print("*Parameter AFTER applied factors*\n    actual name, index, data, mean, max, min")
-    print("    {} {} {} {} {} {}".format(parameter["name"], parameter["index"], parameter["data"], parameter["mean"], parameter["max"], parameter["min"]))    
-
-    print("")    
+    # actual values
+    actual = get_parameter(watertxt_data = data, name = "Discharge")  
+#
+#    import pdb
+#    pdb.set_trace()
+    # print results
+    _print_test_info(expected = expected, actual = actual)  
     
 def test_write_file():
     """ Test write_file functionality """
