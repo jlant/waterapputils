@@ -784,9 +784,7 @@ def test_apply_factors():
     
     # actual values
     actual = get_parameter(watertxt_data = data, name = "Discharge")  
-#
-#    import pdb
-#    pdb.set_trace()
+
     # print results
     _print_test_info(expected = expected, actual = actual)  
     
