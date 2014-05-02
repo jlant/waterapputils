@@ -650,7 +650,7 @@ def test_read_file_in():
                       datetime.datetime(2014, 04, 03, 0, 0),
     ])
     
-    discharge_data = np.array([2, 6, 10])
+    discharge_data = np.array([2, np.nan, 10])
     subsurface_data = np.array([50, 55, 45])
     impervious_data = np.array([2, 8, 2])
     infiltration_data = np.array([0, 1.5, 1.5])
@@ -665,7 +665,7 @@ def test_read_file_in():
     storagedeficit_data = np.array([300, 310, 350])
     returnflow_data = np.array([-5.0, -4.5, -4.0])
 
-    expected_discharge = {"name": "Discharge (cfs)", "index": 0, "data": discharge_data, "mean": np.mean(discharge_data), "max": np.max(discharge_data), "min": np.min(discharge_data)}
+    expected_discharge = {"name": "Discharge (cfs)", "index": 0, "data": discharge_data, "mean": np.nanmean(discharge_data), "max": np.nanmax(discharge_data), "min": np.nanmin(discharge_data)}
     expected_subsurface = {"name": "Subsurface Flow (mm/day)", "index": 1, "data": subsurface_data, "mean": np.mean(subsurface_data), "max": np.max(subsurface_data), "min": np.min(subsurface_data)}
     expected_impervious = {"name": "Impervious Flow (mm/day)", "index": 2, "data": impervious_data, "mean": np.mean(impervious_data), "max": np.max(impervious_data), "min": np.min(impervious_data)}
     expected_infiltration = {"name": "Infiltration Excess (mm/day)", "index": 3, "data": infiltration_data, "mean": np.mean(infiltration_data), "max": np.max(infiltration_data), "min": np.min(infiltration_data)}
@@ -700,7 +700,7 @@ def test_read_file_in():
         StationID:	012345
         Date	Discharge (cfs)	Subsurface Flow (mm/day)	Impervious Flow (mm/day)	Infiltration Excess (mm/day)	Initial Abstracted Flow (mm/day)	Overland Flow (mm/day)	PET (mm/day)	AET(mm/day)	Average Soil Root zone (mm)	Average Soil Unsaturated Zone (mm)	Snow Pack (mm)	Precipitation (mm/day)	Storage Deficit (mm/day)	Return Flow (mm/day)
         4/1/2014	2.0	50.0	2	0	0.1	3.0	5	5	40.0	4.0	150	0.5	300.0	-5.0
-        4/2/2014	6.0	55.0	8	1.5	0.2	9.0	3	12	50.0	3.0	125	0.4	310.0	-4.5
+        4/2/2014		55.0	8	1.5	0.2	9.0	3	12	50.0	3.0	125	0.4	310.0	-4.5
         4/3/2014	10.0	45.0	2	1.5	0.3	3.0	13	13	60.0	2.0	25	0.3	350.0	-4.0
         """
         
