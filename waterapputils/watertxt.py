@@ -598,70 +598,98 @@ def test_get_parameter():
 def test_add_parameter():
     """ Test add_parameter functionality """
 
-    print("--- Testing add_parameter ---") 
-    
+    print("--- Testing add_parameter() ---") 
+
+    # expected values to test with actual values
+    wateruse_data = np.array([50, 55, 45])
+    expected = {"name": "Water Use (cfs)", "index": 14, "data": wateruse_data, "mean": np.mean(wateruse_data), "max": np.max(wateruse_data), "min": np.min(wateruse_data)}
+
+    # create test data
     data = _create_test_data()
-    data = add_parameter(watertxt_data = data, name = "Water Use (cfs)", param_data = np.array([3.0, 2.5, -5.5])) 
+    
+    # add a parameter to the data dictionary
+    data = add_parameter(watertxt_data = data, name = "Water Use (cfs)", param_data = wateruse_data) 
+    
+    # actual values
+    actual = data["parameters"][-1]
 
-    print("*Added parameter name*\n    estimated : actual")    
-    print("    Water Use (cfs) : {}\n".format(data["parameters"][-1]["name"]))
-
-    print("*Added parameter index*\n    estimated : actual")    
-    print("    14 : {}\n".format(data["parameters"][-1]["index"]))
-
-    print("*Added parameter data*\n    estimated : actual")    
-    print("    [3.0 2.5 -5.5] : {}\n".format(data["parameters"][-1]["data"]))
-
-    print("*Added parameter mean*\n    estimated : actual")    
-    print("    0.0 : {}\n".format(data["parameters"][-1]["mean"]))
-
-    print("*Added parameter max*\n    estimated : actual")    
-    print("    3.0 : {}\n".format(data["parameters"][-1]["max"]))
-
-    print("*Added parameter min*\n    estimated : actual")    
-    print("    -5.5 : {}\n".format(data["parameters"][-1]["min"]))
-    print("")
-
-
+    # print results
+    _print_test_info(expected = expected, actual = actual)
+    
 def test_set_parameter_values():
     """ Test set_parameter functionality """
     
-    print("--- Testing set_parameter ---") 
-    
+    print("--- Testing set_parameter() ---") 
+
+    # expected values to test with actual values
+    new_discharge_data = np.array([100, 110, 120])
+    expected = {"name": "Discharge (cfs)", "index": 0, "data": new_discharge_data, "mean": np.mean(new_discharge_data), "max": np.max(new_discharge_data), "min": np.min(new_discharge_data)}
+
+    # create test data
     data = _create_test_data()
+
+    # set the new values
+    data = set_parameter_values(watertxt_data = data, name = "Discharge", values = new_discharge_data)
     
-    new_values = np.array([100, 110, 120])
-    watertxt_data = set_parameter_values(watertxt_data = data, name = "Discharge", values = new_values)
+    # actual values
+    actual = get_parameter(watertxt_data = data, name = "Discharge")  
 
-    updated_discharge = get_parameter(watertxt_data, name = "Discharge")
+    # print results
+    _print_test_info(expected = expected, actual = actual)
 
-    print("*Updated parameter name*\n    estimated : actual")    
-    print("    Discharge (cfs) : {}\n".format(updated_discharge["name"]))
-
-    print("*Updated parameter index*\n    estimated : actual")    
-    print("    0 : {}\n".format(updated_discharge["index"]))
-   
-    print("*Updated parameter data*\n    estimated : actual")    
-    print("    [100 110 120] : {}\n".format(updated_discharge["data"]))
-
-    print("*Updated parameter mean*\n    estimated : actual")    
-    print("    110.0 : {}\n".format(updated_discharge["mean"]))
-
-    print("*Updated parameter max*\n    estimated : actual")    
-    print("    120.0 : {}\n".format(updated_discharge["max"]))
-
-    print("*Updated parameter min*\n    estimated : actual")    
-    print("    100.0 : {}\n".format(updated_discharge["min"]))
-    print("")
 
 def test_read_file_in():
     """ Test read_file_in() functionality"""
 
     print("--- Testing read_file_in() ---")
 
+    # expected values to test with actual values   
+    dates = np.array([datetime.datetime(2014, 04, 01, 0, 0), 
+                      datetime.datetime(2014, 04, 02, 0, 0), 
+                      datetime.datetime(2014, 04, 03, 0, 0),
+    ])
+    
+    discharge_data = np.array([2, 6, 10])
+    subsurface_data = np.array([50, 55, 45])
+    impervious_data = np.array([2, 8, 2])
+    infiltration_data = np.array([0, 1.5, 1.5])
+    initialabstracted_data = np.array([0.1, 0.2, 0.3])
+    overlandflow_data = np.array([3, 9, 3])
+    pet_data = np.array([5, 13, 3])
+    aet_data = np.array([5, 12, 13])
+    avgsoilrootzone_data = np.array([40, 50, 60])
+    avgsoilunsaturatedzone_data = np.array([4, 3, 2])
+    snowpack_data = np.array([150, 125, 25])
+    precipitation_data = np.array([0.5, 0.4, 0.3])
+    storagedeficit_data = np.array([300, 310, 350])
+    returnflow_data = np.array([-5.0, -4.5, -4.0])
+
+    expected_discharge = {"name": "Discharge (cfs)", "index": 0, "data": discharge_data, "mean": np.mean(discharge_data), "max": np.max(discharge_data), "min": np.min(discharge_data)}
+    expected_subsurface = {"name": "Subsurface Flow (mm/day)", "index": 1, "data": subsurface_data, "mean": np.mean(subsurface_data), "max": np.max(subsurface_data), "min": np.min(subsurface_data)}
+    expected_impervious = {"name": "Impervious Flow (mm/day)", "index": 2, "data": impervious_data, "mean": np.mean(impervious_data), "max": np.max(impervious_data), "min": np.min(impervious_data)}
+    expected_infiltration = {"name": "Infiltration Excess (mm/day)", "index": 3, "data": infiltration_data, "mean": np.mean(infiltration_data), "max": np.max(infiltration_data), "min": np.min(infiltration_data)}
+    expected_initialabstracted = {"name": "Initial Abstracted Flow (mm/day)", "index": 4, "data": initialabstracted_data, "mean": np.mean(initialabstracted_data), "max": np.max(initialabstracted_data), "min": np.min(initialabstracted_data)}
+    expected_overlandflow = {"name": "Overland Flow (mm/day)", "index": 5, "data": overlandflow_data, "mean": np.mean(overlandflow_data), "max": np.max(overlandflow_data), "min": np.min(overlandflow_data)}
+    expected_pet = {"name": "PET (mm/day)", "index": 6, "data": pet_data, "mean": np.mean(pet_data), "max": np.max(pet_data), "min": np.min(pet_data)}    
+    expected_aet = {"name": "AET(mm/day)", "index": 7, "data": aet_data, "mean": np.mean(aet_data), "max": np.max(aet_data), "min": np.min(aet_data)}
+    expected_avgesoilrootzone = {"name": "Average Soil Root zone (mm)", "index": 8, "data": avgsoilrootzone_data, "mean": np.mean(avgsoilrootzone_data), "max": np.max(avgsoilrootzone_data), "min": np.min(avgsoilrootzone_data)}
+    expected_avgsoilunsaturatedzone = {"name": "Average Soil Unsaturated Zone (mm)", "index": 9, "data": avgsoilunsaturatedzone_data, "mean": np.mean(avgsoilunsaturatedzone_data), "max": np.max(avgsoilunsaturatedzone_data), "min": np.min(avgsoilunsaturatedzone_data)}    
+    expected_snowpack = {"name": "Snow Pack (mm)", "index": 10, "data": snowpack_data, "mean": np.mean(snowpack_data), "max": np.max(snowpack_data), "min": np.min(snowpack_data)}
+    expected_precipitation = {"name": "Precipitation (mm/day)", "index": 11, "data": precipitation_data, "mean": np.mean(precipitation_data), "max": np.max(precipitation_data), "min": np.min(precipitation_data)}    
+    expected_storagedeficit = {"name": "Storage Deficit (mm/day)", "index": 12, "data": storagedeficit_data, "mean": np.mean(storagedeficit_data), "max": np.max(storagedeficit_data), "min": np.min(storagedeficit_data)}
+    expected_returnflow = {"name": "Return Flow (mm/day)", "index": 13, "data": returnflow_data, "mean": np.mean(returnflow_data), "max": np.max(returnflow_data), "min": np.min(returnflow_data)}     
+
+        
+    expected = {
+        "user": "jlant",
+        "date_created": "4/9/2014 15:50:47 PM",
+        "stationid": "012345",
+        "column_names": ['Discharge (cfs)', 'Subsurface Flow (mm/day)', 'Impervious Flow (mm/day)', 'Infiltration Excess (mm/day)', 'Initial Abstracted Flow (mm/day)', 'Overland Flow (mm/day)', 'PET (mm/day)', 'AET(mm/day)', 'Average Soil Root zone (mm)', 'Average Soil Unsaturated Zone (mm)', 'Snow Pack (mm)', 'Precipitation (mm/day)', 'Storage Deficit (mm/day)', 'Return Flow (mm/day)'],
+        "dates": dates}
+
     fixture = {}
     
-    fixture["data file"] = \
+    fixture["data_file"] = \
         """
          ------------------------------------------------------------------------------
          ----- WATER ------------------------------------------------------------------
@@ -670,65 +698,74 @@ def test_read_file_in():
         Date:	4/9/2014 15:50:47 PM
         StationID:	012345
         Date	Discharge (cfs)	Subsurface Flow (mm/day)	Impervious Flow (mm/day)	Infiltration Excess (mm/day)	Initial Abstracted Flow (mm/day)	Overland Flow (mm/day)	PET (mm/day)	AET(mm/day)	Average Soil Root zone (mm)	Average Soil Unsaturated Zone (mm)	Snow Pack (mm)	Precipitation (mm/day)	Storage Deficit (mm/day)	Return Flow (mm/day)
-        4/1/2014	0.0	50.0	2	0	0.1	3.0	5	5	40.0	4.0	150	0.5	300.0	-5.0
-        4/2/2014		55.0	8	1.5	0.2	9.0	3	12	50.0	3.0	125	0.4	310.0	-4.5
+        4/1/2014	2.0	50.0	2	0	0.1	3.0	5	5	40.0	4.0	150	0.5	300.0	-5.0
+        4/2/2014	6.0	55.0	8	1.5	0.2	9.0	3	12	50.0	3.0	125	0.4	310.0	-4.5
         4/3/2014	10.0	45.0	2	1.5	0.3	3.0	13	13	60.0	2.0	25	0.3	350.0	-4.0
         """
         
-    fileobj = StringIO(fixture["data file"])
-    
+    fileobj = StringIO(fixture["data_file"])
+
+    # actual values    
     data = read_file_in(fileobj)
-
-    print("*User*\n    expected : actual")
-    print("    jlant : {}".format(data["user"]))
-    print("")
-
-    print("*Date created*\n    expected : actual")
-    print("    4/9/2014 15:50:47 PM : {}".format(data["date_created"]))
-    print("")
-
-    print("*StationID*\n    expected : actual")
-    print("    012345 : {}".format(data["stationid"]))
-    print("")
-
-    print("*Column names*\n    expected : actual")
-    print("    ['Discharge (cfs)', 'Subsurface Flow (mm/day)', 'Impervious Flow (mm/day)', 'Infiltration Excess (mm/day)', 'Initial Abstracted Flow (mm/day)', 'Overland Flow (mm/day)', 'PET (mm/day)', 'AET(mm/day)', 'Average Soil Root zone (mm)', 'Average Soil Unsaturated Zone (mm)', 'Snow Pack (mm)', 'Precipitation (mm/day)', 'Storage Deficit (mm/day)', 'Return Flow (mm/day)'] : \n    {}".format(data["column_names"]))
-    print("")
-
-    print("*Dates type*\n    expected : actual")
-    print("    numpy.ndarray : {}".format(type(data["dates"]))) 
-    print("")   
     
-    print("*Dates*\n    expected : actual")
-    print("    [datetime.datetime(2014, 4, 1, 0, 0) datetime.datetime(2014, 4, 2, 0, 0) datetime.datetime(2014, 4, 3, 0, 0)] : \n    {}".format(data["dates"]))
-    print("")
-    
-    print("*Data type*\n    expected : actual")
-    print("    numpy.ndarray : {}".format(type(data["parameters"][0]["data"])))    
-    print("")
+    # actual values
+    actual_discharge = get_parameter(watertxt_data = data, name = "Discharge")  
+    actual_subsurface = get_parameter(watertxt_data = data, name = "Subsurface Flow")  
 
-    print("*Parameters*\n    expected name, index, data, mean, max, min")
-    print("    Discharge (cfs) 0 [  0.   nan  10.] 5.0 10.0 0.0")
-    print("    Subsurface Flow (mm/day) 1 [ 50.  55.  45.] 50.0 55.0 45.0")
-    print("    Impervious Flow (mm/day) 2 [ 2.  8.  2.] 4.0 8.0 2.0")
-    print("    Infiltration Excess (mm/day) 3 [ 0.   1.5  1.5] 1.0 1.5 0.0")
-    print("    Initial Abstracted Flow (mm/day) 4 [ 0.1  0.2  0.3] 0.2 0.3 0.1")
-    print("    Overland Flow (mm/day) 5 [ 3.  9.  3.] 5.0 9.0 3.0")
-    print("    PET (mm/day) 6 [  5.   3.  13.] 7.0 13.0 3.0")
-    print("    AET(mm/day) 7 [  5.  12.  13.] 10.0 13.0 5.0")
-    print("    Average Soil Root zone (mm) 8 [ 40.  50.  60.] 50.0 60.0 40.0")
-    print("    Average Soil Unsaturated Zone (mm) 9 [ 4.  3.  2.] 3.0 4.0 2.0")
-    print("    Snow Pack (mm) 10 [ 150.  125.   25.] 100.0 150.0 25.0")
-    print("    Precipitation (mm/day) 11 [ 0.5  0.4  0.3] 0.4 0.5 0.3")
-    print("    Storage Deficit (mm/day) 12 [ 300.  310.  350.] 320.0 350.0 300.0")
-    print("    Return Flow (mm/day) 13 [  -5.   -4.5   -4.0] -4.5.0 -5.0 -4.0")
-    print("")
-    
+    # print results
+    _print_test_info(expected = expected_discharge, actual = actual_discharge)
+    _print_test_info(expected = expected_subsurface, actual = actual_subsurface)
 
-    print("*Parameters*\n    actual name, index, data, mean, max, min")
-    for parameter in data["parameters"]:
-        print("    {} {} {} {} {} {}".format(parameter["name"], parameter["index"], parameter["data"], parameter["mean"], parameter["max"], parameter["min"]))    
-    print("")
+#    print("*User*\n    expected : actual")
+#    print("    jlant : {}".format(data["user"]))
+#    print("")
+#
+#    print("*Date created*\n    expected : actual")
+#    print("    4/9/2014 15:50:47 PM : {}".format(data["date_created"]))
+#    print("")
+#
+#    print("*StationID*\n    expected : actual")
+#    print("    012345 : {}".format(data["stationid"]))
+#    print("")
+#
+#    print("*Column names*\n    expected : actual")
+#    print("    ['Discharge (cfs)', 'Subsurface Flow (mm/day)', 'Impervious Flow (mm/day)', 'Infiltration Excess (mm/day)', 'Initial Abstracted Flow (mm/day)', 'Overland Flow (mm/day)', 'PET (mm/day)', 'AET(mm/day)', 'Average Soil Root zone (mm)', 'Average Soil Unsaturated Zone (mm)', 'Snow Pack (mm)', 'Precipitation (mm/day)', 'Storage Deficit (mm/day)', 'Return Flow (mm/day)'] : \n    {}".format(data["column_names"]))
+#    print("")
+#
+#    print("*Dates type*\n    expected : actual")
+#    print("    numpy.ndarray : {}".format(type(data["dates"]))) 
+#    print("")   
+#    
+#    print("*Dates*\n    expected : actual")
+#    print("    [datetime.datetime(2014, 4, 1, 0, 0) datetime.datetime(2014, 4, 2, 0, 0) datetime.datetime(2014, 4, 3, 0, 0)] : \n    {}".format(data["dates"]))
+#    print("")
+#    
+#    print("*Data type*\n    expected : actual")
+#    print("    numpy.ndarray : {}".format(type(data["parameters"][0]["data"])))    
+#    print("")
+#
+#    print("*Parameters*\n    expected name, index, data, mean, max, min")
+#    print("    Discharge (cfs) 0 [  0.   nan  10.] 5.0 10.0 0.0")
+#    print("    Subsurface Flow (mm/day) 1 [ 50.  55.  45.] 50.0 55.0 45.0")
+#    print("    Impervious Flow (mm/day) 2 [ 2.  8.  2.] 4.0 8.0 2.0")
+#    print("    Infiltration Excess (mm/day) 3 [ 0.   1.5  1.5] 1.0 1.5 0.0")
+#    print("    Initial Abstracted Flow (mm/day) 4 [ 0.1  0.2  0.3] 0.2 0.3 0.1")
+#    print("    Overland Flow (mm/day) 5 [ 3.  9.  3.] 5.0 9.0 3.0")
+#    print("    PET (mm/day) 6 [  5.   3.  13.] 7.0 13.0 3.0")
+#    print("    AET(mm/day) 7 [  5.  12.  13.] 10.0 13.0 5.0")
+#    print("    Average Soil Root zone (mm) 8 [ 40.  50.  60.] 50.0 60.0 40.0")
+#    print("    Average Soil Unsaturated Zone (mm) 9 [ 4.  3.  2.] 3.0 4.0 2.0")
+#    print("    Snow Pack (mm) 10 [ 150.  125.   25.] 100.0 150.0 25.0")
+#    print("    Precipitation (mm/day) 11 [ 0.5  0.4  0.3] 0.4 0.5 0.3")
+#    print("    Storage Deficit (mm/day) 12 [ 300.  310.  350.] 320.0 350.0 300.0")
+#    print("    Return Flow (mm/day) 13 [  -5.   -4.5   -4.0] -4.5.0 -5.0 -4.0")
+#    print("")
+#    
+#
+#    print("*Parameters*\n    actual name, index, data, mean, max, min")
+#    for parameter in data["parameters"]:
+#        print("    {} {} {} {} {} {}".format(parameter["name"], parameter["index"], parameter["data"], parameter["mean"], parameter["max"], parameter["min"]))    
+#    print("")
 
 
 def test_apply_factors():
