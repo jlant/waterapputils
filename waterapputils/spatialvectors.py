@@ -60,6 +60,36 @@ def get_intersected_field_values(intersector, intersectee, intersectee_field):
 
     return field_values
 
+
+def _print_test_info(expected, actual):
+    """   
+    For testing purposes, assert that all expected values and actual values match. 
+    Prints assertion error when there is no match.  Prints values to user to scan
+    if interested. Helps a lot for debugging. This function mirrors what is done
+    in nosetests.
+    
+    Parameters
+    ----------
+    expected : dictionary  
+        Dictionary holding expected data values
+    actual : dictionary
+        Dictionary holding expected data values
+    """
+    for key in actual.keys():
+        
+        import pdb
+        pdb.set_trace()        
+        if "array" in str(type(actual[key])) or len(actual[key]) > 0:
+
+            for i in range(len(actual[key])):
+                assert expected[key][i].all() ==  actual[key][i].all(), "For key * {} * and index * {} *, expected value(s) * {} * do not equal actual value(s) * {} *".format(key, i, expected[key], actual[key])                          
+        else:
+            assert expected[key] == actual[key], "For key * {} *, expected value(s) * {} * do not equal actual value(s) * {} *".format(key, expected[key], actual[key])
+                
+        print("*{}*".format(key))                     
+        print("    expected: {}".format(expected[key]))
+        print("    actual:   {}\n".format(actual[key]))  
+        
 def test_get_intersected_field_values():
     """ Test functionality of get_intersected_field_values """
 
@@ -68,8 +98,8 @@ def test_get_intersected_field_values():
     # expected values to test with actual values
     expected = {}
     expected["canes_tiles"] = ['31', '32', '21', '11']    
-    expected["gfdl_tiles"] = ['41', '42', '31', '32', '21']
-    expected["giss_tiles"] = ['41', '42', '31', '22']
+    expected["gfdl_tiles"] = ['41', '42', '31', '32', '22']
+    expected["giss_tiles"] = ['41', '42', '31', '21']
     expected["ncar_tiles"] = ['82', '83', '84', '72', '73', '74', '62', '63', '64', '52', '53', '42', '43', '32', '22'] 
 
     # paths to files
@@ -96,10 +126,15 @@ def test_get_intersected_field_values():
     for shapefile in [basin_shapefile, canes_shapefile, gfdl_shapefile, giss_shapefile, ncar_shapefile]:
         shapefile.Destroy()  
     
-    for key in actual.keys():
-        assert expected[key] ==  actual[key], "For key {}, expected tiles {} do not equal actual tiles {}".format(key, expected[key], actual[key])
-        print("    expected: {}".format(expected[key]))
-        print("    actual:   {}\n".format(actual[key]))   
+#    for key in actual.keys():
+#        assert expected[key] ==  actual[key], "For key {}, expected tiles {} do not equal actual tiles {}".format(key, expected[key], actual[key])
+#        print("    expected: {}".format(expected[key]))
+#        print("    actual:   {}\n".format(actual[key])) 
+
+#    import pdb
+#    pdb.set_trace()
+        
+    _print_test_info(expected, actual)
     
 def main():
     """ Test functionality geospatialvectors.py """

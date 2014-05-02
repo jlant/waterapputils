@@ -512,7 +512,19 @@ def _create_test_data(multiplicative_factor = 1, stationid = "012345", with_wate
 
 
 def _print_test_info(expected, actual):
-    """ For testing purposes, assert that expected values and actual values match. """
+    """   
+    For testing purposes, assert that all expected values and actual values match. 
+    Prints assertion error when there is no match.  Prints values to user to scan
+    if interested. Helps a lot for debugging. This function mirrors what is done
+    in nosetests.
+    
+    Parameters
+    ----------
+    expected : dictionary  
+        Dictionary holding expected data values
+    actual : dictionary
+        Dictionary holding expected data values
+    """
     for key in actual.keys():
         try:
              assert expected[key] == actual[key], "For key * {} *, expected value(s) * {} * do not equal actual value(s) * {} *".format(key, expected[key], actual[key])
@@ -820,17 +832,17 @@ def main():
 
     test_get_all_values()
 
-    test_get_parameter()
-
-    test_add_parameter()
-
-    test_set_parameter_values() 
-
-    test_read_file_in()
-
-    test_write_file()
-
-    test_apply_factors()
+#    test_get_parameter()
+#
+#    test_add_parameter()
+#
+#    test_set_parameter_values() 
+#
+#    test_read_file_in()
+#
+#    test_write_file()
+#
+#    test_apply_factors()
     
 if __name__ == "__main__":
     main()
