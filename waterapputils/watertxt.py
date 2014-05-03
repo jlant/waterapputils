@@ -531,11 +531,10 @@ def _print_test_info(expected, actual):
         except:
             for i in range(len(actual[key])):
                 assert expected[key][i].all() ==  actual[key][i].all(), "For key * {} * and index * {} *, expected value(s) * {} * do not equal actual value(s) * {} *".format(key, i, expected[key], actual[key])                          
-        
-        print("*{}*".format(key))                     
-        print("    expected: {}".format(expected[key]))
-        print("    actual:   {}\n".format(actual[key]))      
-
+        finally:              
+            print("*{}*".format(key))                     
+            print("    expected: {}".format(expected[key]))
+            print("    actual:   {}\n".format(actual[key]))      
 
 def test_create_parameter():
     """ Test the create_parameter funtionality"""
