@@ -289,10 +289,39 @@ def _create_test_data():
 
     return data
 
+def _print_test_info(actual, expected):
+    """   
+    For testing purposes, assert that all expected values and actual values match. 
+    Prints assertion error when there is no match.  Prints values to user to scan
+    if interested. Helps a lot for debugging. This function mirrors what is done
+    in nosetests.
+    
+    Parameters
+    ----------
+    expected : dictionary  
+        Dictionary holding expected data values
+    actual : dictionary
+        Dictionary holding expected data values
+    """
+    for key in actual.keys():
+        np.testing.assert_equal(actual[key], expected[key], err_msg = "For key * {} *, actual value(s) * {} * do not equal expected value(s) * {} *".format(key, actual[key], expected[key]))        
+
+        print("*{}*".format(key))                     
+        print("    actual:   {}".format(actual[key]))  
+        print("    expected: {}\n".format(expected[key]))
+
 def test_read_file_in():
     """ Test read_file_in() functionality"""
 
     print("--- Testing read_file_in() ---")
+
+    expected = {"Model": "CanESM2", "Scenario": "rcp45", "Target": "2030", "Variable": "PET", "Tile": ['11', '12', '21', '22', '31', '32'],
+                "January": [1.3, 1.2, 1.3, 1.4, 1.5, 1.6], "February": [2.7, 2.8, 2.9, 2.3, 2.2, 2.3], "March": [3.3, 3.2, 3.3, 3.4, 3.5, 3.6],
+               "April": [4.7, 4.8, 4.9, 4.3, 4.2, 4.3], "May": [5.3, 5.2, 5.3, 5.4, 5.5, 5.6], "June": [6.7, 6.8, 6.9, 6.3, 6.2, 6.3],
+               "July": [7.3, 7.2, 7.3, 7.4, 7.5, 7.6], "August": [8.7, 8.8, 8.9, 8.3, 8.2, 8.3], "September": [9.3, 9.2, 9.3, 9.4, 9.5, 9.6],
+               "October": [10.7, 10.8, 10.9, 10.3, 10.2, 10.3], "November": [11.3, 11.2, 11.3, 11.4, 11.5, 11.6], "December": [12.7, 12.8, 12.9, 12.3, 12.2, 12.3]
+    }          
+
 
     fixture = {}
     
@@ -308,121 +337,63 @@ def test_read_file_in():
         """
         
     fileobj = StringIO(fixture["data_file"])
+
+    actual = read_file_in(fileobj)    
+
+    # print results
+    _print_test_info(actual, expected)
     
-    data = read_file_in(fileobj)
-
-    print("*Delta data*")
-    print("    {}\n".format(data))
-
-    print("*Keys in data*\n    expected : actual")
-    print("    ['Model', 'Scenario', 'Target', 'Variable', 'Tile', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November',   'December'] : \n{}".format(data.keys()))
-    print("")
-
-    print("*Number of keys in data*\n    expected : actual")
-    print("    17 : {}\n".format(len(data.keys())))
-
-    print("*Model*\n    expected : actual")
-    print("    CanESM2 : {}\n".format(data["Model"]))
-
-    print("*Scenario*\n    expected : actual")
-    print("    rcp45 : {}\n".format(data["Scenario"]))
-
-    print("*Target*\n    expected : actual")
-    print("    2030 : {}\n".format(data["Target"]))
-
-    print("*Tile*\n    expected : actual")
-    print("    ['11', '12', '21', '22', '31', '32'] : {}\n".format(data["Tile"]))
-
-    print("*January*\n    expected : actual")
-    print("    [1.3, 1.2, 1.3, 1.4, 1.5, 1.6] : {}\n".format(data["January"]))
-
-    print("*February*\n    expected : actual")
-    print("    [2.7, 2.8, 2.9, 2.3, 2.2, 2.3] : {}\n".format(data["February"]))
-
-    print("*March*\n    expected : actual")
-    print("    [3.3, 3.2, 3.3, 3.4, 3.5, 3.6] : {}\n".format(data["March"]))
-
-    print("*April*\n    expected : actual")
-    print("    [4.7, 4.8, 4.9, 4.3, 4.2, 4.3] : {}\n".format(data["April"]))
-
-    print("*May*\n    expected : actual")
-    print("    [5.3, 5.2, 5.3, 5.4, 5.5, 5.6] : {}\n".format(data["May"]))   
-
-    print("*June*\n    expected : actual")
-    print("    [6.7, 6.8, 6.9, 6.3, 6.2, 6.3] : {}\n".format(data["June"]))   
-
-    print("*July*\n    expected : actual")
-    print("    [7.3, 7.2, 7.3, 7.4, 7.5, 7.6] : {}\n".format(data["July"]))   
-
-    print("*August*\n    expected : actual")
-    print("    [8.7, 8.8, 8.9, 8.3, 8.2, 8.3] : {}\n".format(data["August"]))   
-
-    print("*September*\n    expected : actual")
-    print("    [9.3, 9.2, 9.3, 9.4, 9.5, 9.6] : {}\n".format(data["September"]))   
-
-    print("*October*\n    expected : actual")
-    print("    [10.7, 10.8, 10.9, 10.3, 10.2, 10.3] : {}\n".format(data["October"]))   
-
-    print("*November*\n    expected : actual")
-    print("    [11.3, 11.2, 11.3, 11.4, 11.5, 11.6] : {}\n".format(data["November"]))   
-
-    print("*December*\n    expected : actual")
-    print("    [12.7, 12.8, 12.9, 12.3, 12.2, 12.3] : {}\n".format(data["December"]))   
-
-    print("")
     
 def test_get_monthly_values():
-    """ Test get_monthly_values """
+    """ Test get_monthly_values() """
 
-    print("--- Testing get_monthly_values ---")
+    print("--- Testing get_monthly_values() ---")
+    
+    # expected values to test with actual values
+    expected = {}    
+    expected["tiles_11_12"] = [[1.3, 2.7, 3.3, 4.7, 5.3, 6.7, 7.3, 8.7, 9.3, 10.7, 11.3, 12.7], [1.2, 2.8, 3.2, 4.8, 5.2, 6.8, 7.2, 8.8, 9.2, 10.8, 11.2, 12.8]]
+    expected["tiles_12_22_32"] = [[1.2, 2.8, 3.2, 4.8, 5.2, 6.8, 7.2, 8.8, 9.2, 10.8, 11.2, 12.8], [1.4, 2.3, 3.4, 4.3, 5.4, 6.3, 7.4, 8.3, 9.4, 10.3, 11.4, 12.3], [1.6, 2.3, 3.6, 4.3, 5.6, 6.3, 7.6, 8.3, 9.6, 10.3, 11.6, 12.3]]
 
     data = _create_test_data()
-    values = get_monthly_values(delta_data = data, tile_list = ["11", "12"])
-
-    print("*For tiles 11 and 12*\n    expected : actual")
-    print("    [[  1.3   2.7   3.3   4.7   5.3   6.7   7.3   8.7   9.3  10.7  11.3  12.7],\n    [  1.2   2.8   3.2   4.8   5.2   6.8   7.2   8.8   9.2  10.8  11.2  12.8]] : \n    {}".format(values))
-
-    values = get_monthly_values(delta_data = data, tile_list = ["12", "22"])
-
-    print("*For tiles 12 and 22*\n    expected : actual")
-    print("    [[  1.2   2.8   3.2   4.8   5.2   6.8   7.2   8.8   9.2  10.8  11.2  12.8],\n    [  1.4   2.3   3.4   4.3   5.4   6.3   7.4   8.3   9.4   10.3   11.4   12.3]] : \n    {}".format(values))
-
     
-    print("")
+    actual = {}
+    actual["tiles_11_12"] = get_monthly_values(delta_data = data, tile_list = ["11", "12"])
+    actual["tiles_12_22_32"] = get_monthly_values(delta_data = data, tile_list = ["12", "22", "32"])
+
+    # print results
+    _print_test_info(actual, expected)
     
 def test_format_to_monthly_dict():
-    """ Test format_to_monthly_dict functionality """
+    """ Test format_to_monthly_dict() """
 
-    print("--- Testing format_to_monthly_dict ---")
-    
+    print("--- Testing format_to_monthly_dict() ---")
+
+    expected1 = {'January': [1.1], 'February': [2.2], 'March': [3.3], 'April': [4.4], 'May': [5.5], 'June': [6.6], 'July': [7.7], 'August': [8.8], 'September': [9.9], 'October': [10.0], 'November': [11.1], 'December': [12.2]}
+    expected2 = {'January': [1.1, 1.9], 'February': [2.2, 2.8], 'March': [3.3, 3.7], 'April': [4.4, 4.6], 'May': [5.5, 5.5], 'June': [6.6, 6.4], 'July': [7.7, 7.3], 'August': [8.8, 8.2], 'September': [9.9, 9.1], 'October': [10.0, 10.0], 'November': [11.1, 11.9], 'December': [12.2, 12.8]}    
+
     values1 = [[1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9, 10.0, 11.1, 12.2]]
-
-    values1_dict = format_to_monthly_dict(values1)
-
-    print("*Values dictionary*\n    expected : actual")
-    print("    {'January': [1.1], 'February': [2.2], 'March': [3.3], 'April': [4.4], 'May': [5.5], 'June': [6.6], 'July': [7.7], 'August': [8.8], 'September': [9.9], 'October': [10.0], 'November': [11.1], 'December': [12.2]} : \n")
-    print("    {}\n".format(values1_dict))                
-
     values2 = [[1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9, 10.0, 11.1, 12.2], [1.9, 2.8, 3.7, 4.6, 5.5, 6.4, 7.3, 8.2, 9.1, 10.0, 11.9, 12.8]] 
-
-    values2_dict = format_to_monthly_dict(values2)
-    print("*Values dictionary*\n    expected : actual")
-    print("    {'January': [1.1, 1.9], 'February': [2.2, 2.8], 'March': [3.3, 3.7], 'April': [4.4, 4.6], 'May': [5.5, 5.5], 'June': [6.6, 6.4], 'July': [7.7, 7.3], 'August': [8.8, 8.2], 'September': [9.9, 9.1], 'October': [10.0, 10.0], 'November': [11.1, 11.9], 'December': [12.2, 12.8]} : \n")
-    print("    {}\n".format(values2_dict)) 
     
-    print("")
+    actual1 = format_to_monthly_dict(values1)
+    actual2 = format_to_monthly_dict(values2)
+    
+    # print results
+    _print_test_info(actual1, expected1)
+    _print_test_info(actual2, expected2)
 
 def test_calculate_avg_delta_values():
-    """ Test get_delta_values functionality """
+    """ Test get_delta_values() """
     
-    print("--- Testing get_delta_values ---")
-        
+    print("--- Testing get_delta_values() ---")
+
+    expected = {}
+    expected["PET"] = {'January': 1.25, 'February': 2.75, 'March': 3.25, 'April': 4.75, 'May': 5.25, 'June': 6.75, 'July': 7.25, 'August': 8.75, 'September': 9.25, 'October': 10.75, 'November': 11.25, 'December': 12.75}    
+    
     data = _create_test_data()
-    avg_delta_values = calculate_avg_delta_values(deltas_data = data, tile_list = ["11", "12"])
-    
-    print("*Values dictionary*\n    expected : actual")
-    print("    {'PET' : {'January': 1.25, 'February': 2.75, 'March': 3.25, 'April': 4.75, 'May': 5.25, 'June': 6.75, 'July': 7.25, 'August': 8.75, 'September': 9.25, 'October': 10.75, 'November': 11.25, 'December': 12.75}} : \n")
-    print("    {}\n".format(avg_delta_values))    
+    actual = calculate_avg_delta_values(deltas_data = data, tile_list = ["11", "12"])
+
+    # print results
+    _print_test_info(actual, expected)       
     
     
 def main():
