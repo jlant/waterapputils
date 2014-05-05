@@ -1039,9 +1039,9 @@ def _create_waterxml_test_data2():
     return xml_tree  
     
 def test_print_watertxt_data():
-    """ Test print output functionality """
+    """ Test print_watertxt_data() """
     
-    print("---Testing print_watertxt_data ---")
+    print("---Testing print_watertxt_data() ---")
     
     data = _create_watertxt_test_data()
     print_watertxt_data(watertxt_data = data)
@@ -1049,9 +1049,9 @@ def test_print_watertxt_data():
     print("")
 
 def test_plot_watertxt_data():
-    """ Test plot_watertxt_data functionality """
+    """ Test plot_watertxt_data() """
     
-    print("--- Testing plot_watertxt_data ---")    
+    print("--- Testing plot_watertxt_data() ---")    
     
     data = _create_watertxt_test_data()
     plot_watertxt_data(watertxt_data = data, is_visible = True, save_path = None)
@@ -1060,9 +1060,9 @@ def test_plot_watertxt_data():
     print("")
 
 def test_plot_watertxt_comprison():
-    """ Test plot_watertxt_comprison functionality """
+    """ Test plot_watertxt_comprison() """
     
-    print("--- Testing plot_watertxt_comprison ---")    
+    print("--- Testing plot_watertxt_comprison() ---")    
     
     data1 = _create_watertxt_test_data()
     data2 = _create_watertxt_test_data(multiplicative_factor = 2, stationid = "00000")
@@ -1073,9 +1073,9 @@ def test_plot_watertxt_comprison():
 
 
 def test_print_deltas_data():
-    """ Test print output functionality """
+    """ Test print_deltas_data() """
     
-    print("---Testing print_deltas_data ---")
+    print("---Testing print_deltas_data() ---")
     
     data = _create_deltas_test_data()
     print_deltas_data(deltas_data = data)
@@ -1083,9 +1083,9 @@ def test_print_deltas_data():
     print("")
     
 def test_plot_deltas_data():
-    """ Test plot_deltas_data functionality """
+    """ Test plot_deltas_data() """
     
-    print("--- Testing plot_deltas_data ---")    
+    print("--- Testing plot_deltas_data() ---")    
     
     data = _create_deltas_test_data()
     plot_deltas_data(deltas_data = data, is_visible = True, save_path = None)
@@ -1094,9 +1094,9 @@ def test_plot_deltas_data():
     print("")
 
 def test_print_waterxml_data():
-    """ Test print_waterxml_data """
+    """ Test print_waterxml_data() """
     
-    print("--- print_waterxml_data ---")     
+    print("--- print_waterxml_data() ---")     
 
     xml_tree = _create_waterxml_test_data()
     print_waterxml_data(waterxml_tree = xml_tree)
@@ -1104,23 +1104,23 @@ def test_print_waterxml_data():
 def test_plot_waterxml_timeseries_data():
     """ Test plot_waterxml_timeseries_data """
     
-    print("--- plot_waterxml_timeseries_data ---")     
+    print("--- plot_waterxml_timeseries_data() ---")     
 
     xml_tree = _create_waterxml_test_data()
     plot_waterxml_timeseries_data(waterxml_tree = xml_tree, is_visible = True, save_path = None)    
 
 def test_plot_waterxml_topographic_wetness_index_data():
-    """ Test plot_waterxml_topographic_wetness_index_data """
+    """ Test plot_waterxml_topographic_wetness_index_data() """
     
-    print("--- plot_waterxml_topographic_wetness_index_data ---")     
+    print("--- plot_waterxml_topographic_wetness_index_data() ---")     
 
     xml_tree = _create_waterxml_test_data()
     plot_waterxml_topographic_wetness_index_data(waterxml_tree = xml_tree, is_visible = True, save_path = None) 
 
 def test_plot_waterxml_timeseries_comparison():
-    """ Test plot_waterxml_timeseries_comparison functionality """
+    """ Test plot_waterxml_timeseries_comparison functionality() """
     
-    print("--- Testing plot_waterxml_timeseries_comparison_comprison ---")    
+    print("--- Testing plot_waterxml_timeseries_comparison_comprison() ---")    
     
     waterxml_tree1 = _create_waterxml_test_data()
     waterxml_tree2 = _create_waterxml_test_data2()
@@ -1131,43 +1131,43 @@ def test_plot_waterxml_timeseries_comparison():
 
     
 def main():
-    """ Test functionality of waterapputils_viewer """
+    """ Test functionality of waterapputils_viewer() """
 
     print("")
     print("RUNNING TESTS ...")
     print("")
 
-#    ans_print_watertxt_data = raw_input("Do you want to test print_watertxt_data()? y/n ")
-#    if ans_print_watertxt_data == "y":
-#        test_print_watertxt_data()
-#
-#    ans_plot_watertxt_data = raw_input("Do you want to test plot_watertxt_data()? y/n ")
-#    if ans_plot_watertxt_data == "y":
-#        test_plot_watertxt_data()
-#        
-#    ans_plot_watertxt_comprison = raw_input("Do you want to test plot_watertxt_comprison()? y/n ")
-#    if ans_plot_watertxt_comprison == "y":
-#        test_plot_watertxt_comprison()
-#
-#    ans_print_deltas_data = raw_input("Do you want to test print_deltas_data()? y/n ")
-#    if ans_print_deltas_data == "y":
-#        test_print_deltas_data() 
-#    
-#    ans_plot_deltas_data = raw_input("Do you want to test plot_deltas_data()? y/n ")
-#    if ans_plot_deltas_data == "y":
-#        test_plot_deltas_data() 
+    ans_print_watertxt_data = raw_input("Do you want to test print_watertxt_data()? y/n ")
+    if ans_print_watertxt_data == "y":
+        test_print_watertxt_data()
 
-#    ans_print_waterxml_data = raw_input("Do you want to test print_waterxml_data()? y/n ")
-#    if ans_print_waterxml_data == "y":
-#        test_print_waterxml_data() 
-#
-#    ans_plot_waterxml_timeseries_data = raw_input("Do you want to test plot_waterxml_timeseries_data? y/n ")
-#    if ans_plot_waterxml_timeseries_data == "y":
-#        test_plot_waterxml_timeseries_data() 
+    ans_plot_watertxt_data = raw_input("Do you want to test plot_watertxt_data()? y/n ")
+    if ans_plot_watertxt_data == "y":
+        test_plot_watertxt_data()
+        
+    ans_plot_watertxt_comprison = raw_input("Do you want to test plot_watertxt_comprison()? y/n ")
+    if ans_plot_watertxt_comprison == "y":
+        test_plot_watertxt_comprison()
 
-#    ans_plot_waterxml_topographic_wetness_index_data = raw_input("Do you want to test plot_waterxml_topographic_wetness_index_data? y/n ")
-#    if ans_plot_waterxml_topographic_wetness_index_data == "y":
-#        test_plot_waterxml_topographic_wetness_index_data() 
+    ans_print_deltas_data = raw_input("Do you want to test print_deltas_data()? y/n ")
+    if ans_print_deltas_data == "y":
+        test_print_deltas_data() 
+    
+    ans_plot_deltas_data = raw_input("Do you want to test plot_deltas_data()? y/n ")
+    if ans_plot_deltas_data == "y":
+        test_plot_deltas_data() 
+
+    ans_print_waterxml_data = raw_input("Do you want to test print_waterxml_data()? y/n ")
+    if ans_print_waterxml_data == "y":
+        test_print_waterxml_data() 
+
+    ans_plot_waterxml_timeseries_data = raw_input("Do you want to test plot_waterxml_timeseries_data? y/n ")
+    if ans_plot_waterxml_timeseries_data == "y":
+        test_plot_waterxml_timeseries_data() 
+
+    ans_plot_waterxml_topographic_wetness_index_data = raw_input("Do you want to test plot_waterxml_topographic_wetness_index_data? y/n ")
+    if ans_plot_waterxml_topographic_wetness_index_data == "y":
+        test_plot_waterxml_topographic_wetness_index_data() 
 
     ans_plot_waterxml_timeseries_comparison = raw_input("Do you want to test plot_waterxml_timeseries_comparison()? y/n ")
     if ans_plot_waterxml_timeseries_comparison == "y":
