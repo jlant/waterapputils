@@ -831,17 +831,17 @@ def main():
 
     test_get_all_values()
 
-#    test_get_parameter()
-#
-#    test_add_parameter()
-#
-#    test_set_parameter_values() 
-#
-#    test_read_file_in()
-#
-#    test_write_file()
-#
-#    test_apply_factors()
+    test_get_parameter()
+
+    test_add_parameter()
+
+    test_set_parameter_values() 
+
+    test_read_file_in()
+
+    test_write_file()
+
+    test_apply_factors()
     
 if __name__ == "__main__":
     main()

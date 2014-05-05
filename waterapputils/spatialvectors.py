@@ -15,7 +15,7 @@ __contact__   = __author__
 import os, sys
 import osgeo.ogr
 import pdb
-
+import numpy as np
 
 def get_intersected_field_values(intersector, intersectee, intersectee_field):
     """   
@@ -24,10 +24,12 @@ def get_intersected_field_values(intersector, intersectee, intersectee_field):
     
     Parameters
     ----------
-    shapefile1 : osgeo.ogr.DataSource object
+    intersector : osgeo.ogr.DataSource object
         A shapefile object.
-    shapefile1 : osgeo.ogr.DataSource object
+    intersectee : osgeo.ogr.DataSource object
         A shapefile object.
+    intersectee_field: string
+        String name of a field in intersectee.
 
     Returns
     -------
@@ -76,27 +78,12 @@ def _print_test_info(expected, actual):
         Dictionary holding expected data values
     """
     for key in actual.keys():
-              
-        if "array" in str(type(actual[key])):
-            for i in range(len(actual[key])):
-                assert expected[key][i].all() ==  actual[key][i].all(), "For key * {} * and index * {} *, expected value(s) * {} * do not equal actual value(s) * {} *".format(key, i, expected[key], actual[key])                          
-        else:
-            assert expected[key] == actual[key], "For key * {} *, expected value(s) * {} * do not equal actual value(s) * {} *".format(key, expected[key], actual[key])
-                
+
+        np.testing.assert_array_equal(expected[key], actual[key], err_msg = "Error in key: {}".format(key)) 
+                              
         print("*{}*".format(key))                     
         print("    expected: {}".format(expected[key]))
         print("    actual:   {}\n".format(actual[key]))  
-
-#    for key in actual.keys():
-#        try:
-#             assert expected[key] == actual[key], "For key * {} *, expected value(s) * {} * do not equal actual value(s) * {} *".format(key, expected[key], actual[key])
-#        except:
-#            for i in range(len(actual[key])):
-#                assert expected[key][i].all() ==  actual[key][i].all(), "For key * {} * and index * {} *, expected value(s) * {} * do not equal actual value(s) * {} *".format(key, i, expected[key], actual[key])                          
-#        finally:              
-#            print("*{}*".format(key))                     
-#            print("    expected: {}".format(expected[key]))
-#            print("    actual:   {}\n".format(actual[key]))  
         
 def test_get_intersected_field_values():
     """ Test functionality of get_intersected_field_values """
@@ -108,7 +95,7 @@ def test_get_intersected_field_values():
     expected["canes_tiles"] = ['31', '32', '21', '11']    
     expected["gfdl_tiles"] = ['41', '42', '31', '32', '21']
     expected["giss_tiles"] = ['41', '42', '31', '21']
-    expected["ncar_tiles"] = ['8', '83', '84', '72', '73', '74', '62', '63', '64', '52', '53', '42', '43', '32', '22'] 
+    expected["ncar_tiles"] = ['82', '83', '84', '72', '73', '74', '62', '63', '64', '52', '53', '42', '43', '32', '22'] 
 
     # paths to files
     basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin_proj_wgs/testbasin_proj_wgs.shp"))

@@ -62,7 +62,7 @@ def setup():
     infiltration_data = np.array([0, 1.5, 1.5])
     initialabstracted_data = np.array([0.1, 0.2, 0.3])
     overlandflow_data = np.array([3, 9, 3])
-    pet_data = np.array([5, 13, 3])
+    pet_data = np.array([5, 3, 13])
     aet_data = np.array([5, 12, 13])
     avgsoilrootzone_data = np.array([40, 50, 60])
     avgsoilunsaturatedzone_data = np.array([4, 3, 2])
@@ -238,25 +238,25 @@ def test_create_parameter():
 
     expected1 = {"name": None, "index": None, "data": [], "mean": None, "max": None, "min": None}
     
-    parameter1 = watertxt.create_parameter()
+    actual1 = watertxt.create_parameter()
 
-    nose.tools.assert_equals(expected1["name"], parameter1["name"])
-    nose.tools.assert_equals(expected1["index"], parameter1["index"])
-    nose.tools.assert_equals(expected1["data"], parameter1["data"])
-    nose.tools.assert_equals(expected1["mean"], parameter1["mean"])
-    nose.tools.assert_equals(expected1["max"], parameter1["max"])
-    nose.tools.assert_equals(expected1["min"], parameter1["min"])
+    nose.tools.assert_equals(actual1["name"], expected1["name"])
+    nose.tools.assert_equals(actual1["index"], expected1["index"])
+    nose.tools.assert_equals(actual1["data"], expected1["data"])
+    nose.tools.assert_equals(actual1["mean"], expected1["mean"])
+    nose.tools.assert_equals(actual1["max"], expected1["max"])
+    nose.tools.assert_equals(actual1["min"], expected1["min"])
 
     expected2 = {"name": "discharge", "index": 0, "data": [1, 2, 3], "mean": 2, "max": 3, "min": 1}
     
-    parameter2 = watertxt.create_parameter(name = "discharge", index = 0, data = [1, 2, 3], mean = 2, max = 3, min = 1)    
+    actual2 = watertxt.create_parameter(name = "discharge", index = 0, data = [1, 2, 3], mean = 2, max = 3, min = 1)    
     
-    nose.tools.assert_equals(expected2["name"], parameter2["name"])
-    nose.tools.assert_equals(expected2["index"], parameter2["index"])
-    nose.tools.assert_equals(expected2["data"], parameter2["data"])
-    nose.tools.assert_equals(expected2["mean"], parameter2["mean"])
-    nose.tools.assert_equals(expected2["max"], parameter2["max"])
-    nose.tools.assert_equals(expected2["min"], parameter2["min"])
+    nose.tools.assert_equals(actual2["name"], expected2["name"])
+    nose.tools.assert_equals(actual2["index"], expected2["index"])
+    nose.tools.assert_equals(actual2["data"], expected2["data"])
+    nose.tools.assert_equals(actual2["mean"], expected2["mean"])
+    nose.tools.assert_equals(actual2["max"], expected2["max"])
+    nose.tools.assert_equals(actual2["min"], expected2["min"])
 
 @with_setup(setup, teardown)
 def test_add_parameter():
@@ -267,12 +267,15 @@ def test_add_parameter():
     
     data = watertxt.add_parameter(watertxt_data = fixture["sample_data_dict"], name = "Water Use (cfs)", param_data = np.array([3.0, 2.5, -5.5])) 
 
-    nose.tools.assert_equals(expected["name"], data["parameters"][-1]["name"])
-    nose.tools.assert_equals(expected["index"], data["parameters"][-1]["index"])
-    nose.tools.assert_almost_equals(expected["data"].all(), data["parameters"][-1]["data"].all())
-    nose.tools.assert_equals(expected["mean"], data["parameters"][-1]["mean"])
-    nose.tools.assert_equals(expected["max"], data["parameters"][-1]["max"])
-    nose.tools.assert_equals(expected["min"], data["parameters"][-1]["min"])    
+    actual = data["parameters"][-1]
+    nose.tools.assert_equals(actual["name"], expected["name"])
+    nose.tools.assert_equals(actual["index"], expected["index"])
+
+    nose.tools.assert_equals(actual["mean"], expected["mean"])
+    nose.tools.assert_equals(actual["max"], expected["max"])
+    nose.tools.assert_equals(actual["min"], expected["min"])    
+
+    np.testing.assert_equal(actual["data"], expected["data"])
 
 @with_setup(setup, teardown)
 def test_get_parameter():
@@ -281,14 +284,16 @@ def test_get_parameter():
     expected = {"name": "Subsurface Flow (mm/day)", "index": 1, "data": subsurface_data, 
                 "mean": np.mean(subsurface_data), "max": np.max(subsurface_data), "min": np.min(subsurface_data)}
     
-    parameter = watertxt.get_parameter(watertxt_data = fixture["sample_data_dict"], name = "Subsurface Flow")
+    actual = watertxt.get_parameter(watertxt_data = fixture["sample_data_dict"], name = "Subsurface Flow")
     
-    nose.tools.assert_equals(expected["name"], parameter["name"])
-    nose.tools.assert_equals(expected["index"], parameter["index"])
-    nose.tools.assert_almost_equals(expected["data"].all(), parameter["data"].all())
-    nose.tools.assert_equals(expected["mean"], parameter["mean"])
-    nose.tools.assert_equals(expected["max"], parameter["max"])
-    nose.tools.assert_equals(expected["min"], parameter["min"]) 
+    nose.tools.assert_equals(actual["name"], expected["name"])
+    nose.tools.assert_equals(actual["index"], expected["index"])
+
+    nose.tools.assert_equals(actual["mean"], expected["mean"])
+    nose.tools.assert_equals(actual["max"], expected["max"])
+    nose.tools.assert_equals(actual["min"], expected["min"]) 
+
+    np.testing.assert_equal(actual["data"], expected["data"])
     
 @with_setup(setup, teardown)  
 def test_get_all_values():
@@ -307,25 +312,13 @@ def test_get_all_values():
         np.array([150, 125, 25]),
         np.array([0.5, 0.4, 0.3]),
         np.array([300, 310, 350]),
-        np.array([-5, -4.5, -4]),    
+        np.array([-5, -4.5, -4.]),    
     ]
   
-    values_all = watertxt.get_all_values(watertxt_data = fixture["sample_data_dict"])
-    
-    nose.tools.assert_almost_equals(expected[0].all(), values_all[0].all())
-    nose.tools.assert_almost_equals(expected[1].all(), values_all[1].all())
-    nose.tools.assert_almost_equals(expected[2].all(), values_all[2].all())
-    nose.tools.assert_almost_equals(expected[3].all(), values_all[3].all())
-    nose.tools.assert_almost_equals(expected[4].all(), values_all[4].all())
-    nose.tools.assert_almost_equals(expected[5].all(), values_all[5].all())    
-    nose.tools.assert_almost_equals(expected[6].all(), values_all[6].all())    
-    nose.tools.assert_almost_equals(expected[7].all(), values_all[7].all())
-    nose.tools.assert_almost_equals(expected[8].all(), values_all[8].all())
-    nose.tools.assert_almost_equals(expected[9].all(), values_all[9].all())
-    nose.tools.assert_almost_equals(expected[10].all(), values_all[10].all())
-    nose.tools.assert_almost_equals(expected[11].all(), values_all[11].all())    
-    nose.tools.assert_almost_equals(expected[12].all(), values_all[12].all())
-    nose.tools.assert_almost_equals(expected[13].all(), values_all[13].all())
+    actual = watertxt.get_all_values(watertxt_data = fixture["sample_data_dict"])
+
+    for i in range(len(actual)):
+        np.testing.assert_equal(actual[i], expected[i])
 
 @with_setup(setup, teardown)
 def test_set_parameter_values():
@@ -340,14 +333,16 @@ def test_set_parameter_values():
                 "mean": np.mean(subsurface_data), "max": np.max(subsurface_data), "min": np.min(subsurface_data)}
 
 
-    updated_subsurface_data = watertxt.get_parameter(watertxt_data, name = "Subsurface Flow")
+    actual = watertxt.get_parameter(watertxt_data, name = "Subsurface Flow")
 
-    nose.tools.assert_equals(expected["name"], updated_subsurface_data["name"])
-    nose.tools.assert_equals(expected["index"], updated_subsurface_data["index"])
-    nose.tools.assert_almost_equals(expected["data"].all(), updated_subsurface_data["data"].all())
-    nose.tools.assert_equals(expected["mean"], updated_subsurface_data["mean"])
-    nose.tools.assert_equals(expected["max"], updated_subsurface_data["max"])
-    nose.tools.assert_equals(expected["min"], updated_subsurface_data["min"]) 
+    nose.tools.assert_equals(actual["name"], expected["name"])
+    nose.tools.assert_equals(actual["index"], expected["index"])
+
+    nose.tools.assert_equals(actual["mean"], expected["mean"])
+    nose.tools.assert_equals(actual["max"], expected["max"])
+    nose.tools.assert_equals(actual["min"], expected["min"]) 
+
+    np.testing.assert_equal(actual["data"], expected["data"])
 
 
 @with_setup(setup, teardown) 
@@ -363,122 +358,17 @@ def test_data_file_clean():
     nose.tools.assert_equals(actual["stationid"], expected["stationid"])
     nose.tools.assert_equals(actual["column_names"], expected["column_names"])
 
-    nose.tools.assert_equals(actual["dates"].all(), expected["dates"].all())
+    np.testing.assert_equal(actual["dates"], expected["dates"])
     
-    nose.tools.assert_equals(actual["parameters"][0]["name"], expected["parameters"][0]["name"])
-    nose.tools.assert_equals(actual["parameters"][0]["index"], expected["parameters"][0]["index"])
-
-    nose.tools.assert_equals(actual["parameters"][1]["name"], expected["parameters"][1]["name"])
-    nose.tools.assert_equals(actual["parameters"][1]["index"], expected["parameters"][1]["index"])
-
-    nose.tools.assert_equals(actual["parameters"][2]["name"], expected["parameters"][2]["name"])
-    nose.tools.assert_equals(actual["parameters"][2]["index"], expected["parameters"][2]["index"])
-    
-    nose.tools.assert_equals(actual["parameters"][3]["name"], expected["parameters"][3]["name"])
-    nose.tools.assert_equals(actual["parameters"][3]["index"], expected["parameters"][3]["index"])
-
-    nose.tools.assert_equals(actual["parameters"][4]["name"], expected["parameters"][4]["name"])
-    nose.tools.assert_equals(actual["parameters"][4]["index"], expected["parameters"][4]["index"])
-
-    nose.tools.assert_equals(actual["parameters"][5]["name"], expected["parameters"][5]["name"])
-    nose.tools.assert_equals(actual["parameters"][5]["index"], expected["parameters"][5]["index"])
-
-    nose.tools.assert_equals(actual["parameters"][6]["name"], expected["parameters"][6]["name"])
-    nose.tools.assert_equals(actual["parameters"][6]["index"], expected["parameters"][6]["index"])
-
-    nose.tools.assert_equals(actual["parameters"][7]["name"], expected["parameters"][7]["name"])
-    nose.tools.assert_equals(actual["parameters"][7]["index"], expected["parameters"][7]["index"])
-
-    nose.tools.assert_equals(actual["parameters"][8]["name"], expected["parameters"][8]["name"])
-    nose.tools.assert_equals(actual["parameters"][8]["index"], expected["parameters"][8]["index"])
-
-    nose.tools.assert_equals(actual["parameters"][9]["name"], expected["parameters"][9]["name"])
-    nose.tools.assert_equals(actual["parameters"][9]["index"], expected["parameters"][9]["index"])
-
-    nose.tools.assert_equals(actual["parameters"][10]["name"], expected["parameters"][10]["name"])
-    nose.tools.assert_equals(actual["parameters"][10]["index"], expected["parameters"][10]["index"])
-
-    nose.tools.assert_equals(actual["parameters"][11]["name"], expected["parameters"][11]["name"])
-    nose.tools.assert_equals(actual["parameters"][11]["index"], expected["parameters"][11]["index"])
-
-    nose.tools.assert_equals(actual["parameters"][12]["name"], expected["parameters"][12]["name"])
-    nose.tools.assert_equals(actual["parameters"][12]["index"], expected["parameters"][12]["index"])
-
-    nose.tools.assert_equals(actual["parameters"][13]["name"], expected["parameters"][13]["name"])
-    nose.tools.assert_equals(actual["parameters"][13]["index"], expected["parameters"][13]["index"])
-    
-    nose.tools.assert_almost_equals(actual["parameters"][0]["data"].all(), expected["parameters"][0]["data"].all())
-    nose.tools.assert_almost_equals(actual["parameters"][1]["data"].all(), expected["parameters"][1]["data"].all())
-    nose.tools.assert_almost_equals(actual["parameters"][2]["data"].all(), expected["parameters"][2]["data"].all())
-    nose.tools.assert_almost_equals(actual["parameters"][3]["data"].all(), expected["parameters"][3]["data"].all())
-    nose.tools.assert_almost_equals(actual["parameters"][4]["data"].all(), expected["parameters"][4]["data"].all())
-    nose.tools.assert_almost_equals(actual["parameters"][5]["data"].all(), expected["parameters"][5]["data"].all())
-    nose.tools.assert_almost_equals(actual["parameters"][6]["data"].all(), expected["parameters"][6]["data"].all())
-    nose.tools.assert_almost_equals(actual["parameters"][7]["data"].all(), expected["parameters"][7]["data"].all())
-    nose.tools.assert_almost_equals(actual["parameters"][8]["data"].all(), expected["parameters"][8]["data"].all())
-    nose.tools.assert_almost_equals(actual["parameters"][9]["data"].all(), expected["parameters"][9]["data"].all())
-    nose.tools.assert_almost_equals(actual["parameters"][10]["data"].all(), expected["parameters"][10]["data"].all())
-    nose.tools.assert_almost_equals(actual["parameters"][11]["data"].all(), expected["parameters"][11]["data"].all())
-    nose.tools.assert_almost_equals(actual["parameters"][12]["data"].all(), expected["parameters"][12]["data"].all())
-    nose.tools.assert_almost_equals(actual["parameters"][13]["data"].all(), expected["parameters"][13]["data"].all())
-     
-    
-    nose.tools.assert_almost_equals(actual["parameters"][0]["mean"], expected["parameters"][0]["mean"])
-    nose.tools.assert_almost_equals(actual["parameters"][0]["max"], expected["parameters"][0]["max"])
-    nose.tools.assert_almost_equals(actual["parameters"][0]["min"], expected["parameters"][0]["min"])
-
-    nose.tools.assert_almost_equals(actual["parameters"][1]["mean"], expected["parameters"][1]["mean"])
-    nose.tools.assert_almost_equals(actual["parameters"][1]["max"], expected["parameters"][1]["max"])
-    nose.tools.assert_almost_equals(actual["parameters"][1]["min"], expected["parameters"][1]["min"])
-
-    nose.tools.assert_almost_equals(actual["parameters"][2]["mean"], expected["parameters"][2]["mean"])
-    nose.tools.assert_almost_equals(actual["parameters"][2]["max"], expected["parameters"][2]["max"])
-    nose.tools.assert_almost_equals(actual["parameters"][2]["min"], expected["parameters"][2]["min"])
-
-    nose.tools.assert_almost_equals(actual["parameters"][3]["mean"], expected["parameters"][3]["mean"])
-    nose.tools.assert_almost_equals(actual["parameters"][3]["max"], expected["parameters"][3]["max"])
-    nose.tools.assert_almost_equals(actual["parameters"][3]["min"], expected["parameters"][3]["min"])
-
-    nose.tools.assert_almost_equals(actual["parameters"][4]["mean"], expected["parameters"][4]["mean"])
-    nose.tools.assert_almost_equals(actual["parameters"][4]["max"], expected["parameters"][4]["max"])
-    nose.tools.assert_almost_equals(actual["parameters"][4]["min"], expected["parameters"][4]["min"])
-
-    nose.tools.assert_almost_equals(actual["parameters"][5]["mean"], expected["parameters"][5]["mean"])
-    nose.tools.assert_almost_equals(actual["parameters"][5]["max"], expected["parameters"][5]["max"])
-    nose.tools.assert_almost_equals(actual["parameters"][5]["min"], expected["parameters"][5]["min"])
-
-    nose.tools.assert_almost_equals(actual["parameters"][6]["mean"], expected["parameters"][6]["mean"])
-    nose.tools.assert_almost_equals(actual["parameters"][6]["max"], expected["parameters"][6]["max"])
-    nose.tools.assert_almost_equals(actual["parameters"][6]["min"], expected["parameters"][6]["min"])
-
-    nose.tools.assert_almost_equals(actual["parameters"][7]["mean"], expected["parameters"][7]["mean"])
-    nose.tools.assert_almost_equals(actual["parameters"][7]["max"], expected["parameters"][7]["max"])
-    nose.tools.assert_almost_equals(actual["parameters"][7]["min"], expected["parameters"][7]["min"])
-
-    nose.tools.assert_almost_equals(actual["parameters"][8]["mean"], expected["parameters"][8]["mean"])
-    nose.tools.assert_almost_equals(actual["parameters"][8]["max"], expected["parameters"][8]["max"])
-    nose.tools.assert_almost_equals(actual["parameters"][8]["min"], expected["parameters"][8]["min"])
-
-    nose.tools.assert_almost_equals(actual["parameters"][9]["mean"], expected["parameters"][9]["mean"])
-    nose.tools.assert_almost_equals(actual["parameters"][9]["max"], expected["parameters"][9]["max"])
-    nose.tools.assert_almost_equals(actual["parameters"][9]["min"], expected["parameters"][9]["min"])
-
-    nose.tools.assert_almost_equals(actual["parameters"][10]["mean"], expected["parameters"][10]["mean"])
-    nose.tools.assert_almost_equals(actual["parameters"][10]["max"], expected["parameters"][10]["max"])
-    nose.tools.assert_almost_equals(actual["parameters"][10]["min"], expected["parameters"][10]["min"])
-
-    nose.tools.assert_almost_equals(actual["parameters"][11]["mean"], expected["parameters"][11]["mean"])
-    nose.tools.assert_almost_equals(actual["parameters"][11]["max"], expected["parameters"][11]["max"])
-    nose.tools.assert_almost_equals(actual["parameters"][11]["min"], expected["parameters"][11]["min"])
+    for i in range(len(actual["parameters"])):
+        np.testing.assert_equal(actual["parameters"][i]["name"], expected["parameters"][i]["name"])        
+        np.testing.assert_equal(actual["parameters"][i]["index"], expected["parameters"][i]["index"])
          
-    nose.tools.assert_almost_equals(actual["parameters"][12]["mean"], expected["parameters"][12]["mean"])
-    nose.tools.assert_almost_equals(actual["parameters"][12]["max"], expected["parameters"][12]["max"])
-    nose.tools.assert_almost_equals(actual["parameters"][12]["min"], expected["parameters"][12]["min"])
-
-    nose.tools.assert_almost_equals(actual["parameters"][13]["mean"], expected["parameters"][13]["mean"])
-    nose.tools.assert_almost_equals(actual["parameters"][13]["max"], expected["parameters"][13]["max"])
-    nose.tools.assert_almost_equals(actual["parameters"][13]["min"], expected["parameters"][13]["min"])
-    
+        np.testing.assert_equal(expected["parameters"][i], actual["parameters"][i], err_msg = "Error in: {}".format(actual["parameters"][i]["name"]))
+        
+        np.testing.assert_equal(actual["parameters"][i]["mean"], expected["parameters"][i]["mean"])
+        np.testing.assert_equal(actual["parameters"][i]["max"], expected["parameters"][i]["max"])
+        np.testing.assert_equal(actual["parameters"][i]["min"], expected["parameters"][i]["min"])    
     
 def test_data_file_bad_single_parameter():
 
@@ -525,25 +415,17 @@ def test_data_file_bad_single_parameter():
     nose.tools.assert_equals(actual["stationid"], expected["stationid"])
     nose.tools.assert_equals(actual["column_names"], expected["column_names"])
 
-    nose.tools.assert_equals(actual["dates"].all(), expected["dates"].all())
-    
-    nose.tools.assert_equals(actual["parameters"][0]["name"], expected["parameters"][0]["name"])
-    nose.tools.assert_equals(actual["parameters"][0]["index"], expected["parameters"][0]["index"])
+    np.testing.assert_equal(actual["dates"], expected["dates"])
 
-    nose.tools.assert_equals(actual["parameters"][1]["name"], expected["parameters"][1]["name"])
-    nose.tools.assert_equals(actual["parameters"][1]["index"], expected["parameters"][1]["index"])
-    
-    nose.tools.assert_almost_equals(actual["parameters"][0]["data"].all(), expected["parameters"][0]["data"].all())
-    nose.tools.assert_almost_equals(actual["parameters"][1]["data"].all(), expected["parameters"][1]["data"].all())
-       
-    nose.tools.assert_almost_equals(actual["parameters"][0]["mean"], expected["parameters"][0]["mean"])
-    nose.tools.assert_almost_equals(actual["parameters"][0]["max"], expected["parameters"][0]["max"])
-    nose.tools.assert_almost_equals(actual["parameters"][0]["min"], expected["parameters"][0]["min"])
-       
-    nose.tools.assert_almost_equals(actual["parameters"][1]["mean"], expected["parameters"][1]["mean"])
-    nose.tools.assert_almost_equals(actual["parameters"][1]["max"], expected["parameters"][1]["max"])
-    nose.tools.assert_almost_equals(actual["parameters"][1]["min"], expected["parameters"][1]["min"])
-
+    for i in range(len(actual["parameters"])):
+        np.testing.assert_equal(actual["parameters"][i]["name"], expected["parameters"][i]["name"])        
+        np.testing.assert_equal(actual["parameters"][i]["index"], expected["parameters"][i]["index"])
+         
+        np.testing.assert_equal(expected["parameters"][i], actual["parameters"][i], err_msg = "Error in: {}".format(actual["parameters"][i]["name"]))
+        
+        np.testing.assert_equal(actual["parameters"][i]["mean"], expected["parameters"][i]["mean"])
+        np.testing.assert_equal(actual["parameters"][i]["max"], expected["parameters"][i]["max"])
+        np.testing.assert_equal(actual["parameters"][i]["min"], expected["parameters"][i]["min"])  
 
 @with_setup(setup, teardown) 
 def test_apply_factors_single_parameter():
@@ -596,7 +478,6 @@ def test_apply_factors_single_parameter():
     nose.tools.assert_almost_equals(actual["parameters"][0]["mean"], expected["parameters"][0]["mean"])
     nose.tools.assert_almost_equals(actual["parameters"][0]["max"], expected["parameters"][0]["max"])
     nose.tools.assert_almost_equals(actual["parameters"][0]["min"], expected["parameters"][0]["min"])
-    
 
 def test_apply_factors_multi_parameters():
     
