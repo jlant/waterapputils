@@ -17,16 +17,11 @@ try:
 except ImportError:    
     import xml.etree.ElementTree as ET
 
-import re
 import numpy as np
 import datetime
 import logging
 from StringIO import StringIO
 import os
-
-# my modules
-import helpers
-import deltas
 
 def read_file(filepath):
     """    
@@ -447,7 +442,7 @@ def apply_factors(waterxml_tree, element, factors):
             new_value = float(elem_value.text) * factor
         
         # set new value
-        elem_value.text = str(new_value)
+        elem_value.text = "{}".format(new_value)
 
 def write_file(waterxml_tree, save_path, filename = "WATERSimulation.xml"):
     """   
@@ -571,7 +566,7 @@ def _create_test_data():
                         <SimulID>1</SimulID>
                         <SeriesDate>2014-01-01T00:00:00-05:00</SeriesDate>
                         <SeriesValue>11.1</SeriesValue>
-                        <SeriesUnitsCode>31l</SeriesUnitsCode>
+                        <SeriesUnitsCode>31</SeriesUnitsCode>
                         <SeriesUnit>Celsius</SeriesUnit>                    
                     </ClimaticTemperatureSeries>
                     <ClimaticTemperatureSeries>                        
@@ -593,214 +588,172 @@ def _create_test_data():
 
     return xml_tree    
 
+def _print_test_info(actual, expected):
+    """   
+    For testing purposes, assert that all expected values and actual values match. 
+    Prints assertion error when there is no match.  Prints values to user to scan
+    if interested. Helps a lot for debugging. This function mirrors what is done
+    in nosetests.
+    
+    Parameters
+    ----------
+    expected : dictionary  
+        Dictionary holding expected data values
+    actual : dictionary
+        Dictionary holding expected data values
+    """
+    for key in actual.keys():
+        np.testing.assert_equal(actual[key], expected[key], err_msg = "For key * {} *, actual value(s) * {} * do not equal expected value(s) * {} *".format(key, actual[key], expected[key]))        
+
+        print("*{}*".format(key))                     
+        print("    actual:   {}".format(actual[key]))  
+        print("    expected: {}\n".format(expected[key]))
+
 def test_create_project_dict():
     """ Test functionality of create_project_dict """
 
-    print("--- Testing create_project_dict ---") 
-    
-    project_dict = create_project_dict()
+    print("--- Testing create_project_dict() ---") 
 
-    print("*Project dictionary*\n    expected : actual")
-    print("    {'ProjID': None, 'UserName': None, 'DateCreated': None, 'ProjName': None}  :\n ")
-    print("    {}".format(project_dict))
-    print("")
+    # expected values to test with actual values
+    expected = {"ProjID": None, "UserName": None, "DateCreated": None, "ProjName": None}
+    
+    # actual values
+    actual = create_project_dict()
+  
+    # print results
+    _print_test_info(actual, expected) 
 
 def test_create_study_dict():
     """ Test functionality of create_study_dict """
 
-    print("--- Testing create_study_dict ---") 
-    
-    study_dict = create_study_dict()
+    print("--- Testing create_study_dict() ---") 
 
-    print("*Study dictionary*\n    expected : actual")
-    print("    {'StudyID': None, 'StudyDescription': None, 'StudyLocDecDeg': None}  :\n ")
-    print("    {}".format(study_dict))
-    print("")
+    # expected values to test with actual values
+    expected = {"StudyID": None, "StudyLocDecDeg": None, "StudyDescription": None}
+    
+    # actual values
+    actual = create_study_dict()
+  
+    # print results
+    _print_test_info(actual, expected) 
+
 
 def test_create_simulation_dict():
     """ Test functionality of create_simulation_dict """
 
-    print("--- Testing create_simulation_dict ---") 
-    
-    simulation_dict = create_simulation_dict()
+    print("--- Testing create_simulation_dict() ---") 
 
-    print("*Simulation dictionary*\n    expected : actual")
-    print("    {'SimulID': [], 'StudyID': [], 'RegionType': [], 'SimulationFeatures': [], 'SimulationTopographicWetnessIndex': [], 'StudyUnitDischargeSeries': [], 'ClimaticPrecipitationSeries': [], 'ClimaticTemperatureSeries': []}  :\n ")
-    print("    {}".format(simulation_dict))
-    print("")
+    # expected values to test with actual values
+    expected = {"SimulID": [], "StudyID": [], "RegionType": [], "SimulationFeatures": [],
+             "SimulationTopographicWetnessIndex": [], "StudyUnitDischargeSeries": [],
+             "ClimaticPrecipitationSeries": [], "ClimaticTemperatureSeries": []}
+    
+    # actual values
+    actual = create_simulation_dict()
+  
+    # print results
+    _print_test_info(actual, expected) 
+
 
 def test_fill_dict():
     """ Test functionality of fill_dict """
 
-    print("--- Testing fill_dict ---")    
+    print("--- Testing fill_dict() ---")    
+
+    expected_project = {"ProjID": "1", "UserName": "jlant", "DateCreated": "2014-04-22T10:00:00.0000-00:00", "ProjName": "my-project"}
+    expected_study = {"StudyID": "1", "StudyLocDecDeg": "40.5, -75.9", "StudyDescription": "Test simulation"}
     
     xml_tree = _create_test_data()
     
     project = create_project_dict() 
     study = create_study_dict()
     
-    project = fill_dict(waterxml_tree = xml_tree, data_dict = project, element = "Project", keys = project.keys())
-    study = fill_dict(waterxml_tree = xml_tree, data_dict = study, element = "Study", keys = study.keys())
+    actual_project = fill_dict(waterxml_tree = xml_tree, data_dict = project, element = "Project", keys = project.keys())
+    actual_study = fill_dict(waterxml_tree = xml_tree, data_dict = study, element = "Study", keys = study.keys())
 
-    print("*Project dictionary*\n    expected : actual")
-    print("    {'ProjID': '1', 'UserName': 'jlant', 'DateCreated': '2014-04-22T10:00:00.0000-00:00', 'ProjName': 'my-project'}  :\n ")
-    print("    {}".format(project))
-    print("")
-
-    print("*Study dictionary*\n    expected : actual")
-    print("    {'StudyID': '1', 'StudyDescription': 'Test simulation', 'StudyLocDecDeg': '40.5, -75.9'}  :\n ")
-    print("    {}".format(study))
-    print("")
+    # print results
+    _print_test_info(actual_project, expected_project) 
+    _print_test_info(actual_study, expected_study) 
       
 def test_fill_simulation_dict():
     """ Test functionality of fill_dict """
 
-    print("--- Testing fill_dict ---")     
+    print("--- Testing fill_dict() ---")     
+
+    expected = {"SimulID": ["1"], "StudyID": ["1"], "RegionType": ["4"], 
+                "SimulationFeatures": [[{"SimulID": "1", "AttCode": "1", "AttMinVal": "90.0", "AttName": "Study Unit Total Area", "AttUnits": "(sq Km)", "AttDescription": " Study unit total area", "AttUnitsCode": "303", "AttMaxVal": "110.0", "AttID": "1", "AttstdDev": "0", "AttMeanVal": "100.0"}, 
+                                       {"SimulID": "1", "AttCode": "37", "AttMinVal": "4", "AttName": "Total Estimated Stream Area", "AttUnits": "(sq Km)", "AttDescription": "Estimated area of stream coverage", "AttUnitsCode": "303", "AttMaxVal": "6", "AttID": "2", "AttstdDev": "0", "AttMeanVal": "5"}]], 
+                                        
+                "SimulationTopographicWetnessIndex": [[{"BinID": "1", "SimulID": "1", "BinValueMean": "3.1", "BinValueFraction": "0.002"}, 
+                                                       {"BinID": "2", "SimulID": "1", "BinValueMean": "4.2", "BinValueFraction": "0.005"}]],
+
+                "StudyUnitDischargeSeries": [[{"SeriesID": "1", "SeriesDate": "2014-01-01T00:00:00-05:00", "SeriesUnitsCode": "54", "SimulID": "1", "SeriesValue": "100.0", "SeriesUnit": "mm per day"},
+                                              {"SeriesID": "2", "SeriesDate": "2014-01-02T00:00:00-05:00", "SeriesUnitsCode": "54", "SimulID": "1", "SeriesValue": "110.0", "SeriesUnit": "mm per day"}]], 
+
+                "ClimaticPrecipitationSeries": [[{"SeriesID": "1", "SeriesDate": "2014-01-01T00:00:00-05:00", "SeriesUnitsCode": "4", "SimulID": "1", "SeriesValue": "3.0", "SeriesUnit": "mm"},
+                                                 {"SeriesID": "2", "SeriesDate": "2014-01-02T00:00:00-05:00", "SeriesUnitsCode": "4", "SimulID": "1", "SeriesValue": "4.5", "SeriesUnit": "mm"}]], 
+                
+                "ClimaticTemperatureSeries": [[{"SeriesID": "1", "SeriesDate": "2014-01-01T00:00:00-05:00", "SeriesUnitsCode": "31", "SimulID": "1", "SeriesValue": "11.1", "SeriesUnit": "Celsius"},
+                                               {"SeriesID": "2", "SeriesDate": "2014-01-02T00:00:00-05:00", "SeriesUnitsCode": "31", "SimulID": "1", "SeriesValue": "12.2", "SeriesUnit": "Celsius"}]]
+                }
+    
 
     xml_tree = _create_test_data()
     
     simulation = create_simulation_dict()
 
-    simulation = fill_simulation_dict(waterxml_tree = xml_tree, simulation_dict = simulation)
+    # actual values
+    actual = fill_simulation_dict(waterxml_tree = xml_tree, simulation_dict = simulation)
     
-    print("*Simulation SimulID*\n    expected : actual")
-    print("    ['1'] : {}".format(simulation["SimulID"]))    
-    print("")
-
-    print("*Simulation StudyID*\n    expected : actual")
-    print("    ['1'] : {}".format(simulation["StudyID"]))    
-    print("")
-
-    print("*Simulation RegionType*\n    expected : actual")
-    print("    ['4'] : {}".format(simulation["RegionType"]))    
-    print("")
-
-    print("*Simulation SimulationFeatures*\n    expected : actual")
-    print("    {'SimulID': '1', 'AttCode': '1', 'AttMinVal': '90.0', 'AttName': 'Study Unit Total Area', 'AttUnits': '(sq Km)', 'AttDescription': ' Study unit total area', 'AttUnitsCode': '303', 'AttMaxVal': '110.0', 'AttID': '1', 'AttstdDev': '0', 'AttMeanVal': '100.0'} : \n")
-    print("    {}".format(simulation["SimulationFeatures"][0][0]))    
-    print("")
-    print("    expected : actual")
-    print("    {'SimulID': '1', 'AttCode': '37', 'AttMinVal': '4', 'AttName': 'Total Estimated Stream Area', 'AttUnits': '(sq Km)', 'AttDescription': 'Estimated area of stream coverage', 'AttUnitsCode': '303', 'AttMaxVal': '6', 'AttID': '2', 'AttstdDev': '0', 'AttMeanVal': '5'} : \n")
-    print("    {}".format(simulation["SimulationFeatures"][0][1]))    
-    print("")
-
-    print("*Simulation SimulationTopographicWetnessIndex*\n    expected : actual")
-    print("    {'BinID': '1', 'SimulID': '1', 'BinValueMean': '3.1', 'BinValueFraction': '0.002'} : \n")
-    print("    {}".format(simulation["SimulationTopographicWetnessIndex"][0][0]))    
-    print("")
-    print("    expected : actual")
-    print("    {'BinID': '2', 'SimulID': '1', 'BinValueMean': '4.2', 'BinValueFraction': '0.005'} : \n")
-    print("    {}".format(simulation["SimulationTopographicWetnessIndex"][0][1]))    
-    print("")
-
-    print("*Simulation StudyUnitDischargeSeries*\n    expected : actual")
-    print("    {'SeriesID': '1', 'SeriesDate': '2014-01-01T00:00:00-05:00', 'SeriesUnitsCode': '54', 'SimulID': '1', 'SeriesValue': '100.0', 'SeriesUnit': 'mm per day'} : \n")
-    print("    {}".format(simulation["StudyUnitDischargeSeries"][0][0]))    
-    print("")
-    print("    expected : actual")
-    print("    {'SeriesID': '2', 'SeriesDate': '2014-01-02T00:00:00-05:00', 'SeriesUnitsCode': '54', 'SimulID': '1', 'SeriesValue': '110.0', 'SeriesUnit': 'mm per day'} : \n")
-    print("    {}".format(simulation["StudyUnitDischargeSeries"][0][1]))    
-    print("")    
-
-    print("*Simulation ClimaticPrecipitationSeries*\n    expected : actual")
-    print("    {'SeriesID': '1', 'SeriesDate': '2014-01-01T00:00:00-05:00', 'SeriesUnitsCode': '4', 'SimulID': '1', 'SeriesValue': '3.0', 'SeriesUnit': 'mm'} : \n")
-    print("    {}".format(simulation["ClimaticPrecipitationSeries"][0][0]))    
-    print("")
-    print("    expected : actual")
-    print("    {'SeriesID': '2', 'SeriesDate': '2014-01-02T00:00:00-05:00', 'SeriesUnitsCode': '4', 'SimulID': '1', 'SeriesValue': '4.5', 'SeriesUnit': 'mm'} : \n")
-    print("    {}".format(simulation["ClimaticPrecipitationSeries"][0][1]))    
-    print("") 
-
-    print("*Simulation ClimaticTemperatureSeries*\n    expected : actual")
-    print("    {'SeriesID': '1', 'SeriesDate': '2014-01-01T00:00:00-05:00', 'SeriesUnitsCode': '31', 'SimulID': '1', 'SeriesValue': '11.1', 'SeriesUnit': 'Celsius'} : \n")
-    print("    {}".format(simulation["ClimaticTemperatureSeries"][0][0]))    
-    print("")
-    print("    expected : actual")
-    print("    {'SeriesID': '2', 'SeriesDate': '2014-01-02T00:00:00-05:00', 'SeriesUnitsCode': '31', 'SimulID': '1', 'SeriesValue': '12.2', 'SeriesUnit': 'Celsius'} : \n")
-    print("    {}".format(simulation["ClimaticTemperatureSeries"][0][1]))    
-    print("") 
+    # print results
+    _print_test_info(actual, expected)
 
 
 def test_get_xml_data():
     """ Test get_xml_data """
 
-    print("--- Testing get_xml_data ---")     
+    print("--- Testing get_xml_data() ---")     
+
+    expected_project = {"ProjID": "1", "UserName": "jlant", "DateCreated": "2014-04-22T10:00:00.0000-00:00", "ProjName": "my-project"}
+    expected_study = {"StudyID": "1", "StudyLocDecDeg": "40.5, -75.9", "StudyDescription": "Test simulation"}
+
+    expected_simulation = {"SimulID": ["1"], "StudyID": ["1"], "RegionType": ["4"], 
+                "SimulationFeatures": [[{"SimulID": "1", "AttCode": "1", "AttMinVal": "90.0", "AttName": "Study Unit Total Area", "AttUnits": "(sq Km)", "AttDescription": " Study unit total area", "AttUnitsCode": "303", "AttMaxVal": "110.0", "AttID": "1", "AttstdDev": "0", "AttMeanVal": "100.0"}, 
+                                       {"SimulID": "1", "AttCode": "37", "AttMinVal": "4", "AttName": "Total Estimated Stream Area", "AttUnits": "(sq Km)", "AttDescription": "Estimated area of stream coverage", "AttUnitsCode": "303", "AttMaxVal": "6", "AttID": "2", "AttstdDev": "0", "AttMeanVal": "5"}]], 
+                                        
+                "SimulationTopographicWetnessIndex": [[{"BinID": "1", "SimulID": "1", "BinValueMean": "3.1", "BinValueFraction": "0.002"}, 
+                                                       {"BinID": "2", "SimulID": "1", "BinValueMean": "4.2", "BinValueFraction": "0.005"}]],
+
+                "StudyUnitDischargeSeries": [[{"SeriesID": "1", "SeriesDate": "2014-01-01T00:00:00-05:00", "SeriesUnitsCode": "54", "SimulID": "1", "SeriesValue": "100.0", "SeriesUnit": "mm per day"},
+                                              {"SeriesID": "2", "SeriesDate": "2014-01-02T00:00:00-05:00", "SeriesUnitsCode": "54", "SimulID": "1", "SeriesValue": "110.0", "SeriesUnit": "mm per day"}]], 
+
+                "ClimaticPrecipitationSeries": [[{"SeriesID": "1", "SeriesDate": "2014-01-01T00:00:00-05:00", "SeriesUnitsCode": "4", "SimulID": "1", "SeriesValue": "3.0", "SeriesUnit": "mm"},
+                                                 {"SeriesID": "2", "SeriesDate": "2014-01-02T00:00:00-05:00", "SeriesUnitsCode": "4", "SimulID": "1", "SeriesValue": "4.5", "SeriesUnit": "mm"}]], 
+                
+                "ClimaticTemperatureSeries": [[{"SeriesID": "1", "SeriesDate": "2014-01-01T00:00:00-05:00", "SeriesUnitsCode": "31", "SimulID": "1", "SeriesValue": "11.1", "SeriesUnit": "Celsius"},
+                                               {"SeriesID": "2", "SeriesDate": "2014-01-02T00:00:00-05:00", "SeriesUnitsCode": "31", "SimulID": "1", "SeriesValue": "12.2", "SeriesUnit": "Celsius"}]]
+                }
+  
+
 
     xml_tree = _create_test_data()
     
-    project, study, simulation = get_xml_data(waterxml_tree = xml_tree)
+    actual_project, actual_study, actual_simulation = get_xml_data(waterxml_tree = xml_tree)
 
-    print("*Project dictionary*\n    expected : actual")
-    print("    {'UserName': 'jlant', 'ProjName': 'my-project', 'ProjID': '1', 'DateCreated': '2014-04-22T10:00:00.0000-00:00'}  :\n ")
-    print("    {}".format(project))
-    print("")
-
-    print("*Study dictionary*\n    expected : actual")
-    print("    {'StudyLocDecDeg': '40.5, -75.9', 'StudyDescription': 'Test simulation', 'StudyID': '1'}  :\n ")
-    print("    {}".format(study))
-    print("")
-
-    print("*Study simulation*\n")
-    for key, value in simulation.iteritems():
-        if key == "SimulID":
-            print("    *SimulID*\n    expected : actual")
-            print("        ['1'] : {}\n".format(value))
-        elif key == "StudyID":
-            print("    *StudyID*\n    expected : actual")
-            print("        ['1'] : {}\n".format(value))        
-        elif key == "RegionType":
-            print("    *RegionType*\n    expected : actual")
-            print("        ['4'] : {}\n".format(value)) 
-        elif key == "SimulationFeatures":
-            print("    *Simulation SimulationFeatures*\n    expected : actual")
-            print("        {'SimulID': '1', 'AttCode': '1', 'AttMinVal': '90.0', 'AttName': 'Study Unit Total Area', 'AttUnits': '(sq Km)', 'AttDescription': ' Study unit total area', 'AttUnitsCode': '303', 'AttMaxVal': '110.0', 'AttID': '1', 'AttstdDev': '0', 'AttMeanVal': '100.0'} : \n")
-            print("        {}\n".format(simulation["SimulationFeatures"][0][0]))              
-            print("")
-            print("    expected : actual")
-            print("        {'SimulID': '1', 'AttCode': '37', 'AttMinVal': '4', 'AttName': 'Total Estimated Stream Area', 'AttUnits': '(sq Km)', 'AttDescription': 'Estimated area of stream coverage', 'AttUnitsCode': '303', 'AttMaxVal': '6', 'AttID': '2', 'AttstdDev': '0', 'AttMeanVal': '5'} : \n")
-            print("        {}\n".format(simulation["SimulationFeatures"][0][1])) 
-        elif key == "SimulationTopographicWetnessIndex":
-            print("    *Simulation SimulationTopographicWetnessIndex*\n    expected : actual")
-            print("        {'BinID': '1', 'SimulID': '1', 'BinValueMean': '3.1', 'BinValueFraction': '0.002'} : \n")
-            print("        {}".format(simulation["SimulationTopographicWetnessIndex"][0][0]))    
-            print("")
-            print("     expected : actual")
-            print("        {'BinID': '2', 'SimulID': '1', 'BinValueMean': '4.2', 'BinValueFraction': '0.005'} : \n")
-            print("        {}".format(simulation["SimulationTopographicWetnessIndex"][0][1]))    
-            print("")
-        elif key == "Simulation StudyUnitDischargeSeries":
-            print("    *Simulation StudyUnitDischargeSeries*\n    expected : actual")
-            print("        {'SeriesID': '1', 'SeriesDate': '2014-01-01T00:00:00-05:00', 'SeriesUnitsCode': '54', 'SimulID': '1', 'SeriesValue': '100.0', 'SeriesUnit': 'mm per day'} : \n")
-            print("        {}".format(simulation["StudyUnitDischargeSeries"][0][0]))    
-            print("")
-            print("    expected : actual")
-            print("    {'SeriesID': '2', 'SeriesDate': '2014-01-02T00:00:00-05:00', 'SeriesUnitsCode': '54', 'SimulID': '1', 'SeriesValue': '110.0', 'SeriesUnit': 'mm per day'} : \n")
-            print("    {}".format(simulation["StudyUnitDischargeSeries"][0][1]))    
-            print("") 
-        elif key == "Simulation ClimaticPrecipitationSeries":
-            print("*Simulation ClimaticPrecipitationSeries*\n    expected : actual")
-            print("    {'SeriesID': '1', 'SeriesDate': '2014-01-01T00:00:00-05:00', 'SeriesUnitsCode': '4', 'SimulID': '1', 'SeriesValue': '3.0', 'SeriesUnit': 'mm'} : \n")
-            print("    {}".format(simulation["ClimaticPrecipitationSeries"][0][0]))    
-            print("")
-            print("    expected : actual")
-            print("    {'SeriesID': '2', 'SeriesDate': '2014-01-02T00:00:00-05:00', 'SeriesUnitsCode': '4', 'SimulID': '1', 'SeriesValue': '4.5', 'SeriesUnit': 'mm'} : \n")
-            print("    {}".format(simulation["ClimaticPrecipitationSeries"][0][1]))    
-            print("") 
-        elif key == "Simulation ClimaticTemperatureSeries":        
-            print("*Simulation ClimaticTemperatureSeries*\n    expected : actual")
-            print("    {'SeriesID': '1', 'SeriesDate': '2014-01-01T00:00:00-05:00', 'SeriesUnitsCode': '31', 'SimulID': '1', 'SeriesValue': '11.1', 'SeriesUnit': 'Celsius'} : \n")
-            print("    {}".format(simulation["ClimaticTemperatureSeries"][0][0]))    
-            print("")
-            print("    expected : actual")
-            print("    {'SeriesID': '2', 'SeriesDate': '2014-01-02T00:00:00-05:00', 'SeriesUnitsCode': '31', 'SimulID': '1', 'SeriesValue': '12.2', 'SeriesUnit': 'Celsius'} : \n")
-            print("    {}".format(simulation["ClimaticTemperatureSeries"][0][1]))    
-            print("")
+    # print results
+    _print_test_info(actual_project, expected_project)
+    _print_test_info(actual_study, expected_study)
+    _print_test_info(actual_simulation, expected_simulation)
 
 
 def test_get_topographic_wetness_index_data():
     """ Test get_topographic_wetness_index_data """
 
-    print("--- get_topographic_wetness_index_data ---")     
+    print("--- get_topographic_wetness_index_data() ---")     
+
+    expected = {"bin_ids": [np.array([1., 2.])],
+                "bin_value_means": [np.array([3.1, 4.2])],
+                "bin_value_fractions": [np.array([0.002, 0.005])]}    
 
     xml_tree = _create_test_data()
     
@@ -808,85 +761,63 @@ def test_get_topographic_wetness_index_data():
 
     simulation = fill_simulation_dict(waterxml_tree = xml_tree, simulation_dict = simulation)
 
-    bin_ids, bin_value_means, bin_value_fractions = get_topographic_wetness_index_data(simulation_dict = simulation)
+    actual = {}
+    actual["bin_ids"], actual["bin_value_means"], actual["bin_value_fractions"] = get_topographic_wetness_index_data(simulation_dict = simulation)
 
-
-    print("*SimulationTopographicWetnessIndex BinID*\n    expected : actual")
-    print("    [array([ 1.,  2.])] :")
-    print("    {}".format(bin_ids))    
-    print("")
-
-    print("*SimulationTopographicWetnessIndex BinValueMean*\n    expected : actual")
-    print("    [array([ 3.1,  4.2])] : ")
-    print("    {}".format(bin_value_means))    
-    print("")
-
-    print("*SimulationTopographicWetnessIndex BinValueFraction*\n    expected : actual")
-    print("    [array([ 0.002,  0.005])] : ")
-    print("    {}".format(bin_value_fractions))    
-    print("")
+     # print results
+    _print_test_info(actual, expected)
+    
 
 def test_get_timeseries_data():
     """ Test get_timeseries_data """
 
-    print("--- Testing get_timeseries_data ---")     
+    print("--- Testing get_timeseries_data() ---")     
 
+    expected = {"q_dates": [np.array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)])],
+                "p_dates": [np.array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)])],
+                "t_dates": [np.array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)])],
+                
+                "q_values": [np.array([100.0, 110.0])],
+                "p_values": [np.array([3, 4.5])],
+                "t_values": [np.array([11.1, 12.2])],           
+            
+                "q_units": ["mm per day"],
+                "p_units": ["mm"],
+                "t_units": ["Celsius"]
+                }
+    
     xml_tree = _create_test_data()
     
     simulation = create_simulation_dict()
 
     simulation = fill_simulation_dict(waterxml_tree = xml_tree, simulation_dict = simulation)
 
-    q_dates, q_values, q_units = get_timeseries_data(simulation_dict = simulation, timeseries_key = "StudyUnitDischargeSeries")
-    p_dates, p_values, p_units = get_timeseries_data(simulation_dict = simulation, timeseries_key = "ClimaticPrecipitationSeries")
-    t_dates, t_values, t_units = get_timeseries_data(simulation_dict = simulation, timeseries_key = "ClimaticTemperatureSeries")
+    actual = {}
+    actual["q_dates"], actual["q_values"], actual["q_units"] = get_timeseries_data(simulation_dict = simulation, timeseries_key = "StudyUnitDischargeSeries")
+    actual["p_dates"], actual["p_values"], actual["p_units"] = get_timeseries_data(simulation_dict = simulation, timeseries_key = "ClimaticPrecipitationSeries")
+    actual["t_dates"], actual["t_values"], actual["t_units"] = get_timeseries_data(simulation_dict = simulation, timeseries_key = "ClimaticTemperatureSeries")
 
-    print("*StudyUnitDischargeSeries Dates*\n    expected : actual")
-    print("        [array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)] :")
-    print("    {}".format(q_dates))    
-    print("")
-
-    print("*StudyUnitDischargeSeries Values*\n    expected : actual")
-    print("    [array([ 100.,  110.])] : ")
-    print("    {}".format(q_values))    
-    print("")
-
-    print("*StudyUnitDischargeSeries Units*\n    expected : actual")
-    print("    ['mm per day'] : {}".format(q_units))    
-    print("")
-
-    print("*ClimaticPrecipitationSeries Dates*\n    expected : actual")
-    print("    [array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)] :")
-    print("    {}".format(p_dates))    
-    print("")
-
-    print("*ClimaticPrecipitationSeries Values*\n    expected : actual")
-    print("    [array([ 3. ,  4.5])] : ")
-    print("    {}".format(p_values))    
-    print("")
-
-    print("*ClimaticPrecipitationSeries Units*\n    expected : actual")
-    print("    ['mm'] : {}".format(p_units))    
-    print("")
-
-    print("*ClimaticTemperatureSeries Dates*\n    expected : actual")
-    print("    [array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)] :")
-    print("    {}".format(t_dates))    
-    print("")
-
-    print("*ClimaticTemperatureSeries Values*\n    expected : actual")
-    print("    [array([ 11.1,  12.2])] : ")
-    print("    {}".format(t_values))    
-    print("")
-
-    print("*ClimaticTemperatureSeries Units*\n    expected : actual")
-    print("    ['Celsius'] : {}".format(t_units))    
-    print("")
+     # print results
+    _print_test_info(actual, expected)
                
 def test_apply_factors():
     """ Test apply_factors functionality """
 
-    print("--- Testing apply_factors ---") 
+    print("--- Testing apply_factors() ---") 
+
+    expected = {"q_dates": [np.array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)])],
+                "p_dates": [np.array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)])],
+                "t_dates": [np.array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)])],
+                
+                "q_values": [np.array([200.0, 220.0])],
+                "p_values": [np.array([6, 9.])],
+                "t_values": [np.array([13.1, 14.2])],           
+            
+                "q_units": ["mm per day"],
+                "p_units": ["mm"],
+                "t_units": ["Celsius"]
+                }
+
 
     factors = {
         "January": 2.0,
@@ -926,88 +857,14 @@ def test_apply_factors():
     simulation_updated = create_simulation_dict()
 
     simulation_updated = fill_simulation_dict(waterxml_tree = xml_tree, simulation_dict = simulation_updated)
-    
-    q_dates_updated, q_values_updated, q_units_updated = get_timeseries_data(simulation_dict = simulation_updated, timeseries_key = "StudyUnitDischargeSeries")
-    p_dates_updated, p_values_updated, p_units_updated = get_timeseries_data(simulation_dict = simulation_updated, timeseries_key = "ClimaticPrecipitationSeries")
-    t_dates_updated, t_values_updated, t_units_updated = get_timeseries_data(simulation_dict = simulation_updated, timeseries_key = "ClimaticTemperatureSeries")
 
-    print("*StudyUnitDischargeSeries Dates BEFORE applied factors*\n    expected : actual")
-    print("    [array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)] :")
-    print("    {}".format(q_dates))    
-    print("")
-    print("*StudyUnitDischargeSeries Dates AFTER applied factor {}*\n    expected : actual".format(factors[month]))
-    print("    [array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)] :")
-    print("    {}".format(q_dates_updated))    
-    print("")
-    
-    print("*StudyUnitDischargeSeries Values BEFORE applied factors*\n    expected : actual")
-    print("    [array([ 100.,  110.])] : ")
-    print("    {}".format(q_values))    
-    print("")
-    print("*StudyUnitDischargeSeries Values AFTER applied factors {}*\n    expected : actual".format(factors[month]))
-    print("    [array([ 200.,  220.])] : ")
-    print("    {}".format(q_values_updated))    
-    print("")
-    
-    print("*StudyUnitDischargeSeries Units BEFORE applied factors*\n    expected : actual")
-    print("    ['mm per day'] : {}".format(q_units))    
-    print("")
-    print("*StudyUnitDischargeSeries Units AFTER applied factors {}*\n    expected : actual".format(factors[month]))
-    print("    ['mm per day'] : {}".format(q_units_updated))    
-    print("")  
+    actual = {}
+    actual["q_dates"], actual["q_values"], actual["q_units"] = get_timeseries_data(simulation_dict = simulation_updated, timeseries_key = "StudyUnitDischargeSeries")
+    actual["p_dates"], actual["p_values"], actual["p_units"] = get_timeseries_data(simulation_dict = simulation_updated, timeseries_key = "ClimaticPrecipitationSeries")
+    actual["t_dates"], actual["t_values"], actual["t_units"] = get_timeseries_data(simulation_dict = simulation_updated, timeseries_key = "ClimaticTemperatureSeries")
 
-
-    print("*ClimaticPrecipitationSeries Dates BEFORE applied factors*\n    expected : actual")
-    print("    [array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)] :")
-    print("    {}".format(p_dates))    
-    print("")
-    print("*ClimaticPrecipitationSeries Dates AFTER applied factors {}*\n    expected : actual".format(factors[month]))
-    print("    [array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)] :")
-    print("    {}".format(p_dates_updated))    
-    print("")
-    
-    print("*ClimaticPrecipitationSeries Values BEFORE applied factors*\n    expected : actual")
-    print("    [array([ 3. ,  4.5])] : ")
-    print("    {}".format(p_values))    
-    print("")
-    print("*ClimaticPrecipitationSeries Values AFTER applied factors {}*\n    expected : actual".format(factors[month]))
-    print("    [array([ 6.,  9.])] : ")
-    print("    {}".format(p_values_updated))    
-    print("")
-    
-    print("*ClimaticPrecipitationSeries Units BEFORE applied factors*\n    expected : actual")
-    print("    ['mm'] : {}".format(p_units))    
-    print("")
-    print("*ClimaticPrecipitationSeries Units AFTER applied factors {}*\n    expected : actual".format(factors[month]))
-    print("   ['mm'] : {}".format(p_units_updated))    
-    print("")
-
-
-    print("*ClimaticTemperatureSeries Dates BEFORE applied factors*\n    expected : actual")
-    print("    [array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)] :")
-    print("    {}".format(t_dates))    
-    print("")
-    print("*ClimaticTemperatureSeries Dates AFTER applied factors {}*\n    expected : actual".format(factors[month]))
-    print("    [array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0)] :")
-    print("    {}".format(t_dates_updated))    
-    print("")
-    
-    print("*ClimaticTemperatureSeries Values BEFORE applied factors*\n    expected : actual")
-    print("    [array([ 11.1,  12.2])] : ")
-    print("    {}".format(t_values))    
-    print("")
-    print("*ClimaticTemperatureSeries Values AFTER applied factors {}*\n    expected : actual".format(factors[month]))
-    print("    [array([ 13.1,  14.2])] : ")
-    print("    {}".format(t_values_updated))    
-    print("")
-    
-    print("*ClimaticTemperatureSeries Units BEFORE applied factors*\n    expected : actual")
-    print("    ['Celsius'] : {}".format(t_units))    
-    print("") 
-    print("*ClimaticTemperatureSeries Units AFTER applied factors {}*\n    expected : actual".format(factors[month]))
-    print("    ['Celsius'] : {}".format(t_units_updated))    
-    print("")    
-
+     # print results
+    _print_test_info(actual, expected)
 
 def test_write_file():
     """ Test write_file functionality """

@@ -78,12 +78,11 @@ def _print_test_info(expected, actual):
         Dictionary holding expected data values
     """
     for key in actual.keys():
+        np.testing.assert_equal(actual[key], expected[key], err_msg = "For key * {} *, actual value(s) * {} * do not equal expected value(s) * {} *".format(key, actual[key], expected[key]))        
 
-        np.testing.assert_array_equal(expected[key], actual[key], err_msg = "Error in key: {}".format(key)) 
-                              
         print("*{}*".format(key))                     
-        print("    expected: {}".format(expected[key]))
-        print("    actual:   {}\n".format(actual[key]))  
+        print("    actual:   {}".format(actual[key]))  
+        print("    expected: {}\n".format(expected[key])) 
         
 def test_get_intersected_field_values():
     """ Test functionality of get_intersected_field_values """

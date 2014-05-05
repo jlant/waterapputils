@@ -376,10 +376,10 @@ def test_create_project_dict():
     
     actual = waterxml.create_project_dict()
 
-    nose.tools.assert_equals(expected["ProjID"], actual["ProjID"])
-    nose.tools.assert_equals(expected["UserName"], actual["UserName"])
-    nose.tools.assert_equals(expected["DateCreated"], actual["DateCreated"])
-    nose.tools.assert_equals(expected["ProjName"], actual["ProjName"])
+    nose.tools.assert_equals(actual["ProjID"], expected["ProjID"])
+    nose.tools.assert_equals(actual["UserName"], expected["UserName"])
+    nose.tools.assert_equals(actual["DateCreated"], expected["DateCreated"])
+    nose.tools.assert_equals(actual["ProjName"], actual["ProjName"])
   
 def test_create_study_dict():
 
@@ -387,9 +387,9 @@ def test_create_study_dict():
     
     actual = waterxml.create_study_dict()
 
-    nose.tools.assert_equals(expected["StudyID"], actual["StudyID"])
-    nose.tools.assert_equals(expected["StudyDescription"], actual["StudyDescription"])
-    nose.tools.assert_equals(expected["StudyLocDecDeg"], actual["StudyLocDecDeg"])
+    nose.tools.assert_equals(actual["StudyID"], expected["StudyID"])
+    nose.tools.assert_equals(actual["StudyDescription"], expected["StudyDescription"])
+    nose.tools.assert_equals(actual["StudyLocDecDeg"], expected["StudyLocDecDeg"])
     
 def test_create_simulation_dict():
 
@@ -398,13 +398,13 @@ def test_create_simulation_dict():
     
     actual = waterxml.create_simulation_dict()
 
-    nose.tools.assert_equals(expected["SimulID"], actual["SimulID"])
-    nose.tools.assert_equals(expected["StudyID"], actual["StudyID"])
-    nose.tools.assert_equals(expected["SimulationFeatures"], actual["SimulationFeatures"])
-    nose.tools.assert_equals(expected["SimulationTopographicWetnessIndex"], actual["SimulationTopographicWetnessIndex"])        
-    nose.tools.assert_equals(expected["StudyUnitDischargeSeries"], actual["StudyUnitDischargeSeries"])    
-    nose.tools.assert_equals(expected["ClimaticPrecipitationSeries"], actual["ClimaticPrecipitationSeries"])    
-    nose.tools.assert_equals(expected["ClimaticTemperatureSeries"], actual["ClimaticTemperatureSeries"])  
+    nose.tools.assert_equals(actual["SimulID"], expected["SimulID"])
+    nose.tools.assert_equals(actual["StudyID"], expected["StudyID"])
+    nose.tools.assert_equals(actual["SimulationFeatures"], expected["SimulationFeatures"])
+    nose.tools.assert_equals(actual["SimulationTopographicWetnessIndex"], expected["SimulationTopographicWetnessIndex"])        
+    nose.tools.assert_equals(actual["StudyUnitDischargeSeries"], expected["StudyUnitDischargeSeries"])    
+    nose.tools.assert_equals(actual["ClimaticPrecipitationSeries"], expected["ClimaticPrecipitationSeries"])    
+    nose.tools.assert_equals(actual["ClimaticTemperatureSeries"], expected["ClimaticTemperatureSeries"])  
 
 def test_fill_dict():
     
@@ -417,14 +417,14 @@ def test_fill_dict():
     actual_project = waterxml.fill_dict(waterxml_tree = fixture["xml_tree1"], data_dict = project, element = "Project", keys = project.keys())
     actual_study = waterxml.fill_dict(waterxml_tree = fixture["xml_tree1"], data_dict = study, element = "Study", keys = study.keys())
 
-    nose.tools.assert_equals(expected_project["ProjID"], actual_project["ProjID"])
-    nose.tools.assert_equals(expected_project["UserName"], actual_project["UserName"])
-    nose.tools.assert_equals(expected_project["DateCreated"], actual_project["DateCreated"])
-    nose.tools.assert_equals(expected_project["ProjName"], actual_project["ProjName"])
+    nose.tools.assert_equals(actual_project["ProjID"], expected_project["ProjID"])
+    nose.tools.assert_equals(actual_project["UserName"], expected_project["UserName"])
+    nose.tools.assert_equals(actual_project["DateCreated"], expected_project["DateCreated"])
+    nose.tools.assert_equals(actual_project["ProjName"], expected_project["ProjName"])
     
-    nose.tools.assert_equals(expected_study["StudyID"], actual_study["StudyID"])
-    nose.tools.assert_equals(expected_study["StudyDescription"], actual_study["StudyDescription"])
-    nose.tools.assert_equals(expected_study["StudyLocDecDeg"], actual_study["StudyLocDecDeg"])
+    nose.tools.assert_equals(actual_study["StudyID"], expected_study["StudyID"])
+    nose.tools.assert_equals(actual_study["StudyDescription"], expected_study["StudyDescription"])
+    nose.tools.assert_equals(actual_study["StudyLocDecDeg"], expected_study["StudyLocDecDeg"])
     
 def test_fill_simulation_dict():
 
@@ -449,14 +449,48 @@ def test_fill_simulation_dict():
 
     actual = waterxml.fill_simulation_dict(waterxml_tree = fixture["xml_tree1"], simulation_dict = simulation)
  
-    nose.tools.assert_equals(expected["SimulID"], actual["SimulID"])
-    nose.tools.assert_equals(expected["StudyID"], actual["StudyID"])
-    nose.tools.assert_equals(expected["RegionType"], actual["RegionType"])
-    nose.tools.assert_equals(expected["SimulationFeatures"], actual["SimulationFeatures"])
-    nose.tools.assert_equals(expected["SimulationTopographicWetnessIndex"], actual["SimulationTopographicWetnessIndex"])
-    nose.tools.assert_equals(expected["StudyUnitDischargeSeries"], actual["StudyUnitDischargeSeries"])    
-    nose.tools.assert_equals(expected["ClimaticPrecipitationSeries"], actual["ClimaticPrecipitationSeries"]) 
-    nose.tools.assert_equals(expected["ClimaticTemperatureSeries"], actual["ClimaticTemperatureSeries"])     
+    nose.tools.assert_equals(actual["SimulID"], expected["SimulID"])
+    nose.tools.assert_equals(actual["StudyID"], expected["StudyID"])
+    nose.tools.assert_equals(actual["RegionType"], expected["RegionType"])
+    nose.tools.assert_equals(actual["SimulationFeatures"], expected["SimulationFeatures"])
+    nose.tools.assert_equals(actual["SimulationTopographicWetnessIndex"], expected["SimulationTopographicWetnessIndex"])
+    nose.tools.assert_equals(actual["StudyUnitDischargeSeries"], expected["StudyUnitDischargeSeries"])    
+    nose.tools.assert_equals(actual["ClimaticPrecipitationSeries"], expected["ClimaticPrecipitationSeries"]) 
+    nose.tools.assert_equals(actual["ClimaticTemperatureSeries"], expected["ClimaticTemperatureSeries"])     
+
+def test_get_xml_data():
+    """ Test get_xml_data """
+
+    print("--- Testing get_xml_data() ---")     
+
+    expected_project = {"ProjID": "1", "UserName": "jlant", "DateCreated": "2014-04-22T10:00:00.0000-00:00", "ProjName": "my-project"}
+    expected_study = {"StudyID": "1", "StudyLocDecDeg": "40.5, -75.9", "StudyDescription": "Test simulation"}
+
+    expected_simulation = {"SimulID": ["1"], "StudyID": ["1"], "RegionType": ["4"], 
+                "SimulationFeatures": [[{"SimulID": "1", "AttCode": "1", "AttMinVal": "90.0", "AttName": "Study Unit Total Area", "AttUnits": "(sq Km)", "AttDescription": " Study unit total area", "AttUnitsCode": "303", "AttMaxVal": "110.0", "AttID": "1", "AttstdDev": "0", "AttMeanVal": "100.0"}, 
+                                       {"SimulID": "1", "AttCode": "37", "AttMinVal": "4", "AttName": "Total Estimated Stream Area", "AttUnits": "(sq Km)", "AttDescription": "Estimated area of stream coverage", "AttUnitsCode": "303", "AttMaxVal": "6", "AttID": "2", "AttstdDev": "0", "AttMeanVal": "5"}]], 
+                                        
+                "SimulationTopographicWetnessIndex": [[{"BinID": "1", "SimulID": "1", "BinValueMean": "3.1", "BinValueFraction": "0.002"}, 
+                                                       {"BinID": "2", "SimulID": "1", "BinValueMean": "4.2", "BinValueFraction": "0.005"}]],
+
+                "StudyUnitDischargeSeries": [[{"SeriesID": "1", "SeriesDate": "2014-01-01T00:00:00-05:00", "SeriesUnitsCode": "54", "SimulID": "1", "SeriesValue": "100.0", "SeriesUnit": "mm per day"},
+                                              {"SeriesID": "2", "SeriesDate": "2014-01-02T00:00:00-05:00", "SeriesUnitsCode": "54", "SimulID": "1", "SeriesValue": "110.0", "SeriesUnit": "mm per day"}]], 
+
+                "ClimaticPrecipitationSeries": [[{"SeriesID": "1", "SeriesDate": "2014-01-01T00:00:00-05:00", "SeriesUnitsCode": "4", "SimulID": "1", "SeriesValue": "3.0", "SeriesUnit": "mm"},
+                                                 {"SeriesID": "2", "SeriesDate": "2014-01-02T00:00:00-05:00", "SeriesUnitsCode": "4", "SimulID": "1", "SeriesValue": "4.5", "SeriesUnit": "mm"}]], 
+                
+                "ClimaticTemperatureSeries": [[{"SeriesID": "1", "SeriesDate": "2014-01-01T00:00:00-05:00", "SeriesUnitsCode": "31", "SimulID": "1", "SeriesValue": "11.1", "SeriesUnit": "Celsius"},
+                                               {"SeriesID": "2", "SeriesDate": "2014-01-02T00:00:00-05:00", "SeriesUnitsCode": "31", "SimulID": "1", "SeriesValue": "12.2", "SeriesUnit": "Celsius"}]]
+                }
+  
+   
+    actual_project, actual_study, actual_simulation = waterxml.get_xml_data(waterxml_tree = fixture["xml_tree1"])
+
+    # print results
+    np.testing.assert_equal(actual_project, expected_project)
+    np.testing.assert_equal(actual_study, expected_study)
+    np.testing.assert_equal(actual_simulation, expected_simulation)
+
 
 def test_get_topographic_wetness_index_data_file1():
 
@@ -471,13 +505,14 @@ def test_get_topographic_wetness_index_data_file1():
     actual = {}
     actual["bin_ids"], actual["bin_value_means"], actual["bin_value_fractions"] = waterxml.get_topographic_wetness_index_data(simulation_dict = simulation)
 
-    nose.tools.assert_equals(len(expected["bin_ids"]), len(actual["bin_ids"]))
-    nose.tools.assert_equals(len(expected["bin_value_means"]), len(actual["bin_value_means"]))
-    nose.tools.assert_equals(len(expected["bin_value_fractions"]), len(actual["bin_value_fractions"]))
+    nose.tools.assert_equals(len(actual["bin_ids"]), len(expected["bin_ids"]))
+    nose.tools.assert_equals(len(actual["bin_value_means"]), len(expected["bin_value_means"]))
+    nose.tools.assert_equals(len(actual["bin_value_fractions"]), len(expected["bin_value_fractions"]))
 
-    nose.tools.assert_equals(expected["bin_ids"][0].all(), actual["bin_ids"][0].all())
-    nose.tools.assert_equals(expected["bin_value_means"][0].all(), actual["bin_value_means"][0].all())
-    nose.tools.assert_equals(expected["bin_value_fractions"][0].all(), actual["bin_value_fractions"][0].all())
+    np.testing.assert_equal(actual["bin_ids"][0], expected["bin_ids"][0])
+    np.testing.assert_equal(actual["bin_value_means"][0], expected["bin_value_means"][0])
+    np.testing.assert_equal(actual["bin_value_fractions"][0], expected["bin_value_fractions"][0])
+
 
 def test_get_topographic_wetness_index_data_file2():
 
@@ -492,21 +527,17 @@ def test_get_topographic_wetness_index_data_file2():
     actual = {}
     actual["bin_ids"], actual["bin_value_means"], actual["bin_value_fractions"] = waterxml.get_topographic_wetness_index_data(simulation_dict = simulation)
 
-    nose.tools.assert_equals(len(expected["bin_ids"]), len(actual["bin_ids"]))
-    nose.tools.assert_equals(len(expected["bin_value_means"]), len(actual["bin_value_means"]))
-    nose.tools.assert_equals(len(expected["bin_value_fractions"]), len(actual["bin_value_fractions"]))
+    nose.tools.assert_equals(len(actual["bin_ids"]), len(expected["bin_ids"]))
+    nose.tools.assert_equals(len(actual["bin_value_means"]), len(expected["bin_value_means"]))
+    nose.tools.assert_equals(len(actual["bin_value_fractions"]), len(expected["bin_value_fractions"]))
 
-    nose.tools.assert_equals(expected["bin_ids"][0].all(), actual["bin_ids"][0].all())
-    nose.tools.assert_equals(expected["bin_value_means"][0].all(), actual["bin_value_means"][0].all())
-    nose.tools.assert_equals(expected["bin_value_fractions"][0].all(), actual["bin_value_fractions"][0].all())
+    np.testing.assert_equal(actual["bin_ids"][0], expected["bin_ids"][0])
+    np.testing.assert_equal(actual["bin_value_means"][0], expected["bin_value_means"][0])
+    np.testing.assert_equal(actual["bin_value_fractions"][0], expected["bin_value_fractions"][0])
 
-    nose.tools.assert_equals(len(expected["bin_ids"]), len(actual["bin_ids"]))
-    nose.tools.assert_equals(len(expected["bin_value_means"]), len(actual["bin_value_means"]))
-    nose.tools.assert_equals(len(expected["bin_value_fractions"]), len(actual["bin_value_fractions"]))
-
-    nose.tools.assert_equals(expected["bin_ids"][1].all(), actual["bin_ids"][1].all())
-    nose.tools.assert_equals(expected["bin_value_means"][1].all(), actual["bin_value_means"][1].all())
-    nose.tools.assert_equals(expected["bin_value_fractions"][1].all(), actual["bin_value_fractions"][1].all())
+    np.testing.assert_equal(actual["bin_ids"][1], expected["bin_ids"][1])
+    np.testing.assert_equal(actual["bin_value_means"][1], expected["bin_value_means"][1])
+    np.testing.assert_equal(actual["bin_value_fractions"][1], expected["bin_value_fractions"][1])
        
 def test_get_timeseries_data_file1():
 
@@ -532,21 +563,21 @@ def test_get_timeseries_data_file1():
     actual["p_dates"], actual["p_values"], actual["p_units"] = waterxml.get_timeseries_data(simulation_dict = simulation, timeseries_key = "ClimaticPrecipitationSeries")
     actual["t_dates"], actual["t_values"], actual["t_units"] = waterxml.get_timeseries_data(simulation_dict = simulation, timeseries_key = "ClimaticTemperatureSeries")
 
-    nose.tools.assert_equals(len(expected["q_dates"]), len(actual["q_dates"]))
-    nose.tools.assert_equals(len(expected["p_dates"]), len(actual["p_dates"]))
-    nose.tools.assert_equals(len(expected["t_dates"]), len(actual["t_dates"]))
+    nose.tools.assert_equals(len(actual["q_dates"]), len(expected["q_dates"]))
+    nose.tools.assert_equals(len(actual["p_dates"]), len(expected["p_dates"]))
+    nose.tools.assert_equals(len(actual["t_dates"]), len(expected["t_dates"]))
 
-    nose.tools.assert_equals(expected["q_dates"][0].all(), actual["q_dates"][0].all())
-    nose.tools.assert_equals(expected["p_dates"][0].all(), actual["p_dates"][0].all())
-    nose.tools.assert_equals(expected["t_dates"][0].all(), actual["t_dates"][0].all())
+    np.testing.assert_equal(actual["q_dates"][0], expected["q_dates"][0])
+    np.testing.assert_equal(actual["p_dates"][0], expected["p_dates"][0])
+    np.testing.assert_equal(actual["t_dates"][0], expected["t_dates"][0])
 
-    nose.tools.assert_almost_equals(expected["q_values"][0].all(), actual["q_values"][0].all())
-    nose.tools.assert_almost_equals(expected["p_values"][0].all(), actual["p_values"][0].all())
-    nose.tools.assert_almost_equals(expected["t_values"][0].all(), actual["t_values"][0].all())
+    np.testing.assert_equal(actual["q_values"][0], expected["q_values"][0])
+    np.testing.assert_equal(actual["p_values"][0], expected["p_values"][0])
+    np.testing.assert_equal(actual["t_values"][0], expected["t_values"][0])
 
-    nose.tools.assert_equals(expected["q_units"][0], actual["q_units"][0])
-    nose.tools.assert_equals(expected["p_units"][0], actual["p_units"][0])
-    nose.tools.assert_equals(expected["t_units"][0], actual["t_units"][0])
+    np.testing.assert_equal(actual["q_units"][0], expected["q_units"][0])
+    np.testing.assert_equal(actual["p_units"][0], expected["p_units"][0])
+    np.testing.assert_equal(actual["t_units"][0], expected["t_units"][0])
 
 def test_get_timeseries_data_file2():
 
@@ -576,29 +607,30 @@ def test_get_timeseries_data_file2():
     nose.tools.assert_equals(len(expected["p_dates"]), len(actual["p_dates"]))
     nose.tools.assert_equals(len(expected["t_dates"]), len(actual["t_dates"]))
 
-    nose.tools.assert_equals(expected["q_dates"][0].all(), actual["q_dates"][0].all())
-    nose.tools.assert_equals(expected["p_dates"][0].all(), actual["p_dates"][0].all())
-    nose.tools.assert_equals(expected["t_dates"][0].all(), actual["t_dates"][0].all())
+    np.testing.assert_equal(actual["q_dates"][0], expected["q_dates"][0])
+    np.testing.assert_equal(actual["p_dates"][0], expected["p_dates"][0])
+    np.testing.assert_equal(actual["t_dates"][0], expected["t_dates"][0])
 
-    nose.tools.assert_almost_equals(expected["q_values"][0].all(), actual["q_values"][0].all())
-    nose.tools.assert_almost_equals(expected["p_values"][0].all(), actual["p_values"][0].all())
-    nose.tools.assert_almost_equals(expected["t_values"][0].all(), actual["t_values"][0].all())
+    np.testing.assert_equal(actual["q_values"][0], expected["q_values"][0])
+    np.testing.assert_equal(actual["p_values"][0], expected["p_values"][0])
+    np.testing.assert_equal(actual["t_values"][0], expected["t_values"][0])
 
-    nose.tools.assert_equals(expected["q_units"][0], actual["q_units"][0])
-    nose.tools.assert_equals(expected["p_units"][0], actual["p_units"][0])
-    nose.tools.assert_equals(expected["t_units"][0], actual["t_units"][0])
+    np.testing.assert_equal(actual["q_units"][0], expected["q_units"][0])
+    np.testing.assert_equal(actual["p_units"][0], expected["p_units"][0])
+    np.testing.assert_equal(actual["t_units"][0], expected["t_units"][0])
 
-    nose.tools.assert_equals(expected["q_dates"][1].all(), actual["q_dates"][1].all())
-    nose.tools.assert_equals(expected["p_dates"][1].all(), actual["p_dates"][1].all())
-    nose.tools.assert_equals(expected["t_dates"][1].all(), actual["t_dates"][1].all())
+    np.testing.assert_equal(actual["q_dates"][1], expected["q_dates"][1])
+    np.testing.assert_equal(actual["p_dates"][1], expected["p_dates"][1])
+    np.testing.assert_equal(actual["t_dates"][1], expected["t_dates"][1])
 
-    nose.tools.assert_almost_equals(expected["q_values"][1].all(), actual["q_values"][1].all())
-    nose.tools.assert_almost_equals(expected["p_values"][1].all(), actual["p_values"][1].all())
-    nose.tools.assert_almost_equals(expected["t_values"][1].all(), actual["t_values"][1].all())
+    np.testing.assert_equal(actual["q_values"][1], expected["q_values"][1])
+    np.testing.assert_equal(actual["p_values"][1], expected["p_values"][1])
+    np.testing.assert_equal(actual["t_values"][1], expected["t_values"][1])
 
-    nose.tools.assert_equals(expected["q_units"][1], actual["q_units"][1])
-    nose.tools.assert_equals(expected["p_units"][1], actual["p_units"][1])
-    nose.tools.assert_equals(expected["t_units"][1], actual["t_units"][1])
+    np.testing.assert_equal(actual["q_units"][1], expected["q_units"][1])
+    np.testing.assert_equal(actual["p_units"][1], expected["p_units"][1])
+    np.testing.assert_equal(actual["t_units"][1], expected["t_units"][1])
+
 
 def test_apply_factors():
     
@@ -614,8 +646,6 @@ def test_apply_factors():
                 "p_units": ["mm"],
                 "t_units": ["Celsius"]
                 }
-
-
     
     simulation = waterxml.create_simulation_dict()
 
@@ -634,20 +664,24 @@ def test_apply_factors():
     simulation_updated = waterxml.fill_simulation_dict(waterxml_tree = fixture["xml_tree1"], simulation_dict = simulation_updated)
     
     actual = {}
-    actual["q_dates"], actual["q_values"], actual["q_units"] = waterxml.get_timeseries_data(simulation_dict = simulation, timeseries_key = "StudyUnitDischargeSeries")
-    actual["p_dates"], actual["p_values"], actual["p_units"] = waterxml.get_timeseries_data(simulation_dict = simulation, timeseries_key = "ClimaticPrecipitationSeries")
-    actual["t_dates"], actual["t_values"], actual["t_units"] = waterxml.get_timeseries_data(simulation_dict = simulation, timeseries_key = "ClimaticTemperatureSeries")
+    actual["q_dates"], actual["q_values"], actual["q_units"] = waterxml.get_timeseries_data(simulation_dict = simulation_updated, timeseries_key = "StudyUnitDischargeSeries")
+    actual["p_dates"], actual["p_values"], actual["p_units"] = waterxml.get_timeseries_data(simulation_dict = simulation_updated, timeseries_key = "ClimaticPrecipitationSeries")
+    actual["t_dates"], actual["t_values"], actual["t_units"] = waterxml.get_timeseries_data(simulation_dict = simulation_updated, timeseries_key = "ClimaticTemperatureSeries")
 
-    nose.tools.assert_equals(expected["q_dates"][0].all(), actual["q_dates"][0].all())
-    nose.tools.assert_equals(expected["p_dates"][0].all(), actual["p_dates"][0].all())
-    nose.tools.assert_equals(expected["t_dates"][0].all(), actual["t_dates"][0].all())
+    nose.tools.assert_equals(len(expected["q_dates"]), len(actual["q_dates"]))
+    nose.tools.assert_equals(len(expected["p_dates"]), len(actual["p_dates"]))
+    nose.tools.assert_equals(len(expected["t_dates"]), len(actual["t_dates"]))
 
-    nose.tools.assert_almost_equals(expected["q_values"][0].all(), actual["q_values"][0].all())
-    nose.tools.assert_almost_equals(expected["p_values"][0].all(), actual["p_values"][0].all())
-    nose.tools.assert_almost_equals(expected["t_values"][0].all(), actual["t_values"][0].all())
+    np.testing.assert_equal(actual["q_dates"][0], expected["q_dates"][0])
+    np.testing.assert_equal(actual["p_dates"][0], expected["p_dates"][0])
+    np.testing.assert_equal(actual["t_dates"][0], expected["t_dates"][0])
 
-    nose.tools.assert_equals(expected["q_units"][0], actual["q_units"][0])
-    nose.tools.assert_equals(expected["p_units"][0], actual["p_units"][0])
-    nose.tools.assert_equals(expected["t_units"][0], actual["t_units"][0])
+    np.testing.assert_equal(actual["q_values"][0], expected["q_values"][0])
+    np.testing.assert_equal(actual["p_values"][0], expected["p_values"][0])
+    np.testing.assert_equal(actual["t_values"][0], expected["t_values"][0])
+
+    np.testing.assert_equal(actual["q_units"][0], expected["q_units"][0])
+    np.testing.assert_equal(actual["p_units"][0], expected["p_units"][0])
+    np.testing.assert_equal(actual["t_units"][0], expected["t_units"][0])
     
              

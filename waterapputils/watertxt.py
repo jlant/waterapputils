@@ -445,7 +445,7 @@ def _create_test_data(multiplicative_factor = 1, stationid = "012345", with_wate
     infiltration_data = np.array([0, 1.5, 1.5]) * multiplicative_factor
     initialabstracted_data = np.array([0.1, 0.2, 0.3]) * multiplicative_factor
     overlandflow_data = np.array([3, 9, 3]) * multiplicative_factor
-    pet_data = np.array([5, 13, 3]) * multiplicative_factor
+    pet_data = np.array([5, 3, 13]) * multiplicative_factor
     aet_data = np.array([5, 12, 13]) * multiplicative_factor
     avgsoilrootzone_data = np.array([40, 50, 60]) * multiplicative_factor
     avgsoilunsaturatedzone_data = np.array([4, 3, 2]) * multiplicative_factor
@@ -511,7 +511,7 @@ def _create_test_data(multiplicative_factor = 1, stationid = "012345", with_wate
     return data
 
 
-def _print_test_info(expected, actual):
+def _print_test_info(actual, expected):
     """   
     For testing purposes, assert that all expected values and actual values match. 
     Prints assertion error when there is no match.  Prints values to user to scan
@@ -526,15 +526,11 @@ def _print_test_info(expected, actual):
         Dictionary holding expected data values
     """
     for key in actual.keys():
-        try:
-             assert expected[key] == actual[key], "For key * {} *, expected value(s) * {} * do not equal actual value(s) * {} *".format(key, expected[key], actual[key])
-        except:
-            for i in range(len(actual[key])):
-                assert expected[key][i].all() ==  actual[key][i].all(), "For key * {} * and index * {} *, expected value(s) * {} * do not equal actual value(s) * {} *".format(key, i, expected[key], actual[key])                          
-        finally:              
-            print("*{}*".format(key))                     
-            print("    expected: {}".format(expected[key]))
-            print("    actual:   {}\n".format(actual[key]))      
+        np.testing.assert_equal(actual[key], expected[key], err_msg = "For key * {} *, actual value(s) * {} * do not equal expected value(s) * {} *".format(key, actual[key], expected[key]))        
+
+        print("*{}*".format(key))                     
+        print("    actual:   {}".format(actual[key]))  
+        print("    expected: {}\n".format(expected[key]))
 
 def test_create_parameter():
     """ Test the create_parameter funtionality"""
@@ -550,8 +546,8 @@ def test_create_parameter():
     actual2 = create_parameter(name = "discharge", index = 0, data = [1, 2, 3], mean = 2, max = 3, min = 1)    
 
     # print results
-    _print_test_info(expected = expected1, actual = actual1)
-    _print_test_info(expected = expected2, actual = actual2)   
+    _print_test_info(actual = actual1, expected = expected1)
+    _print_test_info(actual = actual2, expected = expected2)   
 
 def test_get_date():
     """ Test the get_date functionality """
@@ -565,7 +561,7 @@ def test_get_date():
     actual = {"date": get_date(date_str = "4/9/2014")}
 
     # print results
-    _print_test_info(expected = expected, actual = actual)
+    _print_test_info(actual, expected)
    
 def test_get_all_values():
     """ Test get_dict_values functionality """
@@ -587,7 +583,7 @@ def test_get_all_values():
     actual = {"values_all": get_all_values(watertxt_data = data)}
 
     # print results
-    _print_test_info(expected = expected, actual = actual)
+    _print_test_info(actual, expected)
     
 def test_get_parameter():
     """ Test get_parameter functionality """
@@ -605,7 +601,7 @@ def test_get_parameter():
     actual = get_parameter(watertxt_data = data, name = "Subsurface Flow")  
 
     # print results
-    _print_test_info(expected = expected, actual = actual)
+    _print_test_info(actual, expected)
 
 def test_add_parameter():
     """ Test add_parameter functionality """
@@ -626,7 +622,7 @@ def test_add_parameter():
     actual = data["parameters"][-1]
 
     # print results
-    _print_test_info(expected = expected, actual = actual)
+    _print_test_info(actual, expected)
     
 def test_set_parameter_values():
     """ Test set_parameter functionality """
@@ -647,7 +643,7 @@ def test_set_parameter_values():
     actual = get_parameter(watertxt_data = data, name = "Discharge")  
 
     # print results
-    _print_test_info(expected = expected, actual = actual)
+    _print_test_info(actual, expected)
 
 
 def test_read_file_in():
@@ -667,7 +663,7 @@ def test_read_file_in():
     infiltration_data = np.array([0, 1.5, 1.5])
     initialabstracted_data = np.array([0.1, 0.2, 0.3])
     overlandflow_data = np.array([3, 9, 3])
-    pet_data = np.array([5, 13, 3])
+    pet_data = np.array([5, 3, 13])
     aet_data = np.array([5, 12, 13])
     avgsoilrootzone_data = np.array([40, 50, 60])
     avgsoilunsaturatedzone_data = np.array([4, 3, 2])
@@ -698,7 +694,7 @@ def test_read_file_in():
     expected["column_names"] = ['Discharge (cfs)', 'Subsurface Flow (mm/day)', 'Impervious Flow (mm/day)', 'Infiltration Excess (mm/day)', 'Initial Abstracted Flow (mm/day)', 
                                  'Overland Flow (mm/day)', 'PET (mm/day)', 'AET(mm/day)', 'Average Soil Root zone (mm)', 'Average Soil Unsaturated Zone (mm)',
                                  'Snow Pack (mm)', 'Precipitation (mm/day)', 'Storage Deficit (mm/day)', 'Return Flow (mm/day)']
-    expected["dates"] = list(dates)
+    expected["dates"] = dates
 
     fixture = {}
     fixture["data_file"] = \
@@ -725,7 +721,7 @@ def test_read_file_in():
     actual["date_created"] = data["date_created"]
     actual["stationid"] = data["stationid"]
     actual["column_names"] = data["column_names"]
-    actual["dates"] = list(data["dates"])
+    actual["dates"] = data["dates"]
     
     actual_discharge = get_parameter(watertxt_data = data, name = "Discharge")  
     actual_subsurface = get_parameter(watertxt_data = data, name = "Subsurface Flow")  
@@ -743,23 +739,23 @@ def test_read_file_in():
     actual_returnflow = get_parameter(watertxt_data = data, name = "Return Flow")
 
     # print results
-    _print_test_info(expected, actual)
+    _print_test_info(actual, expected)
     
-    _print_test_info(expected = expected_discharge, actual = actual_discharge)
-    _print_test_info(expected = expected_subsurface, actual = actual_subsurface)
-    _print_test_info(expected = expected_impervious, actual = actual_impervious)
-    _print_test_info(expected = expected_infiltration, actual = actual_infiltration)
-    _print_test_info(expected = expected_initialabstracted, actual = actual_initialabstracted)
-    _print_test_info(expected = expected_overlandflow, actual = actual_overlandflow)
-    _print_test_info(expected = expected_pet, actual = actual_pet)
-    _print_test_info(expected = expected_aet, actual = actual_aet)
-    _print_test_info(expected = expected_avgesoilrootzone, actual = actual_avgesoilrootzone)                        
-    _print_test_info(expected = expected_avgsoilunsaturatedzone, actual = actual_avgsoilunsaturatedzone)
-    _print_test_info(expected = expected_avgsoilunsaturatedzone, actual = actual_avgsoilunsaturatedzone)
-    _print_test_info(expected = expected_snowpack, actual = actual_snowpack)    
-    _print_test_info(expected = expected_precipitation, actual = actual_precipitation)    
-    _print_test_info(expected = expected_storagedeficit, actual = actual_storagedeficit)    
-    _print_test_info(expected = expected_returnflow, actual = actual_returnflow) 
+    _print_test_info(actual = actual_discharge, expected = expected_discharge)
+    _print_test_info(actual = actual_subsurface, expected = expected_subsurface)
+    _print_test_info(actual = actual_impervious, expected = expected_impervious)
+    _print_test_info(actual = actual_infiltration, expected = expected_infiltration)
+    _print_test_info(actual = actual_initialabstracted, expected = expected_initialabstracted)
+    _print_test_info(actual = actual_overlandflow, expected = expected_overlandflow)
+    _print_test_info(actual = actual_pet, expected = expected_pet)
+    _print_test_info(actual = actual_aet, expected = expected_aet)
+    _print_test_info(actual = actual_avgesoilrootzone, expected = expected_avgesoilrootzone)                        
+    _print_test_info(actual = actual_avgsoilunsaturatedzone, expected = expected_avgsoilunsaturatedzone)
+    _print_test_info(actual = actual_avgsoilunsaturatedzone, expected = expected_avgsoilunsaturatedzone)
+    _print_test_info(actual = actual_snowpack, expected = expected_snowpack)    
+    _print_test_info(actual = actual_precipitation, expected = expected_precipitation)    
+    _print_test_info(actual = actual_storagedeficit, expected = expected_storagedeficit)    
+    _print_test_info(actual = actual_returnflow, expected = expected_returnflow) 
 
 
 def test_apply_factors():
@@ -797,7 +793,7 @@ def test_apply_factors():
     actual = get_parameter(watertxt_data = data, name = "Discharge")  
 
     # print results
-    _print_test_info(expected = expected, actual = actual)  
+    _print_test_info(actual, expected)
     
 def test_write_file():
     """ Test write_file functionality """
