@@ -39,6 +39,26 @@ def create_shapefile_dict():
 
     return shapefile_dict 
 
+def create_field_dict(key_list):
+    """
+    Create dictionary containing user defined keys.
+
+    Parameters
+    ----------
+    keys_list : list
+        List of strings that will be the keys in the dictionary.
+    
+    Returns
+    -------
+    field_dict : dictionary 
+        Dictionary containing information found in a shapefile    
+    """
+    field_dict = {}
+    for key in key_list:
+        field_dict[key] = None
+
+    return field_dict 
+
 
 def get_intersected_field_values(intersector, intersectee, intersectee_field):
     """   
@@ -65,9 +85,10 @@ def get_intersected_field_values(intersector, intersectee, intersectee_field):
     particular basin. If basin shapefile intersects gcm shapefile, returns
     the GCM tile values that are intersected.
     """
-#    intersectee_data = get_shapefile_data(shapefile = intersectee)
-#    
-#    assert intersectee_field in intersectee_data["fields"], "Field {} not in shapefile {}".format(intersectee_field, intersectee_data["name"])
+    intersector_data = fill_shapefile_dict(shapefile = intersector)
+    intersectee_data = fill_shapefile_dict(shapefile = intersectee)
+    
+    assert intersectee_field in intersectee_data["fields"], "Field {} not in shapefile {}".format(intersectee_field, intersectee_data["name"])
     
     intersectee_layer = intersectee.GetLayer()
     intersector_layer = intersector.GetLayer()
@@ -102,7 +123,7 @@ def get_intersected_field_values_multi(intersector, intersectee, intersectee_fie
     Returns
     -------
     field_values : list
-        List of values for a particular field that were intersected by another shapefile.b
+        List of values for a particular field that were intersected by another shapefile.
 
     Notes
     -----
@@ -110,25 +131,36 @@ def get_intersected_field_values_multi(intersector, intersectee, intersectee_fie
     particular basin. If basin shapefile intersects gcm shapefile, returns
     the GCM tile values that are intersected.
     """
-#    intersectee_data = get_shapefile_data(shapefile = intersectee)
-#    
-#    assert intersectee_field in intersectee_data["fields"], "Field {} not in shapefile {}".format(intersectee_field, intersectee_data["name"])
+    intersector_data = fill_shapefile_dict(shapefile = intersector)
+    intersectee_data = fill_shapefile_dict(shapefile = intersectee)#    
+
+    assert intersectee_field in intersectee_data["fields"], "Field {} not in shapefile {}".format(intersectee_field, intersectee_data["name"])
     
     intersectee_layer = intersectee.GetLayer()
     intersector_layer = intersector.GetLayer()
-    intersector_feature = intersector_layer.GetFeature(0)
-    intersector_geometry = intersector_feature.GetGeometryRef()
     
-    field_values = []    
-    num_features = intersectee_layer.GetFeatureCount()
-    for feature_num in range(num_features):
-        intersectee_feature = intersectee_layer.GetFeature(feature_num)
-        intersectee_geometry = intersectee_feature.GetGeometryRef()
+#    import pdb
+#    pdb.set_trace()
+    
+    field_values_all = []    
+    for num in range(intersector_layer.GetFeatureCount()):
+        intersector_feature = intersector_layer.GetFeature(num)
+        intersector_geometry = intersector_feature.GetGeometryRef()
         
-        if intersector_geometry.Intersect(intersectee_geometry):    
-            field_values.append(intersectee_feature.GetField(intersectee_field))
+        field_values = []    
+        intersectee_num_features = intersectee_layer.GetFeatureCount()
+        for feature_num in range(intersectee_num_features):
+            intersectee_feature = intersectee_layer.GetFeature(feature_num)
+            intersectee_geometry = intersectee_feature.GetGeometryRef()
+            
+            if intersector_geometry.Intersect(intersectee_geometry):    
+                field_values.append(intersectee_feature.GetField(intersectee_field))
+        
+        
+        field_values_all.append(field_values)
 
-    return field_values
+
+    return field_values_all
 
 def fill_shapefile_dict(shapefile):
     """   
@@ -215,10 +247,24 @@ def test_create_shapefile_dict():
     # print results
     _print_test_info(actual, expected) 
 
-def test_fill_shapefile_dict():
+def test_create_field_dict():
+    """ Test create_field_dict() """
+
+    print("--- create_field_dict() ---") 
+
+    # expected values to test with actual values
+    expected = {"key1": None, "key2": None, "key3": None}
+    
+    # actual values
+    actual = create_field_dict(key_list = ["key1", "key2", "key3"])
+  
+    # print results
+    _print_test_info(actual, expected) 
+
+def test_fill_shapefile_dict1():
     """ Test fill_shapefile_dict() """
 
-    print("--- fill_shapefile_dict() ---") 
+    print("--- fill_shapefile_dict() part 1 - sample shapefile ---") 
 
     # expected values to test with actual values
     expected = {"extents": (-76.86408896229581, -73.5013706471868, 38.33140005688545, 43.986783289578774), 
@@ -237,9 +283,58 @@ def test_fill_shapefile_dict():
     
     # actual values
     actual = fill_shapefile_dict(shapefile = basin_shapefile)
+  
+    # print results
+    _print_test_info(actual, expected) 
 
-#    import pdb
-#    pdb.set_trace()
+def test_fill_shapefile_dict2():
+    """ Test fill_shapefile_dict() """
+
+    print("--- fill_shapefile_dict() part 2 - sample WATER basin ---") 
+
+    # expected values to test with actual values
+    expected = {"extents": (-76.3557164298209, -75.83406785380727, 40.52224451815593, 40.89012237818175), 
+                "name": "waterbasin_proj_wgs.shp", 
+                "fields": ["OBJECTID", "Id", "Shape_Leng", "Shape_Area"], 
+                "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
+                "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\testbasin_proj_wgs", 
+                "num_features": 1, 
+                "type": "POLYGON", 
+                "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
+                
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin_proj_wgs/waterbasin_proj_wgs.shp"))
+
+    # Open the shapefiles
+    basin_shapefile = osgeo.ogr.Open(basin_file)  
+    
+    # actual values
+    actual = fill_shapefile_dict(shapefile = basin_shapefile)
+  
+    # print results
+    _print_test_info(actual, expected) 
+
+def test_fill_shapefile_dict3():
+    """ Test fill_shapefile_dict() """
+
+    print("--- fill_shapefile_dict() part 3 - sample WATER basins as single shapefile ---") 
+
+    # expected values to test with actual values
+    expected = {"extents": (-75.46839351213258, -74.35718960764397, 39.85602095657912, 42.36690057316007), 
+                "name": "waterbasin_multi_proj_wgs.shp", 
+                "fields": ["STAID", "da_sqmi", "ForestSum", "AgSum", "DevSum", "FORdivAG"], 
+                "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
+                "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\testbasin_proj_wgs", 
+                "num_features": 12, 
+                "type": "POLYGON", 
+                "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
+                
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin_proj_wgs/waterbasin_multi_proj_wgs.shp"))
+    
+    # Open the shapefiles
+    basin_shapefile = osgeo.ogr.Open(basin_file)  
+    
+    # actual values
+    actual = fill_shapefile_dict(shapefile = basin_shapefile)
   
     # print results
     _print_test_info(actual, expected) 
@@ -290,13 +385,13 @@ def test_get_intersected_field_values_multi():
 
     # expected values to test with actual values
     expected = {}
-    expected["canes_tiles"] = ["31", "32", "21", "22"]    
+    expected["canes_tiles"] = {"0": [], "1": [], "2": []}    
     expected["gfdl_tiles"] = ["31", "32", "22"]
     expected["giss_tiles"] = ["42", "31", "32", "22"]
     expected["ncar_tiles"] = ["63", "53", "43"] 
 
     # paths to files
-    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin_multi_basins_proj_wgs/F12gt75run_wgs.shp"))
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin_proj_wgs/testbasin_multi_proj_wgs.shp"))
     canes_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/CanES_proj_wgs.shp"))
     gfdl_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/GFDL_proj_wgs.shp"))
     giss_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/GISS_proj_wgs.shp"))
@@ -309,12 +404,17 @@ def test_get_intersected_field_values_multi():
     giss_shapefile = osgeo.ogr.Open(giss_file)
     ncar_shapefile = osgeo.ogr.Open(ncar_file)
 
+    import pdb
+    pdb.set_trace()
+
     # actual values    
     actual = {}
-    actual["canes_tiles"] = get_intersected_field_values(intersector = basin_shapefile, intersectee = canes_shapefile, intersectee_field = "Tile")    
-    actual["gfdl_tiles"] = get_intersected_field_values(intersector = basin_shapefile, intersectee = gfdl_shapefile, intersectee_field = "Tile")
-    actual["giss_tiles"] = get_intersected_field_values(intersector = basin_shapefile, intersectee = giss_shapefile, intersectee_field = "Tile")
-    actual["ncar_tiles"] = get_intersected_field_values(intersector = basin_shapefile, intersectee = ncar_shapefile, intersectee_field = "Tile")
+    actual["canes_tiles"] = get_intersected_field_values_multi(intersector = basin_shapefile, intersectee = canes_shapefile, intersectee_field = "Tile")    
+
+
+#    actual["gfdl_tiles"] = get_intersected_field_values(intersector = basin_shapefile, intersectee = gfdl_shapefile, intersectee_field = "Tile")
+#    actual["giss_tiles"] = get_intersected_field_values(intersector = basin_shapefile, intersectee = giss_shapefile, intersectee_field = "Tile")
+#    actual["ncar_tiles"] = get_intersected_field_values(intersector = basin_shapefile, intersectee = ncar_shapefile, intersectee_field = "Tile")
 
     for shapefile in [basin_shapefile, canes_shapefile, gfdl_shapefile, giss_shapefile, ncar_shapefile]:
         shapefile.Destroy()  
@@ -331,11 +431,17 @@ def main():
 
     test_create_shapefile_dict()
 
-    test_fill_shapefile_dict()
-    
-#    test_get_intersected_field_values()
+    test_create_field_dict()
 
-#    test_get_intersected_field_values_multi()
+    test_fill_shapefile_dict1()
+
+    test_fill_shapefile_dict2()
+    
+    test_fill_shapefile_dict3()
+    
+    test_get_intersected_field_values()
+
+    test_get_intersected_field_values_multi()
     
 if __name__ == "__main__":
     main()    
