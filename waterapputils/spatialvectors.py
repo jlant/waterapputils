@@ -59,58 +59,14 @@ def create_field_dict(key_list):
 
     return field_dict 
 
-
-#def get_intersected_field_values(intersector, intersectee, intersectee_field):
-#    """   
-#    Get the field values associated with a shapefile that are intersected by 
-#    another shapefile.
-#    
-#    Parameters
-#    ----------
-#    intersector : osgeo.ogr.DataSource object
-#        A shapefile object.
-#    intersectee : osgeo.ogr.DataSource object
-#        A shapefile object.
-#    intersectee_field: string
-#        String name of a field in intersectee.
-#
-#    Returns
-#    -------
-#    field_values : list
-#        List of values for a particular field that were intersected by another shapefile.b
-#
-#    Notes
-#    -----
-#    For example, used to find Global Climate Model (gcm) tile values intersected by a
-#    particular basin. If basin shapefile intersects gcm shapefile, returns
-#    the GCM tile values that are intersected.
-#    """
-#    intersectee_data = fill_shapefile_dict(shapefile = intersectee)
-#    
-#    assert intersectee_field in intersectee_data["fields"], "Field {} not in shapefile {}".format(intersectee_field, intersectee_data["name"])
-#    
-#    intersectee_layer = intersectee.GetLayer()
-#    intersector_layer = intersector.GetLayer()
-#    intersector_feature = intersector_layer.GetFeature(0)
-#    intersector_geometry = intersector_feature.GetGeometryRef()
-#    
-#    field_values = []    
-#    num_features = intersectee_layer.GetFeatureCount()
-#    for feature_num in range(num_features):
-#        intersectee_feature = intersectee_layer.GetFeature(feature_num)
-#        intersectee_geometry = intersectee_feature.GetGeometryRef()
-#        
-#        if intersector_geometry.Intersect(intersectee_geometry):    
-#            field_values.append(intersectee_feature.GetField(intersectee_field))
-#
-#    return field_values
-
 def get_intersected_field_values(intersector, intersectee, intersectee_field, intersector_field = "FID"):
     """   
     Get the intersectee field values of interest associated with a shapefile 
-    that is intersected by another shapefile.  The dictionary returned has key(s) 
+    that is intersected by another shapefile.  A dictionary is returned with key(s) 
     that correspond to the intersector field value of interest (FID by default) and 
-    values corresponding to intersectee field values that are intersected.  
+    values corresponding to intersectee field values that are intersected. This function 
+    returns all the intersected features, and distinguishes between multiple features (FID's)
+    in the intersector.   
     
     Parameters
     ----------
@@ -118,10 +74,10 @@ def get_intersected_field_values(intersector, intersectee, intersectee_field, in
         A shapefile object.
     intersectee : osgeo.ogr.DataSource object
         A shapefile object.
-    intersector_field: string
-        String name of a field in intersector whose values will be used as keys in the field values dictionary.
     intersectee_field: string
         String name of a field in intersectee whose values will be retrieved if itersection occurs.
+    intersector_field: string
+        String name of a field in intersector whose values will be used as keys in the field values dictionary.
 
     Returns
     -------
@@ -134,6 +90,12 @@ def get_intersected_field_values(intersector, intersectee, intersectee_field, in
     particular basin. If basin shapefile intersects a particular GCM shapefile, the GCM tile values
     that are intersected by the basin shapefile are returned.  So, the intersector would be the basin and 
     the intersectee would be the GCM shapefile.
+    
+    For example,
+    field_values_dict = {"0": ["31", "32", "21", "11"], "1": ["21", "22"], "2": ["12"]}
+    
+    Where the keys are each FID number of the intersector with corrsponding values that are the field values
+    from the intersectee that are intersected.
     """
     # make sure that the supplied fields are contained in the shapefile datasets
     intersector_data = fill_shapefile_dict(shapefile = intersector)
@@ -150,14 +112,13 @@ def get_intersected_field_values(intersector, intersectee, intersectee_field, in
     
     # loop through each intersector feature and find its respective intersections with each of the intersectee features
     field_values_dict = {}
-    for num in range(intersector_layer.GetFeatureCount()):
-        intersector_feature = intersector_layer.GetFeature(num)
+    for i in range(intersector_layer.GetFeatureCount()):                      # loop through intersector
+        intersector_feature = intersector_layer.GetFeature(i)
         intersector_geometry = intersector_feature.GetGeometryRef()
             
         field_values = []    
-        intersectee_num_features = intersectee_layer.GetFeatureCount()
-        for feature_num in range(intersectee_num_features):
-            intersectee_feature = intersectee_layer.GetFeature(feature_num)
+        for j in range(intersectee_layer.GetFeatureCount()):                  # loop through intersectee
+            intersectee_feature = intersectee_layer.GetFeature(j)
             intersectee_geometry = intersectee_feature.GetGeometryRef()
             
             if intersector_geometry.Intersect(intersectee_geometry):    
@@ -348,9 +309,9 @@ def test_fill_shapefile_dict3():
   
     # print results
     _print_test_info(actual, expected) 
-        
+       
 def test_get_intersected_field_values1():
-    """ Test functionality of get_intersected_field_values """
+    """ Test get_intersected_field_values() """
 
     print("--- Testing get_intersected_field_values() part 1 - sample shapefile with single feature ---")  
 
@@ -389,7 +350,7 @@ def test_get_intersected_field_values1():
     _print_test_info(expected, actual)
 
 def test_get_intersected_field_values2():
-    """ Test functionality of get_intersected_field_values """
+    """ Test get_intersected_field_values() """
 
     print("--- Testing get_intersected_field_values() part 2 - sample shapefile with multiple features ---")  
 
