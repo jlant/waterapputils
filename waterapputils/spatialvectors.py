@@ -309,6 +309,32 @@ def test_fill_shapefile_dict3():
   
     # print results
     _print_test_info(actual, expected) 
+
+def test_fill_shapefile_dict4():
+    """ Test fill_shapefile_dict() """
+
+    print("--- fill_shapefile_dict() part 4 - sample test basin as single shapefile ---") 
+
+    # expected values to test with actual values
+    expected = {"extents": (1551876.4646765331, 1813149.8783592982, 1873153.3560966868, 2513535.4955471633), 
+                "name": "testbasin.shp", 
+                "fields": ["Id"], 
+                "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
+                "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\testbasin", 
+                "num_features": 1, 
+                "type": "POLYGON", 
+                "spatialref": "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs "}
+                
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin/testbasin.shp"))   
+    
+    # Open the shapefiles
+    basin_shapefile = osgeo.ogr.Open(basin_file)  
+    
+    # actual values
+    actual = fill_shapefile_dict(shapefile = basin_shapefile)
+  
+    # print results
+    _print_test_info(actual, expected) 
        
 def test_get_intersected_field_values1():
     """ Test get_intersected_field_values() """
@@ -387,6 +413,45 @@ def test_get_intersected_field_values2():
 
     # print test results        
     _print_test_info(expected, actual)
+
+def test_get_intersected_field_values3():
+    """ Test get_intersected_field_values() """
+
+    print("--- Testing get_intersected_field_values() part 3 - sample shapefile with single feature in original projection ---")  
+
+    # expected values to test with actual values
+    expected = {}
+    expected["canes_tiles"] = {"0": ["31", "32", "21", "11"]}
+    expected["gfdl_tiles"] = {"0": ["41", "42", "31", "32", "21"]}
+    expected["giss_tiles"] = {"0": ["41", "42", "31", "21"]}
+    expected["ncar_tiles"] = {"0": ["82", "83", "84", "72", "73", "74", "62", "63", "64", "52", "53", "42", "43", "32", "22"]}
+
+    # paths to files
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin/testbasin.shp"))
+    canes_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/CanES/shapefile/CanES.shp"))
+    gfdl_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/GFDL/shapefile/GFDL.shp"))
+    giss_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/GISS/shapefile/GISS.shp"))
+    ncar_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/NCAR/shapefile/NCAR.shp"))
+
+    # open the shapefiles
+    basin_shapefile = osgeo.ogr.Open(basin_file)    
+    canes_shapefile = osgeo.ogr.Open(canes_file)
+    gfdl_shapefile = osgeo.ogr.Open(gfdl_file)
+    giss_shapefile = osgeo.ogr.Open(giss_file)
+    ncar_shapefile = osgeo.ogr.Open(ncar_file)
+
+    # actual values    
+    actual = {}
+    actual["canes_tiles"] = get_intersected_field_values(intersector = basin_shapefile, intersectee = canes_shapefile, intersectee_field = "Tile")    
+    actual["gfdl_tiles"] = get_intersected_field_values(intersector = basin_shapefile, intersectee = gfdl_shapefile, intersectee_field = "Tile")
+    actual["giss_tiles"] = get_intersected_field_values(intersector = basin_shapefile, intersectee = giss_shapefile, intersectee_field = "Tile")
+    actual["ncar_tiles"] = get_intersected_field_values(intersector = basin_shapefile, intersectee = ncar_shapefile, intersectee_field = "Tile")
+
+    for shapefile in [basin_shapefile, canes_shapefile, gfdl_shapefile, giss_shapefile, ncar_shapefile]:
+        shapefile.Destroy()  
+
+    # print test results        
+    _print_test_info(expected, actual)
     
 def main():
     """ Test functionality geospatialvectors.py """
@@ -404,10 +469,14 @@ def main():
     test_fill_shapefile_dict2()
     
     test_fill_shapefile_dict3()
+
+    test_fill_shapefile_dict4()
     
     test_get_intersected_field_values1()
 
     test_get_intersected_field_values2()
+
+    test_get_intersected_field_values3()
     
 if __name__ == "__main__":
     main()    
