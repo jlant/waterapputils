@@ -39,26 +39,6 @@ def create_shapefile_dict():
 
     return shapefile_dict 
 
-def create_field_dict(key_list):
-    """
-    Create dictionary containing user defined keys.
-
-    Parameters
-    ----------
-    keys_list : list
-        List of strings that will be the keys in the dictionary.
-    
-    Returns
-    -------
-    field_dict : dictionary 
-        Dictionary containing information found in a shapefile    
-    """
-    field_dict = {}
-    for key in key_list:
-        field_dict[key] = None
-
-    return field_dict 
-
 def get_intersected_field_values(intersector, intersectee, intersectee_field, intersector_field = "FID"):
     """   
     Get the intersectee field values of interest associated with a shapefile 
@@ -101,10 +81,15 @@ def get_intersected_field_values(intersector, intersectee, intersectee_field, in
     intersector_data = fill_shapefile_dict(shapefile = intersector)
     intersectee_data = fill_shapefile_dict(shapefile = intersectee)    
 
-    assert intersectee_field in intersectee_data["fields"], "Field {} not in shapefile {}".format(intersectee_field, intersectee_data["name"])
+    assert intersector_data["spatialref"] == intersectee_data["spatialref"], \
+           "Spatial references are not equal\nShapefile: {}\n  Spatial reference: {}\nShapefile: {}\n  Spatial reference: {}".format(intersector_data["name"], intersector_data["spatialref"], intersectee_data["name"], intersectee_data["spatialref"])
+
+    assert intersectee_field in intersectee_data["fields"], \
+           "Field does not exist in shapefile.\nField: {}\nShapefile: {}\n  fields: {}".format(intersectee_field, intersectee_data["name"], intersectee_data["fields"])
 
     if intersector_field != "FID":
-        assert intersector_field in intersector_data["fields"], "Field {} not in shapefile {}".format(intersector_field, intersector_data["name"])
+        assert intersector_field in intersector_data["fields"], \
+               "Field does not exist in shapefile.\nField: {}\nShapefile: {}\n  fields: {}".format(intersector_field, intersector_data["name"], intersector_data["fields"])
 
     # get the shapefile layer    
     intersectee_layer = intersectee.GetLayer()
@@ -218,19 +203,6 @@ def test_create_shapefile_dict():
     # print results
     _print_test_info(actual, expected) 
 
-def test_create_field_dict():
-    """ Test create_field_dict() """
-
-    print("--- create_field_dict() ---") 
-
-    # expected values to test with actual values
-    expected = {"key1": None, "key2": None, "key3": None}
-    
-    # actual values
-    actual = create_field_dict(key_list = ["key1", "key2", "key3"])
-  
-    # print results
-    _print_test_info(actual, expected) 
 
 def test_fill_shapefile_dict1():
     """ Test fill_shapefile_dict() """
@@ -461,8 +433,6 @@ def main():
     print("")
 
     test_create_shapefile_dict()
-
-    test_create_field_dict()
 
     test_fill_shapefile_dict1()
 
