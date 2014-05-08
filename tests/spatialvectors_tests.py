@@ -158,10 +158,10 @@ def test_get_intersected_field_values1():
     for shapefile in [basin_shapefile, canes_shapefile, gfdl_shapefile, giss_shapefile, ncar_shapefile]:
         shapefile.Destroy()  
 
-    np.testing.assert_equal(expected["canes_tiles"], actual["canes_tiles"])
-    np.testing.assert_equal(expected["gfdl_tiles"], actual["gfdl_tiles"])    
-    np.testing.assert_equal(expected["giss_tiles"], actual["giss_tiles"])   
-    np.testing.assert_equal(expected["ncar_tiles"], actual["ncar_tiles"])
+    np.testing.assert_equal(actual["canes_tiles"], expected["canes_tiles"])
+    np.testing.assert_equal(actual["gfdl_tiles"], expected["gfdl_tiles"])    
+    np.testing.assert_equal(actual["giss_tiles"], expected["giss_tiles"])   
+    np.testing.assert_equal(actual["ncar_tiles"], expected["ncar_tiles"])
 
 def test_get_intersected_field_values2(): 
 
@@ -189,10 +189,10 @@ def test_get_intersected_field_values2():
     for shapefile in [basin_shapefile, canes_shapefile, gfdl_shapefile, giss_shapefile, ncar_shapefile]:
         shapefile.Destroy()  
 
-    np.testing.assert_equal(expected["canes_tiles"], actual["canes_tiles"])
-    np.testing.assert_equal(expected["gfdl_tiles"], actual["gfdl_tiles"])    
-    np.testing.assert_equal(expected["giss_tiles"], actual["giss_tiles"])   
-    np.testing.assert_equal(expected["ncar_tiles"], actual["ncar_tiles"])
+    np.testing.assert_equal(actual["canes_tiles"], expected["canes_tiles"])
+    np.testing.assert_equal(actual["gfdl_tiles"], expected["gfdl_tiles"])    
+    np.testing.assert_equal(actual["giss_tiles"], expected["giss_tiles"])   
+    np.testing.assert_equal(actual["ncar_tiles"], expected["ncar_tiles"])
 
 
 def test_get_intersected_field_values3():
@@ -221,12 +221,39 @@ def test_get_intersected_field_values3():
     for shapefile in [basin_shapefile, canes_shapefile, gfdl_shapefile, giss_shapefile, ncar_shapefile]:
         shapefile.Destroy()  
 
-    np.testing.assert_equal(expected["canes_tiles"], actual["canes_tiles"])
-    np.testing.assert_equal(expected["gfdl_tiles"], actual["gfdl_tiles"])    
-    np.testing.assert_equal(expected["giss_tiles"], actual["giss_tiles"])   
-    np.testing.assert_equal(expected["ncar_tiles"], actual["ncar_tiles"])
+    np.testing.assert_equal(actual["canes_tiles"], expected["canes_tiles"])
+    np.testing.assert_equal(actual["gfdl_tiles"], expected["gfdl_tiles"])    
+    np.testing.assert_equal(actual["giss_tiles"], expected["giss_tiles"])   
+    np.testing.assert_equal(actual["ncar_tiles"], expected["ncar_tiles"])
     
     
+def test_get_shapefile_coords():
+
+
+    # expected values to test with actual values
+    expected = {}
+    expected["testbasin"] = {"0": ([-76.5241897068253, -75.23041385228197, -73.58652704198151, -73.5013706471868, -75.02093324688161, -75.08254377360929, -76.46844548090678, -76.86408896229581, -76.76898146953256, -76.86020288529657, -76.5241897068253], 
+                                    [43.72112550966717, 43.986783289578774, 43.58481904994738, 42.78125135043379, 42.064154034262806, 40.419906887537, 38.33140005688545, 40.22529559781875, 40.95275941413145, 41.661899956299614, 43.72112550966717])}
+
+    expected["canes"] = {'0': ([-77.34375265636656, -74.53125172872296, -74.53125153884916, -77.34375244277751, -77.34375265636656], [44.649508846266905, 44.64950895861966, 41.85894444448356, 41.85894433988654, 44.649508846266905]), 
+                         '1': ([-74.53125172872296, -71.71875078911197, -71.71875062341081, -74.53125153884916, -74.53125172872296], [44.64950895861966, 44.64950905729846, 41.85894453702035, 41.85894444448356, 44.64950895861966]),                          
+                         '2': ([-77.34375244277751, -74.53125153884916, -74.53125137708862, -77.34375226209623, -77.34375244277751], [41.85894433988654, 41.85894444448356, 39.068379891689446, 39.068379795204585, 41.85894433988654]), 
+                         '3': ([-74.53125153884916, -71.71875062341081, -71.71875048096074, -74.53125137708862, -74.53125153884916], [41.85894444448356, 41.85894453702035, 39.0683799778016, 39.068379891689446, 41.85894444448356]), 
+                         '4': ([-77.34375226209623, -74.53125137708862, -74.53125123940792, -77.34375210963982, -77.34375226209623], [39.068379795204585, 39.068379891689446, 36.277815301487045, 36.27781521345216, 39.068379795204585]),
+                         '5': ([-74.53125137708862, -71.71875048096074, -71.71875035838741, -74.53125123940792, -74.53125137708862], [39.068379891689446, 39.0683799778016, 36.27781538090664, 36.277815301487045, 39.068379891689446])
+    }
+            
+
+    # Open the shapefiles
+    basin_shapefile = osgeo.ogr.Open(fixture["testbasin_single_fid"]) 
+    canes_shapefile = osgeo.ogr.Open(fixture["canes_file"])
     
+    # actual values
+    actual = {}
+    actual["testbasin"] = spatialvectors.get_shapefile_coords(shapefile = basin_shapefile)
+    actual["canes"] = spatialvectors.get_shapefile_coords(shapefile = canes_shapefile)
+
+    np.testing.assert_equal(actual["testbasin"], expected["testbasin"])      
+    np.testing.assert_equal(actual["canes"], expected["canes"])   
     
     

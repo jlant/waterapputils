@@ -39,6 +39,94 @@ def create_shapefile_dict():
 
     return shapefile_dict 
 
+def get_shapefile_coords(shapefile):
+    """   
+    Get the coordinates (longitudes and latitudes) of each feature in a shapefile. 
+    Loops through each feature contained in a shapefile (e.g. each FID) and gets the features
+    coordinates. Returns a dictionary containing keys that correspond to each feature, namely,
+    the features FID number with corresponding longitude and latitude values.
+    
+    Parameters
+    ----------
+    shapefile : osgeo.ogr.DataSource 
+        A shapefile object.        
+
+    Returns
+    -------
+    coordinates : dictionary
+        Dictionary containing
+    """   
+    shapefile_layer = shapefile.GetLayer()
+    
+    coords = {}
+    for feature_num in range(shapefile_layer.GetFeatureCount()):
+        shapefile_feature = shapefile_layer.GetFeature(feature_num)
+        shapefile_geometry = shapefile_feature.GetGeometryRef()            
+        points = shapefile_geometry.GetGeometryRef(0)           
+
+        lons = []
+        lats = []
+        for i in xrange(points.GetPointCount()):
+            lons.append(points.GetX(i))
+            lats.append(points.GetY(i))
+        
+        # assign the features FID as the key in coords with corresponding lon and lat values
+        fid = str(shapefile_feature.GetFID())
+        coords[fid] = (lons, lats)
+    
+    return coords
+
+
+def fill_shapefile_dict(shapefile):
+    """   
+    Get general shapefile information data source.
+    
+    Parameters
+    ----------
+    shapefile : osgeo.ogr.DataSource 
+        A shapefile object.
+
+    Returns
+    -------
+    shapefile_dict : dictionary 
+        Dictionary containing general information about a shapefile
+
+    Notes
+    -----            
+    shapefile_data = {"shapefile_datatype": osgeo.ogr.DataSource,
+                      "type": string of geometry type (POLYGON, POINT, etc.),
+                      "path": string path including name of shapefile,
+                      "name": string name of shapefile
+                      "fields": list containing fields contained in shapefile,
+                      "spatialref": string of shapefile's spatial reference,
+                      "extents": tuple of shapefile extents}
+    
+    """
+    shapefile_dict = create_shapefile_dict()    
+    
+    shapefile_layer = shapefile.GetLayer()
+    shapefile_feature = shapefile_layer.GetFeature(0)
+    shapefile_geometry = shapefile_feature.geometry()
+    
+    shapefile_fields = []
+    shapefile_layerdef = shapefile_layer.GetLayerDefn()
+    for i in range(shapefile_layerdef.GetFieldCount()):
+        shapefile_fields.append(shapefile_layerdef.GetFieldDefn(i).GetName())        
+
+    shapefile_dir, shapefile_filename = helpers.get_file_info(path = shapefile.GetName())
+        
+    shapefile_dict["shapefile_datatype"] = "{}".format(type(shapefile))
+    shapefile_dict["type"] = shapefile_geometry.GetGeometryName()
+    shapefile_dict["path"] = shapefile_dir
+    shapefile_dict["name"] = shapefile_filename
+    shapefile_dict["num_features"] = shapefile_layer.GetFeatureCount()
+    shapefile_dict["fields"] = shapefile_fields
+    shapefile_dict["spatialref"] = shapefile_layer.GetSpatialRef().ExportToProj4()
+    shapefile_dict["extents"] = shapefile_layer.GetExtent()
+                  
+    return shapefile_dict
+
+
 def get_intersected_field_values(intersector, intersectee, intersectee_field, intersector_field = "FID"):
     """   
     Get the intersectee field values of interest associated with a shapefile 
@@ -118,55 +206,6 @@ def get_intersected_field_values(intersector, intersectee, intersectee_field, in
 
     return field_values_dict
 
-def fill_shapefile_dict(shapefile):
-    """   
-    Get general shapefile information data source.
-    
-    Parameters
-    ----------
-    shapefile : osgeo.ogr.DataSource 
-        A shapefile object.
-
-    Returns
-    -------
-    shapefile_dict : dictionary 
-        Dictionary containing general information about a shapefile
-
-    Notes
-    -----            
-    shapefile_data = {"shapefile_datatype": osgeo.ogr.DataSource,
-                      "type": string of geometry type (POLYGON, POINT, etc.),
-                      "path": string path including name of shapefile,
-                      "name": string name of shapefile
-                      "fields": list containing fields contained in shapefile,
-                      "spatialref": string of shapefile's spatial reference,
-                      "extents": tuple of shapefile extents}
-    
-    """
-    shapefile_dict = create_shapefile_dict()    
-    
-    shapefile_layer = shapefile.GetLayer()
-    shapefile_feature = shapefile_layer.GetFeature(0)
-    shapefile_geometry = shapefile_feature.geometry()
-    
-    shapefile_fields = []
-    shapefile_layerdef = shapefile_layer.GetLayerDefn()
-    for i in range(shapefile_layerdef.GetFieldCount()):
-        shapefile_fields.append(shapefile_layerdef.GetFieldDefn(i).GetName())        
-
-    shapefile_dir, shapefile_filename = helpers.get_file_info(path = shapefile.GetName())
-        
-    shapefile_dict["shapefile_datatype"] = "{}".format(type(shapefile))
-    shapefile_dict["type"] = shapefile_geometry.GetGeometryName()
-    shapefile_dict["path"] = shapefile_dir
-    shapefile_dict["name"] = shapefile_filename
-    shapefile_dict["num_features"] = shapefile_layer.GetFeatureCount()
-    shapefile_dict["fields"] = shapefile_fields
-    shapefile_dict["spatialref"] = shapefile_layer.GetSpatialRef().ExportToProj4()
-    shapefile_dict["extents"] = shapefile_layer.GetExtent()
-                  
-    return shapefile_dict
-
 
 def _print_test_info(expected, actual):
     """   
@@ -192,7 +231,7 @@ def _print_test_info(expected, actual):
 def test_create_shapefile_dict():
     """ Test create_shapefile_dict() """
 
-    print("--- create_shapefile_dict() ---") 
+    print("--- Testing create_shapefile_dict() ---") 
 
     # expected values to test with actual values
     expected = {"shapefile_datatype": None, "type": None, "path": None, "name": None, "num_features": None, "fields": [], "spatialref": None, "extents": ()}
@@ -207,7 +246,7 @@ def test_create_shapefile_dict():
 def test_fill_shapefile_dict1():
     """ Test fill_shapefile_dict() """
 
-    print("--- fill_shapefile_dict() part 1 - sample shapefile ---") 
+    print("--- Testing fill_shapefile_dict() part 1 - sample shapefile ---") 
 
     # expected values to test with actual values
     expected = {"extents": (-76.86408896229581, -73.5013706471868, 38.33140005688545, 43.986783289578774), 
@@ -233,7 +272,7 @@ def test_fill_shapefile_dict1():
 def test_fill_shapefile_dict2():
     """ Test fill_shapefile_dict() """
 
-    print("--- fill_shapefile_dict() part 2 - sample WATER basin ---") 
+    print("--- Testing fill_shapefile_dict() part 2 - sample WATER basin ---") 
 
     # expected values to test with actual values
     expected = {"extents": (-76.3557164298209, -75.83406785380727, 40.52224451815593, 40.89012237818175), 
@@ -424,7 +463,41 @@ def test_get_intersected_field_values3():
 
     # print test results        
     _print_test_info(expected, actual)
+ 
+def test_get_shapefile_coords():
+    """ Test get_shapefile_coords() """
     
+    print("--- Testing get_shapefile_coords() ---") 
+
+    # expected values to test with actual values
+    expected = {}
+    expected["testbasin"] = {"0": ([-76.5241897068253, -75.23041385228197, -73.58652704198151, -73.5013706471868, -75.02093324688161, -75.08254377360929, -76.46844548090678, -76.86408896229581, -76.76898146953256, -76.86020288529657, -76.5241897068253], 
+                                    [43.72112550966717, 43.986783289578774, 43.58481904994738, 42.78125135043379, 42.064154034262806, 40.419906887537, 38.33140005688545, 40.22529559781875, 40.95275941413145, 41.661899956299614, 43.72112550966717])}
+
+    expected["canes"] = {'0': ([-77.34375265636656, -74.53125172872296, -74.53125153884916, -77.34375244277751, -77.34375265636656], [44.649508846266905, 44.64950895861966, 41.85894444448356, 41.85894433988654, 44.649508846266905]), 
+                         '1': ([-74.53125172872296, -71.71875078911197, -71.71875062341081, -74.53125153884916, -74.53125172872296], [44.64950895861966, 44.64950905729846, 41.85894453702035, 41.85894444448356, 44.64950895861966]),                          
+                         '2': ([-77.34375244277751, -74.53125153884916, -74.53125137708862, -77.34375226209623, -77.34375244277751], [41.85894433988654, 41.85894444448356, 39.068379891689446, 39.068379795204585, 41.85894433988654]), 
+                         '3': ([-74.53125153884916, -71.71875062341081, -71.71875048096074, -74.53125137708862, -74.53125153884916], [41.85894444448356, 41.85894453702035, 39.0683799778016, 39.068379891689446, 41.85894444448356]), 
+                         '4': ([-77.34375226209623, -74.53125137708862, -74.53125123940792, -77.34375210963982, -77.34375226209623], [39.068379795204585, 39.068379891689446, 36.277815301487045, 36.27781521345216, 39.068379795204585]),
+                         '5': ([-74.53125137708862, -71.71875048096074, -71.71875035838741, -74.53125123940792, -74.53125137708862], [39.068379891689446, 39.0683799778016, 36.27781538090664, 36.277815301487045, 39.068379891689446])
+    }
+            
+                
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin_proj_wgs/testbasin_proj_wgs.shp"))
+    canes_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/CanES_proj_wgs.shp"))
+
+    # Open the shapefiles
+    basin_shapefile = osgeo.ogr.Open(basin_file) 
+    canes_shapefile = osgeo.ogr.Open(canes_file)
+    
+    # actual values
+    actual = {}
+    actual["testbasin"] = get_shapefile_coords(shapefile = basin_shapefile)
+    actual["canes"] = get_shapefile_coords(shapefile = canes_shapefile)
+   
+    # print results
+    _print_test_info(actual, expected)     
+   
 def main():
     """ Test functionality geospatialvectors.py """
 
@@ -447,6 +520,8 @@ def main():
     test_get_intersected_field_values2()
 
     test_get_intersected_field_values3()
+
+    test_get_shapefile_coords()
     
 if __name__ == "__main__":
     main()    
