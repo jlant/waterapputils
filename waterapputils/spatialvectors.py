@@ -102,6 +102,7 @@ def fill_shapefile_dict(shapefile):
                       "extents": tuple of shapefile extents}
     
     """
+    # create dictionary to hold shapefile data of interest
     shapefile_dict = create_shapefile_dict()    
     
     shapefile_layer = shapefile.GetLayer()
@@ -242,6 +243,45 @@ def test_create_shapefile_dict():
     # print results
     _print_test_info(actual, expected) 
 
+def test_get_shapefile_coords():
+    """ Test get_shapefile_coords() """
+    
+    print("--- Testing get_shapefile_coords() ---") 
+
+    # expected values to test with actual values
+    expected = {}
+    expected["testbasin_wgs84"] = {"0": ([-76.5241897068253, -75.23041385228197, -73.58652704198151, -73.5013706471868, -75.02093324688161, -75.08254377360929, -76.46844548090678, -76.86408896229581, -76.76898146953256, -76.86020288529657, -76.5241897068253], 
+                                    [43.72112550966717, 43.986783289578774, 43.58481904994738, 42.78125135043379, 42.064154034262806, 40.419906887537, 38.33140005688545, 40.22529559781875, 40.95275941413145, 41.661899956299614, 43.72112550966717])}
+
+    expected["testbasin_nad83"] = {"0": ([1551876.4646765331, 1646948.1658269956, 1785445.705257233, 1813149.8783592982, 1710314.4423011306, 1745561.219742352, 1679365.164213511, 1603362.2856433871, 1594846.0132731413, 1571503.7313467045, 1551876.4646765331], 
+                                          [2462788.591455278, 2513535.4955471633, 2499530.126391299, 2413895.970528247, 2307638.3618463, 2126904.9022905156, 1873153.3560966868, 2074193.2284434838, 2155620.5060083373, 2231871.9603013936, 2462788.591455278])}
+
+    expected["canes_wgs84"] = {"0": ([-77.34375265636656, -74.53125172872296, -74.53125153884916, -77.34375244277751, -77.34375265636656], [44.649508846266905, 44.64950895861966, 41.85894444448356, 41.85894433988654, 44.649508846266905]), 
+                         "1": ([-74.53125172872296, -71.71875078911197, -71.71875062341081, -74.53125153884916, -74.53125172872296], [44.64950895861966, 44.64950905729846, 41.85894453702035, 41.85894444448356, 44.64950895861966]),                          
+                         "2": ([-77.34375244277751, -74.53125153884916, -74.53125137708862, -77.34375226209623, -77.34375244277751], [41.85894433988654, 41.85894444448356, 39.068379891689446, 39.068379795204585, 41.85894433988654]), 
+                         "3": ([-74.53125153884916, -71.71875062341081, -71.71875048096074, -74.53125137708862, -74.53125153884916], [41.85894444448356, 41.85894453702035, 39.0683799778016, 39.068379891689446, 41.85894444448356]), 
+                         "4": ([-77.34375226209623, -74.53125137708862, -74.53125123940792, -77.34375210963982, -77.34375226209623], [39.068379795204585, 39.068379891689446, 36.277815301487045, 36.27781521345216, 39.068379795204585]),
+                         "5": ([-74.53125137708862, -71.71875048096074, -71.71875035838741, -74.53125123940792, -74.53125137708862], [39.068379891689446, 39.0683799778016, 36.27781538090664, 36.277815301487045, 39.068379891689446])
+    }
+            
+                
+    basin_file_wgs84 = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin_proj_wgs/testbasin_proj_wgs.shp"))
+    basin_file_nad83 = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin/testbasin.shp"))
+    canes_file_wgs84 = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/CanES_proj_wgs.shp"))
+
+    # Open the shapefiles
+    basin_shapefile_wgs84 = osgeo.ogr.Open(basin_file_wgs84) 
+    basin_shapefile_nad83 = osgeo.ogr.Open(basin_file_nad83) 
+    canes_shapefile_wgs84 = osgeo.ogr.Open(canes_file_wgs84)
+    
+    # actual values
+    actual = {}
+    actual["testbasin_wgs84"] = get_shapefile_coords(shapefile = basin_shapefile_wgs84)
+    actual["testbasin_nad83"] = get_shapefile_coords(shapefile = basin_shapefile_nad83)
+    actual["canes_wgs84"] = get_shapefile_coords(shapefile = canes_shapefile_wgs84)
+
+    # print results
+    _print_test_info(actual, expected)   
 
 def test_fill_shapefile_dict1():
     """ Test fill_shapefile_dict() """
@@ -288,7 +328,7 @@ def test_fill_shapefile_dict2():
 
     # Open the shapefiles
     basin_shapefile = osgeo.ogr.Open(basin_file)  
-    
+   
     # actual values
     actual = fill_shapefile_dict(shapefile = basin_shapefile)
   
@@ -464,45 +504,44 @@ def test_get_intersected_field_values3():
     # print test results        
     _print_test_info(expected, actual)
  
-def test_get_shapefile_coords():
-    """ Test get_shapefile_coords() """
-    
-    print("--- Testing get_shapefile_coords() ---") 
+def test_get_intersected_field_values4():
+    """ Test get_intersected_field_values() """
+
+    print("--- Testing get_intersected_field_values() part 4 - sample shapefile with multiple features without default key identifier ---")  
 
     # expected values to test with actual values
     expected = {}
-    expected["testbasin_wgs84"] = {"0": ([-76.5241897068253, -75.23041385228197, -73.58652704198151, -73.5013706471868, -75.02093324688161, -75.08254377360929, -76.46844548090678, -76.86408896229581, -76.76898146953256, -76.86020288529657, -76.5241897068253], 
-                                    [43.72112550966717, 43.986783289578774, 43.58481904994738, 42.78125135043379, 42.064154034262806, 40.419906887537, 38.33140005688545, 40.22529559781875, 40.95275941413145, 41.661899956299614, 43.72112550966717])}
+    expected["canes_tiles"] = {"01466500": ["22"], "01440000": ["21"], "01415000": ["31"], "01439500": ["21"], "01440400": ["21"], "01442500": ["21"], "01413500": ["31", "32"], "01420500": ["31", "32", "21"], "01435000": ["31", "32"], "01422500": ["31"], "01414500": ["31"], "01422389": ["31"]}   
+    expected["gfdl_tiles"] = {"01466500": ["22"], "01440000": ["32"], "01415000": ["32"], "01439500": ["31"], "01440400": ["31"], "01442500": ["31"], "01413500": ["32"], "01420500": ["32"], "01435000": ["32"], "01422500": ["32"], "01414500": ["32"], "01422389": ["32"]} 
+    expected["giss_tiles"] = {"01466500": ["22"], "01440000": ["32"], "01415000": ["42"], "01439500": ["31"], "01440400": ["31"], "01442500": ["31"], "01413500": ["42"], "01420500": ["42", "32"], "01435000": ["42", "32"], "01422500": ["42"], "01414500": ["42"], "01422389": ["42"]}
+    expected["ncar_tiles"] = {"01466500": ["43"], "01440000": ["53"], "01415000": ["63"], "01439500": ["53"], "01440400": ["53"], "01442500": ["53"], "01413500": ["63"], "01420500": ["63"], "01435000": ["63", "64"], "01422500": ["63"], "01414500": ["63"], "01422389": ["63"]}
 
-    expected["testbasin_nad83"] = {"0": ([1551876.4646765331, 1646948.1658269956, 1785445.705257233, 1813149.8783592982, 1710314.4423011306, 1745561.219742352, 1679365.164213511, 1603362.2856433871, 1594846.0132731413, 1571503.7313467045, 1551876.4646765331], 
-                                          [2462788.591455278, 2513535.4955471633, 2499530.126391299, 2413895.970528247, 2307638.3618463, 2126904.9022905156, 1873153.3560966868, 2074193.2284434838, 2155620.5060083373, 2231871.9603013936, 2462788.591455278])}
-
-    expected["canes_wgs84"] = {"0": ([-77.34375265636656, -74.53125172872296, -74.53125153884916, -77.34375244277751, -77.34375265636656], [44.649508846266905, 44.64950895861966, 41.85894444448356, 41.85894433988654, 44.649508846266905]), 
-                         "1": ([-74.53125172872296, -71.71875078911197, -71.71875062341081, -74.53125153884916, -74.53125172872296], [44.64950895861966, 44.64950905729846, 41.85894453702035, 41.85894444448356, 44.64950895861966]),                          
-                         "2": ([-77.34375244277751, -74.53125153884916, -74.53125137708862, -77.34375226209623, -77.34375244277751], [41.85894433988654, 41.85894444448356, 39.068379891689446, 39.068379795204585, 41.85894433988654]), 
-                         "3": ([-74.53125153884916, -71.71875062341081, -71.71875048096074, -74.53125137708862, -74.53125153884916], [41.85894444448356, 41.85894453702035, 39.0683799778016, 39.068379891689446, 41.85894444448356]), 
-                         "4": ([-77.34375226209623, -74.53125137708862, -74.53125123940792, -77.34375210963982, -77.34375226209623], [39.068379795204585, 39.068379891689446, 36.277815301487045, 36.27781521345216, 39.068379795204585]),
-                         "5": ([-74.53125137708862, -71.71875048096074, -71.71875035838741, -74.53125123940792, -74.53125137708862], [39.068379891689446, 39.0683799778016, 36.27781538090664, 36.277815301487045, 39.068379891689446])
-    }
-            
-                
-    basin_file_wgs84 = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin_proj_wgs/testbasin_proj_wgs.shp"))
-    basin_file_nad83 = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin/testbasin.shp"))
-    canes_file_wgs84 = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/CanES_proj_wgs.shp"))
+    # paths to files
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin_proj_wgs/waterbasin_multi_proj_wgs.shp"))
+    canes_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/CanES_proj_wgs.shp"))
+    gfdl_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/GFDL_proj_wgs.shp"))
+    giss_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/GISS_proj_wgs.shp"))
+    ncar_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/NCAR_proj_wgs.shp"))
 
     # Open the shapefiles
-    basin_shapefile_wgs84 = osgeo.ogr.Open(basin_file_wgs84) 
-    basin_shapefile_nad83 = osgeo.ogr.Open(basin_file_nad83) 
-    canes_shapefile_wgs84 = osgeo.ogr.Open(canes_file_wgs84)
-    
-    # actual values
-    actual = {}
-    actual["testbasin_wgs84"] = get_shapefile_coords(shapefile = basin_shapefile_wgs84)
-    actual["testbasin_nad83"] = get_shapefile_coords(shapefile = basin_shapefile_nad83)
-    actual["canes_wgs84"] = get_shapefile_coords(shapefile = canes_shapefile_wgs84)
+    basin_shapefile = osgeo.ogr.Open(basin_file)    
+    canes_shapefile = osgeo.ogr.Open(canes_file)
+    gfdl_shapefile = osgeo.ogr.Open(gfdl_file)
+    giss_shapefile = osgeo.ogr.Open(giss_file)
+    ncar_shapefile = osgeo.ogr.Open(ncar_file)
 
-    # print results
-    _print_test_info(actual, expected)     
+    # actual values    
+    actual = {}
+    actual["canes_tiles"] = get_intersected_field_values(intersector = basin_shapefile, intersectee = canes_shapefile, intersectee_field = "Tile", intersector_field = "STAID")    
+    actual["gfdl_tiles"] = get_intersected_field_values(intersector = basin_shapefile, intersectee = gfdl_shapefile, intersectee_field = "Tile", intersector_field = "STAID")
+    actual["giss_tiles"] = get_intersected_field_values(intersector = basin_shapefile, intersectee = giss_shapefile, intersectee_field = "Tile", intersector_field = "STAID")
+    actual["ncar_tiles"] = get_intersected_field_values(intersector = basin_shapefile, intersectee = ncar_shapefile, intersectee_field = "Tile", intersector_field = "STAID")
+
+    for shapefile in [basin_shapefile, canes_shapefile, gfdl_shapefile, giss_shapefile, ncar_shapefile]:
+        shapefile.Destroy()  
+
+    # print test results        
+    _print_test_info(expected, actual)  
    
 def main():
     """ Test functionality geospatialvectors.py """
@@ -520,6 +559,8 @@ def main():
     test_fill_shapefile_dict3()
 
     test_fill_shapefile_dict4()
+
+    test_get_shapefile_coords()
     
     test_get_intersected_field_values1()
 
@@ -527,7 +568,7 @@ def main():
 
     test_get_intersected_field_values3()
 
-    test_get_shapefile_coords()
+    test_get_intersected_field_values4()
     
 if __name__ == "__main__":
     main()    

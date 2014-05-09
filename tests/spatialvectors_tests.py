@@ -45,7 +45,7 @@ def test_create_shapefile_dict():
     print("--- create_shapefile_dict() ---") 
 
     # expected values to test with actual values
-    expected = {"shapefile_datatype": None, "type": None, "path": None, "name": None, "num_features": None, "fields": [], "spatialref": None, "extents": ()}
+    expected = {"shapefile_datatype": None, "type": None, "path": None, "name": None, "num_features": None, "fields": [], "spatialref": None, "extents": (), "coords": None}
     
     # actual values
     actual = spatialvectors.create_shapefile_dict()
