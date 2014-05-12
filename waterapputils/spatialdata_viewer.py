@@ -84,7 +84,7 @@ def get_map_extents(shapefiles):
         
     return extent_coords, center_coords, standard_parallels
 
-def plot_shapefiles_map(shapefiles, display_field = None, is_visible = True, save_path = None):
+def plot_shapefiles_map(shapefiles, display_fields = [], title = None, is_visible = True, save_path = None):
     """   
     Generate a map showing all the shapefiles in the shapefile_list.  
     Shapefiles should be in a Geographic Coordinate System (longitude and 
@@ -96,6 +96,10 @@ def plot_shapefiles_map(shapefiles, display_field = None, is_visible = True, sav
     ----------
     shapefiles : list 
         List of dictionaries containing shapefile information
+    title : string 
+        String title for plot
+    display_fields : list 
+        List of strings that correspond to a shapefile field where the corresponding value(s) will be displayed.
     is_visible : bool
         Boolean value to show plots         
     save_path : string 
@@ -107,7 +111,7 @@ def plot_shapefiles_map(shapefiles, display_field = None, is_visible = True, sav
 
     # create the figure
     plt.figure(figsize = (12,10))    
-    plt.title("Map of shapefiles")
+    plt.title(title)
     
     # create the basemap object with Albers Equal Area Conic Projection
     bmap = Basemap(projection = "aea", 
@@ -126,21 +130,19 @@ def plot_shapefiles_map(shapefiles, display_field = None, is_visible = True, sav
     bmap.fillcontinents(color = "coral", lake_color = "aqua")
     bmap.drawparallels(np.arange(-80., 81., 10.), labels = [1, 0, 0, 0])
     bmap.drawmeridians(np.arange(-180., 181., 10.), labels = [0, 0, 0, 1])
- 
-    
+     
     # plot each shapefile on the basemap    
     legend_handles = []
     legend_labels = []
+    colors_index = 0
     for shapefile_data in shapefiles:
         
-        # set up colors
-        colors_list = ["b", "y", "r", "b", "c", "y", "m", "orange", "k"]
-        colors_index = 0
+        # set up colors to use
+        colors_list = ["b", "g", "y", "r", "c", "y", "m", "orange", "aqua", "darksalmon", "gold", "k"]
         if colors_index > len(colors_list) - 1:
             color = np.random.rand(3,)
         else:
-            color = colors_list[colors_index]
-        colors_index += 1         
+            color = colors_list[colors_index]         
         
         full_path = "/".join([shapefile_data["path"], shapefile_data["name"].split(".")[0]])
         shp_tuple = bmap.readshapefile(full_path, "shp", drawbounds = False)          # use basemap shapefile reader for ease of plotting
@@ -148,7 +150,7 @@ def plot_shapefiles_map(shapefiles, display_field = None, is_visible = True, sav
 
             if shapefile_data["type"] == "POLYGON":
                 p1 = mpl.patches.Polygon(shape, facecolor = color, edgecolor = color,
-                                         linewidth = 2, alpha = 0.5, label = shapefile_data["name"])            
+                                         linewidth = 2, alpha = 0.7, label = shapefile_data["name"])            
                 plt.gca().add_patch(p1)
                 xx, yy = zip(*shape)
                 txt_x = str(np.mean(xx))
@@ -165,13 +167,17 @@ def plot_shapefiles_map(shapefiles, display_field = None, is_visible = True, sav
                 p1 = bmap.plot(xx, yy, linewidth = 2, color = color, label = shapefile_data["name"])
                 txt_x = str(np.mean(xx))
                 txt_y = str(np.mean(yy))
-                
+            
+            
             if isinstance(p1, list):
                 p1 = p1[0]
-    
-            if display_field in shape_dict.keys():
-                plt.text(txt_x, txt_y, shape_dict[display_field], color = "k", fontsize = 12, fontweight = "bold")
-    
+
+            # control text display of shapefile fields
+            for display_field in display_fields:
+                if display_field in shape_dict.keys():
+                    plt.text(txt_x, txt_y, shape_dict[display_field], color = "k", fontsize = 12, fontweight = "bold")
+
+        colors_index += 1    
         legend_handles.append(p1)    
         legend_labels.append(shapefile_data["name"])
 
@@ -215,6 +221,61 @@ def _create_shapefile_test_data():
                             "type": "POLYGON", 
                             "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
 
+    fixture["waterbasin"] = {"extents": (-76.3557164298209, -75.83406785380727, 40.52224451815593, 40.89012237818175), 
+                            "name": "waterbasin_proj_wgs.shp", 
+                            "fields": ["OBJECTID", "Id", "Shape_Leng", "Shape_Area"], 
+                            "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
+                            "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\testbasin_proj_wgs", 
+                            "num_features": 1, 
+                            "type": "POLYGON", 
+                            "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
+
+    fixture["waterbasin_multi"] = {"extents": (-75.46839351213258, -74.35718960764397, 39.85602095657912, 42.36690057316007), 
+                                    "name": "waterbasin_multi_proj_wgs.shp", 
+                                    "fields": ["STAID", "da_sqmi", "ForestSum", "AgSum", "DevSum", "FORdivAG"], 
+                                    "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
+                                    "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\testbasin_proj_wgs", 
+                                    "num_features": 12, 
+                                    "type": "POLYGON", 
+                                    "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
+
+    fixture["canes"] = {"extents": (-77.34375265636656, -71.71875035838741, 36.27781521345216, 44.64950905729846), 
+                        "name": "CanES_proj_wgs.shp", 
+                        "fields": ["OBJECTID", "SHAPE_Leng", "SHAPE_Area", "TileDRB", "Tile"], 
+                        "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
+                        "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\gcm_proj_wgs", 
+                        "num_features": 6, 
+                        "type": "POLYGON", 
+                        "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
+
+    fixture["gfdl"] = {"extents": (-77.50000269499992, -72.50000069999992, 38.426973659000055, 44.49439100300006), 
+                "name": "GFDL_proj_wgs.shp", 
+                "fields": ["OBJECTID", "SHAPE_Leng", "Tile_DRB", "Tile", "Shape_Le_1", "Shape_Area"], 
+                "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
+                "path": "c:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\gcm_proj_wgs", 
+                "num_features": 6, 
+                "type": "POLYGON", 
+                "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
+
+    fixture["giss"] = {"extents": (-77.50000282499991, -72.50000059199992, 36.000007148000066, 46.00000926800006), 
+                "name": "GISS_proj_wgs.shp", 
+                "fields": ["OBJECTID", "SHAPE_Leng", "Tile_DRB", "Tile", "Shape_Le_1", "Shape_Area"], 
+                "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
+                "path": "c:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\gcm_proj_wgs", 
+                "num_features": 10, 
+                "type": "POLYGON", 
+                "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
+
+    fixture["ncar"] = {"extents": (-78.125002881412, -73.12500082090243, 36.753934288860414, 44.293199945821605), 
+                "name": "NCAR_proj_wgs.shp", 
+                "fields": ["OBJECTID", "SHAPE_Leng", "SHAPE_Area", "Tile_DRB", "Tile"], 
+                "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
+                "path": "c:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\gcm_proj_wgs", 
+                "num_features": 32, 
+                "type": "POLYGON", 
+                "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
+
+
     return fixture
 
 def test_print_shapefile_data():
@@ -233,7 +294,15 @@ def test_plot_shapefiles_map():
     print("--- Testing plot_shapefile_data ---")
     
     fixture = _create_shapefile_test_data()
-    plot_shapefiles_map(shapefiles = [fixture["testbasin"]])
+    
+    plot_shapefiles_map(shapefiles = [fixture["testbasin"], fixture["waterbasin"]], display_fields = ["Id", "Id"], title = "Testing plotting of map")    
+
+    plot_shapefiles_map(shapefiles = [fixture["testbasin"], fixture["waterbasin_multi"]], display_fields = ["STAID"], title = "Sample test basins")
+
+    plot_shapefiles_map(shapefiles = [fixture["canes"], fixture["waterbasin_multi"]], display_fields = ["Tile", "STAID"], title = "Canes GCM with sample basins")
+
+    plot_shapefiles_map(shapefiles = [fixture["canes"], fixture["gfdl"], fixture["giss"], fixture["ncar"], fixture["waterbasin_multi"]], display_fields = ["Tile"], title = "Many GCM's with sample basins")
+    
     
     print("")
 

@@ -45,7 +45,7 @@ def test_create_shapefile_dict():
     print("--- create_shapefile_dict() ---") 
 
     # expected values to test with actual values
-    expected = {"shapefile_datatype": None, "type": None, "path": None, "name": None, "num_features": None, "fields": [], "spatialref": None, "extents": (), "coords": None}
+    expected = {"shapefile_datatype": None, "type": None, "path": None, "name": None, "num_features": None, "fields": [], "spatialref": None, "extents": ()}
     
     # actual values
     actual = spatialvectors.create_shapefile_dict()
@@ -129,6 +129,86 @@ def test_fill_shapefile_dict4():
     
     # actual values
     actual = spatialvectors.fill_shapefile_dict(shapefile = basin_shapefile)
+  
+    np.testing.assert_equal(actual, expected)
+
+def test_fill_shapefile_dict4():
+
+    # expected values to test with actual values
+    expected = {"extents": (-77.34375265636656, -71.71875035838741, 36.27781521345216, 44.64950905729846), 
+                "name": "CanES_proj_wgs.shp", 
+                "fields": ["OBJECTID", "SHAPE_Leng", "SHAPE_Area", "TileDRB", "Tile"], 
+                "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
+                "path": "c:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\gcm_proj_wgs", 
+                "num_features": 6, 
+                "type": "POLYGON", 
+                "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
+                
+    # Open the shapefiles
+    canes_shapefile = osgeo.ogr.Open(fixture["canes_file"])
+    
+    # actual values
+    actual = spatialvectors.fill_shapefile_dict(shapefile = canes_shapefile)
+  
+    np.testing.assert_equal(actual, expected)
+
+def test_fill_shapefile_dict5():
+
+    # expected values to test with actual values
+    expected = {"extents": (-77.50000269499992, -72.50000069999992, 38.426973659000055, 44.49439100300006), 
+                "name": "GFDL_proj_wgs.shp", 
+                "fields": ["OBJECTID", "SHAPE_Leng", "Tile_DRB", "Tile", "Shape_Le_1", "Shape_Area"], 
+                "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
+                "path": "c:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\gcm_proj_wgs", 
+                "num_features": 6, 
+                "type": "POLYGON", 
+                "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
+                
+    # Open the shapefiles
+    gfdl_shapefile = osgeo.ogr.Open(fixture["gfdl_file"])
+    
+    # actual values
+    actual = spatialvectors.fill_shapefile_dict(shapefile = gfdl_shapefile)
+  
+    np.testing.assert_equal(actual, expected)
+
+def test_fill_shapefile_dict6():
+
+    # expected values to test with actual values
+    expected = {"extents": (-77.50000282499991, -72.50000059199992, 36.000007148000066, 46.00000926800006), 
+                "name": "GISS_proj_wgs.shp", 
+                "fields": ["OBJECTID", "SHAPE_Leng", "Tile_DRB", "Tile", "Shape_Le_1", "Shape_Area"], 
+                "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
+                "path": "c:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\gcm_proj_wgs", 
+                "num_features": 10, 
+                "type": "POLYGON", 
+                "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
+                
+    # Open the shapefiles
+    giss_shapefile = osgeo.ogr.Open(fixture["giss_file"])
+    
+    # actual values
+    actual = spatialvectors.fill_shapefile_dict(shapefile = giss_shapefile)
+  
+    np.testing.assert_equal(actual, expected)
+    
+def test_fill_shapefile_dict7():
+
+    # expected values to test with actual values
+    expected = {"extents": (-78.125002881412, -73.12500082090243, 36.753934288860414, 44.293199945821605), 
+                "name": "NCAR_proj_wgs.shp", 
+                "fields": ["OBJECTID", "SHAPE_Leng", "SHAPE_Area", "Tile_DRB", "Tile"], 
+                "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
+                "path": "c:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\gcm_proj_wgs", 
+                "num_features": 32, 
+                "type": "POLYGON", 
+                "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
+                
+    # Open the shapefiles
+    ncar_shapefile = osgeo.ogr.Open(fixture["ncar_file"])
+    
+    # actual values
+    actual = spatialvectors.fill_shapefile_dict(shapefile = ncar_shapefile)
   
     np.testing.assert_equal(actual, expected)
 

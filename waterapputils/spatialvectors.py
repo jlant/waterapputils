@@ -386,6 +386,32 @@ def test_fill_shapefile_dict4():
   
     # print results
     _print_test_info(actual, expected) 
+
+def test_fill_shapefile_dict5():
+    """ Test fill_shapefile_dict() """
+
+    print("--- Testing fill_shapefile_dict() part 5 - sample delta shapefile ---") 
+
+    # expected values to test with actual values
+    expected = {"extents": (-77.34375265636656, -71.71875035838741, 36.27781521345216, 44.64950905729846), 
+                "name": "CanES_proj_wgs.shp", 
+                "fields": ["OBJECTID", "SHAPE_Leng", "SHAPE_Area", "TileDRB", "Tile"], 
+                "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
+                "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\gcm_proj_wgs", 
+                "num_features": 6, 
+                "type": "POLYGON", 
+                "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
+                
+    canes_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/CanES_proj_wgs.shp"))
+
+    # Open the shapefiles
+    canes_shapefile = osgeo.ogr.Open(canes_file)  
+    
+    # actual values
+    actual = fill_shapefile_dict(shapefile = canes_shapefile)
+  
+    # print results
+    _print_test_info(actual, expected) 
        
 def test_get_intersected_field_values1():
     """ Test get_intersected_field_values() """
@@ -559,6 +585,8 @@ def main():
     test_fill_shapefile_dict3()
 
     test_fill_shapefile_dict4()
+
+    test_fill_shapefile_dict5()
 
     test_get_shapefile_coords()
     
