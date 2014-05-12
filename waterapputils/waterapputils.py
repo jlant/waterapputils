@@ -60,6 +60,41 @@ def process_txt_files(file_list, arguments):
         # close error logging
         waterapputils_logging.remove_loggers()
 
+def process_xml_files(file_list, arguments):
+    """    
+    Process a list of WATER xml files according to options contained in arguments parameter.
+
+    Parameters
+    ----------
+    file_list : list 
+        List of files to parse, process, and plot.        
+    arguments : argparse object
+        An argparse object containing user options.                    
+    """
+    for f in file_list:
+                
+        filedir, filename = helpers.get_file_info(f)
+          
+        # create output directory     
+        outputdirpath = helpers.make_directory(path = filedir, directory_name = "-".join([filename.split(".xml")[0], "output"]))      
+        
+        # initialize error logging
+        waterapputils_logging.initialize_loggers(output_dir = outputdirpath)        
+        
+        # read data
+        data = waterxml.read_file(f)  
+
+        # plot data                            
+        waterapputils_viewer.plot_waterxml_timeseries_data(data, is_visible = arguments.showplot, save_path = outputdirpath)             
+        waterapputils_viewer.plot_waterxml_topographic_wetness_index_data(data, is_visible = arguments.showplot, save_path = outputdirpath) 
+        
+        # print data
+        if arguments.verbose: 
+            waterapputils_viewer.print_waterxml_data(data)  
+
+        # close error logging
+        waterapputils_logging.remove_loggers()
+
 def process_txtcmp(file_list, arguments):
     """    
     Compare two WATER text files according to options contained in arguments parameter.
@@ -97,41 +132,6 @@ def process_txtcmp(file_list, arguments):
 
     # close error logging
     waterapputils_logging.remove_loggers()
-
-def process_xml_files(file_list, arguments):
-    """    
-    Process a list of WATER xml files according to options contained in arguments parameter.
-
-    Parameters
-    ----------
-    file_list : list 
-        List of files to parse, process, and plot.        
-    arguments : argparse object
-        An argparse object containing user options.                    
-    """
-    for f in file_list:
-                
-        filedir, filename = helpers.get_file_info(f)
-          
-        # create output directory     
-        outputdirpath = helpers.make_directory(path = filedir, directory_name = "-".join([filename.split(".xml")[0], "output"]))      
-        
-        # initialize error logging
-        waterapputils_logging.initialize_loggers(output_dir = outputdirpath)        
-        
-        # read data
-        data = waterxml.read_file(f)  
-
-        # plot data                            
-        waterapputils_viewer.plot_waterxml_timeseries_data(data, is_visible = arguments.showplot, save_path = outputdirpath)             
-        waterapputils_viewer.plot_waterxml_topographic_wetness_index_data(data, is_visible = arguments.showplot, save_path = outputdirpath) 
-        
-        # print data
-        if arguments.verbose: 
-            waterapputils_viewer.print_watertxt_data(data)  
-
-        # close error logging
-        waterapputils_logging.remove_loggers()
 
 def process_xmlcmp(file_list, arguments):
     """    
@@ -270,11 +270,13 @@ def main():
     group.add_argument("-watertxt", "--watertxtfiles", nargs = "+", help = "List WATER text data file(s) to be processed")
     group.add_argument("-watertxtfd", "--watertxtfiledialog", action = "store_true", help = "Open a file dialog window to select WATER text data file(s).")
     group.add_argument("-watertxtcmp", "--watertxtcompare", nargs = 2, help = "List 2 WATER text data file(s) to be compared")
+    group.add_argument("-watertxtcmpfd", "--watertxtcomparefiledialog", action = "store_true", help = "Open 2 separate file dialog windows to select WATER text data file(s) to be compared")
 
     group.add_argument("-waterxml", "--waterxmlfiles", nargs = "+", help = "List WATER xml data file(s) to be processed")
     group.add_argument("-waterxmlfd", "--waterxmlfiledialog", action = "store_true", help = "Open a file dialog window to select WATER xml data file(s).")
     group.add_argument("-waterxmlcmp", "--waterxmlcompare", nargs = 2, help = "List 2 WATER xml data file(s) to be compared")
-
+    group.add_argument("-waterxmlcmpfd", "--waterxmlcomparefiledialog", action = "store_true", help = "Open 2 separate file dialog windows to select WATER XML data file(s) to be compared")
+    
     group.add_argument("-applydeltastxt", "--applydeltasdatatxt", nargs = 2, help = "List WATER text data file followed by delta file to be applied.")
     group.add_argument("-applydeltasxml", "--applydeltasdataxml", nargs = 2, help = "List WATER xml data file followed by delta file to be applied.")
 
@@ -282,51 +284,73 @@ def main():
     parser.add_argument("-p", "--showplot", action = "store_true",  help = "Show plots of parameters contained in data file(s)")
     args = parser.parse_args()  
 
-    try:
+    # get files from command line arguments and process
+    try:       
         
-        # get files from command line arguments and process
+        # water text files
         if args.watertxtfiles:
             process_txt_files(file_list = args.watertxtfiles, arguments = args)
             sys.exit()
         
-        # get files from file dialog and process
         elif args.watertxtfiledialog:
             root = Tkinter.Tk() 
             files = tkFileDialog.askopenfilenames(title = "Select WATER Text File(s)", filetypes = [("Text file","*.txt"), ("All files", ".*")])
             root.destroy()          
             process_txt_files(file_list = root.tk.splitlist(files), arguments = args)
-        
+            sys.exit()
+
         elif args.watertxtcompare:
             process_txtcmp(file_list = args.watertxtcompare, arguments = args)
+            sys.exit()
 
-        if args.waterxmlfiles:
+        elif args.watertxtcomparefiledialog:
+            root = Tkinter.Tk() 
+            file1 = tkFileDialog.askopenfilename(title = "Select First WATER Text File To Use In Comparision", filetypes = [("Text file","*.txt"), ("All files", ".*")])
+            root.destroy()          
+
+            root = Tkinter.Tk() 
+            file2 = tkFileDialog.askopenfilename(title = "Select Second WATER Text File To Use In Comparision", filetypes = [("Text file","*.txt"), ("All files", ".*")])
+            root.destroy()
+            
+            process_txtcmp(file_list = [file1, file2], arguments = args)
+            sys.exit()
+            
+        # water xml files
+        elif args.waterxmlfiles:
             process_xml_files(file_list = args.waterxmlfiles, arguments = args)
             sys.exit()
         
-        # get files from file dialog and process
         elif args.waterxmlfiledialog:
             root = Tkinter.Tk() 
             files = tkFileDialog.askopenfilenames(title = "Select WATER XML File(s)", filetypes = [("XML file","*.xml"), ("All files", ".*")])
             root.destroy()          
             process_xml_files(file_list = root.tk.splitlist(files), arguments = args)
+            sys.exit()
 
         elif args.waterxmlcompare:
             process_xmlcmp(file_list = args.waterxmlcompare, arguments = args)
+            sys.exit()
 
+        elif args.waterxmlcomparefiledialog:
+            root = Tkinter.Tk() 
+            file1 = tkFileDialog.askopenfilename(title = "Select First WATER XML File To Use In Comparision", filetypes = [("XML file","*.xml"), ("All files", ".*")])
+            root.destroy()          
+
+            root = Tkinter.Tk() 
+            file2 = tkFileDialog.askopenfilename(title = "Select Second WATER XML File To Use In Comparision", filetypes = [("XML file","*.xml"), ("All files", ".*")])
+            root.destroy()
+            
+            process_xmlcmp(file_list = [file1, file2], arguments = args)
+            sys.exit()
+
+        # apply deltas
         elif args.applydeltasdatatxt:
             apply_deltas_to_txt(file_list = args.applydeltasdatatxt, arguments = args)
+            sys.exit()
 
         elif args.applydeltasdataxml:
             apply_deltas_to_xml(file_list = args.applydeltasdataxml, arguments = args)
-                 
-        # process file(s) using standard input
-        else:
-            data = watertxt.read_file_in(sys.stdin) 
-            outputdirpath = helpers.make_directory(path = os.getcwd(), directory_name = args.outputdir)
-            waterapputils_viewer.plot_data(data, is_visible = args.showplot, save_path = outputdirpath) 
-                    
-            if args.verbose: 
-                waterapputils_viewer.print_info(data)
+            sys.exit() 
             
     except IOError as error:
         logging.exception("IO error: {0}".format(error.message))
@@ -337,7 +361,11 @@ def main():
         sys.exit(1)
 
     except IndexError as error:
-        logging.exception("Index: {0}".format(error.message))
+        logging.exception("Index error: {0}".format(error.message))
+        sys.exit(1)
+
+    except AssertionError as error:
+        logging.exception("Assertion error: {0}".format(error.message))
         sys.exit(1)
         
 if __name__ == "__main__":
