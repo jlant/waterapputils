@@ -276,6 +276,37 @@ def calculate_avg_delta_values(deltas_data, tile_list):
        
     return avg_delta_values   
 
+def get_avg_deltas(delta_files, tiles):
+    """    
+    Get all average Global Climate Model (GCM) delta values for a list of specific 
+    (GCM) tile values.
+
+    Parameters
+    ----------
+    delta_files : list
+        List of delta files to calculate average delta values for
+    tiles : list
+        List of Global Climate Model tile values.
+    
+    See Also
+    --------
+    calculate_avg_delta_values()
+    """
+    # calculate average values for a list of delta files
+    avg_deltas = {}
+    for delta_file in delta_files:
+        
+        # read the delta file
+        deltas_data = read_file(delta_file) 
+                
+        # calculate average deltas for a list of tiles
+        avg_delta_values = calculate_avg_delta_values(deltas_data = deltas_data, tile_list = tiles)
+        
+        # update avgerage delta values dictionary 
+        avg_deltas.update(avg_delta_values)   
+    
+    return avg_deltas
+
     
 def _create_test_data():
     """ Create a delta data dictionary for tests """

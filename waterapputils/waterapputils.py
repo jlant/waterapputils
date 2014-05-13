@@ -17,7 +17,8 @@ import os, sys
 import argparse
 import Tkinter, tkFileDialog
 import logging
-import pdb
+import osgeo.ogr
+
 # my modules
 import helpers
 import watertxt
@@ -25,6 +26,7 @@ import waterxml
 import waterapputils_viewer
 import waterapputils_logging
 import deltas
+import spatialvectors
 
 def process_txt_files(file_list, arguments):
     """    
@@ -213,46 +215,129 @@ def apply_deltas_to_txt(file_list, arguments):
     # close error logging
     waterapputils_logging.remove_loggers()
 
-def apply_deltas_to_xml(file_list, arguments):
+#def apply_deltas_to_xml(file_list, arguments):
+#    """    
+#    Apply delta factors to a WATER *.xml file. The new file created is saved to the same
+#    directory as the *.xml file.
+#
+#    Parameters
+#    ----------
+#    file_list : list 
+#        List of files to parse, process, and plot.        
+#    arguments : argparse object
+#        An argparse object containing user options.                    
+#    """
+#    waterxml_file = file_list[0]
+#    delta_file = file_list[1]
+#                
+#    water_filedir, water_filename = helpers.get_file_info(waterxml_file)
+#    delta_filedir, delta_filename = helpers.get_file_info(delta_file)
+#          
+#    # initialize error logging
+#    waterapputils_logging.initialize_loggers(output_dir = water_filedir)        
+#    
+#    # read data
+#    waterxml_data = waterxml.read_file(waterxml_file)  
+#    deltas_data = deltas.read_file(delta_file) 
+#    
+#    # calculate average deltas for a list of tiles
+#    avg_delta_values = deltas.calculate_avg_delta_values(deltas_data = deltas_data, tile_list = ["31", "32"])
+#
+#    # apply deltas
+#    for key, value in avg_delta_values.iteritems():
+#        if key == "Ppt":
+#            waterxml.apply_factors(waterxml_tree = waterxml_data, element = "ClimaticPrecipitationSeries", factors = avg_delta_values[key])
+#        elif key == "Tmax":
+#            waterxml.apply_factors(waterxml_tree = waterxml_data, element = "ClimaticTemperatureSeries", factors = avg_delta_values[key])
+#
+#    waterxml.write_file(waterxml_tree = waterxml_data, save_path = water_filedir, filename = "-".join([water_filename.split(".xml")[0], "with", delta_filename.split(".txt")[0] , "applied.xml"]))
+#           
+#    # print data
+#    if arguments.verbose: 
+#        waterapputils_viewer.print_watertxt_data(waterxml_data)  
+#
+#    # close error logging
+#    waterapputils_logging.remove_loggers()
+
+def _apply_deltas(waterxml_data, avg_deltas):
+
+
+    import pdb
+    pdb.set_trace()
+
+    # apply deltas 
+    for key, value in avg_deltas.iteritems():
+        if key == "Ppt":
+            waterxml_data = waterxml.apply_factors(waterxml_tree = waterxml_data, element = "ClimaticPrecipitationSeries", factors = avg_deltas[key])
+
+        elif key == "Tmax":
+            waterxml_data = waterxml.apply_factors(waterxml_tree = waterxml_data, element = "ClimaticTemperatureSeries", factors = avg_deltas[key])
+
+    return waterxml_data
+
+def apply_deltas_to_xml_series(files_dict, arguments):
     """    
     Apply delta factors to a WATER *.xml file. The new file created is saved to the same
     directory as the *.xml file.
 
     Parameters
     ----------
-    file_list : list 
-        List of files to parse, process, and plot.        
+    files_dict : dictionary
+        Dictionary of 
     arguments : argparse object
         An argparse object containing user options.                    
+
+    Notes
+    -----
+    files_dict = {"delta_files": list of delta text files,
+                  "delta_shapefile": shapefile corresponding to delta files,
+                  "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with delta shapefile}    
     """
-    waterxml_file = file_list[0]
-    delta_file = file_list[1]
-                
-    water_filedir, water_filename = helpers.get_file_info(waterxml_file)
-    delta_filedir, delta_filename = helpers.get_file_info(delta_file)
-          
     # initialize error logging
-    waterapputils_logging.initialize_loggers(output_dir = water_filedir)        
+    waterapputils_logging.initialize_loggers(output_dir = os.getcwd())
     
-    # read data
-    waterxml_data = waterxml.read_file(waterxml_file)  
-    deltas_data = deltas.read_file(delta_file) 
-    
-    # calculate average deltas for a list of tiles
-    avg_delta_values = deltas.calculate_avg_delta_values(deltas_data = deltas_data, tile_list = ["31", "32"])
+    # open shapefiles
+    delta_shapefile = osgeo.ogr.Open(files_dict["delta_shapefile"]) 
+    basin_shapefile = osgeo.ogr.Open(files_dict["basin_shapefile"]) 
 
-    # apply deltas
-    for key, value in avg_delta_values.iteritems():
-        if key == "Ppt":
-            waterxml.apply_factors(waterxml_tree = waterxml_data, element = "ClimaticPrecipitationSeries", factors = avg_delta_values[key])
-        elif key == "Tmax":
-            waterxml.apply_factors(waterxml_tree = waterxml_data, element = "ClimaticTemperatureSeries", factors = avg_delta_values[key])
+    # find intersecting tiles based on water basin supplied
+    intersecting_tiles = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = delta_shapefile, intersectee_field = "Tile")
 
-    waterxml.write_file(waterxml_tree = waterxml_data, save_path = water_filedir, filename = "-".join([water_filename.split(".xml")[0], "with", delta_filename.split(".txt")[0] , "applied.xml"]))
-           
-    # print data
-    if arguments.verbose: 
-        waterapputils_viewer.print_watertxt_data(waterxml_data)  
+    print("Intersecting tiles: {}".format(intersecting_tiles))        
+    for featureid, tiles in intersecting_tiles.iteritems():                    
+        print("FeatureId: {}".format(featureid))  
+        print("Tiles: {}".format(tiles))  
+
+        # get average values for a list of delta files
+        avg_deltas = deltas.get_avg_deltas(delta_files = files_dict["delta_files"], tiles = tiles)  
+        
+        # get the xml data associated with the basin shapefile
+#        root = Tkinter.Tk() 
+#        waterxml_file = tkFileDialog.askopenfilename(title = "Select WATER XML File That Corresponds to Feature ID (FID): {}".format(featureid), filetypes = [("All files", ".*"), ("XML file","*.xml")])
+#        root.destroy()       
+
+        # get xml file information to use in writing new xml file            
+#        waterxml_filedir, waterxml_filename = helpers.get_file_info(waterxml_file)
+        waterxml_filedir, waterxml_filename = helpers.get_file_info("../data/waterxml-datafiles/WATERSimulation_1981_2011.xml")
+        
+        # read xml data
+#        waterxml_tree = waterxml.read_file(waterxml_file)            
+        waterxml_tree = waterxml.read_file("../data/waterxml-datafiles/WATERSimulation_1981_2011.xml")      
+                   
+        # apply deltas
+        for key, value in avg_deltas.iteritems():
+            if key == "Ppt":
+                waterxml.apply_factors(waterxml_tree = waterxml_tree, element = "ClimaticPrecipitationSeries", factors = avg_deltas[key])
+
+            elif key == "Tmax":
+                waterxml.apply_factors(waterxml_tree = waterxml_tree, element = "ClimaticTemperatureSeries", factors = avg_deltas[key])
+
+        # write updated xml                
+        waterxml.write_file(waterxml_tree = waterxml_tree, save_path = waterxml_filedir, filename = "-".join([waterxml_filename.split(".xml")[0], "updated-for-FID", featureid, ".xml"]))
+               
+        # print data
+        if arguments.verbose: 
+            waterapputils_viewer.print_watertxt_data(waterxml_tree)  
 
     # close error logging
     waterapputils_logging.remove_loggers()
@@ -277,8 +362,9 @@ def main():
     group.add_argument("-waterxmlcmp", "--waterxmlcompare", nargs = 2, help = "List 2 WATER xml data file(s) to be compared")
     group.add_argument("-waterxmlcmpfd", "--waterxmlcomparefiledialog", action = "store_true", help = "Open 2 separate file dialog windows to select WATER XML data file(s) to be compared")
     
-    group.add_argument("-applydeltastxt", "--applydeltasdatatxt", nargs = 2, help = "List WATER text data file followed by delta file to be applied.")
-    group.add_argument("-applydeltasxml", "--applydeltasdataxml", nargs = 2, help = "List WATER xml data file followed by delta file to be applied.")
+    group.add_argument("-applydeltastxt", "--applydeltastxt", nargs = 2, help = "List WATER text data file followed by delta file to be applied.")
+    group.add_argument("-applydeltasxml", "--applydeltasxml", nargs = 2, help = "List WATER xml data file followed by delta file to be applied.")
+    group.add_argument("-applydeltasxmlfd", "--applydeltasxmlfiledialog", action = "store_true", help = "Open a series of file dialog windows to apply deltas to WATER XML data file(s)")
 
     parser.add_argument("-v", "--verbose", action = "store_true",  help = "Print general information about data file(s)")
     parser.add_argument("-p", "--showplot", action = "store_true",  help = "Show plots of parameters contained in data file(s)")
@@ -344,12 +430,38 @@ def main():
             sys.exit()
 
         # apply deltas
-        elif args.applydeltasdatatxt:
+        elif args.applydeltastxt:
             apply_deltas_to_txt(file_list = args.applydeltasdatatxt, arguments = args)
             sys.exit()
 
-        elif args.applydeltasdataxml:
+        elif args.applydeltasxml:
             apply_deltas_to_xml(file_list = args.applydeltasdataxml, arguments = args)
+            sys.exit() 
+
+        elif args.applydeltasxmlfiledialog:
+            # get delta_files
+#            root = Tkinter.Tk() 
+#            delta_files = tkFileDialog.askopenfilenames(title = "Select Global Climate Model Delta Files To Apply", filetypes = [("All files", ".*"), ("Text file","*.txt")])       
+#            delta_files = root.tk.splitlist(delta_files)
+#            root.destroy()   
+#            
+#            # get delta shapefile
+#            root = Tkinter.Tk() 
+#            delta_shapefile = tkFileDialog.askopenfilename(title = "Select Global Climate Model Shapefile To Use", filetypes = [("All files", ".*"), ("Shapefile file","*.shp")])
+#            root.destroy()   
+#            
+#            # get basin shapefile
+#            root = Tkinter.Tk() 
+#            water_shapefile = tkFileDialog.askopenfilename(title = "Select WATER Basin Shapefile To Use", filetypes = [("All files", ".*"), ("Shapefile file","*.shp")])
+#            root.destroy() 
+
+#            files_dict = {"delta_files": delta_files, "delta_shapefile": delta_shapefile, "basin_shapefile": water_shapefile}
+
+            files_dict = {"delta_files": ["../data/deltas-gcm/CanES/RCP45/2030/Ppt.txt", "../data/deltas-gcm/CanES/RCP45/2030/Tmax.txt"], 
+                          "delta_shapefile": "../data/deltas-gcm/gcm_proj_wgs/CanES_proj_wgs.shp", 
+                          "basin_shapefile": "../data/deltas-gcm/testbasin_proj_wgs/testbasin_multi_proj_wgs.shp"}
+            
+            apply_deltas_to_xml_series(files_dict = files_dict, arguments = args)
             sys.exit() 
             
     except IOError as error:
