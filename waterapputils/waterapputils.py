@@ -215,65 +215,7 @@ def apply_deltas_to_txt(file_list, arguments):
     # close error logging
     waterapputils_logging.remove_loggers()
 
-#def apply_deltas_to_xml(file_list, arguments):
-#    """    
-#    Apply delta factors to a WATER *.xml file. The new file created is saved to the same
-#    directory as the *.xml file.
-#
-#    Parameters
-#    ----------
-#    file_list : list 
-#        List of files to parse, process, and plot.        
-#    arguments : argparse object
-#        An argparse object containing user options.                    
-#    """
-#    waterxml_file = file_list[0]
-#    delta_file = file_list[1]
-#                
-#    water_filedir, water_filename = helpers.get_file_info(waterxml_file)
-#    delta_filedir, delta_filename = helpers.get_file_info(delta_file)
-#          
-#    # initialize error logging
-#    waterapputils_logging.initialize_loggers(output_dir = water_filedir)        
-#    
-#    # read data
-#    waterxml_data = waterxml.read_file(waterxml_file)  
-#    deltas_data = deltas.read_file(delta_file) 
-#    
-#    # calculate average deltas for a list of tiles
-#    avg_delta_values = deltas.calculate_avg_delta_values(deltas_data = deltas_data, tile_list = ["31", "32"])
-#
-#    # apply deltas
-#    for key, value in avg_delta_values.iteritems():
-#        if key == "Ppt":
-#            waterxml.apply_factors(waterxml_tree = waterxml_data, element = "ClimaticPrecipitationSeries", factors = avg_delta_values[key])
-#        elif key == "Tmax":
-#            waterxml.apply_factors(waterxml_tree = waterxml_data, element = "ClimaticTemperatureSeries", factors = avg_delta_values[key])
-#
-#    waterxml.write_file(waterxml_tree = waterxml_data, save_path = water_filedir, filename = "-".join([water_filename.split(".xml")[0], "with", delta_filename.split(".txt")[0] , "applied.xml"]))
-#           
-#    # print data
-#    if arguments.verbose: 
-#        waterapputils_viewer.print_watertxt_data(waterxml_data)  
-#
-#    # close error logging
-#    waterapputils_logging.remove_loggers()
 
-def _apply_deltas(waterxml_data, avg_deltas):
-
-
-    import pdb
-    pdb.set_trace()
-
-    # apply deltas 
-    for key, value in avg_deltas.iteritems():
-        if key == "Ppt":
-            waterxml_data = waterxml.apply_factors(waterxml_tree = waterxml_data, element = "ClimaticPrecipitationSeries", factors = avg_deltas[key])
-
-        elif key == "Tmax":
-            waterxml_data = waterxml.apply_factors(waterxml_tree = waterxml_data, element = "ClimaticTemperatureSeries", factors = avg_deltas[key])
-
-    return waterxml_data
 
 def apply_deltas_to_xml_series(files_dict, arguments):
     """    
@@ -291,10 +233,15 @@ def apply_deltas_to_xml_series(files_dict, arguments):
     -----
     files_dict = {"delta_files": list of delta text files,
                   "delta_shapefile": shapefile corresponding to delta files,
-                  "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with delta shapefile}    
+                  "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with delta shapefile,
+                  "waterxml_directory": path to directory containing xml file or files"
+                  "outputxml_directory": path of directory to store new updated xml files}    
     """
     # initialize error logging
-    waterapputils_logging.initialize_loggers(output_dir = os.getcwd())
+    waterapputils_logging.initialize_loggers(output_dir = files_dict["outputxml_directory"])
+
+    # find all xml files that match WATERSimulation.xml tag in provided waterxml_directory
+    waterxml_files = helpers.find_files(name = "WATERSimulation.xml", path = files_dict["waterxml_directory"])
     
     # open shapefiles
     delta_shapefile = osgeo.ogr.Open(files_dict["delta_shapefile"]) 
@@ -310,34 +257,40 @@ def apply_deltas_to_xml_series(files_dict, arguments):
 
         # get average values for a list of delta files
         avg_deltas = deltas.get_avg_deltas(delta_files = files_dict["delta_files"], tiles = tiles)  
-        
-        # get the xml data associated with the basin shapefile
-#        root = Tkinter.Tk() 
-#        waterxml_file = tkFileDialog.askopenfilename(title = "Select WATER XML File That Corresponds to Feature ID (FID): {}".format(featureid), filetypes = [("All files", ".*"), ("XML file","*.xml")])
-#        root.destroy()       
+    
+        # get the xml data file associated with the basin shapefile 
+        for waterxml_file in waterxml_files:
+            # get the file info
+            waterxml_filedir_path, waterxml_filename = helpers.get_file_info(waterxml_file)
+            # get the directory info
+            waterxml_parentdir_path, waterxml_parentdirname = os.path.split(waterxml_filedir_path)
+            # if the parent directory name of the xml file matches the featureid, then process that file            
+            if waterxml_parentdirname == featureid:
+                # read the xml
+                waterxml_tree = waterxml.read_file(waterxml_file)       
 
         # get xml file information to use in writing new xml file            
-#        waterxml_filedir, waterxml_filename = helpers.get_file_info(waterxml_file)
-        waterxml_filedir, waterxml_filename = helpers.get_file_info("../data/waterxml-datafiles/WATERSimulation_1981_2011.xml")
-        
-        # read xml data
-#        waterxml_tree = waterxml.read_file(waterxml_file)            
-        waterxml_tree = waterxml.read_file("../data/waterxml-datafiles/WATERSimulation_1981_2011.xml")      
-                   
-        # apply deltas
-        for key, value in avg_deltas.iteritems():
-            if key == "Ppt":
-                waterxml.apply_factors(waterxml_tree = waterxml_tree, element = "ClimaticPrecipitationSeries", factors = avg_deltas[key])
+#        
+#        waterxml_filedir, waterxml_filename = helpers.get_file_info("../data/waterxml-datafiles/WATERSimulation_1981_2011.xml")
+#        
+#        # read xml data
+##        waterxml_tree = waterxml.read_file(waterxml_file)            
+#        waterxml_tree = waterxml.read_file("../data/waterxml-datafiles/WATERSimulation_1981_2011.xml")      
 
-            elif key == "Tmax":
-                waterxml.apply_factors(waterxml_tree = waterxml_tree, element = "ClimaticTemperatureSeries", factors = avg_deltas[key])
+        if waterxml_tree:                   
+            # apply deltas
+            for key, value in avg_deltas.iteritems():
+                if key == "Ppt":
+                    waterxml.apply_factors(waterxml_tree = waterxml_tree, element = "ClimaticPrecipitationSeries", factors = avg_deltas[key])
+    
+                elif key == "Tmax":
+                    waterxml.apply_factors(waterxml_tree = waterxml_tree, element = "ClimaticTemperatureSeries", factors = avg_deltas[key])
+    
+            # write updated xml                
+            waterxml.write_file(waterxml_tree = waterxml_tree, save_path = files_dict["outputxml_directory"], filename = "-".join([waterxml_filename.split(".xml")[0], "updated-for-FID", featureid, ".xml"]))
 
-        # write updated xml                
-        waterxml.write_file(waterxml_tree = waterxml_tree, save_path = waterxml_filedir, filename = "-".join([waterxml_filename.split(".xml")[0], "updated-for-FID", featureid, ".xml"]))
-               
-        # print data
-        if arguments.verbose: 
-            waterapputils_viewer.print_watertxt_data(waterxml_tree)  
+        else:
+            raise AssertionError("Can not find a WATERSimulation.xml file in a directory named: {}".format(featureid))                
 
     # close error logging
     waterapputils_logging.remove_loggers()
@@ -459,7 +412,9 @@ def main():
 
             files_dict = {"delta_files": ["../data/deltas-gcm/CanES/RCP45/2030/Ppt.txt", "../data/deltas-gcm/CanES/RCP45/2030/Tmax.txt"], 
                           "delta_shapefile": "../data/deltas-gcm/gcm_proj_wgs/CanES_proj_wgs.shp", 
-                          "basin_shapefile": "../data/deltas-gcm/testbasin_proj_wgs/testbasin_multi_proj_wgs.shp"}
+                          "basin_shapefile": "../data/deltas-gcm/testbasin_proj_wgs/testbasin_multi_proj_wgs.shp",
+                          "waterxml_directory": "C:/Users/jlant/jeremiah/temp/2014-05-13_testbatch_jgl/",
+                          "outputxml_directory": "../data/waterxml-datafiles/"}
             
             apply_deltas_to_xml_series(files_dict = files_dict, arguments = args)
             sys.exit() 
@@ -479,8 +434,8 @@ def main():
     except AssertionError as error:
         logging.exception("Assertion error: {0}".format(error.message))
         sys.exit(1)
+
         
 if __name__ == "__main__":
-    main()    
+    main() 
 
-  

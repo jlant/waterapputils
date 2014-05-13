@@ -17,6 +17,8 @@ import numpy as np
 import datetime
 import re
 import logging
+import fnmatch
+
 
 def now():
     """    
@@ -36,26 +38,93 @@ def now():
     
     return date_time
 
-def get_file_paths(directory, file_ext = None):
+def find_file(name, path):
     """    
-    Return a list of full file paths from a directory including its subdirectories.
-    Filter fil    
+    Return the full path to a particular file the matches a file name provided.
     
     Parameters
     ----------    
-    directory : string
+    name : string
+        String name of file
+    path : string
+        String path 
+        
+    Returns
+    -------
+    full_path : string 
+        String of the full path for a file.
+    """       
+    for root, directories, files in os.walk(path):
+        if name in files:
+            return os.path.join(root, name)  
+
+def find_files(name, path):
+    """    
+    Return a list of full paths to a file matching a file name provided.  
+    Search starts from path provided.
+    
+    Parameters
+    ----------    
+    name : string
+        String name of file
+    path : string
+        String path 
+       
+    Returns
+    -------
+    results : list 
+        List of strings of full paths for a file. 
+    """    
+    result = []   
+    for root, dirs, files in os.walk(path):
+        if name in files:
+            result.append(os.path.join(root, name))
+            
+    return result
+
+def find_files_with_pattern(pattern, path):
+    """    
+    Return a list of full paths to a file matching a pattern (e.g. *.txt).  
+    Search starts from path provided.   
+    
+    Parameters
+    ----------    
+    pattern : string
+        String pattern to match a file
+    path : string
+        String path to start search 
+        
+    Returns
+    -------
+    results : list 
+        List of strings of full paths for a file. 
+    """  
+    result = []
+    for root, dirs, files in os.walk(path):
+        for name in files:
+            if fnmatch.fnmatch(name, pattern):
+                result.append(os.path.join(root, name))
+    return result
+
+def get_file_paths(path, file_ext = None):
+    """    
+    Return a list of full file paths from a directory including its subdirectories.
+    Filter files based on its file extension.    
+    
+    Parameters
+    ----------    
+    path : string
         String path 
     file_ext : string
         String file extention; e.g. ".txt" 
+        
     Returns
     -------
     file_paths : list 
         List of strings of full file paths from a directory.
     """     
     file_paths = []  
-
-    # Walk the tree.
-    for root, directories, files in os.walk(directory):
+    for root, directories, files in os.walk(path):
         for filename in files:
             filepath = os.path.join(root, filename)
             if file_ext and filepath.endswith(file_ext):
@@ -81,7 +150,7 @@ def get_file_info(path):
     """ 
     filedir, filename = os.path.split(path)
     
-    # filedir is an empty string when file is in current directory 
+    # filedir is an empty string then file is in current directory 
     if not filedir: 
         filedir = os.getcwd()
 
@@ -403,6 +472,39 @@ def test_now():
     print("    {}".format(date_time_str))
     print("")
 
+def test_find_file():
+    """ Test find_file() """
+    
+    print("--- Testing find_file() ---")   
+    
+    file_path = find_file(name = "helpers.py", path = os.getcwd())
+    
+    print("File path is:")
+    print("    {}".format(file_path))
+    print("")
+
+def test_find_files():
+    """ Test find_files() """
+    
+    print("--- Testing find_files() ---")   
+    
+    file_paths = find_files(name = "helpers.py", path = os.getcwd())
+    
+    print("File paths are:")
+    print("    {}".format(file_paths))
+    print("")
+
+def test_find_files_with_pattern():
+    """ Test find_files_with_pattern() """
+    
+    print("--- Testing find_files_with_pattern() ---")   
+    
+    file_paths = find_files_with_pattern(pattern = "*.py", path = os.getcwd())
+    
+    print("File paths are:")
+    print("    {}".format(file_paths))
+    print("")
+
 def test_get_filepaths():
     """ Test get_filepaths() """
     
@@ -583,6 +685,12 @@ def main():
     """ Test functionality of helpers """
 
     test_now()
+
+    test_find_file()
+
+    test_find_files()
+
+    test_find_files_with_pattern()
 
     test_get_filepaths()    
       
