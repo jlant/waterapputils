@@ -196,7 +196,8 @@ def get_intersected_field_values(intersector, intersectee, intersectee_field, in
             intersectee_geometry = intersectee_feature.GetGeometryRef()
             
             if intersector_geometry.Intersect(intersectee_geometry):    
-                field_values.append(intersectee_feature.GetField(intersectee_field))
+                field_value = str(intersectee_feature.GetField(intersectee_field))
+                field_values.append(field_value)
 
         if intersector_field == "FID":
             intersector_field_value = str(intersector_feature.GetFID())
@@ -265,9 +266,9 @@ def test_get_shapefile_coords():
     }
             
                 
-    basin_file_wgs84 = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin_proj_wgs/testbasin_proj_wgs.shp"))
-    basin_file_nad83 = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin/testbasin.shp"))
-    canes_file_wgs84 = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/CanES_proj_wgs.shp"))
+    basin_file_wgs84 = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/testbasin_proj_wgs.shp"))
+    basin_file_nad83 = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/testbasin.shp"))
+    canes_file_wgs84 = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/gcm-tiles/CanES_proj_wgs.shp"))
 
     # Open the shapefiles
     basin_shapefile_wgs84 = osgeo.ogr.Open(basin_file_wgs84) 
@@ -293,12 +294,12 @@ def test_fill_shapefile_dict1():
                 "name": "testbasin_proj_wgs.shp", 
                 "fields": ["Id"], 
                 "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
-                "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\testbasin_proj_wgs", 
+                "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\basins", 
                 "num_features": 1, 
                 "type": "POLYGON", 
                 "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
                 
-    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin_proj_wgs/testbasin_proj_wgs.shp"))
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/testbasin_proj_wgs.shp"))
 
     # Open the shapefiles
     basin_shapefile = osgeo.ogr.Open(basin_file)  
@@ -319,12 +320,12 @@ def test_fill_shapefile_dict2():
                 "name": "waterbasin_proj_wgs.shp", 
                 "fields": ["OBJECTID", "Id", "Shape_Leng", "Shape_Area"], 
                 "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
-                "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\testbasin_proj_wgs", 
+                "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\basins", 
                 "num_features": 1, 
                 "type": "POLYGON", 
                 "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
                 
-    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin_proj_wgs/waterbasin_proj_wgs.shp"))
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/waterbasin_proj_wgs.shp"))
 
     # Open the shapefiles
     basin_shapefile = osgeo.ogr.Open(basin_file)  
@@ -345,12 +346,12 @@ def test_fill_shapefile_dict3():
                 "name": "waterbasin_multi_proj_wgs.shp", 
                 "fields": ["STAID", "da_sqmi", "ForestSum", "AgSum", "DevSum", "FORdivAG"], 
                 "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
-                "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\testbasin_proj_wgs", 
+                "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\basins", 
                 "num_features": 12, 
                 "type": "POLYGON", 
                 "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
                 
-    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin_proj_wgs/waterbasin_multi_proj_wgs.shp"))
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/waterbasin_multi_proj_wgs.shp"))
     
     # Open the shapefiles
     basin_shapefile = osgeo.ogr.Open(basin_file)  
@@ -371,12 +372,12 @@ def test_fill_shapefile_dict4():
                 "name": "testbasin.shp", 
                 "fields": ["Id"], 
                 "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
-                "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\testbasin", 
+                "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\basins", 
                 "num_features": 1, 
                 "type": "POLYGON", 
                 "spatialref": "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs "}
                 
-    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin/testbasin.shp"))   
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/testbasin.shp"))   
     
     # Open the shapefiles
     basin_shapefile = osgeo.ogr.Open(basin_file)  
@@ -397,12 +398,12 @@ def test_fill_shapefile_dict5():
                 "name": "CanES_proj_wgs.shp", 
                 "fields": ["OBJECTID", "SHAPE_Leng", "SHAPE_Area", "TileDRB", "Tile"], 
                 "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
-                "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\gcm_proj_wgs", 
+                "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\gcm-tiles", 
                 "num_features": 6, 
                 "type": "POLYGON", 
                 "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
                 
-    canes_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/CanES_proj_wgs.shp"))
+    canes_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/gcm-tiles/CanES_proj_wgs.shp"))
 
     # Open the shapefiles
     canes_shapefile = osgeo.ogr.Open(canes_file)  
@@ -426,11 +427,11 @@ def test_get_intersected_field_values1():
     expected["ncar_tiles"] = {"0": ["82", "83", "84", "72", "73", "74", "62", "63", "64", "52", "53", "42", "43", "32", "22"]}
 
     # paths to files
-    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin_proj_wgs/testbasin_proj_wgs.shp"))
-    canes_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/CanES_proj_wgs.shp"))
-    gfdl_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/GFDL_proj_wgs.shp"))
-    giss_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/GISS_proj_wgs.shp"))
-    ncar_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/NCAR_proj_wgs.shp"))
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/testbasin_proj_wgs.shp"))
+    canes_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/gcm-tiles/CanES_proj_wgs.shp"))
+    gfdl_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/gcm-tiles/GFDL_proj_wgs.shp"))
+    giss_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/gcm-tiles/GISS_proj_wgs.shp"))
+    ncar_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/gcm-tiles/NCAR_proj_wgs.shp"))
 
     # open the shapefiles
     basin_shapefile = osgeo.ogr.Open(basin_file)    
@@ -465,11 +466,11 @@ def test_get_intersected_field_values2():
     expected["ncar_tiles"] = {"0": ["82", "83", "84", "72", "73", "74", "62", "63", "64", "52", "53", "42", "43", "32", "22"], "1": ["43", "44", "33", "34"], "2": ["24"]}  
 
     # paths to files
-    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin_proj_wgs/testbasin_multi_proj_wgs.shp"))
-    canes_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/CanES_proj_wgs.shp"))
-    gfdl_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/GFDL_proj_wgs.shp"))
-    giss_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/GISS_proj_wgs.shp"))
-    ncar_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/NCAR_proj_wgs.shp"))
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/testbasin_multi_proj_wgs.shp"))
+    canes_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/gcm-tiles/CanES_proj_wgs.shp"))
+    gfdl_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/gcm-tiles/GFDL_proj_wgs.shp"))
+    giss_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/gcm-tiles/GISS_proj_wgs.shp"))
+    ncar_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/gcm-tiles/NCAR_proj_wgs.shp"))
 
     # Open the shapefiles
     basin_shapefile = osgeo.ogr.Open(basin_file)    
@@ -504,11 +505,11 @@ def test_get_intersected_field_values3():
     expected["ncar_tiles"] = {"0": ["82", "83", "84", "72", "73", "74", "62", "63", "64", "52", "53", "42", "43", "32", "22"]}
 
     # paths to files
-    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin/testbasin.shp"))
-    canes_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/CanES/shapefile/CanES.shp"))
-    gfdl_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/GFDL/shapefile/GFDL.shp"))
-    giss_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/GISS/shapefile/GISS.shp"))
-    ncar_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/NCAR/shapefile/NCAR.shp"))
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/testbasin.shp"))
+    canes_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/gcm-tiles/CanES.shp"))
+    gfdl_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/gcm-tiles/GFDL.shp"))
+    giss_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/gcm-tiles/GISS.shp"))
+    ncar_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/gcm-tiles/NCAR.shp"))
 
     # open the shapefiles
     basin_shapefile = osgeo.ogr.Open(basin_file)    
@@ -543,11 +544,11 @@ def test_get_intersected_field_values4():
     expected["ncar_tiles"] = {"01466500": ["43"], "01440000": ["53"], "01415000": ["63"], "01439500": ["53"], "01440400": ["53"], "01442500": ["53"], "01413500": ["63"], "01420500": ["63"], "01435000": ["63", "64"], "01422500": ["63"], "01414500": ["63"], "01422389": ["63"]}
 
     # paths to files
-    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/testbasin_proj_wgs/waterbasin_multi_proj_wgs.shp"))
-    canes_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/CanES_proj_wgs.shp"))
-    gfdl_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/GFDL_proj_wgs.shp"))
-    giss_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/GISS_proj_wgs.shp"))
-    ncar_file = os.path.abspath(os.path.join(os.getcwd(), "../data/deltas-gcm/gcm_proj_wgs/NCAR_proj_wgs.shp"))
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/waterbasin_multi_proj_wgs.shp"))
+    canes_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/gcm-tiles/CanES_proj_wgs.shp"))
+    gfdl_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/gcm-tiles/GFDL_proj_wgs.shp"))
+    giss_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/gcm-tiles/GISS_proj_wgs.shp"))
+    ncar_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/gcm-tiles/NCAR_proj_wgs.shp"))
 
     # Open the shapefiles
     basin_shapefile = osgeo.ogr.Open(basin_file)    
@@ -568,6 +569,37 @@ def test_get_intersected_field_values4():
 
     # print test results        
     _print_test_info(expected, actual)  
+
+def test_get_intersected_field_values5():
+    """ Test get_intersected_field_values() """
+
+    print("--- Testing get_intersected_field_values() part 4 - sample shapefile with multiple features without default key identifier ---")  
+
+    # expected values to test with actual values
+    expected = {}
+    expected["newhydroid"] = {"0": ["12", "11", "8"], "1": ["256", "241", "220", "222"]}   
+
+    # paths to files
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/test_basinsmall_proj_wgs.shp"))
+    point_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/dem_basin_centroids_proj_wgs.shp"))
+
+
+    # Open the shapefiles
+    basin_shapefile = osgeo.ogr.Open(basin_file)    
+    point_shapefile = osgeo.ogr.Open(point_file)
+
+
+    # actual values    
+    actual = {}
+    actual["newhydroid"] = get_intersected_field_values(intersector = basin_shapefile, intersectee = point_shapefile, intersectee_field = "newhydroid")    
+
+    for shapefile in [basin_shapefile, point_shapefile]:
+        shapefile.Destroy()  
+
+
+    # print test results        
+    _print_test_info(expected, actual)  
+   
    
 def main():
     """ Test functionality geospatialvectors.py """
@@ -597,6 +629,8 @@ def main():
     test_get_intersected_field_values3()
 
     test_get_intersected_field_values4()
+
+    test_get_intersected_field_values5()
     
 if __name__ == "__main__":
     main()    
