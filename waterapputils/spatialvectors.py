@@ -573,7 +573,7 @@ def test_get_intersected_field_values4():
 def test_get_intersected_field_values5():
     """ Test get_intersected_field_values() """
 
-    print("--- Testing get_intersected_field_values() part 4 - sample shapefile with multiple features without default key identifier ---")  
+    print("--- Testing get_intersected_field_values() part 5 - sample shapefile with multiple features using points as the intersectee ---")  
 
     # expected values to test with actual values
     expected = {}
@@ -596,10 +596,38 @@ def test_get_intersected_field_values5():
     for shapefile in [basin_shapefile, point_shapefile]:
         shapefile.Destroy()  
 
-
     # print test results        
     _print_test_info(expected, actual)  
    
+def test_get_intersected_field_values6():
+    """ Test get_intersected_field_values() """
+
+    print("--- Testing get_intersected_field_values() part 6 - sample shapefile with multiple features using points as the intersectee using NAD83 Projection ---")  
+
+    # expected values to test with actual values
+    expected = {}
+    expected["newhydroid"] = {"0": ["12", "11", "8"], "1": ["256", "241", "220", "222"]}   
+
+    # paths to files
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/test_basinsmall.shp"))
+    point_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/dem_basin_centroids.shp"))
+
+
+    # Open the shapefiles
+    basin_shapefile = osgeo.ogr.Open(basin_file)    
+    point_shapefile = osgeo.ogr.Open(point_file)
+
+
+    # actual values    
+    actual = {}
+    actual["newhydroid"] = get_intersected_field_values(intersector = basin_shapefile, intersectee = point_shapefile, intersectee_field = "newhydroid")    
+
+    for shapefile in [basin_shapefile, point_shapefile]:
+        shapefile.Destroy()  
+
+    # print test results        
+    _print_test_info(expected, actual)
+
    
 def main():
     """ Test functionality geospatialvectors.py """
@@ -631,6 +659,8 @@ def main():
     test_get_intersected_field_values4()
 
     test_get_intersected_field_values5()
+
+    test_get_intersected_field_values6()
     
 if __name__ == "__main__":
     main()    
