@@ -216,7 +216,7 @@ def _create_shapefile_test_data():
                             "name": "testbasin_proj_wgs.shp", 
                             "fields": ["Id"], 
                             "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
-                            "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\testbasin_proj_wgs", 
+                            "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\basins", 
                             "num_features": 1, 
                             "type": "POLYGON", 
                             "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
@@ -225,7 +225,7 @@ def _create_shapefile_test_data():
                             "name": "waterbasin_proj_wgs.shp", 
                             "fields": ["OBJECTID", "Id", "Shape_Leng", "Shape_Area"], 
                             "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
-                            "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\testbasin_proj_wgs", 
+                            "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\basins", 
                             "num_features": 1, 
                             "type": "POLYGON", 
                             "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
@@ -234,7 +234,7 @@ def _create_shapefile_test_data():
                                     "name": "waterbasin_multi_proj_wgs.shp", 
                                     "fields": ["STAID", "da_sqmi", "ForestSum", "AgSum", "DevSum", "FORdivAG"], 
                                     "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
-                                    "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\testbasin_proj_wgs", 
+                                    "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\basins", 
                                     "num_features": 12, 
                                     "type": "POLYGON", 
                                     "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
@@ -243,7 +243,7 @@ def _create_shapefile_test_data():
                         "name": "CanES_proj_wgs.shp", 
                         "fields": ["OBJECTID", "SHAPE_Leng", "SHAPE_Area", "TileDRB", "Tile"], 
                         "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
-                        "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\gcm_proj_wgs", 
+                        "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\gcm-tiles", 
                         "num_features": 6, 
                         "type": "POLYGON", 
                         "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
@@ -252,7 +252,7 @@ def _create_shapefile_test_data():
                 "name": "GFDL_proj_wgs.shp", 
                 "fields": ["OBJECTID", "SHAPE_Leng", "Tile_DRB", "Tile", "Shape_Le_1", "Shape_Area"], 
                 "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
-                "path": "c:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\gcm_proj_wgs", 
+                "path": "c:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\gcm-tiles", 
                 "num_features": 6, 
                 "type": "POLYGON", 
                 "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
@@ -261,7 +261,7 @@ def _create_shapefile_test_data():
                 "name": "GISS_proj_wgs.shp", 
                 "fields": ["OBJECTID", "SHAPE_Leng", "Tile_DRB", "Tile", "Shape_Le_1", "Shape_Area"], 
                 "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
-                "path": "c:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\gcm_proj_wgs", 
+                "path": "c:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\gcm-tiles", 
                 "num_features": 10, 
                 "type": "POLYGON", 
                 "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
@@ -270,7 +270,7 @@ def _create_shapefile_test_data():
                 "name": "NCAR_proj_wgs.shp", 
                 "fields": ["OBJECTID", "SHAPE_Leng", "SHAPE_Area", "Tile_DRB", "Tile"], 
                 "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
-                "path": "c:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\deltas-gcm\\gcm_proj_wgs", 
+                "path": "c:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\gcm-tiles", 
                 "num_features": 32, 
                 "type": "POLYGON", 
                 "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
@@ -291,7 +291,7 @@ def test_print_shapefile_data():
 def test_plot_shapefiles_map():
     """ Test plot_shapefile_data """
     
-    print("--- Testing plot_shapefile_data ---")
+    print("--- Testing plot_shapefile_data() ---")
     
     fixture = _create_shapefile_test_data()
     
