@@ -19,7 +19,6 @@ from StringIO import StringIO
 import datetime
 import numpy as np
 import os
-import pdb
 
 # my modules
 import waterxml
@@ -43,7 +42,7 @@ def print_watertxt_data(watertxt_data):
     >>> discharge_data = np.array([100 + i for i in range(11)])
     >>> subsurfaceflow_data = np.array([i + 2 for i in range(11)])      
     >>> parameters = [{"name": "Discharge (cfs)", "index": 0,
-                   ... "data": discharge_data, "mean": np.mean(discharge_data), "max": np.max(discharge_data), 
+                   ... "data": discharge_data, "mean": np.mean(discharge_data), "max": np.b(discharge_data), 
                    ... "min": np.min(discharge_data)}, 
                       {"name": "Subsurface Flow (mm/day)", "index": 1,
                    ... "data": subsurfaceflow_data, "mean": np.mean(subsurfaceflow_data), "max": np.max(subsurfaceflow_data), 
@@ -554,7 +553,7 @@ def plot_waterxml_timeseries_data(waterxml_tree, is_visible = True, save_path = 
             legend.draggable(state=True)
             
             # show text of mean, max, min values on graph; use matplotlib.patch.Patch properies and bbox
-            text = "mean = %.2f\nmax = %.2f\nmin = %.2f" % (np.mean(values[i]), max(values[i]), min(values[i]))
+            text = "mean = %.2f\nmax = %.2f\nmin = %.2f" % (np.nanmean(values[i]), np.nanmax(values[i]), min(values[i]))
             patch_properties = {"boxstyle": "round", "facecolor": "wheat", "alpha": 0.5}
                            
             ax.text(0.05, 0.95, text, transform = ax.transAxes, fontsize = 14, 
@@ -613,7 +612,9 @@ def plot_waterxml_timeseries_comparison(waterxml_tree1, waterxml_tree2, is_visib
             assert region_type1 == region_type2, "Region Types {} and {} are not equal".format(region_type1, region_type2)
             assert sim_id1 == sim_id2, "Simulation Id's {} and {} are not equal".format(sim_id1, sim_id2)
             assert units1[i] == units2[i], "Units {} and {} are not equal".format(units1[i], units2[i])            
-            
+            assert len(dates1[i]) == len(dates2[i]), "Length of dates {} and {} are not equal".format(dates1[i], dates2[i]) 
+            assert len(values1[i]) == len(values2[i]), "Length of values {} and {} are not equal".format(values1[i], values2[i]) 
+               
             fig = plt.figure(figsize=(12,10))
             ax1 = fig.add_subplot(211)
             ax1.grid(True)
@@ -641,9 +642,9 @@ def plot_waterxml_timeseries_comparison(waterxml_tree1, waterxml_tree2, is_visib
             ax1.set_xlabel("Date")
             ax1.set_ylabel(ylabel)   
             
-            ax1.plot(dates1[i], values1[i], color = color_str1, label = ylabel + "-xmlfile1", linewidth = 2) 
+            ax1.plot(dates1[i], values1[i], color = color_str1, label = ylabel + " xml-file-1", linewidth = 2) 
             ax1.hold(True)
-            ax1.plot(dates2[i], values2[i], color = color_str2, label = ylabel + "-xmlfile2", linewidth = 2, alpha = 0.6)
+            ax1.plot(dates2[i], values2[i], color = color_str2, label = ylabel + " xml-file-2", linewidth = 2, alpha = 0.6)
             
             # increase y axis to have text and legend show up better
             curr_ylim = ax1.get_ylim()
@@ -663,10 +664,10 @@ def plot_waterxml_timeseries_comparison(waterxml_tree1, waterxml_tree2, is_visib
             legend1.draggable(state=True)
             
             # show text of mean, max, min values on graph; use matplotlib.patch.Patch properies and bbox
-            text = "mean = %.2f\nmax = %.2f\nmin = %.2f\n---\nmean = %.2f\nmax = %.2f\nmin = %.2f" % (np.mean(values1[i]), max(values1[i]), min(values1[i]), np.mean(values2[i]), max(values2[i]), min(values2[i]))
+            text1 = "mean = %.2f\nmax = %.2f\nmin = %.2f\n---\nmean = %.2f\nmax = %.2f\nmin = %.2f" % (np.nanmean(values1[i]), np.nanmax(values1[i]), np.nanmin(values1[i]), np.nanmean(values2[i]), np.nanmax(values2[i]), np.nanmin(values2[i]))
             patch_properties = {"boxstyle": "round", "facecolor": "wheat", "alpha": 0.5}
                            
-            ax1.text(0.05, 0.95, text, transform = ax1.transAxes, fontsize = 14, 
+            ax1.text(0.05, 0.95, text1, transform = ax1.transAxes, fontsize = 14, 
                     verticalalignment = "top", horizontalalignment = "left", bbox = patch_properties)
  
             # plot difference = values_b - values_a
@@ -677,10 +678,20 @@ def plot_waterxml_timeseries_comparison(waterxml_tree1, waterxml_tree2, is_visib
             ax2.set_ylabel('Difference' + ' (' + units1[i] + ')')
             diff = values2[i] - values1[i]
             ax2.plot(dates1[i], diff, color = 'k', linewidth = 2)  
+
+            # increase y axis to have text and legend show up better
+            curr_ylim2 = ax2.get_ylim()
+            ax2.set_ylim((curr_ylim2[0], curr_ylim2[1] * 1.5))
             
             # use a more precise date string for the x axis locations in the toolbar
             ax2.fmt_xdata = mdates.DateFormatter('%Y-%m-%d')
-            
+
+            # show text of mean, max, min values on graph; use matplotlib.patch.Patch properies and bbox
+            text2 = "mean = %.2f\nmax = %.2f\nmin = %.2f\n" % (np.nanmean(diff), np.nanmax(diff), np.nanmin(diff))
+                           
+            ax2.text(0.05, 0.95, text2, transform = ax2.transAxes, fontsize = 14, 
+                    verticalalignment = "top", horizontalalignment = "left", bbox = patch_properties)
+           
             # rotate and align the tick labels so they look better; note that ax2 will 
             # have the dates, but ax1 will not. do not need to rotate each individual axis
             # because this method does it

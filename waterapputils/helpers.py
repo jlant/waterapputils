@@ -51,13 +51,20 @@ def find_file(name, path):
         
     Returns
     -------
-    full_path : string 
+    result : string 
         String of the full path for a file.
-    """       
+    """
+    result = None       
     for root, directories, files in os.walk(path):
         if name in files:
-            return os.path.join(root, name)  
+            result = os.path.join(root, name)  
 
+    # if file was not found, raise an error
+    if not result:
+        raise IOError("Did not find {} files in directory: {}".format(name, path))
+        
+    return result
+       
 def find_files(name, path):
     """    
     Return a list of full paths to a file matching a file name provided.  
@@ -75,12 +82,16 @@ def find_files(name, path):
     results : list 
         List of strings of full paths for a file. 
     """    
-    result = []   
+    results = []   
     for root, dirs, files in os.walk(path):
         if name in files:
-            result.append(os.path.join(root, name))
+            results.append(os.path.join(root, name))
+
+    # if no results (files) were found, raise an error
+    if not results:
+        raise IOError("Did not find {} files in directory: {}".format(name, path))
             
-    return result
+    return results
 
 def find_files_with_pattern(pattern, path):
     """    
@@ -99,12 +110,17 @@ def find_files_with_pattern(pattern, path):
     results : list 
         List of strings of full paths for a file. 
     """  
-    result = []
+    results = []
     for root, dirs, files in os.walk(path):
         for name in files:
             if fnmatch.fnmatch(name, pattern):
-                result.append(os.path.join(root, name))
-    return result
+                results.append(os.path.join(root, name))
+
+    # if no results (files) were found, raise an error
+    if not results:
+        raise IOError("Did not find {} files in directory: {}".format(name, path))
+
+    return results
 
 def get_file_paths(path, file_ext = None):
     """    

@@ -153,7 +153,7 @@ def process_xmlcmp(file_list, arguments):
     filedir2, filename2 = helpers.get_file_info(waterxml_file2)
       
     # create output directory     
-    outputdirpath = helpers.make_directory(path = filedir1, directory_name = "-".join([filename1.split(".xml")[0], filename2.split(".xml")[0] , "comparison", "output"]))         
+    outputdirpath = helpers.make_directory(path = filedir1, directory_name = "-".join([filename1.split(".xml")[0], "vs", filename2.split(".xml")[0], "output"]))         
     
     # initialize error logging
     waterapputils_logging.initialize_loggers(output_dir = outputdirpath)        
@@ -161,7 +161,10 @@ def process_xmlcmp(file_list, arguments):
     # read data
     waterxml_data1 = waterxml.read_file(waterxml_file1)  
     waterxml_data2 = waterxml.read_file(waterxml_file2) 
-    
+ 
+#    import pdb
+#    pdb.set_trace()
+   
     # plot data                            
     waterapputils_viewer.plot_waterxml_timeseries_comparison(waterxml_data1, waterxml_data2, is_visible = arguments.showplot, save_path = outputdirpath) 
             
@@ -216,8 +219,7 @@ def apply_deltas_to_txt(file_list, arguments):
     waterapputils_logging.remove_loggers()
 
 
-
-def apply_deltas_to_xml_series(files_dict, arguments):
+def apply_deltas_to_xml_files(files_dict, arguments):
     """    
     Apply delta factors to a WATER *.xml file. The new file created is saved to the same
     directory as the *.xml file.
@@ -233,64 +235,63 @@ def apply_deltas_to_xml_series(files_dict, arguments):
     -----
     files_dict = {"delta_files": list of delta text files,
                   "delta_shapefile": shapefile corresponding to delta files,
-                  "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with delta shapefile,
-                  "waterxml_directory": path to directory containing xml file or files"
+                  "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with delta shapefile
+                  "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
+                  "waterxml_directory": path to directory containing xml file or files
                   "outputxml_directory": path of directory to store new updated xml files}    
     """
     # initialize error logging
     waterapputils_logging.initialize_loggers(output_dir = files_dict["outputxml_directory"])
-
-    # find all xml files that match WATERSimulation.xml tag in provided waterxml_directory
-    waterxml_files = helpers.find_files(name = "WATERSimulation.xml", path = files_dict["waterxml_directory"])
     
     # open shapefiles
     delta_shapefile = osgeo.ogr.Open(files_dict["delta_shapefile"]) 
     basin_shapefile = osgeo.ogr.Open(files_dict["basin_shapefile"]) 
 
     # find intersecting tiles based on water basin supplied
-    intersecting_tiles = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = delta_shapefile, intersectee_field = "Tile")
+    intersecting_tiles = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = delta_shapefile, intersectee_field = "Tile", intersector_field = files_dict["basin_field"])
 
-    print("Intersecting tiles: {}".format(intersecting_tiles))        
+    print("Intersecting tiles: {}\n".format(intersecting_tiles))        
     for featureid, tiles in intersecting_tiles.iteritems():                    
-        print("FeatureId: {}".format(featureid))  
-        print("Tiles: {}".format(tiles))  
+        print("FeatureId: {}\n".format(featureid))  
+        print("Tiles: {}\n".format(tiles))  
 
         # get average values for a list of delta files
         avg_deltas = deltas.get_avg_deltas(delta_files = files_dict["delta_files"], tiles = tiles)  
-    
-        # get the xml data file associated with the basin shapefile 
-        for waterxml_file in waterxml_files:
-            # get the file info
-            waterxml_filedir_path, waterxml_filename = helpers.get_file_info(waterxml_file)
-            # get the directory info
-            waterxml_parentdir_path, waterxml_parentdirname = os.path.split(waterxml_filedir_path)
-            # if the parent directory name of the xml file matches the featureid, then process that file            
-            if waterxml_parentdirname == featureid:
-                # read the xml
-                waterxml_tree = waterxml.read_file(waterxml_file)       
 
-        # get xml file information to use in writing new xml file            
-#        
-#        waterxml_filedir, waterxml_filename = helpers.get_file_info("../data/waterxml-datafiles/WATERSimulation_1981_2011.xml")
-#        
-#        # read xml data
-##        waterxml_tree = waterxml.read_file(waterxml_file)            
-#        waterxml_tree = waterxml.read_file("../data/waterxml-datafiles/WATERSimulation_1981_2011.xml")      
+        print("Avg deltas: {}\n".format(avg_deltas))
 
-        if waterxml_tree:                   
-            # apply deltas
-            for key, value in avg_deltas.iteritems():
-                if key == "Ppt":
-                    waterxml.apply_factors(waterxml_tree = waterxml_tree, element = "ClimaticPrecipitationSeries", factors = avg_deltas[key])
-    
-                elif key == "Tmax":
-                    waterxml.apply_factors(waterxml_tree = waterxml_tree, element = "ClimaticTemperatureSeries", factors = avg_deltas[key])
-    
-            # write updated xml                
-            waterxml.write_file(waterxml_tree = waterxml_tree, save_path = files_dict["outputxml_directory"], filename = "-".join([waterxml_filename.split(".xml")[0], "updated-for-FID", featureid, ".xml"]))
+        # get the xml data file that has a parent directory matching the current featureid
+        path = os.path.join(files_dict["waterxml_directory"], featureid)
+        waterxml_file = helpers.find_file(name = "WATERSimulation.xml", path = path)
 
-        else:
-            raise AssertionError("Can not find a WATERSimulation.xml file in a directory named: {}".format(featureid))                
+        # get file info
+        waterxml_filedir_path, waterxml_filename = helpers.get_file_info(waterxml_file)
+
+        # read the xml
+        waterxml_tree = waterxml.read_file(waterxml_file)            
+
+        # apply deltas
+        for key, value in avg_deltas.iteritems():
+            if key == "Ppt":
+                waterxml.apply_factors(waterxml_tree = waterxml_tree, element = "ClimaticPrecipitationSeries", factors = avg_deltas[key])
+
+            elif key == "Tmax":
+                waterxml.apply_factors(waterxml_tree = waterxml_tree, element = "ClimaticTemperatureSeries", factors = avg_deltas[key])
+
+        # write updated xml
+        xml_output_filename = "-".join([waterxml_filename.split(".xml")[0], "updated", files_dict["basin_field"], featureid]) + ".xml"                
+        waterxml.write_file(waterxml_tree = waterxml_tree, save_path = files_dict["outputxml_directory"], filename = xml_output_filename)
+
+#        import pdb
+#        pdb.set_trace()
+
+        # plot comparison
+        updated_waterxml_file = os.path.join(files_dict["outputxml_directory"], xml_output_filename)
+        process_xmlcmp(file_list = [updated_waterxml_file, waterxml_file], arguments = arguments)
+#        orig_waterxml_tree = waterxml.read_file(waterxml_file)
+#        updated_waterxml_tree = waterxml.read_file()
+#        waterapputils_viewer.plot_waterxml_timeseries_comparison(waterxml_tree1 = orig_waterxml_tree, waterxml_tree2 = updated_waterxml_tree, is_visible = False, save_path = files_dict["outputxml_directory"])
+
 
     # close error logging
     waterapputils_logging.remove_loggers()
@@ -411,12 +412,13 @@ def main():
 #            files_dict = {"delta_files": delta_files, "delta_shapefile": delta_shapefile, "basin_shapefile": water_shapefile}
 
             files_dict = {"delta_files": ["../data/deltas-gcm/CanES/RCP45/2030/Ppt.txt", "../data/deltas-gcm/CanES/RCP45/2030/Tmax.txt"], 
-                          "delta_shapefile": "../data/deltas-gcm/gcm_proj_wgs/CanES_proj_wgs.shp", 
-                          "basin_shapefile": "../data/deltas-gcm/testbasin_proj_wgs/testbasin_multi_proj_wgs.shp",
-                          "waterxml_directory": "C:/Users/jlant/jeremiah/temp/2014-05-13_testbatch_jgl/",
+                          "delta_shapefile": "../data/spatial-datafiles/gcm-tiles/CanES_proj_wgs.shp", 
+                          "basin_shapefile": "../data/spatial-datafiles/basins/waterbasin_multi_clean_proj_wgs.shp",
+                          "basin_field": "STAID",
+                          "waterxml_directory": "C:/Users/jlant/jeremiah/temp/2014-05-19_testbatch/",
                           "outputxml_directory": "../data/waterxml-datafiles/"}
             
-            apply_deltas_to_xml_series(files_dict = files_dict, arguments = args)
+            apply_deltas_to_xml_files(files_dict = files_dict, arguments = args)
             sys.exit() 
             
     except IOError as error:
