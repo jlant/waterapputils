@@ -413,6 +413,32 @@ def test_fill_shapefile_dict5():
   
     # print results
     _print_test_info(actual, expected) 
+
+def test_fill_shapefile_dict6():
+    """ Test fill_shapefile_dict() """
+
+    print("--- Testing fill_shapefile_dict() part 1 - sample shapefile ---") 
+
+    # expected values to test with actual values
+    expected = {"extents": (-76.36786373172723, -74.39059291460879, 38.71298637220271, 42.42374381313648), 
+                "name": "dem_basin_centroids_proj_wgs.shp", 
+                "fields": ["newhydroid", "HUC_12"], 
+                "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
+                "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\basins", 
+                "num_features": 3736, 
+                "type": "POINT", 
+                "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
+                
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/dem_basin_centroids_proj_wgs.shp"))
+
+    # Open the shapefiles
+    basin_shapefile = osgeo.ogr.Open(basin_file)     
+    
+    # actual values
+    actual = fill_shapefile_dict(shapefile = basin_shapefile)
+  
+    # print results
+    _print_test_info(actual, expected) 
        
 def test_get_intersected_field_values1():
     """ Test get_intersected_field_values() """
@@ -647,6 +673,8 @@ def main():
     test_fill_shapefile_dict4()
 
     test_fill_shapefile_dict5()
+
+    test_fill_shapefile_dict6()
 
     test_get_shapefile_coords()
     

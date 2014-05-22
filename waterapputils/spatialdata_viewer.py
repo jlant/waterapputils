@@ -275,6 +275,14 @@ def _create_shapefile_test_data():
                 "type": "POLYGON", 
                 "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
 
+    fixture["basin_centroids"] = {"extents": (-76.36786373172723, -74.39059291460879, 38.71298637220271, 42.42374381313648), 
+                "name": "dem_basin_centroids_small_proj_wgs.shp", 
+                "fields": ["newhydroid", "HUC_12"], 
+                "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
+                "path": "c:\\Users\\jlant\\jeremiah\\temp\\spatialdata\\", 
+                "num_features": 3736, 
+                "type": "POINT", 
+                "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
 
     return fixture
 
@@ -295,14 +303,15 @@ def test_plot_shapefiles_map():
     
     fixture = _create_shapefile_test_data()
     
-    plot_shapefiles_map(shapefiles = [fixture["testbasin"], fixture["waterbasin"]], display_fields = ["Id", "Id"], title = "Testing plotting of map")    
-
-    plot_shapefiles_map(shapefiles = [fixture["testbasin"], fixture["waterbasin_multi"]], display_fields = ["STAID"], title = "Sample test basins")
-
-    plot_shapefiles_map(shapefiles = [fixture["canes"], fixture["waterbasin_multi"]], display_fields = ["Tile", "STAID"], title = "Canes GCM with sample basins")
-
-    plot_shapefiles_map(shapefiles = [fixture["canes"], fixture["gfdl"], fixture["giss"], fixture["ncar"], fixture["waterbasin_multi"]], display_fields = ["Tile"], title = "Many GCM's with sample basins")
+#    plot_shapefiles_map(shapefiles = [fixture["testbasin"], fixture["waterbasin"]], display_fields = ["Id", "Id"], title = "Testing plotting of map")    
+#
+#    plot_shapefiles_map(shapefiles = [fixture["testbasin"], fixture["waterbasin_multi"]], display_fields = ["STAID"], title = "Sample test basins")
+#
+#    plot_shapefiles_map(shapefiles = [fixture["canes"], fixture["waterbasin_multi"]], display_fields = ["Tile", "STAID"], title = "Canes GCM with sample basins")
+#
+#    plot_shapefiles_map(shapefiles = [fixture["canes"], fixture["gfdl"], fixture["giss"], fixture["ncar"], fixture["waterbasin_multi"]], display_fields = ["Tile"], title = "Many GCM's with sample basins")
     
+    plot_shapefiles_map(shapefiles = [fixture["basin_centroids"], fixture["waterbasin_multi"]], display_fields = ["STAID"], title = "Canes GCM with sample basins")
     
     print("")
 
