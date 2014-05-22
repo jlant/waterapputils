@@ -17,24 +17,26 @@ def setup():
     print >> sys.stderr, "SETUP: spatialvectors tests"
    
     # set up fixtures    
-    fixture["testbasin_single_fid"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/basins/testbasin_proj_wgs.shp"))
-    fixture["testbasin_multi_fid"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/basins/testbasin_multi_proj_wgs.shp"))
-    fixture["testbasin_orig_proj"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/basins/testbasin.shp"))
+    fixture["testbasin_single_fid_proj_wgs"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/basins/testbasin_proj_wgs.shp"))
+    fixture["testbasin_multi_fid_proj_wgs"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/basins/testbasin_multi_proj_wgs.shp"))
+    fixture["testbasin_single_fid_proj_nad83"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/basins/testbasin.shp"))    
 
-    fixture["waterbasin_single_fid"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/basins/waterbasin_proj_wgs.shp"))
-    fixture["waterbasin_multi_fid"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/basins/waterbasin_multi_proj_wgs.shp"))
+    fixture["waterbasin_single_fid_proj_wgs"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/basins/waterbasin_proj_wgs.shp"))
+    fixture["waterbasin_multi_fid_proj_wgs"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/basins/waterbasin_multi_proj_wgs.shp"))
 
-    fixture["canes_file"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/gcm-tiles/CanES_proj_wgs.shp"))
-    fixture["gfdl_file"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/gcm-tiles/GFDL_proj_wgs.shp"))
-    fixture["giss_file"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/gcm-tiles/GISS_proj_wgs.shp"))
-    fixture["ncar_file"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/gcm-tiles/NCAR_proj_wgs.shp"))
-    fixture["canes_file_orig_proj"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/gcm-tiles/CanES.shp"))
-    fixture["gfdl_file_orig_proj"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/gcm-tiles/GFDL.shp"))
-    fixture["giss_file_orig_proj"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/gcm-tiles/GISS.shp"))
-    fixture["ncar_file_orig_proj"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/gcm-tiles/NCAR.shp"))
+    fixture["canes_file_proj_wgs"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/gcm-tiles/CanES_proj_wgs.shp"))
+    fixture["gfdl_file_proj_wgs"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/gcm-tiles/GFDL_proj_wgs.shp"))
+    fixture["giss_file_proj_wgs"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/gcm-tiles/GISS_proj_wgs.shp"))
+    fixture["ncar_file_proj_wgs"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/gcm-tiles/NCAR_proj_wgs.shp"))
+    fixture["canes_file_proj_nad83"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/gcm-tiles/CanES.shp"))
+    fixture["gfdl_file_proj_nad83"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/gcm-tiles/GFDL.shp"))
+    fixture["giss_file_proj_nad83"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/gcm-tiles/GISS.shp"))
+    fixture["ncar_file_proj_nad83"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/gcm-tiles/NCAR.shp"))
 
     fixture["test_basinsmall_proj_wgs"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/basins/test_basinsmall_proj_wgs.shp"))    
     fixture["dem_basin_centroids_proj_wgs"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/basins/dem_basin_centroids_proj_wgs.shp"))
+    fixture["test_basinsmall_proj_nad83"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/basins/test_basinsmall.shp"))    
+    fixture["dem_basin_centroids_proj_nad83"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/basins/dem_basin_centroids.shp"))
 
 
 def teardown():
@@ -69,7 +71,7 @@ def test_fill_shapefile_dict1():
                 "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
                 
     # Open the shapefiles
-    basin_shapefile = osgeo.ogr.Open(fixture["testbasin_single_fid"])  
+    basin_shapefile = osgeo.ogr.Open(fixture["testbasin_single_fid_proj_wgs"])  
     
     # actual values
     actual = spatialvectors.fill_shapefile_dict(shapefile = basin_shapefile)
@@ -89,7 +91,7 @@ def test_fill_shapefile_dict2():
                 "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
 
     # Open the shapefiles
-    basin_shapefile = osgeo.ogr.Open(fixture["waterbasin_single_fid"])  
+    basin_shapefile = osgeo.ogr.Open(fixture["waterbasin_single_fid_proj_wgs"])  
     
     # actual values
     actual = spatialvectors.fill_shapefile_dict(shapefile = basin_shapefile)
@@ -109,7 +111,7 @@ def test_fill_shapefile_dict3():
                 "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
     
     # Open the shapefiles
-    basin_shapefile = osgeo.ogr.Open(fixture["waterbasin_multi_fid"])  
+    basin_shapefile = osgeo.ogr.Open(fixture["waterbasin_multi_fid_proj_wgs"])  
     
     # actual values
     actual = spatialvectors.fill_shapefile_dict(shapefile = basin_shapefile)
@@ -129,7 +131,7 @@ def test_fill_shapefile_dict4():
                 "spatialref": "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs "}
                 
     # Open the shapefiles
-    basin_shapefile = osgeo.ogr.Open(fixture["testbasin_orig_proj"])  
+    basin_shapefile = osgeo.ogr.Open(fixture["testbasin_single_fid_proj_nad83"])  
     
     # actual values
     actual = spatialvectors.fill_shapefile_dict(shapefile = basin_shapefile)
@@ -149,7 +151,7 @@ def test_fill_shapefile_dict4():
                 "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
                 
     # Open the shapefiles
-    canes_shapefile = osgeo.ogr.Open(fixture["canes_file"])
+    canes_shapefile = osgeo.ogr.Open(fixture["canes_file_proj_wgs"])
     
     # actual values
     actual = spatialvectors.fill_shapefile_dict(shapefile = canes_shapefile)
@@ -169,7 +171,7 @@ def test_fill_shapefile_dict5():
                 "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
                 
     # Open the shapefiles
-    gfdl_shapefile = osgeo.ogr.Open(fixture["gfdl_file"])
+    gfdl_shapefile = osgeo.ogr.Open(fixture["gfdl_file_proj_wgs"])
     
     # actual values
     actual = spatialvectors.fill_shapefile_dict(shapefile = gfdl_shapefile)
@@ -189,7 +191,7 @@ def test_fill_shapefile_dict6():
                 "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
                 
     # Open the shapefiles
-    giss_shapefile = osgeo.ogr.Open(fixture["giss_file"])
+    giss_shapefile = osgeo.ogr.Open(fixture["giss_file_proj_wgs"])
     
     # actual values
     actual = spatialvectors.fill_shapefile_dict(shapefile = giss_shapefile)
@@ -209,7 +211,27 @@ def test_fill_shapefile_dict7():
                 "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
                 
     # Open the shapefiles
-    ncar_shapefile = osgeo.ogr.Open(fixture["ncar_file"])
+    ncar_shapefile = osgeo.ogr.Open(fixture["ncar_file_proj_wgs"])
+    
+    # actual values
+    actual = spatialvectors.fill_shapefile_dict(shapefile = ncar_shapefile)
+  
+    np.testing.assert_equal(actual, expected)
+
+def test_fill_shapefile_dict8():
+
+    # expected values to test with actual values
+    expected = {"extents": (-76.36786373172723, -74.39059291460879, 38.71298637220271, 42.42374381313648), 
+                "name": "dem_basin_centroids_proj_wgs.shp", 
+                "fields": ["newhydroid", "HUC_12"], 
+                "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
+                "path": "c:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\basins", 
+                "num_features": 3736, 
+                "type": "POINT", 
+                "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
+                
+    # Open the shapefiles
+    ncar_shapefile = osgeo.ogr.Open(fixture["dem_basin_centroids_proj_wgs"])
     
     # actual values
     actual = spatialvectors.fill_shapefile_dict(shapefile = ncar_shapefile)
@@ -235,9 +257,9 @@ def test_get_shapefile_coords():
     }
             
     # Open the shapefiles
-    basin_shapefile = osgeo.ogr.Open(fixture["testbasin_single_fid"]) 
-    basin_shapefile_nad83 = osgeo.ogr.Open(fixture["testbasin_orig_proj"])
-    canes_shapefile = osgeo.ogr.Open(fixture["canes_file"])
+    basin_shapefile = osgeo.ogr.Open(fixture["testbasin_single_fid_proj_wgs"]) 
+    basin_shapefile_nad83 = osgeo.ogr.Open(fixture["testbasin_single_fid_proj_nad83"])
+    canes_shapefile = osgeo.ogr.Open(fixture["canes_file_proj_wgs"])
     
     # actual values
     actual = {}
@@ -260,11 +282,11 @@ def test_get_intersected_field_values1():
     expected["ncar_tiles"] = {"0": ["82", "83", "84", "72", "73", "74", "62", "63", "64", "52", "53", "42", "43", "32", "22"]}
 
     # open the shapefiles
-    basin_shapefile = osgeo.ogr.Open(fixture["testbasin_single_fid"])    
-    canes_shapefile = osgeo.ogr.Open(fixture["canes_file"])
-    gfdl_shapefile = osgeo.ogr.Open(fixture["gfdl_file"])
-    giss_shapefile = osgeo.ogr.Open(fixture["giss_file"])
-    ncar_shapefile = osgeo.ogr.Open(fixture["ncar_file"])
+    basin_shapefile = osgeo.ogr.Open(fixture["testbasin_single_fid_proj_wgs"])    
+    canes_shapefile = osgeo.ogr.Open(fixture["canes_file_proj_wgs"])
+    gfdl_shapefile = osgeo.ogr.Open(fixture["gfdl_file_proj_wgs"])
+    giss_shapefile = osgeo.ogr.Open(fixture["giss_file_proj_wgs"])
+    ncar_shapefile = osgeo.ogr.Open(fixture["ncar_file_proj_wgs"])
 
     # actual values    
     actual = {}
@@ -291,11 +313,11 @@ def test_get_intersected_field_values2():
     expected["ncar_tiles"] = {"0": ["82", "83", "84", "72", "73", "74", "62", "63", "64", "52", "53", "42", "43", "32", "22"], "1": ["43", "44", "33", "34"], "2": ["24"]}  
 
     # open the shapefiles
-    basin_shapefile = osgeo.ogr.Open(fixture["testbasin_multi_fid"])    
-    canes_shapefile = osgeo.ogr.Open(fixture["canes_file"])
-    gfdl_shapefile = osgeo.ogr.Open(fixture["gfdl_file"])
-    giss_shapefile = osgeo.ogr.Open(fixture["giss_file"])
-    ncar_shapefile = osgeo.ogr.Open(fixture["ncar_file"])
+    basin_shapefile = osgeo.ogr.Open(fixture["testbasin_multi_fid_proj_wgs"])    
+    canes_shapefile = osgeo.ogr.Open(fixture["canes_file_proj_wgs"])
+    gfdl_shapefile = osgeo.ogr.Open(fixture["gfdl_file_proj_wgs"])
+    giss_shapefile = osgeo.ogr.Open(fixture["giss_file_proj_wgs"])
+    ncar_shapefile = osgeo.ogr.Open(fixture["ncar_file_proj_wgs"])
 
     # actual values    
     actual = {}
@@ -323,11 +345,11 @@ def test_get_intersected_field_values3():
     expected["ncar_tiles"] = {"0": ["82", "83", "84", "72", "73", "74", "62", "63", "64", "52", "53", "42", "43", "32", "22"]}
 
     # open the shapefiles
-    basin_shapefile = osgeo.ogr.Open(fixture["testbasin_orig_proj"])    
-    canes_shapefile = osgeo.ogr.Open(fixture["canes_file_orig_proj"])
-    gfdl_shapefile = osgeo.ogr.Open(fixture["gfdl_file_orig_proj"])
-    giss_shapefile = osgeo.ogr.Open(fixture["giss_file_orig_proj"])
-    ncar_shapefile = osgeo.ogr.Open(fixture["ncar_file_orig_proj"])
+    basin_shapefile = osgeo.ogr.Open(fixture["testbasin_single_fid_proj_nad83"])    
+    canes_shapefile = osgeo.ogr.Open(fixture["canes_file_proj_nad83"])
+    gfdl_shapefile = osgeo.ogr.Open(fixture["gfdl_file_proj_nad83"])
+    giss_shapefile = osgeo.ogr.Open(fixture["giss_file_proj_nad83"])
+    ncar_shapefile = osgeo.ogr.Open(fixture["ncar_file_proj_nad83"])
 
     # actual values    
     actual = {}
@@ -343,26 +365,75 @@ def test_get_intersected_field_values3():
     np.testing.assert_equal(actual["gfdl_tiles"], expected["gfdl_tiles"])    
     np.testing.assert_equal(actual["giss_tiles"], expected["giss_tiles"])   
     np.testing.assert_equal(actual["ncar_tiles"], expected["ncar_tiles"])
+
+
+def test_get_intersected_field_values4():
+
+    # expected values to test with actual values
+    expected = {}
+    expected["canes_tiles"] = {"01466500": ["22"], "01440000": ["21"], "01415000": ["31"], "01439500": ["21"], "01440400": ["21"], "01442500": ["21"], "01413500": ["31", "32"], "01420500": ["31", "32", "21"], "01435000": ["31", "32"], "01422500": ["31"], "01414500": ["31"], "01422389": ["31"]}   
+    expected["gfdl_tiles"] = {"01466500": ["22"], "01440000": ["32"], "01415000": ["32"], "01439500": ["31"], "01440400": ["31"], "01442500": ["31"], "01413500": ["32"], "01420500": ["32"], "01435000": ["32"], "01422500": ["32"], "01414500": ["32"], "01422389": ["32"]} 
+    expected["giss_tiles"] = {"01466500": ["22"], "01440000": ["32"], "01415000": ["42"], "01439500": ["31"], "01440400": ["31"], "01442500": ["31"], "01413500": ["42"], "01420500": ["42", "32"], "01435000": ["42", "32"], "01422500": ["42"], "01414500": ["42"], "01422389": ["42"]}
+    expected["ncar_tiles"] = {"01466500": ["43"], "01440000": ["53"], "01415000": ["63"], "01439500": ["53"], "01440400": ["53"], "01442500": ["53"], "01413500": ["63"], "01420500": ["63"], "01435000": ["63", "64"], "01422500": ["63"], "01414500": ["63"], "01422389": ["63"]}
+
+    # Open the shapefiles
+    basin_shapefile = osgeo.ogr.Open(fixture["waterbasin_multi_fid_proj_wgs"])    
+    canes_shapefile = osgeo.ogr.Open(fixture["canes_file_proj_wgs"])
+    gfdl_shapefile = osgeo.ogr.Open(fixture["gfdl_file_proj_wgs"])
+    giss_shapefile = osgeo.ogr.Open(fixture["giss_file_proj_wgs"])
+    ncar_shapefile = osgeo.ogr.Open(fixture["ncar_file_proj_wgs"])
+
+    # actual values    
+    actual = {}
+    actual["canes_tiles"] = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = canes_shapefile, intersectee_field = "Tile", intersector_field = "STAID")    
+    actual["gfdl_tiles"] = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = gfdl_shapefile, intersectee_field = "Tile", intersector_field = "STAID")
+    actual["giss_tiles"] = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = giss_shapefile, intersectee_field = "Tile", intersector_field = "STAID")
+    actual["ncar_tiles"] = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = ncar_shapefile, intersectee_field = "Tile", intersector_field = "STAID")
+
+    for shapefile in [basin_shapefile, canes_shapefile, gfdl_shapefile, giss_shapefile, ncar_shapefile]:
+        shapefile.Destroy()  
+
+    np.testing.assert_equal(actual["canes_tiles"], expected["canes_tiles"])
+    np.testing.assert_equal(actual["gfdl_tiles"], expected["gfdl_tiles"])    
+    np.testing.assert_equal(actual["giss_tiles"], expected["giss_tiles"])   
+    np.testing.assert_equal(actual["ncar_tiles"], expected["ncar_tiles"]) 
     
-#def test_get_intersected_field_values4():
-#
-#    # expected values to test with actual values
-#    expected = {}
-#    expected["newhydroid"] = {"0": ["12", "11", "8"], "1": ["256", "241", "220", "222"]}  
-#
-#    # open the shapefiles
-#    basin_shapefile = osgeo.ogr.Open(fixture["test_basinsmall_proj_wgs"])    
-#    point_shapefile = osgeo.ogr.Open(fixture["basin_centroids_proj_wgs"])
-#
-#    # actual values    
-#    actual = {}
-#    actual["newhydroid"] = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = point_shapefile, intersectee_field = "newhydroid")
-#
-#    for shapefile in [basin_shapefile, point_shapefile]:
-#        shapefile.Destroy()  
-#
-#    np.testing.assert_equal(actual["newhydroid"], expected["newhydroid"])
+def test_get_intersected_field_values5():
+
+    # expected values to test with actual values
+    expected = {}
+    expected["newhydroid"] = {"0": ["12", "11", "8"], "1": ["256", "241", "220", "222"]}  
+
+    # open the shapefiles
+    basin_shapefile = osgeo.ogr.Open(fixture["test_basinsmall_proj_wgs"])    
+    point_shapefile = osgeo.ogr.Open(fixture["dem_basin_centroids_proj_wgs"])
+
+    # actual values    
+    actual = {}
+    actual["newhydroid"] = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = point_shapefile, intersectee_field = "newhydroid")
+
+    for shapefile in [basin_shapefile, point_shapefile]:
+        shapefile.Destroy()  
+
+    np.testing.assert_equal(actual["newhydroid"], expected["newhydroid"])
 
     
+def test_get_intersected_field_values6():
 
+    # expected values to test with actual values
+    expected = {}
+    expected["newhydroid"] = {"0": ["12", "11", "8"], "1": ["256", "241", "220", "222"]}  
+
+    # open the shapefiles
+    basin_shapefile = osgeo.ogr.Open(fixture["test_basinsmall_proj_nad83"])    
+    point_shapefile = osgeo.ogr.Open(fixture["dem_basin_centroids_proj_nad83"])
+
+    # actual values    
+    actual = {}
+    actual["newhydroid"] = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = point_shapefile, intersectee_field = "newhydroid")
+
+    for shapefile in [basin_shapefile, point_shapefile]:
+        shapefile.Destroy()  
+
+    np.testing.assert_equal(actual["newhydroid"], expected["newhydroid"])
     
