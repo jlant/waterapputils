@@ -284,6 +284,15 @@ def _create_shapefile_test_data():
                 "type": "POINT", 
                 "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
 
+    fixture["pourpoint"] = {"extents": (-75.99795597969509, -75.99795597969509, 40.52231614829165, 40.52231614829165), 
+                "name": "pourpoint_proj_wgs.shp", 
+                "fields": ["OBJECTID", "POINTID", "GRID_CODE"], 
+                "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
+                "path": "c:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\basins", 
+                "num_features": 1, 
+                "type": "POINT", 
+                "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
+
     return fixture
 
 def test_print_shapefile_data():
@@ -303,7 +312,7 @@ def test_plot_shapefiles_map():
     
     fixture = _create_shapefile_test_data()
     
-    plot_shapefiles_map(shapefiles = [fixture["testbasin"], fixture["waterbasin"]], display_fields = ["Id", "Id"], title = "Testing plotting of map")    
+    plot_shapefiles_map(shapefiles = [fixture["testbasin"], fixture["waterbasin"], fixture["pourpoint"]], display_fields = ["Id", "Id", "POINTID"], title = "Testing plotting of map")    
 
     plot_shapefiles_map(shapefiles = [fixture["testbasin"], fixture["waterbasin_multi"]], display_fields = ["STAID"], title = "Sample test basins")
 

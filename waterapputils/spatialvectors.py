@@ -299,14 +299,16 @@ def test_fill_shapefile_dict1():
                 "type": "POLYGON", 
                 "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
                 
-    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/testbasin_proj_wgs.shp"))
+#    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/testbasin_proj_wgs.shp"))
+
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/pourpoint_proj_wgs.shp"))
 
     # Open the shapefiles
     basin_shapefile = osgeo.ogr.Open(basin_file)  
     
     # actual values
     actual = fill_shapefile_dict(shapefile = basin_shapefile)
-  
+
     # print results
     _print_test_info(actual, expected) 
 
