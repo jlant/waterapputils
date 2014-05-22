@@ -218,6 +218,26 @@ def test_fill_shapefile_dict7():
   
     np.testing.assert_equal(actual, expected)
 
+def test_fill_shapefile_dict8():
+
+    # expected values to test with actual values
+    expected = {"extents": (-76.36786373172723, -74.39059291460879, 38.71298637220271, 42.42374381313648), 
+                "name": "dem_basin_centroids_proj_wgs.shp", 
+                "fields": ["newhydroid", "HUC_12"], 
+                "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
+                "path": "c:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\basins", 
+                "num_features": 3736, 
+                "type": "POINT", 
+                "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
+                
+    # Open the shapefiles
+    ncar_shapefile = osgeo.ogr.Open(fixture["dem_basin_centroids_proj_wgs"])
+    
+    # actual values
+    actual = spatialvectors.fill_shapefile_dict(shapefile = ncar_shapefile)
+  
+    np.testing.assert_equal(actual, expected)
+
 def test_get_shapefile_coords():
 
     # expected values to test with actual values

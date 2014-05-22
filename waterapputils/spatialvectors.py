@@ -417,7 +417,7 @@ def test_fill_shapefile_dict5():
 def test_fill_shapefile_dict6():
     """ Test fill_shapefile_dict() """
 
-    print("--- Testing fill_shapefile_dict() part 1 - sample shapefile ---") 
+    print("--- Testing fill_shapefile_dict() part 6 - sample point shapefile ---") 
 
     # expected values to test with actual values
     expected = {"extents": (-76.36786373172723, -74.39059291460879, 38.71298637220271, 42.42374381313648), 
