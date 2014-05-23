@@ -299,9 +299,7 @@ def test_fill_shapefile_dict1():
                 "type": "POLYGON", 
                 "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
                 
-#    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/testbasin_proj_wgs.shp"))
-
-    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/pourpoint_proj_wgs.shp"))
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/testbasin_proj_wgs.shp"))
 
     # Open the shapefiles
     basin_shapefile = osgeo.ogr.Open(basin_file)  
@@ -644,8 +642,7 @@ def test_get_intersected_field_values6():
     # Open the shapefiles
     basin_shapefile = osgeo.ogr.Open(basin_file)    
     point_shapefile = osgeo.ogr.Open(point_file)
-
-
+   
     # actual values    
     actual = {}
     actual["newhydroid"] = get_intersected_field_values(intersector = basin_shapefile, intersectee = point_shapefile, intersectee_field = "newhydroid")    

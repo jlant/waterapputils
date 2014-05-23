@@ -221,6 +221,15 @@ def _create_shapefile_test_data():
                             "type": "POLYGON", 
                             "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
 
+    fixture["testbasin_small"] = {"extents": (-74.65523090397193, -74.36488125936603, 41.9520891488861, 42.397621499584034), 
+                            "name": "test_basinsmall_proj_wgs.shp", 
+                            "fields": ["Id"], 
+                            "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
+                            "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\basins", 
+                            "num_features": 2, 
+                            "type": "POLYGON", 
+                            "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
+
     fixture["waterbasin"] = {"extents": (-76.3557164298209, -75.83406785380727, 40.52224451815593, 40.89012237818175), 
                             "name": "waterbasin_proj_wgs.shp", 
                             "fields": ["OBJECTID", "Id", "Shape_Leng", "Shape_Area"], 
@@ -321,6 +330,9 @@ def test_plot_shapefiles_map():
     plot_shapefiles_map(shapefiles = [fixture["canes"], fixture["gfdl"], fixture["giss"], fixture["ncar"], fixture["waterbasin_multi"]], display_fields = ["Tile"], title = "Many GCM's with sample basins")
     
     plot_shapefiles_map(shapefiles = [fixture["basin_centroids"], fixture["waterbasin_multi"]], display_fields = ["STAID"], title = "Canes GCM with sample basins")
+
+    plot_shapefiles_map(shapefiles = [fixture["basin_centroids"], fixture["testbasin_small"]], display_fields = ["newhydroid", "FID"], title = "Canes GCM with sample basins")
+
     
     print("")
 
