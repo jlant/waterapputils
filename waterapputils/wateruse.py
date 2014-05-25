@@ -48,6 +48,69 @@ def read_file(filepath):
         
     return data
 
+def read_file_in(filestream):
+    """    
+    Read and process a WATER *.txt file. Finds any parameter and its respective data.
+    
+    Parameters
+    ----------
+    filestream : file object
+        A python file object that contains an open data file.
+        
+    Returns
+    -------
+    data : dictionary 
+        Returns a dictionary containing data found in data file. 
+
+    Notes
+    -----          
+    data = {
+        "user": None,
+        
+        "date_created": None,
+        
+        "stationid": None,
+        
+        "column_names": None,
+        
+        "dates": [],
+        
+        "parameters": [], 
+          
+    }      
+            
+    ** Note: The "parameters" key contains a list of dictionaries containing
+    the parameters found in the data file; i.e.
+    
+    See Also
+    --------
+    create_parameter : Create new dictionary to hold parameter data
+    """
+    
+    # read all the lines in the filestream
+    data_file = filestream.readlines()
+    
+    # regular expression patterns in data file 
+    patterns = {
+        "months": "(#)\s([JFMASOND].+)",
+        "column_names": "(huc12)\t(.+)",
+        "data_row": "([0-9]{11})\t(.+)"
+    }        
+
+   # initialize a dictionary to hold all the data of interest
+    data = {
+        "user": None,
+        "date_created": None,
+        "stationid": None,
+        "column_names": None,
+        "dates": [],
+        "parameters": []
+    }      
+    
+    # process file
+    for line in data_file: 
+        # find match
+        match_user = re.search(pattern = patterns["user"], string = line)
     
 def _create_test_data():
     """ Create test data for tests """
@@ -58,12 +121,19 @@ def _create_test_data():
         """
         # JFM_WU																								
         # released 2014, March 7																								
-        huc12	newhydroid	AqGwWL	CoGwWL	DoGwWL	InGwWL	IrGwWL	LvGwWL	MiGwWL	ReGwWL	TeGwWL	WsGwWL	AqSwWL	CoSwWL	InSwWL	IrSwWL	MiSwWL	TeSwWL	WsSwWL	InGwRT	InSwRT	STswRT	WSgwRT	WSunkTR	WStrans
-        20401010101	256	2	0	0	0	0	0	0		0	0	0	0	0	0	0	0	-0.00225682	0	0	0	0		0
-        20401010101	241	4	0	0	0	0	0	0		0	0	0	0	0	0	0	0	-0.016137437	0	0	0	0		0
-        20401010101	220	6	0	0	0	0	0	0		0	-5.32E-05	0	0	0	0	0	0	-0.021012399	0	0	0	0		0
-        20401010101	8	0	0	0	0	0	0	0		0	0	0	0	0	0	0	0	-0.027395508	0	0	0	0		0
-        20401010101	12	0	0	0	0	0	0	0		0	-2.65E-06	0	0	0	0	0	0	-0.052423916	0	0	0	0		0
-        20401010101	222	3	0	0	0	0	0	0		0	0	0	0	0	0	0	0	-0.058066851	0	0	0	0		0
-        20401010102	11	0	0	0	0	0	0	0		0	0	0	0	0	0	0	0	-0.000150877	0	0	0	0		0
+        huc12	newhydroid	AqGwWL	CoGwWL	DoGwWL	InGwWL	IrGwWL
+        20401010101	256	2	5	2	5	-2
+        20401010101	241	4	3	4	3	-4
+        20401010101	222	6	4	6	4	-6
+        20401010101	220	3	8	3	8	-8
+        20401010101	12	1	3	1	3	-1
+        20401010101	11	2	6	2	6	-1
+        20401010102	8	2	1	2	1	-1
         """
+
+def main():
+    
+    pass
+
+if __name__ == "__main__":
+    main()
