@@ -94,11 +94,8 @@ def read_file_in(filestream):
         "data_row": "([a-zA-z0-9-]+)\t(\w+)\t(\d+)\t(.+)"
     }        
 
-   # initialize a dictionary to hold all the data of interest
-    initial_data = {
-        "column_names": None,
-        "parameters": []
-    }      
+   # initialize a temporary dictionary to hold data of interest
+    initial_data = {"column_names": None, "parameters": []}      
 
     # process file
     for line in data_file:     
@@ -255,11 +252,10 @@ def calculate_avg_delta_values(deltas_data, tile_list):
     # check that each tile in tile list is contained in the deltas_data     
     for tile in tile_list:
         if tile not in deltas_data["Tile"]:
-            raise ValueError, "{} tile is not in tile list contined in deltas_data".format(tile)
-
-    avg_delta_values = {}
+            raise ValueError, "Tile {} is not contined in deltas_data".format(tile)
   
     # initialize avg_delta_values with keys corresponding to variable type  
+    avg_delta_values = {}    
     variable_type = deltas_data["Variable"]
     avg_delta_values[variable_type] = helpers.create_monthly_dict()
     

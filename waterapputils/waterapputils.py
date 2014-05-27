@@ -282,16 +282,9 @@ def apply_deltas_to_xml_files(files_dict, arguments):
         xml_output_filename = "-".join([waterxml_filename.split(".xml")[0], "updated", files_dict["basin_field"], featureid]) + ".xml"                
         waterxml.write_file(waterxml_tree = waterxml_tree, save_path = files_dict["outputxml_directory"], filename = xml_output_filename)
 
-#        import pdb
-#        pdb.set_trace()
-
         # plot comparison
         updated_waterxml_file = os.path.join(files_dict["outputxml_directory"], xml_output_filename)
         process_xmlcmp(file_list = [updated_waterxml_file, waterxml_file], arguments = arguments)
-#        orig_waterxml_tree = waterxml.read_file(waterxml_file)
-#        updated_waterxml_tree = waterxml.read_file()
-#        waterapputils_viewer.plot_waterxml_timeseries_comparison(waterxml_tree1 = orig_waterxml_tree, waterxml_tree2 = updated_waterxml_tree, is_visible = False, save_path = files_dict["outputxml_directory"])
-
 
     # close error logging
     waterapputils_logging.remove_loggers()
