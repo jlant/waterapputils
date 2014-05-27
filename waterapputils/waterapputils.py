@@ -161,9 +161,6 @@ def process_xmlcmp(file_list, arguments):
     # read data
     waterxml_data1 = waterxml.read_file(waterxml_file1)  
     waterxml_data2 = waterxml.read_file(waterxml_file2) 
- 
-#    import pdb
-#    pdb.set_trace()
    
     # plot data                            
     waterapputils_viewer.plot_waterxml_timeseries_comparison(waterxml_data1, waterxml_data2, is_visible = arguments.showplot, save_path = outputdirpath) 

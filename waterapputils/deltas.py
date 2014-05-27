@@ -222,12 +222,12 @@ def calculate_avg_delta_values(deltas_data, tile_list):
     
     Parameters
     ----------
-    delta_data: list 
+    delta_data : list 
         List of dictionaries holding data from delta data files.
         
     Returns
     -------
-    avg_delta_values: dictionary 
+    avg_delta_values : dictionary 
         Dictionary keys corresponding to delta variable type (i.e. precipitation (Ppt)) holding averaged data values for a specific list of tiles.
         
     Notes
@@ -283,6 +283,11 @@ def get_avg_deltas(delta_files, tiles):
         List of delta files to calculate average delta values for
     tiles : list
         List of Global Climate Model tile values.
+
+    Returns
+    -------
+    avg_deltas : dictionary
+        Dictionary containing average delta values for a list of specific tile values for a list of delta files
     
     See Also
     --------

@@ -151,7 +151,7 @@ def get_wateruse_values(wateruse_data, id_list):
     Returns
     -------
     values: list
-        List containing lists of monthly values; shape is n x 12 where n is number of tiles in tile_list   
+        List containing lists of water use values for each id in id_list; shape is m x n where m is the number of water use values and n is number of ids in id_list   
     
     Notes
     -----
@@ -181,61 +181,42 @@ def get_wateruse_values(wateruse_data, id_list):
             logging.warn("Id number {} is not in wateruse_data.".format(id_num)) 
 
     return values
-    
-def format_to_monthly_dict(values):
-    """
-    Format array of values into a dictionary with monthly keys.
+
+def sum_values(values):
+    """   
+    Get water use values based on id(s) of interest.
     
     Parameters
     ----------
     values: list
-        List containing lists of monthly values; shape is n x 12 
+        List containing lists of values
         
     Returns
     -------
-    values_dict : dictionary
-        Dictionary containing monthly keys with corresponding values.
-    
-    Notes
-    -----
-    {"January": [2.0, 1.0],
-     "February": [0.98, 0.99],
-     "March": [0.97, 1.10],
-     "April": [1.04, 1.02],
-     "May": [1.10, 0.99],
-     "June": [0.99, 0.98],
-     "July": [0.87, 0.75],
-     "August": [0.75, 0.95],
-     "September": [0.95, 0.9],
-     "October": [0.98, 0.8],
-     "November": [1.10, 1.05],
-     "December": [2.0, 1.10]
-    }
+    sums: dictionary
+        Dictionary containing row-wise, column-wise, and total sums
     """
-    assert np.shape(values)[1] == 12
+    assert np.rank(values) == 2, "Rank (dimensions) of values {} is not equal to 2".format(values)
+    
+    sums = {"row_wise": np.sum(values, axis = 0),
+            "column_wise": np.sum(values, axis = 1),
+            "total": np.sum(values)}
 
-    months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-    values_dict = helpers.create_monthly_dict()
-
-    month_enum_list = list(enumerate(months))
-    for values_list in values:
-        for index, month in month_enum_list:
-            values_dict[month].append(values_list[index])
-  
-    return values_dict
+    return sums
+    
     
 def calculate_sum_wateruse_values(wateruse_data, id_list):
     """   
-    Get monthly summed wateruse data values for a specific list of tiles.
+    Get summed wateruse data values for a specific list of ids.
     
     Parameters
     ----------
-    wateruse_data: list 
+    wateruse_data : list 
         List of dictionaries holding data from wateruse data files.
         
     Returns
     -------
-    sum_wateruse_values: dictionary 
+    sum_wateruse_values : dictionary 
         Dictionary keys corresponding to delta variable type (i.e. precipitation (Ppt)) holding averaged data values for a specific list of tiles.
         
     Notes
@@ -266,13 +247,9 @@ def calculate_sum_wateruse_values(wateruse_data, id_list):
     # get wateruse values that correspond to a list of ids
     values = get_wateruse_values(wateruse_data, id_list = id_list)    
     
-    # format the values into a dictionary containing monthly keys
-    values_dict = format_to_monthly_dict(values)
     
     # compute sum of wateruse values for each month and put it in sum_wateruse_values
-    for key, value in values_dict.iteritems():
-        sum_value = np.sum(value)
-        sum_wateruse_values[key] = sum_value
+
        
     return sum_wateruse_values   
 
@@ -344,6 +321,8 @@ def _create_test_data():
                                 "IrGwWL": [-2.0, -4.0, -6.0, -8.0, -1.0, -1.0, -1.0]
     }
 
+
+    fixture["values_data"] = [[2.0, 5.0, 2.0, 5.0, -2.0], [4.0, 3.0, 4.0, 3.0, -4.0], [6.0, 4.0, 6.0, 4.0, -6.0], [3.0, 8.0, 3.0, 8.0, -8.0]]
     
     return fixture
 
@@ -415,6 +394,45 @@ def test_get_wateruse_values():
     # print results
     _print_test_info(actual, expected)
 
+def test_sum_wateruse_values():
+    """ Test sum_wateruse_values() """
+
+    print("--- Testing sum_wateruse_values() ---")
+    
+    # expected values to test with actual values
+    expected = {}    
+    expected["row_wise"] = np.array([ 15.,  20.,  15.,  20., -20.])
+    expected["column_wise"] = np.array([ 12.,  10.,  14.,  14.])
+    expected["total"] = 50.0
+
+    # create test data
+    fixture = _create_test_data()
+
+    # actual values       
+    actual = sum_wateruse_values(values = fixture["values_data"])  
+
+    # print results
+    _print_test_info(actual, expected)    
+
+
+def test_format_to_monthly_dict():
+    """ Test format_to_monthly_dict() """
+
+    print("--- Testing format_to_monthly_dict() ---")
+
+    expected1 = {'January': [1.1], 'February': [2.2], 'March': [3.3], 'April': [4.4], 'May': [5.5], 'June': [6.6], 'July': [7.7], 'August': [8.8], 'September': [9.9], 'October': [10.0], 'November': [11.1], 'December': [12.2]}
+    expected2 = {'January': [1.1, 1.9], 'February': [2.2, 2.8], 'March': [3.3, 3.7], 'April': [4.4, 4.6], 'May': [5.5, 5.5], 'June': [6.6, 6.4], 'July': [7.7, 7.3], 'August': [8.8, 8.2], 'September': [9.9, 9.1], 'October': [10.0, 10.0], 'November': [11.1, 11.9], 'December': [12.2, 12.8]}    
+
+    values1 = [[2.0, 5.0, 2.0, 5.0, -2.0], [4.0, 3.0, 4.0, 3.0, -4.0], [6.0, 4.0, 6.0, 4.0, -6.0], [3.0, 8.0, 3.0, 8.0, -8.0]]
+    values2 = [[1.0, 3.0, 1.0, 3.0, -1.0], [2.0, 6.0, 2.0, 6.0, -1.0], [2.0, 1.0, 2.0, 1.0, -1.0]]
+    
+    actual1 = format_to_monthly_dict(values1)
+    actual2 = format_to_monthly_dict(values2)
+    
+    # print results
+    _print_test_info(actual1, expected1)
+    _print_test_info(actual2, expected2)
+
 def main():
 
     print("")
@@ -424,6 +442,8 @@ def main():
     test_read_file_in()
 
     test_get_wateruse_values()
+
+    test_sum_wateruse_values()
 
 if __name__ == "__main__":
     main()
