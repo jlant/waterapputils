@@ -66,7 +66,7 @@ def read_file_in(filestream):
     -----          
     expected = {
     
-b        "huc12": list of string ids,
+        "huc12": list of string ids,
     
         "newhydroid": list of string ids,
                 
@@ -203,99 +203,172 @@ def sum_values(values):
 
     return sums
     
-    
-def calculate_sum_wateruse_values(wateruse_data, id_list):
+def create_monthly_wateruse_dict(wateruse_data, wateruse_value):
     """   
-    Get summed wateruse data values for a specific list of ids.
+    Create monthly wateruse dictionary according to the months in the wateruse_data
     
     Parameters
     ----------
-    wateruse_data : list 
-        List of dictionaries holding data from wateruse data files.
+    wateruse_data : dictionary
+        Dictionary containing wateruse data from wateruse file
         
     Returns
     -------
-    sum_wateruse_values : dictionary 
-        Dictionary keys corresponding to delta variable type (i.e. precipitation (Ppt)) holding averaged data values for a specific list of tiles.
+    monthly_wateruse_dict : dictionary 
+        Dictionary filled with data from wateruse_value for particular months specified by months in wateruse_data
         
     Notes
     -----          
-    sum_wateruse_values = {
-        "January": 2.0,
-        "February": 0.98,
-        "March": 0.97,
-        "April": 1.04,
-        "May": 1.10,
-        "June": 0.99,
-        "July": 0.87,
-        "August": 0.75,
-        "September": 0.95,
-        "October": 0.98,
-        "November": 1.10,
-        "December": 2.0
-    }         
+    monthly_wateruse_dict = {
+    
+        "January": 5.0,
+
+        "February": 5.0,
+
+        "March": 5.0
+    }        
+    """
+    wateruse_month_conversion = {"JFM": ["January", "February", "March"],
+                                 "AMJ": ["April", "May", "June"],
+                                 "JAS": ["July", "August", "September"],
+                                 "OND": ["October", "November", "December"]
+    }    
+
+    # create an empty dictionary that will have monthly keys and values corresponding to the summed wateruse
+    monthly_wateruse_dict = {}
+    
+    # loop through month conversion, if the key matches months in wateruse_data, then fill monthly_dict with values    
+    for key, values in wateruse_month_conversion.iteritems():
+        if key in wateruse_data["months"]:
+            for month in values:
+                monthly_wateruse_dict[month] = wateruse_value
+
+    return monthly_wateruse_dict
+    
+def get_total_wateruse(wateruse_data, id_list):
+    """   
+    Return a dictionary with monthly keys containing the total wateruse for a specific list of ids
+    
+    Parameters
+    ----------
+    wateruse_data : dictionary 
+        Dictionary containing wateruse data from wateruse file.
+        
+    Returns
+    -------
+    total_wateruse_dict : dictionary 
+        Dictionary filled with data from wateruse_value for particular months specified by months in wateruse_data
+
+    Notes
+    -----          
+    total_wateruse_dict = {
+    
+        "January": 5.0,
+
+        "February": 5.0,
+
+        "March": 5.0
+    }   
     """ 
     # check that each id in id list is contained in the wateruse_data     
     for id_num in id_list:
         if id_num not in wateruse_data["newhydroid"]:
             raise ValueError, "newhydroid {} is not contined in wateruse_data".format(id_num)
   
-    # initialize avg_delta_values with keys corresponding to variable type  
-    sum_wateruse_values = helpers.create_monthly_dict()
-    
     # get wateruse values that correspond to a list of ids
-    values = get_wateruse_values(wateruse_data, id_list = id_list)    
-    
-    
-    # compute sum of wateruse values for each month and put it in sum_wateruse_values
+    values = get_wateruse_values(wateruse_data, id_list = id_list) 
 
-       
-    return sum_wateruse_values   
+    # calculate the sums of the wateruse values along different axes
+    sums = sum_values(values)
+    
+    # fill sum_wateruse_dict with total water use
+    total_wateruse_dict = create_monthly_wateruse_dict(wateruse_data, wateruse_value = sums["total"])
 
-def get_sum_wateruse(wateruse_files, ids):
+    return total_wateruse_dict   
+
+def get_all_total_wateruse(wateruse_files, id_list):
     """    
-    Get all summed water use values for a list of specific id values.
+    Get all total water use values for a list of specific id values.
 
     Parameters
     ----------
     wateruse_files : list
         List of water use files to calculate the sum of all water use values 
+
     ids : list
         List of ids values.
     
     See Also
     --------
-    calculate_sum_wateruse_values()
+    get_total_wateruse()
     """
     # calculate average values for a list of water use files
-    sum_wateruse = {}
+    all_total_wateruse_dict = {}
     for wateruse_file in wateruse_files:
         
         # read the delta file
         wateruse_data = read_file(wateruse_file) 
                 
         # calculate average wateruse for a list of ids
-        sum_wateruse_values = calculate_sum_wateruse_values(wateruse_data = wateruse_data, id_list = ids)
+        total_wateruse_dict = get_total_wateruse(wateruse_data = wateruse_data, id_list = id_list)
         
-        # update avgerage delta values dictionary 
-        sum_wateruse.update(sum_wateruse_values)   
+        # update dictionary 
+        all_total_wateruse_dict.update(total_wateruse_dict)   
     
-    return sum_wateruse
-
-
-
-
-
-
-    
+    return all_total_wateruse_dict
+   
 def _create_test_data():
     """ Create test data for tests """
 
     fixture = {} 
     
-    fixture["data_file"] = \
+    fixture["data_file_JFM"] = \
         """
         # JFM_WU	
+        # Units: Mgal/day																							
+        # released 2014, March 7																								
+        huc12	newhydroid	AqGwWL	CoGwWL	DoGwWL	InGwWL	IrGwWL
+        20401010101	256	2	5	2	5	-2
+        20401010101	241	4	3	4	3	-4
+        20401010101	222	6	4	6	4	-6
+        20401010101	220	3	8	3	8	-8
+        20401010101	12	1	3	1	3	-1
+        20401010101	11	2	6	2	6	-1
+        20401010102	8	2	1	2	1	-1
+        """
+    fixture["data_file_AMJ"] = \
+        """
+        # AMJ_WU	
+        # Units: Mgal/day																							
+        # released 2014, March 7																								
+        huc12	newhydroid	AqGwWL	CoGwWL	DoGwWL	InGwWL	IrGwWL
+        20401010101	256	2	5	2	5	-2
+        20401010101	241	4	3	4	3	-4
+        20401010101	222	6	4	6	4	-6
+        20401010101	220	3	8	3	8	-8
+        20401010101	12	1	3	1	3	-1
+        20401010101	11	2	6	2	6	-1
+        20401010102	8	2	1	2	1	-1
+        """
+
+    fixture["data_file_JAS"] = \
+        """
+        # JAS_WU	
+        # Units: Mgal/day																							
+        # released 2014, March 7																								
+        huc12	newhydroid	AqGwWL	CoGwWL	DoGwWL	InGwWL	IrGwWL
+        20401010101	256	2	5	2	5	-2
+        20401010101	241	4	3	4	3	-4
+        20401010101	222	6	4	6	4	-6
+        20401010101	220	3	8	3	8	-8
+        20401010101	12	1	3	1	3	-1
+        20401010101	11	2	6	2	6	-1
+        20401010102	8	2	1	2	1	-1
+        """
+
+    fixture["data_file_OND"] = \
+        """
+        # OND_WU	
         # Units: Mgal/day																							
         # released 2014, March 7																								
         huc12	newhydroid	AqGwWL	CoGwWL	DoGwWL	InGwWL	IrGwWL
@@ -320,8 +393,13 @@ def _create_test_data():
                                 "IrGwWL": [-2.0, -4.0, -6.0, -8.0, -1.0, -1.0, -1.0]
     }
 
+    fixture["ids_256_241_222_220_values"] = [[2.0, 5.0, 2.0, 5.0, -2.0], [4.0, 3.0, 4.0, 3.0, -4.0], [6.0, 4.0, 6.0, 4.0, -6.0], [3.0, 8.0, 3.0, 8.0, -8.0]]
+    fixture["ids_12_11_8_values"] = [[1.0, 3.0, 1.0, 3.0, -1.0], [2.0, 6.0, 2.0, 6.0, -1.0], [2.0, 1.0, 2.0, 1.0, -1.0]]
 
-    fixture["values_data"] = [[2.0, 5.0, 2.0, 5.0, -2.0], [4.0, 3.0, 4.0, 3.0, -4.0], [6.0, 4.0, 6.0, 4.0, -6.0], [3.0, 8.0, 3.0, 8.0, -8.0]]
+    fixture["wateruse_data_months_AMJ"] = {"months": "AMJ_WU"}
+    fixture["wateruse_data_months_JAS"] = {"months": "JAS_WU"}
+    fixture["wateruse_data_months_OND"] = {"months": "OND_WU"}
+
     
     return fixture
 
@@ -366,7 +444,7 @@ def test_read_file_in():
     
     # create test data
     fixture = _create_test_data()
-    fileobj = StringIO(fixture["data_file"])
+    fileobj = StringIO(fixture["data_file_JFM"])
     
     # read file object
     actual = read_file_in(fileobj)
@@ -393,10 +471,10 @@ def test_get_wateruse_values():
     # print results
     _print_test_info(actual, expected)
 
-def test_sum_values():
+def test_sum_values1():
     """ Test sum_values() """
 
-    print("--- Testing sum_values() ---")
+    print("--- Testing sum_values() part 1 - ids [256, 241, 222, 220] ---")
     
     # expected values to test with actual values
     expected = {}    
@@ -408,29 +486,191 @@ def test_sum_values():
     fixture = _create_test_data()
 
     # actual values       
-    actual = sum_values(values = fixture["values_data"])  
+    actual = sum_values(values = fixture["ids_256_241_222_220_values"])  
 
     # print results
     _print_test_info(actual, expected)    
 
+def test_sum_values2():
+    """ Test sum_values() """
 
-def test_format_to_monthly_dict():
-    """ Test format_to_monthly_dict() """
-
-    print("--- Testing format_to_monthly_dict() ---")
-
-    expected1 = {'January': [1.1], 'February': [2.2], 'March': [3.3], 'April': [4.4], 'May': [5.5], 'June': [6.6], 'July': [7.7], 'August': [8.8], 'September': [9.9], 'October': [10.0], 'November': [11.1], 'December': [12.2]}
-    expected2 = {'January': [1.1, 1.9], 'February': [2.2, 2.8], 'March': [3.3, 3.7], 'April': [4.4, 4.6], 'May': [5.5, 5.5], 'June': [6.6, 6.4], 'July': [7.7, 7.3], 'August': [8.8, 8.2], 'September': [9.9, 9.1], 'October': [10.0, 10.0], 'November': [11.1, 11.9], 'December': [12.2, 12.8]}    
-
-    values1 = [[2.0, 5.0, 2.0, 5.0, -2.0], [4.0, 3.0, 4.0, 3.0, -4.0], [6.0, 4.0, 6.0, 4.0, -6.0], [3.0, 8.0, 3.0, 8.0, -8.0]]
-    values2 = [[1.0, 3.0, 1.0, 3.0, -1.0], [2.0, 6.0, 2.0, 6.0, -1.0], [2.0, 1.0, 2.0, 1.0, -1.0]]
+    print("--- Testing sum_values() part 2 - ids [12, 11, 8] ---")
     
-    actual1 = format_to_monthly_dict(values1)
-    actual2 = format_to_monthly_dict(values2)
-    
+    # expected values to test with actual values
+    expected = {}    
+    expected["row_wise"] = np.array([ 5.,  10.,  5.,  10., -3.])
+    expected["column_wise"] = np.array([ 7.,  15., 5.])
+    expected["total"] = 27.0
+
+    # create test data
+    fixture = _create_test_data()
+
+    # actual values       
+    actual = sum_values(values = fixture["ids_12_11_8_values"])  
+
     # print results
-    _print_test_info(actual1, expected1)
-    _print_test_info(actual2, expected2)
+    _print_test_info(actual, expected)  
+    
+def test_create_monthly_wateruse_dict1():
+    """ Test create_monthly_wateruse_dict() """
+
+    print("--- Testing create_monthly_wateruse_dict() part 1 - testing January, Februray, March ---")
+
+    # expected values to test with actual values
+    expected = {"January": 5.0,
+                "February": 5.0,
+                "March": 5.0,
+    } 
+    
+    # create test data
+    fixture = _create_test_data()
+
+    # actual values       
+    actual = create_monthly_wateruse_dict(wateruse_data = fixture["wateruse_data"], wateruse_value = 5.0)  
+
+    # print results
+    _print_test_info(actual, expected) 
+
+def test_create_monthly_wateruse_dict2():
+    """ Test create_monthly_wateruse_dict() """
+
+    print("--- Testing create_monthly_wateruse_dict() part 2 - testing April, May, June ---")
+
+    # expected values to test with actual values
+    expected = {"April": 2.0,
+                "May": 2.0,
+                "June": 2.0,
+    } 
+    
+    # create test data
+    fixture = _create_test_data()
+
+    # actual values       
+    actual = create_monthly_wateruse_dict(wateruse_data = fixture["wateruse_data_months_AMJ"], wateruse_value = 2.0)  
+
+    # print results
+    _print_test_info(actual, expected) 
+
+def test_create_monthly_wateruse_dict3():
+    """ Test create_monthly_wateruse_dict() """
+
+    print("--- Testing create_monthly_wateruse_dict() part 3 - testing July, August, September ---")
+
+    # expected values to test with actual values
+    expected = {"July": 3.0,
+                "August": 3.0,
+                "September": 3.0,
+    } 
+    
+    # create test data
+    fixture = _create_test_data()
+
+    # actual values       
+    actual = create_monthly_wateruse_dict(wateruse_data = fixture["wateruse_data_months_JAS"], wateruse_value = 3.0)  
+
+    # print results
+    _print_test_info(actual, expected) 
+
+def test_create_monthly_wateruse_dict4():
+    """ Test create_monthly_wateruse_dict() """
+
+    print("--- Testing create_monthly_wateruse_dict() part 4 - testing October, November, December ---")
+
+    # expected values to test with actual values
+    expected = {"October": 4.0,
+                "November": 4.0,
+                "December": 4.0,
+    } 
+    
+    # create test data
+    fixture = _create_test_data()
+
+    # actual values       
+    actual = create_monthly_wateruse_dict(wateruse_data = fixture["wateruse_data_months_OND"], wateruse_value = 4.0)  
+
+    # print results
+    _print_test_info(actual, expected) 
+    
+
+def test_get_total_wateruse1():
+    """ Test get_total_wateruse() """
+
+    print("--- Testing get_total_wateruse() part 1 - ids [256, 241, 222, 220] ---")    
+
+    # expected values to test with actual values
+    expected = {"January": 50.0,
+                "February": 50.0,
+                "March": 50.0,
+    }  
+    
+    # create test data
+    fixture = _create_test_data()
+
+    # actual values       
+    actual = get_total_wateruse(wateruse_data = fixture["wateruse_data"], id_list = ["256", "241", "222", "220"])  
+
+    # print results
+    _print_test_info(actual, expected) 
+
+def test_get_total_wateruse2():
+    """ Test get_total_wateruse() """
+
+    print("--- Testing get_total_wateruse() part 2 - ids [12, 11, 8] ---")    
+
+    # expected values to test with actual values
+    expected = {"January": 27.0,
+                "February": 27.0,
+                "March": 27.0,
+    }  
+    
+    # create test data
+    fixture = _create_test_data()
+
+    # actual values       
+    actual = get_total_wateruse(wateruse_data = fixture["wateruse_data"], id_list = ["12", "11", "8"])  
+
+    # print results
+    _print_test_info(actual, expected) 
+
+def test_get_all_total_wateruse1():
+    """ Test get_all_total_wateruse() """
+
+    print("--- Testing get_all_total_wateruse() part 1 - ids [256, 241, 222, 220] ---")
+
+    # expected values to test with actual values
+    expected = {"January": 50.0,
+                "February": 50.0,
+                "March": 50.0,
+                "April": 50.0,
+                "May": 50.0,
+                "June": 50.0,
+                "July": 50.0,
+                "August": 50.0,
+                "September": 50.0,
+                "October": 50.0,
+                "November": 50.0,
+                "December": 50.0
+    } 
+    
+    # create test data
+    fixture = _create_test_data()
+
+    # make a list of water use files
+#    fileobj_JFM = StringIO(fixture["data_file_JFM"])
+#    fileobj_AMJ = StringIO(fixture["data_file_AMJ"])
+#    fileobj_JAS = StringIO(fixture["data_file_JAS"])
+#    fileobj_OND = StringIO(fixture["data_file_OND"])
+    
+    wateruse_files_list = [fixture["data_file_JFM"], fixture["data_file_AMJ"], fixture["data_file_JAS"], fixture["data_file_OND"]]
+
+    # actual values       
+    actual = get_all_total_wateruse(wateruse_files = wateruse_files_list, id_list = ["256", "241", "222", "220"])  
+
+    import pdb
+    pdb.set_trace()
+
+    # print results
+    _print_test_info(actual, expected) 
 
 def main():
 
@@ -442,7 +682,23 @@ def main():
 
     test_get_wateruse_values()
 
-    test_sum_wateruse_values()
+    test_sum_values1()
+
+    test_sum_values2()
+
+    test_create_monthly_wateruse_dict1()
+
+    test_create_monthly_wateruse_dict2()
+
+    test_create_monthly_wateruse_dict3()
+
+    test_create_monthly_wateruse_dict4()
+
+    test_get_total_wateruse1()
+
+    test_get_total_wateruse2()
+
+    test_get_all_total_wateruse1()
 
 if __name__ == "__main__":
     main()
