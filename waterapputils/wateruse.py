@@ -159,7 +159,6 @@ def get_wateruse_values(wateruse_data, id_list):
               [  1.2   2.8   3.2   4.8   5.2   6.8   7.2   8.8   9.2  10.8  11.2  12.8]]
     """
     # get water use types of interest; 
-#    wateruse_types = ["AqGwWL", "CoGwWL", "DoGwWL", "InGwWL", "IrGwWL", "LvGwWL", "MiGwWL", "ReGwWL", "TeGwWL", "WsGwWL", "AqSwWL", "CoSwWL", "InSwWL", "IrSwWL", "MiSwWL", "TeSwWL", "WsSwWL", "InGwRT", "InSwRT", "STswRT", "WSgwRT", "WSunkTR", "WStrans"]   
     wateruse_types = []
     for name in wateruse_data["column_names"]:
         if name not in ["huc12", "newhydroid"]:
@@ -394,10 +393,10 @@ def test_get_wateruse_values():
     # print results
     _print_test_info(actual, expected)
 
-def test_sum_wateruse_values():
-    """ Test sum_wateruse_values() """
+def test_sum_values():
+    """ Test sum_values() """
 
-    print("--- Testing sum_wateruse_values() ---")
+    print("--- Testing sum_values() ---")
     
     # expected values to test with actual values
     expected = {}    
@@ -409,7 +408,7 @@ def test_sum_wateruse_values():
     fixture = _create_test_data()
 
     # actual values       
-    actual = sum_wateruse_values(values = fixture["values_data"])  
+    actual = sum_values(values = fixture["values_data"])  
 
     # print results
     _print_test_info(actual, expected)    
