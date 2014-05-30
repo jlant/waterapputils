@@ -322,9 +322,6 @@ def test_get_all_values():
 
 @with_setup(setup, teardown)
 def test_set_parameter_values():
-    """ Test set_parameter functionality """
-    
-    print("--- Testing set_parameter ---") 
     
     subsurface_data = np.array([100, 110, 120])
     watertxt_data = watertxt.set_parameter_values(watertxt_data = fixture["sample_data_dict"], name = "Subsurface Flow", values = subsurface_data)

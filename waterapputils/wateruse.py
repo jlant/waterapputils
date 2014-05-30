@@ -305,9 +305,39 @@ def get_all_total_wateruse(wateruse_files, id_list):
     # calculate average values for a list of water use files
     all_total_wateruse_dict = {}
     for wateruse_file in wateruse_files:
-        
+
         # read the delta file
         wateruse_data = read_file(wateruse_file) 
+       
+        # calculate average wateruse for a list of ids
+        total_wateruse_dict = get_total_wateruse(wateruse_data = wateruse_data, id_list = id_list)
+        
+        # update dictionary 
+        all_total_wateruse_dict.update(total_wateruse_dict)   
+    
+    return all_total_wateruse_dict
+
+def get_all_total_wateruse_for_tests(wateruse_files, id_list):
+    """    
+    Get all total water use values for a list of specific id values.
+
+    Parameters
+    ----------
+    wateruse_files : list
+        List of water use files to calculate the sum of all water use values 
+
+    ids : list
+        List of ids values.
+    
+    See Also
+    --------
+    get_total_wateruse()
+    """
+    # calculate average values for a list of water use files
+    all_total_wateruse_dict = {}
+    for wateruse_file in wateruse_files:
+        fileobj = StringIO(wateruse_file)
+        wateruse_data = read_file_in(fileobj) 
                 
         # calculate average wateruse for a list of ids
         total_wateruse_dict = get_total_wateruse(wateruse_data = wateruse_data, id_list = id_list)
@@ -316,7 +346,7 @@ def get_all_total_wateruse(wateruse_files, id_list):
         all_total_wateruse_dict.update(total_wateruse_dict)   
     
     return all_total_wateruse_dict
-   
+  
 def _create_test_data():
     """ Create test data for tests """
 
@@ -655,19 +685,75 @@ def test_get_all_total_wateruse1():
     # create test data
     fixture = _create_test_data()
 
-    # make a list of water use files
-#    fileobj_JFM = StringIO(fixture["data_file_JFM"])
-#    fileobj_AMJ = StringIO(fixture["data_file_AMJ"])
-#    fileobj_JAS = StringIO(fixture["data_file_JAS"])
-#    fileobj_OND = StringIO(fixture["data_file_OND"])
-    
+    # make a list of water use files   
     wateruse_files_list = [fixture["data_file_JFM"], fixture["data_file_AMJ"], fixture["data_file_JAS"], fixture["data_file_OND"]]
 
     # actual values       
-    actual = get_all_total_wateruse(wateruse_files = wateruse_files_list, id_list = ["256", "241", "222", "220"])  
+    actual = get_all_total_wateruse_for_tests(wateruse_files = wateruse_files_list, id_list = ["256", "241", "222", "220"])  
 
-    import pdb
-    pdb.set_trace()
+    # print results
+    _print_test_info(actual, expected) 
+
+def test_get_all_total_wateruse2():
+    """ Test get_all_total_wateruse() """
+
+    print("--- Testing get_all_total_wateruse() part 2 - ids [12, 11, 8] ---")
+
+    # expected values to test with actual values
+    expected = {"January": 27.0,
+                "February": 27.0,
+                "March": 27.0,
+                "April": 27.0,
+                "May": 27.0,
+                "June": 27.0,
+                "July": 27.0,
+                "August": 27.0,
+                "September": 27.0,
+                "October": 27.0,
+                "November": 27.0,
+                "December": 27.0
+    } 
+    
+    # create test data
+    fixture = _create_test_data()
+
+    # make a list of water use files   
+    wateruse_files_list = [fixture["data_file_JFM"], fixture["data_file_AMJ"], fixture["data_file_JAS"], fixture["data_file_OND"]]
+
+    # actual values       
+    actual = get_all_total_wateruse_for_tests(wateruse_files = wateruse_files_list, id_list = ["12", "11", "8"])  
+
+    # print results
+    _print_test_info(actual, expected) 
+
+def test_get_all_total_wateruse3():
+    """ Test get_all_total_wateruse() """
+
+    print("--- Testing get_all_total_wateruse() part 3 - ids [256] ---")
+
+    # expected values to test with actual values
+    expected = {"January": 12.0,
+                "February": 12.0,
+                "March": 12.0,
+                "April": 12.0,
+                "May": 12.0,
+                "June": 12.0,
+                "July": 12.0,
+                "August": 12.0,
+                "September": 12.0,
+                "October": 12.0,
+                "November": 12.0,
+                "December": 12.0
+    } 
+    
+    # create test data
+    fixture = _create_test_data()
+
+    # make a list of water use files   
+    wateruse_files_list = [fixture["data_file_JFM"], fixture["data_file_AMJ"], fixture["data_file_JAS"], fixture["data_file_OND"]]
+
+    # actual values       
+    actual = get_all_total_wateruse_for_tests(wateruse_files = wateruse_files_list, id_list = ["256"])  
 
     # print results
     _print_test_info(actual, expected) 
@@ -700,5 +786,9 @@ def main():
 
     test_get_all_total_wateruse1()
 
+    test_get_all_total_wateruse2()
+
+    test_get_all_total_wateruse3()
+    
 if __name__ == "__main__":
     main()
