@@ -1,0 +1,357 @@
+SETUP: deltatxt tests
+........TEARDOWN: deltatxt tests
+SETUP: helpers tests
+........TEARDOWN: helpers tests
+SETUP: spatialvectors tests
+................TEARDOWN: spatialvectors tests
+SETUP: watertxt tests
+..SETUP: watertxt tests
+TEARDOWN: watertxt tests
+.SETUP: watertxt tests
+TEARDOWN: watertxt tests
+.SETUP: watertxt tests
+TEARDOWN: watertxt tests
+.SETUP: watertxt tests
+TEARDOWN: watertxt tests
+.SETUP: watertxt tests
+TEARDOWN: watertxt tests
+..SETUP: watertxt tests
+TEARDOWN: watertxt tests
+..TEARDOWN: watertxt tests
+.........SETUP: wateruse tests
+
+--- Test read_file_in() - test reading of water use files; using simplified water use formatted file ---
+
+*huc12*
+    actual:   ['20401010101', '20401010101', '20401010101', '20401010101', '20401010101', '20401010101', '20401010102']
+    expected: ['20401010101', '20401010101', '20401010101', '20401010101', '20401010101', '20401010101', '20401010102']
+
+*column_names*
+    actual:   ['huc12', 'newhydroid', 'AqGwWL', 'CoGwWL', 'DoGwWL', 'InGwWL', 'IrGwWL']
+    expected: ['huc12', 'newhydroid', 'AqGwWL', 'CoGwWL', 'DoGwWL', 'InGwWL', 'IrGwWL']
+
+*CoGwWL*
+    actual:   [5.0, 3.0, 4.0, 8.0, 3.0, 6.0, 1.0]
+    expected: [5.0, 3.0, 4.0, 8.0, 3.0, 6.0, 1.0]
+
+*DoGwWL*
+    actual:   [2.0, 4.0, 6.0, 3.0, 1.0, 2.0, 2.0]
+    expected: [2.0, 4.0, 6.0, 3.0, 1.0, 2.0, 2.0]
+
+*months*
+    actual:   JFM_WU
+    expected: JFM_WU
+
+*newhydroid*
+    actual:   ['256', '241', '222', '220', '12', '11', '8']
+    expected: ['256', '241', '222', '220', '12', '11', '8']
+
+*IrGwWL*
+    actual:   [-2.0, -4.0, -6.0, -8.0, -1.0, -1.0, -1.0]
+    expected: [-2.0, -4.0, -6.0, -8.0, -1.0, -1.0, -1.0]
+
+*InGwWL*
+    actual:   [5.0, 3.0, 4.0, 8.0, 3.0, 6.0, 1.0]
+    expected: [5.0, 3.0, 4.0, 8.0, 3.0, 6.0, 1.0]
+
+*units*
+    actual:   Mgal/day
+    expected: Mgal/day
+
+*AqGwWL*
+    actual:   [2.0, 4.0, 6.0, 3.0, 1.0, 2.0, 2.0]
+    expected: [2.0, 4.0, 6.0, 3.0, 1.0, 2.0, 2.0]
+
+
+--- Test get_wateruse_values() - test getting water use values for a particular list of id (hydroid) values ---
+
+*ids_12_11_8*
+    actual:   [[1.0, 3.0, 1.0, 3.0, -1.0], [2.0, 6.0, 2.0, 6.0, -1.0], [2.0, 1.0, 2.0, 1.0, -1.0]]
+    expected: [[1.0, 3.0, 1.0, 3.0, -1.0], [2.0, 6.0, 2.0, 6.0, -1.0], [2.0, 1.0, 2.0, 1.0, -1.0]]
+
+*ids_256_241_222_220*
+    actual:   [[2.0, 5.0, 2.0, 5.0, -2.0], [4.0, 3.0, 4.0, 3.0, -4.0], [6.0, 4.0, 6.0, 4.0, -6.0], [3.0, 8.0, 3.0, 8.0, -8.0]]
+    expected: [[2.0, 5.0, 2.0, 5.0, -2.0], [4.0, 3.0, 4.0, 3.0, -4.0], [6.0, 4.0, 6.0, 4.0, -6.0], [3.0, 8.0, 3.0, 8.0, -8.0]]
+
+
+--- Test sum_values() : part 1 - test calculating sums (row wise, column wise, and total) for a list of lists using ids = [256, 241, 222, 220] ---
+
+*total*
+    actual:   50.0
+    expected: 50.0
+
+*row_wise*
+    actual:   [ 15.  20.  15.  20. -20.]
+    expected: [ 15.  20.  15.  20. -20.]
+
+*column_wise*
+    actual:   [ 12.  10.  14.  14.]
+    expected: [ 12.  10.  14.  14.]
+
+
+--- Test sum_values() : part 2 - test calculating sums (row wise, column wise, and total) for a list of lists using ids = [12, 11, 8] ---
+
+*total*
+    actual:   27.0
+    expected: 27.0
+
+*row_wise*
+    actual:   [  5.  10.   5.  10.  -3.]
+    expected: [  5.  10.   5.  10.  -3.]
+
+*column_wise*
+    actual:   [  7.  15.   5.]
+    expected: [  7.  15.   5.]
+
+
+--- Test sum_values() : part 1 - test creating a dictionary with monthly keys (January, Februray, March) having values that correspond to the sum total water use ---
+
+*January*
+    actual:   5.0
+    expected: 5.0
+
+*February*
+    actual:   5.0
+    expected: 5.0
+
+*March*
+    actual:   5.0
+    expected: 5.0
+
+
+--- Test sum_values() : part 2 - test creating a dictionary with monthly keys (April, May, June) having values that correspond to the sum total water use ---
+
+*May*
+    actual:   2.0
+    expected: 2.0
+
+*April*
+    actual:   2.0
+    expected: 2.0
+
+*June*
+    actual:   2.0
+    expected: 2.0
+
+
+--- Test sum_values() : part 3 - test creating a dictionary with monthly keys (July, August, September) having values that correspond to the sum total water use ---
+
+*September*
+    actual:   3.0
+    expected: 3.0
+
+*July*
+    actual:   3.0
+    expected: 3.0
+
+*August*
+    actual:   3.0
+    expected: 3.0
+
+
+--- Test sum_values() : part 4 - test creating a dictionary with monthly keys (October, November, December) having values that correspond to the sum total water use ---
+
+*December*
+    actual:   4.0
+    expected: 4.0
+
+*November*
+    actual:   4.0
+    expected: 4.0
+
+*October*
+    actual:   4.0
+    expected: 4.0
+
+
+---  ---
+
+*January*
+    actual:   50.0
+    expected: 50.0
+
+*February*
+    actual:   50.0
+    expected: 50.0
+
+*March*
+    actual:   50.0
+    expected: 50.0
+
+
+--- ....SETUP: waterxml tests
+...........Test get_total_wateruse() : part 2 - test getting the total sum of water use for ids (hydroids) [12, 11, 8] ---
+
+*January*
+    actual:   27.0
+    expected: 27.0
+
+*February*
+    actual:   27.0
+    expected: 27.0
+
+*March*
+    actual:   27.0
+    expected: 27.0
+
+
+--- Test get_all_total_wateruse() : part 1 - test getting the total sum of water use for ids (hydroids) [256, 241, 222, 220] for multiple water use files (the entire year) ---
+
+*February*
+    actual:   50.0
+    expected: 50.0
+
+*October*
+    actual:   50.0
+    expected: 50.0
+
+*March*
+    actual:   50.0
+    expected: 50.0
+
+*August*
+    actual:   50.0
+    expected: 50.0
+
+*May*
+    actual:   50.0
+    expected: 50.0
+
+*January*
+    actual:   50.0
+    expected: 50.0
+
+*June*
+    actual:   50.0
+    expected: 50.0
+
+*September*
+    actual:   50.0
+    expected: 50.0
+
+*April*
+    actual:   50.0
+    expected: 50.0
+
+*December*
+    actual:   50.0
+    expected: 50.0
+
+*July*
+    actual:   50.0
+    expected: 50.0
+
+*November*
+    actual:   50.0
+    expected: 50.0
+
+
+--- Test get_all_total_wateruse() : part 2 - test getting the total sum of water use for ids (hydroids) [12, 11, 8] for multiple water use files (the entire year) ---
+
+*February*
+    actual:   27.0
+    expected: 27.0
+
+*October*
+    actual:   27.0
+    expected: 27.0
+
+*March*
+    actual:   27.0
+    expected: 27.0
+
+*August*
+    actual:   27.0
+    expected: 27.0
+
+*May*
+    actual:   27.0
+    expected: 27.0
+
+*January*
+    actual:   27.0
+    expected: 27.0
+
+*June*
+    actual:   27.0
+    expected: 27.0
+
+*September*
+    actual:   27.0
+    expected: 27.0
+
+*April*
+    actual:   27.0
+    expected: 27.0
+
+*December*
+    actual:   27.0
+    expected: 27.0
+
+*July*
+    actual:   27.0
+    expected: 27.0
+
+*November*
+    actual:   27.0
+    expected: 27.0
+
+
+--- Test get_all_total_wateruse() : part 3 - test getting the total sum of water use for ids (hydroids) [256] for multiple water use files (the entire year) ---
+
+*February*
+    actual:   12.0
+    expected: 12.0
+
+*October*
+    actual:   12.0
+    expected: 12.0
+
+*March*
+    actual:   12.0
+    expected: 12.0
+
+*August*
+    actual:   12.0
+    expected: 12.0
+
+*May*
+    actual:   12.0
+    expected: 12.0
+
+*January*
+    actual:   12.0
+    expected: 12.0
+
+*June*
+    actual:   12.0
+    expected: 12.0
+
+*September*
+    actual:   12.0
+    expected: 12.0
+
+*April*
+    actual:   12.0
+    expected: 12.0
+
+*December*
+    actual:   12.0
+    expected: 12.0
+
+*July*
+    actual:   12.0
+    expected: 12.0
+
+*November*
+    actual:   12.0
+    expected: 12.0
+
+SETUP: wateruse tests
+--- Testing get_xml_data() ---
+TEARDOWN: waterxml tests
+
+----------------------------------------------------------------------
+Ran 66 tests in 0.744s
+
+OK
