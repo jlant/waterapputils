@@ -147,6 +147,24 @@ def teardown():
     
     print("SETUP: wateruse tests", file = sys.stdout) 
 
+
+def _get_all_total_wateruse_for_tests(wateruse_files, id_list):
+    """ Test get_all_total_wateruse - strictly a test function here that mirrors get_all_totoal_wateruse in water.py but creates fileobj from StringIO instead of reading a file path """
+
+    # calculate average values for a list of water use files
+    all_total_wateruse_dict = {}
+    for wateruse_file in wateruse_files:
+        fileobj = StringIO(wateruse_file)
+        wateruse_data = wateruse.read_file_in(fileobj) 
+                
+        # calculate average wateruse for a list of ids
+        total_wateruse_dict = wateruse.get_total_wateruse(wateruse_data = wateruse_data, id_list = id_list)
+        
+        # update dictionary 
+        all_total_wateruse_dict.update(total_wateruse_dict)   
+    
+    return all_total_wateruse_dict
+
 def test_read_file_in():
     """ Test read_file_in() """
 
@@ -363,7 +381,7 @@ def test_get_all_total_wateruse1():
     wateruse_files_list = [fixture["data_file_JFM"], fixture["data_file_AMJ"], fixture["data_file_JAS"], fixture["data_file_OND"]]
 
     # actual values       
-    actual = wateruse.get_all_total_wateruse_for_tests(wateruse_files = wateruse_files_list, id_list = ["256", "241", "222", "220"])  
+    actual = _get_all_total_wateruse_for_tests(wateruse_files = wateruse_files_list, id_list = ["256", "241", "222", "220"])  
 
     # assert equality
     _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
@@ -393,7 +411,7 @@ def test_get_all_total_wateruse2():
     wateruse_files_list = [fixture["data_file_JFM"], fixture["data_file_AMJ"], fixture["data_file_JAS"], fixture["data_file_OND"]]
 
     # actual values       
-    actual = wateruse.get_all_total_wateruse_for_tests(wateruse_files = wateruse_files_list, id_list = ["12", "11", "8"])  
+    actual = _get_all_total_wateruse_for_tests(wateruse_files = wateruse_files_list, id_list = ["12", "11", "8"])  
 
     # assert equality
     _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
@@ -423,7 +441,7 @@ def test_get_all_total_wateruse3():
     wateruse_files_list = [fixture["data_file_JFM"], fixture["data_file_AMJ"], fixture["data_file_JAS"], fixture["data_file_OND"]]
 
     # actual values       
-    actual = wateruse.get_all_total_wateruse_for_tests(wateruse_files = wateruse_files_list, id_list = ["256"])  
+    actual = _get_all_total_wateruse_for_tests(wateruse_files = wateruse_files_list, id_list = ["256"])  
 
     # assert equality
     _perform_assertion(actual, expected, verbose = VERBOSE, description = description)     

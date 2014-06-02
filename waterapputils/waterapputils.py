@@ -218,8 +218,8 @@ def apply_deltas_to_txt(file_list, arguments):
 
 def apply_deltas_to_xml_files(files_dict, arguments):
     """    
-    Apply delta factors to a WATER *.xml file. The new file created is saved to the same
-    directory as the *.xml file.
+    Apply delta factors to a WATER *.xml file. The new file created is saved to a directory
+    chosen by the user.
 
     Parameters
     ----------
@@ -237,6 +237,83 @@ def apply_deltas_to_xml_files(files_dict, arguments):
                   "waterxml_directory": path to directory containing xml file or files
                   "outputxml_directory": path of directory to store new updated xml files}    
     """
+    # initialize error logging
+    waterapputils_logging.initialize_loggers(output_dir = files_dict["outputxml_directory"])
+    
+    # open shapefiles
+    delta_shapefile = osgeo.ogr.Open(files_dict["delta_shapefile"]) 
+    basin_shapefile = osgeo.ogr.Open(files_dict["basin_shapefile"]) 
+
+    # find intersecting tiles based on water basin supplied
+    intersecting_tiles = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = delta_shapefile, intersectee_field = "Tile", intersector_field = files_dict["basin_field"])
+
+    print("Intersecting tiles: {}\n".format(intersecting_tiles))        
+    for featureid, tiles in intersecting_tiles.iteritems():                    
+        print("FeatureId: {}\n".format(featureid))  
+        print("Tiles: {}\n".format(tiles))  
+
+        # get average values for a list of delta files
+        avg_deltas = deltas.get_avg_deltas(delta_files = files_dict["delta_files"], tiles = tiles)  
+
+        print("Avg deltas: {}\n".format(avg_deltas))
+
+        # get the xml data file that has a parent directory matching the current featureid
+        path = os.path.join(files_dict["waterxml_directory"], featureid)
+        waterxml_file = helpers.find_file(name = "WATERSimulation.xml", path = path)
+
+        # get file info
+        waterxml_filedir_path, waterxml_filename = helpers.get_file_info(waterxml_file)
+
+        # read the xml
+        waterxml_tree = waterxml.read_file(waterxml_file)            
+
+        # apply deltas
+        for key, value in avg_deltas.iteritems():
+            if key == "Ppt":
+                waterxml.apply_factors(waterxml_tree = waterxml_tree, element = "ClimaticPrecipitationSeries", factors = avg_deltas[key])
+
+            elif key == "Tmax":
+                waterxml.apply_factors(waterxml_tree = waterxml_tree, element = "ClimaticTemperatureSeries", factors = avg_deltas[key])
+
+        # write updated xml
+        xml_output_filename = "-".join([waterxml_filename.split(".xml")[0], "updated", files_dict["basin_field"], featureid]) + ".xml"                
+        waterxml.write_file(waterxml_tree = waterxml_tree, save_path = files_dict["outputxml_directory"], filename = xml_output_filename)
+
+        # plot comparison
+        updated_waterxml_file = os.path.join(files_dict["outputxml_directory"], xml_output_filename)
+        process_xmlcmp(file_list = [updated_waterxml_file, waterxml_file], arguments = arguments)
+
+    # close error logging
+    waterapputils_logging.remove_loggers()
+
+def apply_wateruse_to_txt_files(files_dict, arguments):
+    """    
+    Apply water use data to a WATER *.txt file. The new file created is saved to the same
+    directory as the *.xml file.
+
+    Parameters
+    ----------
+    files_dict : dictionary
+        Dictionary of 
+    arguments : argparse object
+        An argparse object containing user options.                    
+
+    Notes
+    -----
+    files_dict = {"wateruse_files": list of delta text files,
+                  "basin_centroids_shapefile": shapefile corresponding to basin centroids,
+                  "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with delta shapefile
+                  "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
+                  "waterxml_directory": path to directory containing xml file or files
+                  "outputxml_directory": path of directory to store new updated xml files}    
+    """
+            files_dict = {"wateruse_files": ["../data/wateruse-datafiles/test_wateruse_JFM.txt", "../data/wateruse-datafiles/test_wateruse_AMJ.txt", "../data/wateruse-datafiles/test_wateruse_JAS.txt", "../data/wateruse-datafiles/test_wateruse_OND.txt"], 
+                          "basin_centroids_shapefile": "../data/spatial-datafiles/basins/dem_basin_centroids_tests_proj_wgs.shp", 
+                          "basin_shapefile": "../data/spatial-datafiles/basins/waterbasin_multi_tests_proj_wgs.shp",
+                          "basin_field": "STAID",
+                          "watertxt_directory": "C:/Users/jlant/jeremiah/temp/2014-06-02_wateruse_batch_tests/",
+                          "outputtxt_directory": "../data/wateruse-datafiles/"}    
+    
     # initialize error logging
     waterapputils_logging.initialize_loggers(output_dir = files_dict["outputxml_directory"])
     
@@ -309,6 +386,8 @@ def main():
     group.add_argument("-applydeltastxt", "--applydeltastxt", nargs = 2, help = "List WATER text data file followed by delta file to be applied.")
     group.add_argument("-applydeltasxml", "--applydeltasxml", nargs = 2, help = "List WATER xml data file followed by delta file to be applied.")
     group.add_argument("-applydeltasxmlfd", "--applydeltasxmlfiledialog", action = "store_true", help = "Open a series of file dialog windows to apply deltas to WATER XML data file(s)")
+
+    group.add_argument("-applywateruse", "--applywaterusefiledialog", action = "store_true", help = "Open a series of file dialog windows to apply deltas to WATER XML data file(s)")
 
     parser.add_argument("-v", "--verbose", action = "store_true",  help = "Print general information about data file(s)")
     parser.add_argument("-p", "--showplot", action = "store_true",  help = "Show plots of parameters contained in data file(s)")
@@ -410,6 +489,17 @@ def main():
             
             apply_deltas_to_xml_files(files_dict = files_dict, arguments = args)
             sys.exit() 
+
+        elif args.applywaterusefiledialog:
+            files_dict = {"wateruse_files": ["../data/wateruse-datafiles/S1_JFM_WU_2014mar7.txt", "../data/wateruse-datafiles/S2_AMJ_WU_2014mar7.txt", "../data/wateruse-datafiles/S3_JAS_WU_2014mar7.txt", "../data/wateruse-datafiles/S4_OND_WU_2014mar7.txt"], 
+                          "basin_centroids_shapefile": "../data/spatial-datafiles/basins/dem_basin_centroids_small_proj_wgs.shp", 
+                          "basin_shapefile": "../data/spatial-datafiles/basins/waterbasin_multi_clean_proj_wgs.shp",
+                          "basin_field": "STAID",
+                          "watertxt_directory": "C:/Users/jlant/jeremiah/temp/2014-05-19_testbatch/",
+                          "outputtxt_directory": "../data/wateruse-datafiles/"}
+            
+            apply_wateruse_to_txt_files(files_dict = files_dict, arguments = args)
+
             
     except IOError as error:
         logging.exception("IO error: {0}".format(error.message))

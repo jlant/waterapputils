@@ -352,6 +352,6 @@ SETUP: wateruse tests
 TEARDOWN: waterxml tests
 
 ----------------------------------------------------------------------
-Ran 66 tests in 0.744s
+Ran 66 tests in 0.784s
 
 OK
