@@ -259,7 +259,7 @@ def write_file(watertxt_data, save_path, filename = "WATER.txt"):
             output_file.write(date_str + "\t")
             row = []
             for j in range(ncols):
-                row.append(str(values_all[j][i]))
+                row.append("{}".format(values_all[j][i]))
 
             output_file.write("\t".join(row) + "\n")
        
@@ -441,7 +441,7 @@ def apply_factors(watertxt_data, name, factors, is_additive = False):
 
     return watertxt_data      
 
-def apply_wateruse(watertxt_data, wateruse_factors):
+def apply_wateruse(watertxt_data, wateruse_totals):
     """
     Apply monthly water use factors to discharge parameter.  Factors are additive.
     
@@ -476,17 +476,23 @@ def apply_wateruse(watertxt_data, wateruse_factors):
     """
     # get the discharge parameter
     discharge = get_parameter(watertxt_data = watertxt_data, name = "Discharge") 
+
+    # create a water use parameter containing water use totals
+    watertxt_data = add_parameter(watertxt_data = watertxt_data, name = "Water Use (cfs)", param_data = np.zeros(np.shape(discharge["data"])))
     
-    # fill water use parameter with discharge data
-    watertxt_data = add_parameter(watertxt_data = watertxt_data, name = "Water Use (cfs)", param_data = discharge)
+    # apply water use factors
+    watertxt_data = apply_factors(watertxt_data = watertxt_data, name = "Water Use (cfs)", factors = wateruse_totals, is_additive = True)    
     
-    # apply water use
-    watertxt_data = apply_factors(watertxt_data = watertxt_data, name = "Water Use", factors = wateruse_factors, is_additive = True)    
+    # temporarily fill water use parameter with original discharge data
+    watertxt_data = add_parameter(watertxt_data = watertxt_data, name = "Discharge + Water Use (cfs)", param_data = discharge["data"])
+    
+    # apply water use factors
+    watertxt_data = apply_factors(watertxt_data = watertxt_data, name = "Discharge + Water Use (cfs)", factors = wateruse_totals, is_additive = True)    
     
     return watertxt_data
 
 
-def _create_test_data(multiplicative_factor = 1, stationid = "012345", with_wateruse = False):
+def _create_test_data(multiplicative_factor = 1, stationid = "012345"):
     """ Create test data for tests """
 
     dates = [datetime.datetime(2014, 04, 01, 0, 0), datetime.datetime(2014, 04, 02, 0, 0), datetime.datetime(2014, 04, 03, 0, 0)]
@@ -553,12 +559,6 @@ def _create_test_data(multiplicative_factor = 1, stationid = "012345", with_wate
     data = {"user": "jlant", "date_created": "4/9/2014 15:30:00 PM", "stationid": stationid, 
             "column_names": column_names,
             "parameters": parameters, "dates": dates}
-
-    if with_wateruse:
-        data = add_parameter(watertxt_data = data, name = "Water Use (cfs)", param_data = np.array([3.0, 2.5, -5.5]))
-        discharge = get_parameter(watertxt_data = data, name = "Discharge")
-        wateruse = get_parameter(watertxt_data = data, name = "Water Use")
-        data = add_parameter(watertxt_data = data, name = "Discharge - Water Use (cfs)", param_data = discharge["data"] - wateruse["data"])
 
     return data
 
@@ -883,9 +883,69 @@ def test_apply_factors2():
 
     # print results
     _print_test_info(actual, expected)
+
+def test_apply_wateruse():
+    """ Test apply_wateruse() functionality """
+
+    print("--- Testing apply_wateruse() ---") 
+
+    # create water use totals
+    wateruse_totals = {
+        'January': 2.0,
+        'February': 2.0,
+        'March': 2.0,
+        'April': 3.0,
+        'May': 3.0,
+        'June': 0.0,
+        'July': 4.0,
+        'August': 4.0,
+        'September': 4.0,
+        'October': 5.0,
+        'November': 5.0,
+        'December': 5.0
+    }  
+
+    # expected values to test with actual values
+    wateruse_totals_data = np.ones(3) * wateruse_totals["April"] # only three values in create_test_data() that occur in the month of April
+    discharge_and_wateruse_data = np.array([5., 9., 13.])
+
+    expected_wateruse_totals = {"name": "Water Use (cfs)", "index": 14, "data": wateruse_totals_data, "mean": np.mean(wateruse_totals_data), "max": np.max(wateruse_totals_data), "min": np.min(wateruse_totals_data)}    
+    expected_discharge_and_wateruse = {"name": "Discharge + Water Use (cfs)", "index": 15, "data": discharge_and_wateruse_data, "mean": np.mean(discharge_and_wateruse_data), "max": np.max(discharge_and_wateruse_data), "min": np.min(discharge_and_wateruse_data)}
+    
+
+    # create test data
+    data = _create_test_data()
+    
+    # apply water use
+    data = apply_wateruse(watertxt_data = data, wateruse_totals = wateruse_totals) 
+    
+    # actual values
+    actual_wateruse_totals = get_parameter(watertxt_data = data, name = "Water Use")
+    actual_discharge_and_wateruse = get_parameter(watertxt_data = data, name = "Discharge + Water Use") 
+
+    # print results
+    _print_test_info(actual_wateruse_totals, expected_wateruse_totals)
+    _print_test_info(actual_discharge_and_wateruse, expected_discharge_and_wateruse)
+
     
 def test_write_file():
     """ Test write_file functionality """
+
+    # create water use totals
+    wateruse_totals = {
+        'January': 2.0,
+        'February': 2.0,
+        'March': 2.0,
+        'April': 3.0,
+        'May': 3.0,
+        'June': 0.0,
+        'July': 4.0,
+        'August': 4.0,
+        'September': 4.0,
+        'October': 5.0,
+        'November': 5.0,
+        'December': 5.0
+    }  
 
     print("--- Testing write_file ---") 
     
@@ -897,7 +957,13 @@ def test_write_file():
     data = set_parameter_values(watertxt_data = data, name = "Discharge", values = new_discharge_data)
     write_file(watertxt_data = data , save_path = os.getcwd(), filename = "WATER_new_discharge_data.txt")
     
-    data = _create_test_data(with_wateruse = True)
+    # create test data
+    data = _create_test_data()
+    
+    # apply water use
+    data = apply_wateruse(watertxt_data = data, wateruse_totals = wateruse_totals)     
+    
+    # write file
     write_file(watertxt_data = data , save_path = os.getcwd(), filename = "WATER_wateruse.txt") 
     
     print("Created 3 files {}, {}, and {} in current working directory. Please check for proper writing".format("WATER.txt", "WATER_new_discharge_data.txt" , "WATER_wateruse.txt")) 
@@ -924,11 +990,13 @@ def main():
 
     test_read_file_in()
 
-    test_write_file()
-
     test_apply_factors1()
 
     test_apply_factors2()
+    
+    test_apply_wateruse()
+
+    test_write_file()
     
 if __name__ == "__main__":
     main()

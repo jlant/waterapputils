@@ -342,7 +342,7 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
         watertxt_data = watertxt.apply_wateruse(watertxt_data, wateruse_factors = total_wateruse_dict) 
 
         # write updated txt
-        txt_output_filename = "-".join([waterxml_filename.split(".txt")[0], "updated", files_dict["basin_field"], featureid]) + ".txt"  
+        txt_output_filename = "-".join([watertxt_filename.split(".txt")[0], "updated", files_dict["basin_field"], featureid]) + ".txt"  
         watertxt.write_file(watertxt_data = watertxt_data, save_path = files_dict["outputtxt_directory"], filename = txt_output_filename)              
 
         # plot comparison
