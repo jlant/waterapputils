@@ -375,9 +375,11 @@ def set_parameter_values(watertxt_data, name, values):
 
     return watertxt_data
  
-def apply_factors(watertxt_data, name, factors):
+def apply_factors(watertxt_data, name, factors, is_additive = False):
     """
-    Apply monthly multiplicative factors to a specific parameter.
+    Apply monthly factors to a specific parameter.  Factors are multiplicative
+    by default, however the factors can be additive if the is_additive flag 
+    is set to True.
     
     Parameters
     ----------
@@ -386,7 +388,9 @@ def apply_factors(watertxt_data, name, factors):
     name : string
         String name of parameter
     factors : dictionary
-        Dictionary holding monthly multiplicative factors
+        Dictionary holding monthly factors
+    is_additive : boolean
+        String multiplicative or additive which specifies how to apply the factor
        
     Returns
     -------
@@ -421,9 +425,13 @@ def apply_factors(watertxt_data, name, factors):
         # match the month from the date value to the factors dictionary key
         month = date.strftime("%B")     # get month 
         factor = factors[month]         # get the factor that corresponds to a specific month 
-        
+       
         # apply factor
-        new_value = parameter["data"][i] * factor
+        if is_additive:
+            new_value = parameter["data"][i] + factor
+        else:
+            new_value = parameter["data"][i] * factor
+        
         new_values.append(new_value)
             
     new_values = np.array(new_values)
@@ -432,6 +440,50 @@ def apply_factors(watertxt_data, name, factors):
     watertxt_data = set_parameter_values(watertxt_data, name, values = new_values)
 
     return watertxt_data      
+
+def apply_wateruse(watertxt_data, wateruse_factors):
+    """
+    Apply monthly water use factors to discharge parameter.  Factors are additive.
+    
+    Parameters
+    ----------
+    watertxt_data : dictionary 
+        Dictionary holding data found in WATER output text file.
+    factors : dictionary
+        Dictionary holding monthly multiplicative factors
+      
+    Returns
+    -------
+    watertxt_data : dictionary 
+        Dictionary holding updated data with factors applied.
+    
+    Notes
+    -----    
+    factors = {
+        'January': 2.0,
+        'February': 0.98,
+        'March': 0.97,
+        'April': 1.04,
+        'May': 1.10,
+        'June': 0.99,
+        'July': 0.97,
+        'August': 1.25,
+        'September': 1.21,
+        'October': 1.11,
+        'November': 1.10,
+        'December': 2.0
+    }  
+    """
+    # get the discharge parameter
+    discharge = get_parameter(watertxt_data = watertxt_data, name = "Discharge") 
+    
+    # fill water use parameter with discharge data
+    watertxt_data = add_parameter(watertxt_data = watertxt_data, name = "Water Use (cfs)", param_data = discharge)
+    
+    # apply water use
+    watertxt_data = apply_factors(watertxt_data = watertxt_data, name = "Water Use", factors = wateruse_factors, is_additive = True)    
+    
+    return watertxt_data
 
 
 def _create_test_data(multiplicative_factor = 1, stationid = "012345", with_wateruse = False):
@@ -758,10 +810,10 @@ def test_read_file_in():
     _print_test_info(actual = actual_returnflow, expected = expected_returnflow) 
 
 
-def test_apply_factors():
+def test_apply_factors1():
     """ Test apply_factors functionality """
 
-    print("--- Testing apply_factors ---") 
+    print("--- Testing apply_factors() part 1 - test multiplicative factors ---") 
 
     # expected values to test with actual values
     discharge_data = np.array([6, 18, 30])
@@ -788,6 +840,43 @@ def test_apply_factors():
 
     # apply factors
     data = apply_factors(watertxt_data = data, name = "Discharge", factors = factors)    
+    
+    # actual values
+    actual = get_parameter(watertxt_data = data, name = "Discharge")  
+
+    # print results
+    _print_test_info(actual, expected)
+
+def test_apply_factors2():
+    """ Test apply_factors functionality """
+
+    print("--- Testing apply_factors() part 2 - test additive factors ---") 
+
+    # expected values to test with actual values
+    discharge_data = np.array([5., 9., 13.])
+    expected = {"name": "Discharge (cfs)", "index": 0, "data": discharge_data, "mean": np.mean(discharge_data), "max": np.max(discharge_data), "min": np.min(discharge_data)}
+
+    # create test data
+    data = _create_test_data()
+
+    # create factors
+    factors = {
+        'January': 1.5,
+        'February': 2.0,
+        'March': 2.5,
+        'April': 3.0,
+        'May': 3.5,
+        'June': 4.0,
+        'July': 4.5,
+        'August': 5.5,
+        'September': 6.0,
+        'October': 6.5,
+        'November': 7.0,
+        'December': 7.5
+    }  
+
+    # apply factors
+    data = apply_factors(watertxt_data = data, name = "Discharge", factors = factors, is_additive = True)    
     
     # actual values
     actual = get_parameter(watertxt_data = data, name = "Discharge")  
@@ -837,7 +926,9 @@ def main():
 
     test_write_file()
 
-    test_apply_factors()
+    test_apply_factors1()
+
+    test_apply_factors2()
     
 if __name__ == "__main__":
     main()

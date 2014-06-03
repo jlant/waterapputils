@@ -128,3 +128,17 @@ def test_find_start_end_dates_longer_range():
 
     nose.tools.assert_equals(actual_start_date, expected_start_date)
     nose.tools.assert_equals(actual_end_date, expected_end_date)
+
+def test_create_nan_array():
+
+    # expected values
+    expected = {"array_2x2": np.array([[np.nan, np.nan], [np.nan, np.nan]]),
+                "array_1x5": np.array([[np.nan, np.nan, np.nan, np.nan, np.nan]])} 
+
+    # actual values
+    actual = {"array_2x2": helpers.create_nan_array(shape = (2, 2)),
+              "array_1x5": helpers.create_nan_array(shape = (1, 5))}    
+
+    nose.tools.assert_equals(actual["array_2x2"].all(), expected["array_2x2"].all())
+    nose.tools.assert_equals(actual["array_1x5"].all(), expected["array_1x5"].all())    
+    

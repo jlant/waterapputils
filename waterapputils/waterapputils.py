@@ -27,6 +27,7 @@ import waterapputils_viewer
 import waterapputils_logging
 import deltas
 import spatialvectors
+import wateruse
 
 def process_txt_files(file_list, arguments):
     """    
@@ -302,63 +303,51 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
     -----
     files_dict = {"wateruse_files": list of delta text files,
                   "basin_centroids_shapefile": shapefile corresponding to basin centroids,
-                  "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with delta shapefile
+                  "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with basin centroid shapefile
                   "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
-                  "waterxml_directory": path to directory containing xml file or files
-                  "outputxml_directory": path of directory to store new updated xml files}    
-    """
-            files_dict = {"wateruse_files": ["../data/wateruse-datafiles/test_wateruse_JFM.txt", "../data/wateruse-datafiles/test_wateruse_AMJ.txt", "../data/wateruse-datafiles/test_wateruse_JAS.txt", "../data/wateruse-datafiles/test_wateruse_OND.txt"], 
-                          "basin_centroids_shapefile": "../data/spatial-datafiles/basins/dem_basin_centroids_tests_proj_wgs.shp", 
-                          "basin_shapefile": "../data/spatial-datafiles/basins/waterbasin_multi_tests_proj_wgs.shp",
-                          "basin_field": "STAID",
-                          "watertxt_directory": "C:/Users/jlant/jeremiah/temp/2014-06-02_wateruse_batch_tests/",
-                          "outputtxt_directory": "../data/wateruse-datafiles/"}    
-    
+                  "watertxt_directory": path to directory containing txt file or files
+                  "outputtxt_directory": path of directory to store new updated txt files}    
+    """    
     # initialize error logging
     waterapputils_logging.initialize_loggers(output_dir = files_dict["outputxml_directory"])
     
     # open shapefiles
-    delta_shapefile = osgeo.ogr.Open(files_dict["delta_shapefile"]) 
+    centroids_shapefile = osgeo.ogr.Open(files_dict["basin_centroids_shapefile"]) 
     basin_shapefile = osgeo.ogr.Open(files_dict["basin_shapefile"]) 
 
-    # find intersecting tiles based on water basin supplied
-    intersecting_tiles = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = delta_shapefile, intersectee_field = "Tile", intersector_field = files_dict["basin_field"])
+    # find intersecting points (centroids) based on water basin supplied
+    intersecting_centroids = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = centroids_shapefile, intersectee_field = "newhydroid", intersector_field = files_dict["basin_field"])
 
-    print("Intersecting tiles: {}\n".format(intersecting_tiles))        
-    for featureid, tiles in intersecting_tiles.iteritems():                    
+    print("Intersecting centroids: {}\n".format(intersecting_centroids))        
+    for featureid, centroids in intersecting_centroids.iteritems():                    
         print("FeatureId: {}\n".format(featureid))  
-        print("Tiles: {}\n".format(tiles))  
+        print("Centroids: {}\n".format(centroids))  
 
-        # get average values for a list of delta files
-        avg_deltas = deltas.get_avg_deltas(delta_files = files_dict["delta_files"], tiles = tiles)  
+        # get sum of the water use data
+        total_wateruse_dict = wateruse.get_all_total_wateruse(wateruse_files = files_dict["wateruse_files"], id_list = centroids)
 
-        print("Avg deltas: {}\n".format(avg_deltas))
+        print("Total water use dictionary: {}\n".format(total_wateruse_dict))
 
-        # get the xml data file that has a parent directory matching the current featureid
-        path = os.path.join(files_dict["waterxml_directory"], featureid)
-        waterxml_file = helpers.find_file(name = "WATERSimulation.xml", path = path)
+        # get the txt data file that has a parent directory matching the current featureid
+        path = os.path.join(files_dict["watertxt_directory"], featureid)
+        watertxt_file = helpers.find_file(name = "WATER.txt", path = path)
 
         # get file info
-        waterxml_filedir_path, waterxml_filename = helpers.get_file_info(waterxml_file)
+        watertxt_filedir_path, watertxt_filename = helpers.get_file_info(watertxt_file)
 
-        # read the xml
-        waterxml_tree = waterxml.read_file(waterxml_file)            
+        # read the txt
+        watertxt_data = watertxt.read_file(watertxt_file)            
 
-        # apply deltas
-        for key, value in avg_deltas.iteritems():
-            if key == "Ppt":
-                waterxml.apply_factors(waterxml_tree = waterxml_tree, element = "ClimaticPrecipitationSeries", factors = avg_deltas[key])
+        # apply water use
+        watertxt_data = watertxt.apply_wateruse(watertxt_data, wateruse_factors = total_wateruse_dict) 
 
-            elif key == "Tmax":
-                waterxml.apply_factors(waterxml_tree = waterxml_tree, element = "ClimaticTemperatureSeries", factors = avg_deltas[key])
-
-        # write updated xml
-        xml_output_filename = "-".join([waterxml_filename.split(".xml")[0], "updated", files_dict["basin_field"], featureid]) + ".xml"                
-        waterxml.write_file(waterxml_tree = waterxml_tree, save_path = files_dict["outputxml_directory"], filename = xml_output_filename)
+        # write updated txt
+        txt_output_filename = "-".join([waterxml_filename.split(".txt")[0], "updated", files_dict["basin_field"], featureid]) + ".txt"  
+        watertxt.write_file(watertxt_data = watertxt_data, save_path = files_dict["outputtxt_directory"], filename = txt_output_filename)              
 
         # plot comparison
-        updated_waterxml_file = os.path.join(files_dict["outputxml_directory"], xml_output_filename)
-        process_xmlcmp(file_list = [updated_waterxml_file, waterxml_file], arguments = arguments)
+        updated_watertxt_file = os.path.join(files_dict["outputtxt_directory"], txt_output_filename)
+        process_txtcmp(file_list = [updated_watertxt_file, watertxt_file], arguments = arguments)
 
     # close error logging
     waterapputils_logging.remove_loggers()
