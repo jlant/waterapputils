@@ -23,7 +23,8 @@ import osgeo.ogr
 import helpers
 import watertxt
 import waterxml
-import waterapputils_viewer
+import watertxt_viewer
+import waterxml_viewer
 import waterapputils_logging
 import deltas
 import spatialvectors
@@ -54,11 +55,11 @@ def process_txt_files(file_list, arguments):
         data = watertxt.read_file(f)  
 
         # plot data                            
-        waterapputils_viewer.plot_watertxt_data(data, is_visible = arguments.showplot, save_path = outputdirpath)             
+        watertxt_viewer.plot_watertxt_data(data, is_visible = arguments.showplot, save_path = outputdirpath)             
 
         # print data
         if arguments.verbose: 
-            waterapputils_viewer.print_watertxt_data(data)  
+            watertxt_viewer.print_watertxt_data(data)  
 
         # close error logging
         waterapputils_logging.remove_loggers()
@@ -88,12 +89,12 @@ def process_xml_files(file_list, arguments):
         data = waterxml.read_file(f)  
 
         # plot data                            
-        waterapputils_viewer.plot_waterxml_timeseries_data(data, is_visible = arguments.showplot, save_path = outputdirpath)             
-        waterapputils_viewer.plot_waterxml_topographic_wetness_index_data(data, is_visible = arguments.showplot, save_path = outputdirpath) 
+        waterxml_viewer.plot_waterxml_timeseries_data(data, is_visible = arguments.showplot, save_path = outputdirpath)             
+        waterxml_viewer.plot_waterxml_topographic_wetness_index_data(data, is_visible = arguments.showplot, save_path = outputdirpath) 
         
         # print data
         if arguments.verbose: 
-            waterapputils_viewer.print_waterxml_data(data)  
+            waterxml_viewer.print_waterxml_data(data)  
 
         # close error logging
         waterapputils_logging.remove_loggers()
@@ -126,12 +127,12 @@ def process_txtcmp(file_list, arguments):
     watertxt_data2 = watertxt.read_file(watertxt_file2) 
     
     # plot data                            
-    waterapputils_viewer.plot_watertxt_comparison(watertxt_data1, watertxt_data2, is_visible = arguments.showplot, save_path = outputdirpath)             
+    watertxt_viewer.plot_watertxt_comparison(watertxt_data1, watertxt_data2, is_visible = arguments.showplot, save_path = outputdirpath)             
             
     # print data
     if arguments.verbose: 
-        waterapputils_viewer.print_watertxt_data(watertxt_data1)  
-        waterapputils_viewer.print_watertxt_data(watertxt_data2)  
+        watertxt_viewer.print_watertxt_data(watertxt_data1)  
+        watertxt_viewer.print_watertxt_data(watertxt_data2)  
 
     # close error logging
     waterapputils_logging.remove_loggers()
@@ -164,12 +165,12 @@ def process_xmlcmp(file_list, arguments):
     waterxml_data2 = waterxml.read_file(waterxml_file2) 
    
     # plot data                            
-    waterapputils_viewer.plot_waterxml_timeseries_comparison(waterxml_data1, waterxml_data2, is_visible = arguments.showplot, save_path = outputdirpath) 
+    waterxml_viewer.plot_waterxml_timeseries_comparison(waterxml_data1, waterxml_data2, is_visible = arguments.showplot, save_path = outputdirpath) 
             
     # print data
     if arguments.verbose: 
-        waterapputils_viewer.print_watertxt_data(waterxml_data1)  
-        waterapputils_viewer.print_watertxt_data(waterxml_data2)  
+        waterxml_viewer.print_watertxt_data(waterxml_data1)  
+        waterxml_viewer.print_watertxt_data(waterxml_data2)  
 
     # close error logging
     waterapputils_logging.remove_loggers()
@@ -210,8 +211,8 @@ def apply_deltas_to_txt(file_list, arguments):
            
     # print data
     if arguments.verbose: 
-        waterapputils_viewer.print_watertxt_data(watertxt_data)  
-        waterapputils_viewer.print_watertxt_data(watertxt_data_with_deltas)  
+        watertxt_viewer.print_watertxt_data(watertxt_data)  
+        watertxt_viewer.print_watertxt_data(watertxt_data_with_deltas)  
 
     # close error logging
     waterapputils_logging.remove_loggers()
