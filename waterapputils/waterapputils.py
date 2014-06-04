@@ -309,7 +309,7 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
                   "outputtxt_directory": path of directory to store new updated txt files}    
     """    
     # initialize error logging
-    waterapputils_logging.initialize_loggers(output_dir = files_dict["outputxml_directory"])
+    waterapputils_logging.initialize_loggers(output_dir = files_dict["outputtxt_directory"])
     
     # open shapefiles
     centroids_shapefile = osgeo.ogr.Open(files_dict["basin_centroids_shapefile"]) 
@@ -339,7 +339,7 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
         watertxt_data = watertxt.read_file(watertxt_file)            
 
         # apply water use
-        watertxt_data = watertxt.apply_wateruse(watertxt_data, wateruse_factors = total_wateruse_dict) 
+        watertxt_data = watertxt.apply_wateruse(watertxt_data, wateruse_totals = total_wateruse_dict) 
 
         # write updated txt
         txt_output_filename = "-".join([watertxt_filename.split(".txt")[0], "updated", files_dict["basin_field"], featureid]) + ".txt"  
@@ -347,7 +347,7 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
 
         # plot comparison
         updated_watertxt_file = os.path.join(files_dict["outputtxt_directory"], txt_output_filename)
-        process_txtcmp(file_list = [updated_watertxt_file, watertxt_file], arguments = arguments)
+        process_txt_files(file_list = [updated_watertxt_file, watertxt_file], arguments = arguments)
 
     # close error logging
     waterapputils_logging.remove_loggers()
@@ -480,12 +480,12 @@ def main():
             sys.exit() 
 
         elif args.applywaterusefiledialog:
-            files_dict = {"wateruse_files": ["../data/wateruse-datafiles/S1_JFM_WU_2014mar7.txt", "../data/wateruse-datafiles/S2_AMJ_WU_2014mar7.txt", "../data/wateruse-datafiles/S3_JAS_WU_2014mar7.txt", "../data/wateruse-datafiles/S4_OND_WU_2014mar7.txt"], 
-                          "basin_centroids_shapefile": "../data/spatial-datafiles/basins/dem_basin_centroids_small_proj_wgs.shp", 
-                          "basin_shapefile": "../data/spatial-datafiles/basins/waterbasin_multi_clean_proj_wgs.shp",
+            files_dict = {"wateruse_files": ["../data/wateruse-datafiles/test-files/test_wateruse_JFM.txt", "../data/wateruse-datafiles/test-files/test_wateruse_AMJ.txt", "../data/wateruse-datafiles/test-files/test_wateruse_JAS.txt", "../data/wateruse-datafiles/test-files/test_wateruse_OND.txt"], 
+                          "basin_centroids_shapefile": "../data/spatial-datafiles/basins/dem_basin_centroids_tests_proj_wgs.shp", 
+                          "basin_shapefile": "../data/spatial-datafiles/basins/waterbasin_multi_tests_proj_wgs.shp",
                           "basin_field": "STAID",
-                          "watertxt_directory": "C:/Users/jlant/jeremiah/temp/2014-05-19_testbatch/",
-                          "outputtxt_directory": "../data/wateruse-datafiles/"}
+                          "watertxt_directory": "../data/wateruse-datafiles/test-files/wateruse_batch_test/",
+                          "outputtxt_directory": "../data/wateruse-datafiles/test-files/"}
             
             apply_wateruse_to_txt_files(files_dict = files_dict, arguments = args)
 
