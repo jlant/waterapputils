@@ -150,7 +150,7 @@ def get_wateruse_values(wateruse_data, id_list):
         
     Returns
     -------
-    values: list
+    values : list
         List containing lists of water use values for each id in id_list; shape is m x n where m is the number of water use values and n is number of ids in id_list   
     
     Notes
@@ -158,7 +158,7 @@ def get_wateruse_values(wateruse_data, id_list):
     values = [[  1.3   2.7   3.3   4.7   5.3   6.7   7.3   8.7   9.3  10.7  11.3  12.7]
               [  1.2   2.8   3.2   4.8   5.2   6.8   7.2   8.8   9.2  10.8  11.2  12.8]]
     """
-    # get water use types of interest; 
+    # get all water use types from column names
     wateruse_types = []
     for name in wateruse_data["column_names"]:
         if name not in ["huc12", "newhydroid"]:
@@ -181,9 +181,11 @@ def get_wateruse_values(wateruse_data, id_list):
 
     return values
 
+
 def sum_values(values):
     """   
-    Get water use values based on id(s) of interest.
+    Sum values row-wise, column-wise, and absolute total. Return dictionary containing
+    each sum.
     
     Parameters
     ----------
@@ -244,6 +246,27 @@ def create_monthly_wateruse_dict(wateruse_data, wateruse_value):
                 monthly_wateruse_dict[month] = wateruse_value
 
     return monthly_wateruse_dict
+
+def convert_wateruse_units(value):
+    """   
+    Convert values from a mega gallons to cubic feet per second
+    
+    Parameters
+    ----------
+    value : float
+        Float value in mega gallons per day
+        
+    Returns
+    -------
+    converted_value: float
+        Float value in cubic feet per second    
+    """    
+    # 1 Mgal / 1 day * 10**6 gal / 1 Mgal * 0.133681 ft**3 / 1 gal * 1 day / 24 hours * 1 hour / 3600 seconds
+    conversion_factor = ((10**6. * 0.133681) / (24 * 3600)) 
+    
+    converted_value = value * conversion_factor
+
+    return converted_value
     
 def get_total_wateruse(wateruse_data, id_list):
     """   
@@ -285,19 +308,21 @@ def get_total_wateruse(wateruse_data, id_list):
     total_wateruse_dict = create_monthly_wateruse_dict(wateruse_data, wateruse_value = sums["total"])
 
     return total_wateruse_dict   
-
-def get_all_total_wateruse(wateruse_files, id_list):
+    
+def get_all_total_wateruse(wateruse_files, id_list, in_cfs = False):
     """    
-    Get all total water use values for a list of specific id values.
-
+    Get all total water use values for a list of specific id values. 
+    The base unit in the water use data file is mega gallons per day (Mgal/day) .
+    Can convert to cubic feet per second (cfs) using in_cubic_feet_per_sec flag.
+    
     Parameters
     ----------
     wateruse_files : list
         List of water use files to calculate the sum of all water use values 
-
     ids : list
         List of ids values.
-    
+    in_cfs : boolean
+        Boolean flag to convert units from Mgal to cfs 
     See Also
     --------
     get_total_wateruse()
@@ -311,6 +336,12 @@ def get_all_total_wateruse(wateruse_files, id_list):
        
         # calculate average wateruse for a list of ids
         total_wateruse_dict = get_total_wateruse(wateruse_data = wateruse_data, id_list = id_list)
+
+        # convert values to cfs
+        if in_cfs:
+            for key, value in total_wateruse_dict.iteritems():
+                value_cfs = convert_wateruse_units(value)
+                total_wateruse_dict[key] = value_cfs
         
         # update dictionary 
         all_total_wateruse_dict.update(total_wateruse_dict)   

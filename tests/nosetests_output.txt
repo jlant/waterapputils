@@ -1,7 +1,7 @@
 SETUP: deltatxt tests
 ........TEARDOWN: deltatxt tests
 SETUP: helpers tests
-........TEARDOWN: helpers tests
+.........TEARDOWN: helpers tests
 SETUP: spatialvectors tests
 ................TEARDOWN: spatialvectors tests
 SETUP: watertxt tests
@@ -17,8 +17,14 @@ TEARDOWN: watertxt tests
 TEARDOWN: watertxt tests
 ..SETUP: watertxt tests
 TEARDOWN: watertxt tests
-..TEARDOWN: watertxt tests
-.........SETUP: wateruse tests
+.SETUP: watertxt tests
+TEARDOWN: watertxt tests
+.SETUP: watertxt tests
+TEARDOWN: watertxt tests
+.SETUP: watertxt tests
+TEARDOWN: watertxt tests
+.TEARDOWN: watertxt tests
+........SETUP: wateruse tests
 
 --- Test read_file_in() - test reading of water use files; using simplified water use formatted file ---
 
@@ -104,6 +110,17 @@ TEARDOWN: watertxt tests
     expected: [  7.  15.   5.]
 
 
+--- Test convert_wateruse_units() which converts from mega gallons per day to cubic feet per second ---
+
+*1*
+    actual:   1.5472337963
+    expected: 1.5472337963
+
+*5*
+    actual:   7.73616898148
+    expected: 7.73616898148
+
+
 --- Test sum_values() : part 1 - test creating a dictionary with monthly keys (January, Februray, March) having values that correspond to the sum total water use ---
 
 *January*
@@ -157,7 +174,8 @@ TEARDOWN: watertxt tests
 
 *November*
     actual:   4.0
-    expected: 4.0
+  ......SETUP: waterxml tests
+...........  expected: 4.0
 
 *October*
     actual:   4.0
@@ -179,8 +197,7 @@ TEARDOWN: watertxt tests
     expected: 50.0
 
 
---- ....SETUP: waterxml tests
-...........Test get_total_wateruse() : part 2 - test getting the total sum of water use for ids (hydroids) [12, 11, 8] ---
+--- Test get_total_wateruse() : part 2 - test getting the total sum of water use for ids (hydroids) [12, 11, 8] ---
 
 *January*
     actual:   27.0
@@ -352,6 +369,6 @@ SETUP: wateruse tests
 TEARDOWN: waterxml tests
 
 ----------------------------------------------------------------------
-Ran 66 tests in 0.784s
+Ran 70 tests in 0.759s
 
 OK

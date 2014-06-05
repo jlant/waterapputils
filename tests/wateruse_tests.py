@@ -246,6 +246,24 @@ def test_sum_values2():
 
     # assert equality
     _perform_assertion(actual, expected, verbose = VERBOSE, description = description)   
+
+def test_convert_wateruse_units():
+    """ Test convert_wateruse_units() """
+    
+    description = "Test convert_wateruse_units() which converts from mega gallons per day to cubic feet per second"
+
+    # expected values
+    expected = {"1": 1.5472337962962963,
+                "5": 7.736168981481482
+    }
+    
+    # read file object
+    actual = {"1" : wateruse.convert_wateruse_units(value = 1.),
+              "5" : wateruse.convert_wateruse_units(value = 5.)
+    }
+    
+    # assert equality
+    _perform_assertion(actual, expected, verbose = VERBOSE, description = description) 
     
 def test_create_monthly_wateruse_dict1():
     """ Test create_monthly_wateruse_dict() part 1 - testing January, Februray, March """

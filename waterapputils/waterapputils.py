@@ -325,7 +325,7 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
         print("Centroids: {}\n".format(centroids))  
 
         # get sum of the water use data
-        total_wateruse_dict = wateruse.get_all_total_wateruse(wateruse_files = files_dict["wateruse_files"], id_list = centroids)
+        total_wateruse_dict = wateruse.get_all_total_wateruse(wateruse_files = files_dict["wateruse_files"], id_list = centroids, in_cfs = True)
 
         print("Total water use dictionary: {}\n".format(total_wateruse_dict))
 
