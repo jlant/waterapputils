@@ -82,13 +82,6 @@ def read_file_in(filestream):
     data_file = filestream.readlines()
     
     # regular expression patterns in data file 
-#    patterns = {
-#        "months": "(#)\s([JFMASOND].+)",
-#        "units": "(#)\s(Units:)(.+)",
-#        "column_names": "(huc12)\t(.+)",
-#        "data_row": "([0-9]{0,11})\t(.+)"
-#    }        
-
     patterns = {
         "months": "(#)\s([JFMASOND].+)",
         "units": "(#)\s(Units:)(.+)",
@@ -380,8 +373,8 @@ def _create_test_data():
     fixture["factor_file"] = \
         """
         # water use factors																									
-        huc12	newhydroid	AqGwWL	CoGwWL	DoGwWL	InGwWL	IrGwWL
-        0	0	2	2	2	2	2
+        AqGwWL	CoGwWL	DoGwWL	InGwWL	IrGwWL
+        2	2	2	2	2
         """
 
         

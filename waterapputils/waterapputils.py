@@ -487,10 +487,16 @@ def main():
                           "basin_field": "STAID",
                           "watertxt_directory": "../data/wateruse-datafiles/test-files/wateruse_batch_test/",
                           "outputtxt_directory": "../data/wateruse-datafiles/test-files/"}
+
+#            files_dict = {"wateruse_files": ["../data/wateruse-datafiles/test_JFM.txt", "../data/wateruse-datafiles/test_AMJ.txt", "../data/wateruse-datafiles/test_JAS.txt", "../data/wateruse-datafiles/test_OND.txt"], 
+#                          "basin_centroids_shapefile": "../data/spatial-datafiles/basins/dem_basin_centroids_proj_wgs.shp", 
+#                          "basin_shapefile": "../data/spatial-datafiles/basins/waterbasin_multi_clean_proj_wgs.shp",
+#                          "basin_field": "STAID",
+#                          "watertxt_directory": "C:/Users/jlant/jeremiah/temp/2014-06-06_testbatch_clean/",
+#                          "outputtxt_directory": "../data/wateruse-datafiles/"}
             
             apply_wateruse_to_txt_files(files_dict = files_dict, arguments = args)
 
-            
     except IOError as error:
         logging.exception("IO error: {0}".format(error.message))
         sys.exit(1)
