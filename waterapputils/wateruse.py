@@ -82,18 +82,26 @@ def read_file_in(filestream):
     data_file = filestream.readlines()
     
     # regular expression patterns in data file 
+#    patterns = {
+#        "months": "(#)\s([JFMASOND].+)",
+#        "units": "(#)\s(Units:)(.+)",
+#        "column_names": "(huc12)\t(.+)",
+#        "data_row": "([0-9]{0,11})\t(.+)"
+#    }        
+
     patterns = {
         "months": "(#)\s([JFMASOND].+)",
         "units": "(#)\s(Units:)(.+)",
         "column_names": "(huc12)\t(.+)",
-        "data_row": "([0-9]{11})\t(.+)"
-    }        
+        "data_row": "(^[0-9]{,11})\t(.+)"
+    }  
 
    # initialize a temporary dictionary to hold data of interest
     initial_data = {"months": None, "units": None, "column_names": None, "parameters": []}      
     
     # process file
     for line in data_file: 
+        line = line.strip()
         # find match
         match_months = re.search(pattern = patterns["months"], string = line)
         match_units = re.search(pattern = patterns["units"], string = line)
@@ -112,16 +120,17 @@ def read_file_in(filestream):
             
             for name in initial_data["column_names"]:
                 initial_data["parameters"].append({"name": name, "index": initial_data["column_names"].index(name), "data": []})
-                
+
         if match_data_row:
+
             for parameter in initial_data["parameters"]:
                 value = match_data_row.group(0).split("\t")[parameter["index"]] 
                 parameter["data"].append(value)
 
     # format data into a dictionary; dynamically create keys with column names
     data = {"months": initial_data["months"], "units": initial_data["units"], "column_names": initial_data["column_names"]}
-    string_columns = ["huc12", "newhydroid"]
 
+    string_columns = ["huc12", "newhydroid"]
     for parameter in initial_data["parameters"]:
         if parameter["name"] in string_columns:
             pass    # leave values as strings
@@ -367,6 +376,15 @@ def _create_test_data():
         20401010101	11	2	6	2	6	-1
         20401010102	8	2	1	2	1	-1
         """
+
+    fixture["factor_file"] = \
+        """
+        # water use factors																									
+        huc12	newhydroid	AqGwWL	CoGwWL	DoGwWL	InGwWL	IrGwWL
+        0	0	2	2	2	2	2
+        """
+
+        
     fixture["wateruse_data"] = {"months": "JFM_WU", 
                                 "units": "Mgal/day",
                                 "column_names": ["huc12", "newhydroid", "AqGwWL", "CoGwWL", "DoGwWL", "InGwWL", "IrGwWL"],
@@ -433,13 +451,43 @@ def test_read_file_in():
     # print results
     _print_test_info(actual, expected)
 
+def test_read_file_in1():
+    """ Test read_file_in() """
+    
+    print("--- Testing read_file_in() ---")
+
+    # expected values
+    expected = {"months": None,
+                "units": None,
+                "column_names": ["huc12", "newhydroid", "AqGwWL", "CoGwWL", "DoGwWL", "InGwWL", "IrGwWL"],
+                "huc12": ["0"],
+                "newhydroid": ["0"],
+                "AqGwWL": [2.0],
+                "CoGwWL": [2.0],
+                "DoGwWL": [2.0],
+                "InGwWL": [2.0],
+                "IrGwWL": [2.0]
+    }
+    
+    # create test data
+    fixture = _create_test_data()
+    fileobj = StringIO(fixture["factor_file"])
+    
+    # read file object
+    actual = read_file_in(fileobj)
+    
+    # print results
+    _print_test_info(actual, expected)
+
 def main():
 
     print("")
     print("RUNNING TESTS ...")
     print("")
-    
+
     test_read_file_in()
+    
+    test_read_file_in1()
     
 if __name__ == "__main__":
     main()
