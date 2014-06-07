@@ -22,7 +22,7 @@ import os
 # my modules
 import helpers
 
-def read_file(filepath):
+def read_file(filepath, factor_file = False):
     """    
     Open WATER text file, create a file object for read_file_in(filestream) to process.
     This function is responsible to opening the file, removing the file opening  
@@ -44,13 +44,16 @@ def read_file(filepath):
     read_file_in : Read data file object           
     """    
     with open(filepath, "r") as f:
-        data = read_file_in(f)
+        if factor_file:
+            data = read_factor_file_in(f)
+        else:
+            data = read_file_in(f)            
         
     return data
 
 def read_file_in(filestream):
     """    
-    Read and process a WATER *.txt file. Finds any parameter and its respective data.
+    Read and process a water use *.txt file. Finds any parameter and its respective data.
     
     Parameters
     ----------
@@ -132,6 +135,78 @@ def read_file_in(filestream):
                 value = helpers.convert_to_float(value = parameter["data"][i], helper_str = "parameter {}".format(parameter["name"]))                
                                        
                 parameter["data"][i] = float(value)
+        
+        # populate data dictionary with clean data sets
+        data[parameter["name"]] = parameter["data"]
+            
+    # return data
+    return data
+
+def read_factor_file_in(filestream):
+    """    
+    Read and process a water use factor *.txt file. Finds any parameter and its respective data.
+    
+    Parameters
+    ----------
+    filestream : file object
+        A python file object that contains an open data file.
+        
+    Returns
+    -------
+    data : dictionary 
+        Returns a dictionary containing data found in data file. 
+
+    Notes
+    -----          
+    expected = {
+                
+        "AqGwWL": float water use factor value,
+        
+        "CoGwWL": float water use factor value,
+
+        ...
+    }
+    """
+    
+    # read all the lines in the filestream
+    data_file = filestream.readlines()
+    
+    # regular expression patterns in data file 
+    patterns = {
+        "column_names": "(^[aA-zZ].+)",
+        "data_row": "(^[0-9].+)"
+    }  
+
+   # initialize a temporary dictionary to hold data of interest
+    initial_data = {"column_names": None, "parameters": []}      
+    
+    # process file
+    for line in data_file: 
+        line = line.strip()
+        # find match
+        match_column_names = re.search(pattern = patterns["column_names"], string = line)
+        match_data_row = re.search(pattern = patterns["data_row"], string = line)
+
+        # if match is found add it to data dictionary            
+        if match_column_names:
+            initial_data["column_names"] = match_column_names.group(0).split("\t") 
+            
+            for name in initial_data["column_names"]:
+                initial_data["parameters"].append({"name": name, "index": initial_data["column_names"].index(name), "data": None})
+
+        if match_data_row:
+            for parameter in initial_data["parameters"]:
+                value = match_data_row.group(0).split("\t")[parameter["index"]] 
+                parameter["data"] = value
+
+    # format data into a dictionary; dynamically create keys with column names
+    data = {"column_names": initial_data["column_names"]}
+
+    for parameter in initial_data["parameters"]:
+        # ensure that value is a float
+        value = helpers.convert_to_float(value = parameter["data"], helper_str = "parameter {}".format(parameter["name"]))                
+                                   
+        parameter["data"] = float(value)
         
         # populate data dictionary with clean data sets
         data[parameter["name"]] = parameter["data"]
@@ -377,7 +452,6 @@ def _create_test_data():
         2	2	2	2	2
         """
 
-        
     fixture["wateruse_data"] = {"months": "JFM_WU", 
                                 "units": "Mgal/day",
                                 "column_names": ["huc12", "newhydroid", "AqGwWL", "CoGwWL", "DoGwWL", "InGwWL", "IrGwWL"],
@@ -444,22 +518,18 @@ def test_read_file_in():
     # print results
     _print_test_info(actual, expected)
 
-def test_read_file_in1():
-    """ Test read_file_in() """
+def test_read_factor_file_in():
+    """ Test read_factor_file_in() """
     
-    print("--- Testing read_file_in() ---")
+    print("--- Testing read_factor_file_in() ---")
 
     # expected values
-    expected = {"months": None,
-                "units": None,
-                "column_names": ["huc12", "newhydroid", "AqGwWL", "CoGwWL", "DoGwWL", "InGwWL", "IrGwWL"],
-                "huc12": ["0"],
-                "newhydroid": ["0"],
-                "AqGwWL": [2.0],
-                "CoGwWL": [2.0],
-                "DoGwWL": [2.0],
-                "InGwWL": [2.0],
-                "IrGwWL": [2.0]
+    expected = {"column_names": ["AqGwWL", "CoGwWL", "DoGwWL", "InGwWL", "IrGwWL"],
+                "AqGwWL": 2.0,
+                "CoGwWL": 2.0,
+                "DoGwWL": 2.0,
+                "InGwWL": 2.0,
+                "IrGwWL": 2.0
     }
     
     # create test data
@@ -467,7 +537,10 @@ def test_read_file_in1():
     fileobj = StringIO(fixture["factor_file"])
     
     # read file object
-    actual = read_file_in(fileobj)
+    actual = read_factor_file_in(fileobj)
+    
+    import pdb
+    pdb.set_trace()
     
     # print results
     _print_test_info(actual, expected)
@@ -480,7 +553,7 @@ def main():
 
     test_read_file_in()
     
-    test_read_file_in1()
+    test_read_factor_file_in()
     
 if __name__ == "__main__":
     main()
