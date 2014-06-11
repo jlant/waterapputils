@@ -22,7 +22,7 @@ import os
 # my modules
 import helpers
 
-def read_file(filepath, factor_file = False):
+def read_file(filepath, factor_file = None):
     """    
     Open WATER text file, create a file object for read_file_in(filestream) to process.
     This function is responsible to opening the file, removing the file opening  
@@ -214,9 +214,9 @@ def read_factor_file_in(filestream):
     # return data
     return data
 
-def get_wateruse_values(wateruse_data, id_list):
+def get_wateruse_values(wateruse_data, id_list, wateruse_factors = None):
     """   
-    Get water use values based on id(s) of interest.
+    Get water use values based on id(s) of interest. 
     
     Parameters
     ----------
@@ -240,15 +240,22 @@ def get_wateruse_values(wateruse_data, id_list):
     for name in wateruse_data["column_names"]:
         if name not in ["huc12", "newhydroid"]:
             wateruse_types.append(name)
+
+    # make sure that wateruse_factors have same keys as wateruse types from wateruse_data
+    assert wateruse_factors["column_names"] == wateruse_types, "Water use column names {} do not equal water use types {}".format(wateruse_factors.keys(), wateruse_types)
     
-    # put all values into a list of lists    
+    # put all values into a list of lists; apply water use factors if they exist    
     values = []
     for id_num in id_list:
         if id_num in wateruse_data["newhydroid"]:
             wateruse_type_values = []
             id_index = wateruse_data["newhydroid"].index(id_num)
             for wateruse_type in wateruse_types:
-                value = wateruse_data[wateruse_type][id_index]
+                if wateruse_factors:
+                    value = wateruse_data[wateruse_type][id_index] * wateruse_factors[wateruse_type]
+                else:
+                    value = wateruse_data[wateruse_type][id_index]
+                        
                 wateruse_type_values.append(value)
                 
             values.append(wateruse_type_values)
@@ -345,7 +352,7 @@ def convert_wateruse_units(value):
 
     return converted_value
     
-def get_total_wateruse(wateruse_data, id_list):
+def get_total_wateruse(wateruse_data, id_list, wateruse_factors = None):
     """   
     Return a dictionary with monthly keys containing the total wateruse for a specific list of ids
     
@@ -376,7 +383,7 @@ def get_total_wateruse(wateruse_data, id_list):
             raise ValueError, "newhydroid {} is not contined in wateruse_data".format(id_num)
   
     # get wateruse values that correspond to a list of ids
-    values = get_wateruse_values(wateruse_data, id_list = id_list) 
+    values = get_wateruse_values(wateruse_data, id_list = id_list, wateruse_factor = wateruse_factors) 
 
     # calculate the sums of the wateruse values along different axes
     sums = sum_values(values)
@@ -386,7 +393,7 @@ def get_total_wateruse(wateruse_data, id_list):
 
     return total_wateruse_dict   
     
-def get_all_total_wateruse(wateruse_files, id_list, in_cfs = False):
+def get_all_total_wateruse(wateruse_files, id_list, wateruse_factor_file = None, in_cfs = False):
     """    
     Get all total water use values for a list of specific id values. 
     The base unit in the water use data file is mega gallons per day (Mgal/day) .
@@ -408,11 +415,15 @@ def get_all_total_wateruse(wateruse_files, id_list, in_cfs = False):
     all_total_wateruse_dict = {}
     for wateruse_file in wateruse_files:
 
-        # read the delta file
+        # read the water use file
         wateruse_data = read_file(wateruse_file) 
-       
+        
+        if wateruse_factor_file:
+            # read water use factor file
+            wateruse_factors = read_file(wateruse_factor_file, factor_file = True)
+        
         # calculate average wateruse for a list of ids
-        total_wateruse_dict = get_total_wateruse(wateruse_data = wateruse_data, id_list = id_list)
+        total_wateruse_dict = get_total_wateruse(wateruse_data = wateruse_data, id_list = id_list, wateruse_factors = wateruse_factors)
 
         # convert values to cfs
         if in_cfs:
@@ -538,10 +549,7 @@ def test_read_factor_file_in():
     
     # read file object
     actual = read_factor_file_in(fileobj)
-    
-    import pdb
-    pdb.set_trace()
-    
+   
     # print results
     _print_test_info(actual, expected)
 

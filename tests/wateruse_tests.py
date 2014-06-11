@@ -123,6 +123,13 @@ def setup():
         20401010102	8	2	1	2	1	-1
         """
 
+    fixture["factor_file"] = \
+        """
+        # water use factors																									
+        AqGwWL	CoGwWL	DoGwWL	InGwWL	IrGwWL
+        2	2	2	2	2
+        """
+
     fixture["wateruse_data"] = {"months": "JFM_WU", 
                                 "units": "Mgal/day",
                                 "column_names": ["huc12", "newhydroid", "AqGwWL", "CoGwWL", "DoGwWL", "InGwWL", "IrGwWL"],
@@ -141,6 +148,14 @@ def setup():
     fixture["wateruse_data_months_AMJ"] = {"months": "AMJ_WU"}
     fixture["wateruse_data_months_JAS"] = {"months": "JAS_WU"}
     fixture["wateruse_data_months_OND"] = {"months": "OND_WU"}
+
+    fixture["wateruse_factors"] = {"column_names": ["AqGwWL", "CoGwWL", "DoGwWL", "InGwWL", "IrGwWL"],
+                                   "AqGwWL": 2.0,
+                                   "CoGwWL": 2.0,
+                                   "DoGwWL": 2.0,
+                                   "InGwWL": 2.0,
+                                   "IrGwWL": 2.0
+    }
 
 def teardown():
     """ Print to standard error when all tests are finished """
@@ -193,11 +208,35 @@ def test_read_file_in():
     # assert equality
     _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
 
-def test_get_wateruse_values():
+def test_read_factor_file_in():
+    """ Test read_factor_file_in() """
+    
+    # description of test    
+    description = "Test read_file_in() - test reading of water use files; using simplified water use formatted file"
+
+    # expected values
+    expected = {"column_names": ["AqGwWL", "CoGwWL", "DoGwWL", "InGwWL", "IrGwWL"],
+                "AqGwWL": 2.0,
+                "CoGwWL": 2.0,
+                "DoGwWL": 2.0,
+                "InGwWL": 2.0,
+                "IrGwWL": 2.0
+    }
+    
+    # create test data
+    fileobj = StringIO(fixture["factor_file"])
+    
+    # read file object
+    actual = wateruse.read_factor_file_in(fileobj)
+   
+    # assert equality
+    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)
+
+def test_get_wateruse_values1():
     """ Test get_wateruse_values() """    
 
     # description of test        
-    description = "Test get_wateruse_values() - test getting water use values for a particular list of id (hydroid) values"     
+    description = "Test get_wateruse_values() part 1 - test getting water use values for a particular list of id (hydroid) values WITHOUT water use factors"     
     
     # expected values to test with actual values
     expected = {}    
@@ -207,6 +246,24 @@ def test_get_wateruse_values():
     actual = {}
     actual["ids_256_241_222_220"] = wateruse.get_wateruse_values(wateruse_data = fixture["wateruse_data"], id_list = ["256", "241", "222", "220"])
     actual["ids_12_11_8"] = wateruse.get_wateruse_values(wateruse_data = fixture["wateruse_data"], id_list = ["12", "11", "8"])
+
+    # assert equality
+    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
+
+def test_get_wateruse_values2():
+    """ Test get_wateruse_values() """    
+
+    # description of test        
+    description = "Test get_wateruse_values() part 2 - test getting water use values for a particular list of id (hydroid) values WITH water use factors"     
+    
+    # expected values to test with actual values
+    expected = {}    
+    expected["ids_256_241_222_220"] = [[4.0, 10.0, 4.0, 10.0, -4.0], [8.0, 6.0, 8.0, 6.0, -8.0], [12.0, 8.0, 12.0, 8.0, -12.0], [6.0, 16.0, 6.0, 16.0, -16.0]]
+    expected["ids_12_11_8"] = [[2.0, 6.0, 2.0, 6.0, -2.0], [4.0, 12.0, 4.0, 12.0, -2.0], [4.0, 2.0, 4.0, 2.0, -2.0]]
+    
+    actual = {}
+    actual["ids_256_241_222_220"] = wateruse.get_wateruse_values(wateruse_data = fixture["wateruse_data"], id_list = ["256", "241", "222", "220"], wateruse_factors = fixture["wateruse_factors"])
+    actual["ids_12_11_8"] = wateruse.get_wateruse_values(wateruse_data = fixture["wateruse_data"], id_list = ["12", "11", "8"], wateruse_factors = fixture["wateruse_factors"])
 
     # assert equality
     _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
@@ -463,3 +520,4 @@ def test_get_all_total_wateruse3():
 
     # assert equality
     _perform_assertion(actual, expected, verbose = VERBOSE, description = description)     
+    
