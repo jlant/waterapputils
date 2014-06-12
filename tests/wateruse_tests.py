@@ -411,7 +411,7 @@ def test_get_total_wateruse1():
     actual = wateruse.get_total_wateruse(wateruse_data = fixture["wateruse_data"], id_list = ["256", "241", "222", "220"])  
 
     # assert equality
-    _perform_assertion(actual, expected, verbose = VERBOSE)  
+    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
 
 def test_get_total_wateruse2():
     """ Test get_total_wateruse() part 2 - ids [12, 11, 8] """  
@@ -427,6 +427,24 @@ def test_get_total_wateruse2():
 
     # actual values       
     actual = wateruse.get_total_wateruse(wateruse_data = fixture["wateruse_data"], id_list = ["12", "11", "8"])  
+
+    # assert equality
+    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
+
+def test_get_total_wateruse3():
+    """ Test get_total_wateruse() part 3 - ids [256, 241, 222, 220]  WITH water use factors"""    
+
+    # description of test        
+    description = "Test get_total_wateruse() : part 3 - test getting the total sum of water use for ids (hydroids) [256, 241, 222, 220] WITH water use factors"     
+
+    # expected values to test with actual values
+    expected = {"January": 100.0,
+                "February": 100.0,
+                "March": 100.0,
+    }  
+
+    # actual values       
+    actual = wateruse.get_total_wateruse(wateruse_data = fixture["wateruse_data"], id_list = ["256", "241", "222", "220"], wateruse_factors = fixture["wateruse_factors"])  
 
     # assert equality
     _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  

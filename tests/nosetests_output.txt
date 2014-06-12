@@ -24,7 +24,7 @@ TEARDOWN: watertxt tests
 .SETUP: watertxt tests
 TEARDOWN: watertxt tests
 .TEARDOWN: watertxt tests
-........SETUP: wateruse tests
+......SETUP: wateruse tests
 
 --- Test read_file_in() - test reading of water use files; using simplified water use formatted file ---
 
@@ -69,7 +69,34 @@ TEARDOWN: watertxt tests
     expected: [2.0, 4.0, 6.0, 3.0, 1.0, 2.0, 2.0]
 
 
---- Test get_wateruse_values() - test getting water use values for a particular list of id (hydroid) values ---
+--- Test read_file_in() - test reading of water use files; using simplified water use formatted file ---
+
+*column_names*
+    actual:   ['AqGwWL', 'CoGwWL', 'DoGwWL', 'InGwWL', 'IrGwWL']
+    expected: ['AqGwWL', 'CoGwWL', 'DoGwWL', 'InGwWL', 'IrGwWL']
+
+*CoGwWL*
+    actual:   2.0
+    expected: 2.0
+
+*DoGwWL*
+    actual:   2.0
+    expected: 2.0
+
+*IrGwWL*
+    actual:   2.0
+    expected: 2.0
+
+*InGwWL*
+    actual:   2.0
+    expected: 2.0
+
+*AqGwWL*
+    actual:   2.0
+    expected: 2.0
+
+
+--- Test get_wateruse_values() part 1 - test getting water use values for a particular list of id (hydroid) values WITHOUT water use factors ---
 
 *ids_12_11_8*
     actual:   [[1.0, 3.0, 1.0, 3.0, -1.0], [2.0, 6.0, 2.0, 6.0, -1.0], [2.0, 1.0, 2.0, 1.0, -1.0]]
@@ -78,6 +105,17 @@ TEARDOWN: watertxt tests
 *ids_256_241_222_220*
     actual:   [[2.0, 5.0, 2.0, 5.0, -2.0], [4.0, 3.0, 4.0, 3.0, -4.0], [6.0, 4.0, 6.0, 4.0, -6.0], [3.0, 8.0, 3.0, 8.0, -8.0]]
     expected: [[2.0, 5.0, 2.0, 5.0, -2.0], [4.0, 3.0, 4.0, 3.0, -4.0], [6.0, 4.0, 6.0, 4.0, -6.0], [3.0, 8.0, 3.0, 8.0, -8.0]]
+
+
+--- Test get_wateruse_values() part 2 - test getting water use values for a particular list of id (hydroid) values WITH water use factors ---
+
+*ids_12_11_8*
+    actual:   [[2.0, 6.0, 2.0, 6.0, -2.0], [4.0, 12.0, 4.0, 12.0, -2.0], [4.0, 2.0, 4.0, 2.0, -2.0]]
+    expected: [[2.0, 6.0, 2.0, 6.0, -2.0], [4.0, 12.0, 4.0, 12.0, -2.0], [4.0, 2.0, 4.0, 2.0, -2.0]]
+
+*ids_256_241_222_220*
+    actual:   [[4.0, 10.0, 4.0, 10.0, -4.0], [8.0, 6.0, 8.0, 6.0, -8.0], [12.0, 8.0, 12.0, 8.0, -12.0], [6.0, 16.0, 6.0, 16.0, -16.0]]
+    expected: [[4.0, 10.0, 4.0, 10.0, -4.0], [8.0, 6.0, 8.0, 6.0, -8.0], [12.0, 8.0, 12.0, 8.0, -12.0], [6.0, 16.0, 6.0, 16.0, -16.0]]
 
 
 --- Test sum_values() : part 1 - test calculating sums (row wise, column wise, and total) for a list of lists using ids = [256, 241, 222, 220] ---
@@ -118,7 +156,7 @@ TEARDOWN: watertxt tests
 
 *5*
     actual:   7.73616898148
-    expected: 7.73616898148
+    expected: 7...........73616898148
 
 
 --- Test sum_values() : part 1 - test creating a dictionary with monthly keys (January, Februray, March) having values that correspond to the sum total water use ---
@@ -174,15 +212,14 @@ TEARDOWN: watertxt tests
 
 *November*
     actual:   4.0
-  ......SETUP: waterxml tests
-...........  expected: 4.0
+    expected: 4.0
 
 *October*
     actual:   4.0
     expected: 4.0
 
 
----  ---
+--- Test get_total_wateruse() : part 1 - test getting the total sum of water use for ids (hydroids) [256, 241, 222, 220] ---
 
 *January*
     actual:   50.0
@@ -210,6 +247,21 @@ TEARDOWN: watertxt tests
 *March*
     actual:   27.0
     expected: 27.0
+
+
+--- Test get_total_wateruse() : part 2 - test getting the total sum of water use for ids (hydroids) [256, 241, 222, 220] WITH water use factors ---
+
+*January*
+    actual:   100.0
+    expected: 100.0
+
+*February*
+    actual:   100.0
+    expected: 100.0
+
+*March*
+    actual:   100.0
+    expected: 100.0
 
 
 --- Test get_all_total_wateruse() : part 1 - test getting the total sum of water use for ids (hydroids) [256, 241, 222, 220] for multiple water use files (the entire year) ---
@@ -345,7 +397,8 @@ TEARDOWN: watertxt tests
     expected: 12.0
 
 *September*
-    actual:   12.0
+    actual:.SETUP: waterxml tests
+...........   12.0
     expected: 12.0
 
 *April*
@@ -369,6 +422,6 @@ SETUP: wateruse tests
 TEARDOWN: waterxml tests
 
 ----------------------------------------------------------------------
-Ran 70 tests in 0.762s
+Ran 73 tests in 0.999s
 
 OK

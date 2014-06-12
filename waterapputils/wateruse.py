@@ -241,8 +241,9 @@ def get_wateruse_values(wateruse_data, id_list, wateruse_factors = None):
         if name not in ["huc12", "newhydroid"]:
             wateruse_types.append(name)
 
-    # make sure that wateruse_factors have same keys as wateruse types from wateruse_data
-    assert wateruse_factors["column_names"] == wateruse_types, "Water use column names {} do not equal water use types {}".format(wateruse_factors.keys(), wateruse_types)
+    if wateruse_factors:
+        # make sure that wateruse_factors have same keys as wateruse types from wateruse_data
+        assert wateruse_factors["column_names"] == wateruse_types, "Water use column names {} do not equal water use types {}".format(wateruse_factors.keys(), wateruse_types)
     
     # put all values into a list of lists; apply water use factors if they exist    
     values = []
@@ -383,7 +384,7 @@ def get_total_wateruse(wateruse_data, id_list, wateruse_factors = None):
             raise ValueError, "newhydroid {} is not contined in wateruse_data".format(id_num)
   
     # get wateruse values that correspond to a list of ids
-    values = get_wateruse_values(wateruse_data, id_list = id_list, wateruse_factor = wateruse_factors) 
+    values = get_wateruse_values(wateruse_data, id_list = id_list, wateruse_factors = wateruse_factors) 
 
     # calculate the sums of the wateruse values along different axes
     sums = sum_values(values)
