@@ -1,0 +1,3 @@
+# water use factors																									
+AqGwWL	CoGwWL	DoGwWL	InGwWL	IrGwWL
+2	3	4	5	6

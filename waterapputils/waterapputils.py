@@ -302,7 +302,8 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
 
     Notes
     -----
-    files_dict = {"wateruse_files": list of delta text files,
+    files_dict = {"wateruse_files": list of water use text files,
+                  "wateruse_factor_file": path to water use factor file 
                   "basin_centroids_shapefile": shapefile corresponding to basin centroids,
                   "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with basin centroid shapefile
                   "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
@@ -325,7 +326,11 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
         print("Centroids: {}\n".format(centroids))  
 
         # get sum of the water use data
-        total_wateruse_dict = wateruse.get_all_total_wateruse(wateruse_files = files_dict["wateruse_files"], id_list = centroids, in_cfs = True)
+        if files_dict["wateruse_factor_file"]:
+            total_wateruse_dict = wateruse.get_all_total_wateruse(wateruse_files = files_dict["wateruse_files"], id_list = centroids, wateruse_factor_file = files_dict["wateruse_factor_file"], in_cfs = True)
+
+        else:
+            total_wateruse_dict = wateruse.get_all_total_wateruse(wateruse_files = files_dict["wateruse_files"], id_list = centroids, wateruse_factor_file = None, in_cfs = True)
 
         print("Total water use dictionary: {}\n".format(total_wateruse_dict))
 
@@ -481,14 +486,18 @@ def main():
             sys.exit() 
 
         elif args.applywaterusefiledialog:
+            # test using test file batch and test water use data files
             files_dict = {"wateruse_files": ["../data/wateruse-datafiles/test-files/test_wateruse_JFM.txt", "../data/wateruse-datafiles/test-files/test_wateruse_AMJ.txt", "../data/wateruse-datafiles/test-files/test_wateruse_JAS.txt", "../data/wateruse-datafiles/test-files/test_wateruse_OND.txt"], 
+                          "wateruse_factor_file": "../data/wateruse-datafiles/test-files/test_wateruse_factors.txt",
                           "basin_centroids_shapefile": "../data/spatial-datafiles/basins/dem_basin_centroids_tests_proj_wgs.shp", 
                           "basin_shapefile": "../data/spatial-datafiles/basins/waterbasin_multi_tests_proj_wgs.shp",
                           "basin_field": "STAID",
                           "watertxt_directory": "../data/wateruse-datafiles/test-files/wateruse_batch_test/",
                           "outputtxt_directory": "../data/wateruse-datafiles/test-files/"}
 
+#            # test using full batch and water use data files
 #            files_dict = {"wateruse_files": ["../data/wateruse-datafiles/test_JFM.txt", "../data/wateruse-datafiles/test_AMJ.txt", "../data/wateruse-datafiles/test_JAS.txt", "../data/wateruse-datafiles/test_OND.txt"], 
+#                          "wateruse_factor_file": "../data/wateruse-datafiles/test_wateruse_factors.txt",
 #                          "basin_centroids_shapefile": "../data/spatial-datafiles/basins/dem_basin_centroids_proj_wgs.shp", 
 #                          "basin_shapefile": "../data/spatial-datafiles/basins/waterbasin_multi_clean_proj_wgs.shp",
 #                          "basin_field": "STAID",

@@ -349,8 +349,7 @@ TEARDOWN: watertxt tests
 
 *July*
     actual:   50.0
-    expected: 5.....SETUP: waterxml tests
-...........0.0
+    expected: 5.....0.0
 
 *November*
     actual:   50.0
@@ -560,11 +559,63 @@ TEARDOWN: watertxt tests
     actual:   130.0
     expected: 130.0
 
+
+--- Test get_all_total_wateruse() : part 5 - test getting the total sum of water use for ids (hydroids) [256, 241, 222, 220] for multiple water use files (the entire year) WITH water use factors that are VARIABLE in CFS ---
+
+*February*
+    actual:   201.140393519
+    expected: 201.140393519
+
+*October*
+    actual:   201.140393519
+    expected: 201.140393519
+
+*March*
+    actual:   201.140393519
+    expected: 201.140393519
+
+*August*
+    actual:   201.140393519
+    expected: 201.140393519
+
+*May*
+    actual:   201.140393519
+    expected: 201.140393519
+
+*January*
+    actual:   201.140393519
+    expected: 201.140393519
+
+*June*
+    actual:   201.140393519
+    expected: 201.140393519
+
+*September*
+    actual:   201.140393519
+    expected: 201.140393519
+
+*April*
+    actual:   201.140393519
+    expected: 201.140393519
+
+*December*
+    actual:   201.140393519
+    expected: 201.140393519
+
+*July*
+    actual:   201.140393519
+    ex.SETUP: waterxml tests
+...........pected: 201.140393519
+
+*November*
+    actual:   201.140393519
+    expected: 201.140393519
+
 SETUP: wateruse tests
 --- Testing get_xml_data() ---
 TEARDOWN: waterxml tests
 
 ----------------------------------------------------------------------
-Ran 78 tests in 0.718s
+Ran 79 tests in 0.729s
 
 OK

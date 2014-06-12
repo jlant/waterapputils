@@ -565,5 +565,9 @@ def main():
     
     test_read_factor_file_in()
     
+    print(convert_wateruse_units(130))
+
+    print(convert_wateruse_units(92))
+    
 if __name__ == "__main__":
     main()

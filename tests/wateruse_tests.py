@@ -15,49 +15,6 @@ from waterapputils import wateruse
 # define the global fixture to hold the data that goes into the functions you test
 fixture = {}
 
-# define global to print out details of successful tests 
-VERBOSE = True
-
-def _perform_assertion(actual, expected, verbose, description = ""):
-    """   
-    For testing purposes, assert that all expected values and actual values match. 
-    Prints assertion error when there is no match.  Prints values to user to scan
-    if verbose is True. Helps a lot for debugging and creates a log of tests. 
-    
-    Parameters
-    ----------
-    expected : dictionary  
-        Dictionary holding expected data values
-        
-    actual : dictionary
-        Dictionary holding expected data values
-        
-    verbose : boolean
-        Boolean to print out details when actual matches expected
-    
-    Notes
-    -----
-    In order to capture stdout, need to run nosetests with -s or --nocapture flag    
-    
-    nosetests -s
-    
-    OR 
-    
-    nostests --nocapture
-    """
-    # print description to stderr 
-    print("\n--- " + description + " ---\n", file = sys.stdout)  
-
-    # for each in the actual result, assert equality to expected and print error message if actual does not equal expected. 
-    for key in actual.keys():        
-        np.testing.assert_equal(actual[key], expected[key], err_msg = "For key * {} *, actual value(s) * {} * do not equal expected value(s) * {} *".format(key, actual[key], expected[key]))        
-
-        # if verbose, print details to stderr; nosetests only displays stderr so displaying to stderr instead of stdout
-        if verbose:
-            print("*{}*".format(key), file = sys.stdout) 
-            print("    actual:   {}".format(actual[key]), file = sys.stdout) 
-            print("    expected: {}\n".format(expected[key]), file = sys.stdout) 
-
 def setup():
     """ Setup and initialize fixture for testing """
 
@@ -178,6 +135,45 @@ def teardown():
     print("SETUP: wateruse tests", file = sys.stdout) 
 
 
+def _perform_assertion(actual, expected, description = "", do_almost_equal = False):
+    """   
+    For testing purposes, assert that all expected values and actual values match. 
+    Prints assertion error when there is no match.  Prints values to user to scan
+    if verbose is True. Helps a lot for debugging and creates a log of tests. 
+    
+    Parameters
+    ----------
+    expected : dictionary  
+        Dictionary holding expected data values
+        
+    actual : dictionary
+        Dictionary holding expected data values
+           
+    Notes
+    -----
+    In order to capture stdout, need to run nosetests with -s or --nocapture flag    
+    
+    nosetests -s
+    
+    OR 
+    
+    nostests --nocapture
+    """
+    # print description to stderr 
+    print("\n--- " + description + " ---\n", file = sys.stdout)  
+
+    # for each in the actual result, assert equality to expected and print error message if actual does not equal expected. 
+    for key in actual.keys():
+        if do_almost_equal:
+            np.testing.assert_almost_equal(actual[key], expected[key], err_msg = "For key * {} *, actual value(s) * {} * do not equal expected value(s) * {} *".format(key, actual[key], expected[key]))        
+        else:
+            np.testing.assert_equal(actual[key], expected[key], err_msg = "For key * {} *, actual value(s) * {} * do not equal expected value(s) * {} *".format(key, actual[key], expected[key]))        
+
+        #print details to stderr; nosetests only displays stderr so displaying to stderr instead of stdout
+        print("*{}*".format(key), file = sys.stdout) 
+        print("    actual:   {}".format(actual[key]), file = sys.stdout) 
+        print("    expected: {}\n".format(expected[key]), file = sys.stdout) 
+
 def _get_all_total_wateruse_for_tests(wateruse_files, id_list, wateruse_factor_file = None, in_cfs = False):
     """ Test get_all_total_wateruse - strictly a test function here that mirrors get_all_totoal_wateruse in water.py but creates fileobj from StringIO instead of reading a file path """
 
@@ -200,6 +196,11 @@ def _get_all_total_wateruse_for_tests(wateruse_files, id_list, wateruse_factor_f
             # calculate average wateruse for a list of ids
             total_wateruse_dict = wateruse.get_total_wateruse(wateruse_data = wateruse_data, id_list = id_list)
 
+        # convert values to cfs
+        if in_cfs:
+            for key, value in total_wateruse_dict.iteritems():
+                value_cfs = wateruse.convert_wateruse_units(value)
+                total_wateruse_dict[key] = value_cfs
         
         # update dictionary 
         all_total_wateruse_dict.update(total_wateruse_dict)   
@@ -232,7 +233,7 @@ def test_read_file_in():
     actual = wateruse.read_file_in(fileobj)
     
     # assert equality
-    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
+    _perform_assertion(actual, expected, description = description)  
 
 def test_read_factor_file_in():
     """ Test read_factor_file_in() """
@@ -256,7 +257,7 @@ def test_read_factor_file_in():
     actual = wateruse.read_factor_file_in(fileobj)
    
     # assert equality
-    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)
+    _perform_assertion(actual, expected, description = description)
 
 def test_get_wateruse_values1():
     """ Test get_wateruse_values() """    
@@ -274,7 +275,7 @@ def test_get_wateruse_values1():
     actual["ids_12_11_8"] = wateruse.get_wateruse_values(wateruse_data = fixture["wateruse_data"], id_list = ["12", "11", "8"])
 
     # assert equality
-    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
+    _perform_assertion(actual, expected, description = description)  
 
 def test_get_wateruse_values2():
     """ Test get_wateruse_values() """    
@@ -292,7 +293,7 @@ def test_get_wateruse_values2():
     actual["ids_12_11_8"] = wateruse.get_wateruse_values(wateruse_data = fixture["wateruse_data"], id_list = ["12", "11", "8"], wateruse_factors = fixture["wateruse_factors"])
 
     # assert equality
-    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
+    _perform_assertion(actual, expected, description = description)  
 
 def test_get_wateruse_values3():
     """ Test get_wateruse_values() """    
@@ -310,7 +311,7 @@ def test_get_wateruse_values3():
     actual["ids_12_11_8"] = wateruse.get_wateruse_values(wateruse_data = fixture["wateruse_data"], id_list = ["12", "11", "8"], wateruse_factors = fixture["wateruse_factors_variable"])
 
     # assert equality
-    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
+    _perform_assertion(actual, expected, description = description)  
 
 def test_sum_values1():
     """ Test sum_values() part 1 - ids [256, 241, 222, 220] """
@@ -328,7 +329,7 @@ def test_sum_values1():
     actual = wateruse.sum_values(values = fixture["ids_256_241_222_220_values"])  
 
     # assert equality
-    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)   
+    _perform_assertion(actual, expected, description = description)   
 
 def test_sum_values2():
     """ Test sum_values()  part 2 - ids [12, 11, 8] """
@@ -346,7 +347,7 @@ def test_sum_values2():
     actual = wateruse.sum_values(values = fixture["ids_12_11_8_values"])  
 
     # assert equality
-    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)   
+    _perform_assertion(actual, expected, description = description)   
 
 def test_convert_wateruse_units():
     """ Test convert_wateruse_units() """
@@ -364,7 +365,7 @@ def test_convert_wateruse_units():
     }
     
     # assert equality
-    _perform_assertion(actual, expected, verbose = VERBOSE, description = description) 
+    _perform_assertion(actual, expected, description = description) 
     
 def test_create_monthly_wateruse_dict1():
     """ Test create_monthly_wateruse_dict() part 1 - testing January, Februray, March """
@@ -382,7 +383,7 @@ def test_create_monthly_wateruse_dict1():
     actual = wateruse.create_monthly_wateruse_dict(wateruse_data = fixture["wateruse_data"], wateruse_value = 5.0)  
 
     # assert equality
-    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)   
+    _perform_assertion(actual, expected, description = description)   
 
 def test_create_monthly_wateruse_dict2():
     """ Test create_monthly_wateruse_dict() part 2 - testing April, May, June """
@@ -400,7 +401,7 @@ def test_create_monthly_wateruse_dict2():
     actual = wateruse.create_monthly_wateruse_dict(wateruse_data = fixture["wateruse_data_months_AMJ"], wateruse_value = 2.0)  
    
     # assert equality
-    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
+    _perform_assertion(actual, expected, description = description)  
 
 def test_create_monthly_wateruse_dict3():
     """ Test create_monthly_wateruse_dict() part 3 - testing July, August, September """
@@ -418,7 +419,7 @@ def test_create_monthly_wateruse_dict3():
     actual = wateruse.create_monthly_wateruse_dict(wateruse_data = fixture["wateruse_data_months_JAS"], wateruse_value = 3.0)  
 
     # assert equality
-    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)   
+    _perform_assertion(actual, expected, description = description)   
 
 def test_create_monthly_wateruse_dict4():
     """ Test create_monthly_wateruse_dict() part 4 - testing October, November, December """
@@ -436,7 +437,7 @@ def test_create_monthly_wateruse_dict4():
     actual = wateruse.create_monthly_wateruse_dict(wateruse_data = fixture["wateruse_data_months_OND"], wateruse_value = 4.0)  
 
     # assert equality
-    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
+    _perform_assertion(actual, expected, description = description)  
     
 
 def test_get_total_wateruse1():
@@ -455,7 +456,7 @@ def test_get_total_wateruse1():
     actual = wateruse.get_total_wateruse(wateruse_data = fixture["wateruse_data"], id_list = ["256", "241", "222", "220"])  
 
     # assert equality
-    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
+    _perform_assertion(actual, expected, description = description)  
 
 def test_get_total_wateruse2():
     """ Test get_total_wateruse() part 2 - ids [12, 11, 8] """  
@@ -473,7 +474,7 @@ def test_get_total_wateruse2():
     actual = wateruse.get_total_wateruse(wateruse_data = fixture["wateruse_data"], id_list = ["12", "11", "8"])  
 
     # assert equality
-    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
+    _perform_assertion(actual, expected, description = description)  
 
 def test_get_total_wateruse3():
     """ Test get_total_wateruse() part 3 - ids [256, 241, 222, 220]  WITH water use factors"""    
@@ -491,7 +492,7 @@ def test_get_total_wateruse3():
     actual = wateruse.get_total_wateruse(wateruse_data = fixture["wateruse_data"], id_list = ["256", "241", "222", "220"], wateruse_factors = fixture["wateruse_factors"])  
 
     # assert equality
-    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
+    _perform_assertion(actual, expected, description = description)  
 
 def test_get_total_wateruse4():
     """ Test get_total_wateruse() part 4 - ids [256, 241, 222, 220]  WITH water use factors"""    
@@ -509,7 +510,7 @@ def test_get_total_wateruse4():
     actual = wateruse.get_total_wateruse(wateruse_data = fixture["wateruse_data"], id_list = ["256", "241", "222", "220"], wateruse_factors = fixture["wateruse_factors_variable"])  
 
     # assert equality
-    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
+    _perform_assertion(actual, expected, description = description)  
 
 def test_get_total_wateruse5():
     """ Test get_total_wateruse() part 5 - ids [12, 11, 8] WITH water use factors"""    
@@ -527,7 +528,7 @@ def test_get_total_wateruse5():
     actual = wateruse.get_total_wateruse(wateruse_data = fixture["wateruse_data"], id_list = ["12", "11", "8"], wateruse_factors = fixture["wateruse_factors_variable"])  
 
     # assert equality
-    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
+    _perform_assertion(actual, expected, description = description)  
 
 
 def test_get_all_total_wateruse1():
@@ -558,7 +559,7 @@ def test_get_all_total_wateruse1():
     actual = _get_all_total_wateruse_for_tests(wateruse_files = wateruse_files_list, id_list = ["256", "241", "222", "220"])  
 
     # assert equality
-    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
+    _perform_assertion(actual, expected, description = description)  
 
 def test_get_all_total_wateruse2():
     """ Test get_all_total_wateruse() part 2 - ids [12, 11, 8] """
@@ -588,7 +589,7 @@ def test_get_all_total_wateruse2():
     actual = _get_all_total_wateruse_for_tests(wateruse_files = wateruse_files_list, id_list = ["12", "11", "8"])  
 
     # assert equality
-    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
+    _perform_assertion(actual, expected, description = description)  
 
 def test_get_all_total_wateruse3():
     """ Test get_all_total_wateruse() part 3 - ids [256] """
@@ -618,7 +619,7 @@ def test_get_all_total_wateruse3():
     actual = _get_all_total_wateruse_for_tests(wateruse_files = wateruse_files_list, id_list = ["256"])  
 
     # assert equality
-    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)     
+    _perform_assertion(actual, expected, description = description)     
     
 def test_get_all_total_wateruse4():
     """ Test get_all_total_wateruse() part 4 - ids [256, 241, 222, 220] WITH water use factors """
@@ -650,7 +651,7 @@ def test_get_all_total_wateruse4():
     actual = _get_all_total_wateruse_for_tests(wateruse_files = wateruse_files_list, id_list = ["256", "241", "222", "220"], wateruse_factor_file = wateruse_factor_file)  
 
     # assert equality
-    _perform_assertion(actual, expected, verbose = VERBOSE, description = description) 
+    _perform_assertion(actual, expected, description = description) 
 
 def test_get_all_total_wateruse5():
     """ Test get_all_total_wateruse() part 5 - ids [256, 241, 222, 220] WITH water use factors """
@@ -682,4 +683,36 @@ def test_get_all_total_wateruse5():
     actual = _get_all_total_wateruse_for_tests(wateruse_files = wateruse_files_list, id_list = ["256", "241", "222", "220"], wateruse_factor_file = wateruse_factor_file)  
 
     # assert equality
-    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)
+    _perform_assertion(actual, expected, description = description)
+
+def test_get_all_total_wateruse6():
+    """ Test get_all_total_wateruse() part 6 - ids [256, 241, 222, 220] WITH water use factors """
+
+    # description of test        
+    description = "Test get_all_total_wateruse() : part 5 - test getting the total sum of water use for ids (hydroids) [256, 241, 222, 220] for multiple water use files (the entire year) WITH water use factors that are VARIABLE in CFS"     
+
+    # expected values to test with actual values
+    expected = {"January": 201.140393519,
+                "February": 201.140393519,
+                "March": 201.140393519,
+                "April": 201.140393519,
+                "May": 201.140393519,
+                "June": 201.140393519,
+                "July": 201.140393519,
+                "August": 201.140393519,
+                "September": 201.140393519,
+                "October": 201.140393519,
+                "November": 201.140393519,
+                "December": 201.140393519
+    } 
+
+    # make a list of water use files   
+    wateruse_files_list = [fixture["data_file_JFM"], fixture["data_file_AMJ"], fixture["data_file_JAS"], fixture["data_file_OND"]]
+
+    wateruse_factor_file = fixture["factor_file_variable"]
+
+    # actual values       
+    actual = _get_all_total_wateruse_for_tests(wateruse_files = wateruse_files_list, id_list = ["256", "241", "222", "220"], wateruse_factor_file = wateruse_factor_file, in_cfs = True)  
+
+    # assert equality
+    _perform_assertion(actual, expected, description = description, do_almost_equal = True)
