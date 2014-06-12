@@ -24,7 +24,7 @@ TEARDOWN: watertxt tests
 .SETUP: watertxt tests
 TEARDOWN: watertxt tests
 .TEARDOWN: watertxt tests
-......SETUP: wateruse tests
+.....SETUP: wateruse tests
 
 --- Test read_file_in() - test reading of water use files; using simplified water use formatted file ---
 
@@ -118,6 +118,17 @@ TEARDOWN: watertxt tests
     expected: [[4.0, 10.0, 4.0, 10.0, -4.0], [8.0, 6.0, 8.0, 6.0, -8.0], [12.0, 8.0, 12.0, 8.0, -12.0], [6.0, 16.0, 6.0, 16.0, -16.0]]
 
 
+--- Test get_wateruse_values() part 3 - test getting water use values for a particular list of id (hydroid) values WITH water use factors that are VARIABLE ---
+
+*ids_12_11_8*
+    actual:   [[2.0, 9.0, 4.0, 15.0, -6.0], [4.0, 18.0, 8.0, 30.0, -6.0], [4.0, 3.0, 8.0, 5.0, -6.0]]
+    expected: [[2.0, 9.0, 4.0, 15.0, -6.0], [4.0, 18.0, 8.0, 30.0, -6.0], [4.0, 3.0, 8.0, 5.0, -6.0]]
+
+*ids_256_241_222_220*
+    actual:   [[4.0, 15.0, 8.0, 25.0, -12.0], [8.0, 9.0, 16.0, 15.0, -24.0], [12.0, 12.0, 24.0, 20.0, -36.0], [6.0, 24.0, 12.0, 40.0, -48.0]]
+    expected: [[4.0, 15.0, 8.0, 25.0, -12.0], [8.0, 9.0, 16.0, 15.0, -24.0], [12.0, 12.0, 24.0, 20.0, -36.0], [6.0, 24.0, 12.0, 40.0, -48.0]]
+
+
 --- Test sum_values() : part 1 - test calculating sums (row wise, column wise, and total) for a list of lists using ids = [256, 241, 222, 220] ---
 
 *total*
@@ -126,7 +137,7 @@ TEARDOWN: watertxt tests
 
 *row_wise*
     actual:   [ 15.  20.  15.  20. -20.]
-    expected: [ 15.  20.  15.  20. -20.]
+    expecte............d: [ 15.  20.  15.  20. -20.]
 
 *column_wise*
     actual:   [ 12.  10.  14.  14.]
@@ -156,7 +167,7 @@ TEARDOWN: watertxt tests
 
 *5*
     actual:   7.73616898148
-    expected: 7...........73616898148
+    expected: 7.73616898148
 
 
 --- Test sum_values() : part 1 - test creating a dictionary with monthly keys (January, Februray, March) having values that correspond to the sum total water use ---
@@ -249,7 +260,7 @@ TEARDOWN: watertxt tests
     expected: 27.0
 
 
---- Test get_total_wateruse() : part 2 - test getting the total sum of water use for ids (hydroids) [256, 241, 222, 220] WITH water use factors ---
+--- Test get_total_wateruse() : part 3 - test getting the total sum of water use for ids (hydroids) [256, 241, 222, 220] WITH water use factors ---
 
 *January*
     actual:   100.0
@@ -262,6 +273,36 @@ TEARDOWN: watertxt tests
 *March*
     actual:   100.0
     expected: 100.0
+
+
+--- Test get_total_wateruse() : part 4 - test getting the total sum of water use for ids (hydroids) [256, 241, 222, 220] WITH water use factors that are VARIABLE ---
+
+*January*
+    actual:   130.0
+    expected: 130.0
+
+*February*
+    actual:   130.0
+    expected: 130.0
+
+*March*
+    actual:   130.0
+    expected: 130.0
+
+
+--- Test get_total_wateruse() : part 5 - test getting the total sum of water use for ids (hydroids) [256, 241, 222, 220] WITH water use factors that are VARIABLE ---
+
+*January*
+    actual:   92.0
+    expected: 92.0
+
+*February*
+    actual:   92.0
+    expected: 92.0
+
+*March*
+    actual:   92.0
+    expected: 92.0
 
 
 --- Test get_all_total_wateruse() : part 1 - test getting the total sum of water use for ids (hydroids) [256, 241, 222, 220] for multiple water use files (the entire year) ---
@@ -308,7 +349,8 @@ TEARDOWN: watertxt tests
 
 *July*
     actual:   50.0
-    expected: 50.0
+    expected: 5.....SETUP: waterxml tests
+...........0.0
 
 *November*
     actual:   50.0
@@ -397,8 +439,7 @@ TEARDOWN: watertxt tests
     expected: 12.0
 
 *September*
-    actual:.SETUP: waterxml tests
-...........   12.0
+    actual:   12.0
     expected: 12.0
 
 *April*
@@ -417,11 +458,113 @@ TEARDOWN: watertxt tests
     actual:   12.0
     expected: 12.0
 
+
+--- Test get_all_total_wateruse() : part 4 - test getting the total sum of water use for ids (hydroids) [256, 241, 222, 220] for multiple water use files (the entire year) WITH water use factors ---
+
+*February*
+    actual:   100.0
+    expected: 100.0
+
+*October*
+    actual:   100.0
+    expected: 100.0
+
+*March*
+    actual:   100.0
+    expected: 100.0
+
+*August*
+    actual:   100.0
+    expected: 100.0
+
+*May*
+    actual:   100.0
+    expected: 100.0
+
+*January*
+    actual:   100.0
+    expected: 100.0
+
+*June*
+    actual:   100.0
+    expected: 100.0
+
+*September*
+    actual:   100.0
+    expected: 100.0
+
+*April*
+    actual:   100.0
+    expected: 100.0
+
+*December*
+    actual:   100.0
+    expected: 100.0
+
+*July*
+    actual:   100.0
+    expected: 100.0
+
+*November*
+    actual:   100.0
+    expected: 100.0
+
+
+--- Test get_all_total_wateruse() : part 5 - test getting the total sum of water use for ids (hydroids) [256, 241, 222, 220] for multiple water use files (the entire year) WITH water use factors that are VARIABLE ---
+
+*February*
+    actual:   130.0
+    expected: 130.0
+
+*October*
+    actual:   130.0
+    expected: 130.0
+
+*March*
+    actual:   130.0
+    expected: 130.0
+
+*August*
+    actual:   130.0
+    expected: 130.0
+
+*May*
+    actual:   130.0
+    expected: 130.0
+
+*January*
+    actual:   130.0
+    expected: 130.0
+
+*June*
+    actual:   130.0
+    expected: 130.0
+
+*September*
+    actual:   130.0
+    expected: 130.0
+
+*April*
+    actual:   130.0
+    expected: 130.0
+
+*December*
+    actual:   130.0
+    expected: 130.0
+
+*July*
+    actual:   130.0
+    expected: 130.0
+
+*November*
+    actual:   130.0
+    expected: 130.0
+
 SETUP: wateruse tests
 --- Testing get_xml_data() ---
 TEARDOWN: waterxml tests
 
 ----------------------------------------------------------------------
-Ran 73 tests in 0.999s
+Ran 78 tests in 0.718s
 
 OK

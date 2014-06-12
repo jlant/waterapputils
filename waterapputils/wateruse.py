@@ -461,7 +461,7 @@ def _create_test_data():
         """
         # water use factors																									
         AqGwWL	CoGwWL	DoGwWL	InGwWL	IrGwWL
-        2	2	2	2	2
+        2	      2	      2	      2	      2
         """
 
     fixture["wateruse_data"] = {"months": "JFM_WU", 
@@ -553,6 +553,7 @@ def test_read_factor_file_in():
    
     # print results
     _print_test_info(actual, expected)
+
 
 def main():
 

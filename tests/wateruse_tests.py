@@ -127,7 +127,14 @@ def setup():
         """
         # water use factors																									
         AqGwWL	CoGwWL	DoGwWL	InGwWL	IrGwWL
-        2	2	2	2	2
+        2	      2	      2	      2	      2
+        """
+
+    fixture["factor_file_variable"] = \
+        """
+        # water use factors																									
+        AqGwWL	CoGwWL	DoGwWL	InGwWL	IrGwWL
+        2	      3	      4	      5	      6
         """
 
     fixture["wateruse_data"] = {"months": "JFM_WU", 
@@ -157,13 +164,21 @@ def setup():
                                    "IrGwWL": 2.0
     }
 
+    fixture["wateruse_factors_variable"] = {"column_names": ["AqGwWL", "CoGwWL", "DoGwWL", "InGwWL", "IrGwWL"],
+                                           "AqGwWL": 2.0,
+                                           "CoGwWL": 3.0,
+                                           "DoGwWL": 4.0,
+                                           "InGwWL": 5.0,
+                                           "IrGwWL": 6.0
+    }
+
 def teardown():
     """ Print to standard error when all tests are finished """
     
     print("SETUP: wateruse tests", file = sys.stdout) 
 
 
-def _get_all_total_wateruse_for_tests(wateruse_files, id_list):
+def _get_all_total_wateruse_for_tests(wateruse_files, id_list, wateruse_factor_file = None, in_cfs = False):
     """ Test get_all_total_wateruse - strictly a test function here that mirrors get_all_totoal_wateruse in water.py but creates fileobj from StringIO instead of reading a file path """
 
     # calculate average values for a list of water use files
@@ -171,9 +186,20 @@ def _get_all_total_wateruse_for_tests(wateruse_files, id_list):
     for wateruse_file in wateruse_files:
         fileobj = StringIO(wateruse_file)
         wateruse_data = wateruse.read_file_in(fileobj) 
+
+        # if water use factor file is supplied, then apply factors        
+        if wateruse_factor_file:
+            # read water use factor file
+            fileobj_factors = StringIO(wateruse_factor_file)
+            wateruse_factors = wateruse.read_factor_file_in(fileobj_factors)
                 
-        # calculate average wateruse for a list of ids
-        total_wateruse_dict = wateruse.get_total_wateruse(wateruse_data = wateruse_data, id_list = id_list)
+            # calculate average wateruse for a list of ids
+            total_wateruse_dict = wateruse.get_total_wateruse(wateruse_data = wateruse_data, id_list = id_list, wateruse_factors = wateruse_factors)
+
+        else:
+            # calculate average wateruse for a list of ids
+            total_wateruse_dict = wateruse.get_total_wateruse(wateruse_data = wateruse_data, id_list = id_list)
+
         
         # update dictionary 
         all_total_wateruse_dict.update(total_wateruse_dict)   
@@ -264,6 +290,24 @@ def test_get_wateruse_values2():
     actual = {}
     actual["ids_256_241_222_220"] = wateruse.get_wateruse_values(wateruse_data = fixture["wateruse_data"], id_list = ["256", "241", "222", "220"], wateruse_factors = fixture["wateruse_factors"])
     actual["ids_12_11_8"] = wateruse.get_wateruse_values(wateruse_data = fixture["wateruse_data"], id_list = ["12", "11", "8"], wateruse_factors = fixture["wateruse_factors"])
+
+    # assert equality
+    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
+
+def test_get_wateruse_values3():
+    """ Test get_wateruse_values() """    
+
+    # description of test        
+    description = "Test get_wateruse_values() part 3 - test getting water use values for a particular list of id (hydroid) values WITH water use factors that are VARIABLE"     
+    
+    # expected values to test with actual values
+    expected = {}    
+    expected["ids_256_241_222_220"] = [[4.0, 15.0, 8.0, 25.0, -12.0], [8.0, 9.0, 16.0, 15.0, -24.0], [12.0, 12.0, 24.0, 20.0, -36.0], [6.0, 24.0, 12.0, 40.0, -48.0]]
+    expected["ids_12_11_8"] = [[2.0, 9.0, 4.0, 15.0, -6.0], [4.0, 18.0, 8.0, 30.0, -6.0], [4.0, 3.0, 8.0, 5.0, -6.0]]
+    
+    actual = {}
+    actual["ids_256_241_222_220"] = wateruse.get_wateruse_values(wateruse_data = fixture["wateruse_data"], id_list = ["256", "241", "222", "220"], wateruse_factors = fixture["wateruse_factors_variable"])
+    actual["ids_12_11_8"] = wateruse.get_wateruse_values(wateruse_data = fixture["wateruse_data"], id_list = ["12", "11", "8"], wateruse_factors = fixture["wateruse_factors_variable"])
 
     # assert equality
     _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
@@ -449,6 +493,43 @@ def test_get_total_wateruse3():
     # assert equality
     _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
 
+def test_get_total_wateruse4():
+    """ Test get_total_wateruse() part 4 - ids [256, 241, 222, 220]  WITH water use factors"""    
+
+    # description of test        
+    description = "Test get_total_wateruse() : part 4 - test getting the total sum of water use for ids (hydroids) [256, 241, 222, 220] WITH water use factors that are VARIABLE"     
+
+    # expected values to test with actual values
+    expected = {"January": 130.0,
+                "February": 130.0,
+                "March": 130.0,
+    }  
+
+    # actual values       
+    actual = wateruse.get_total_wateruse(wateruse_data = fixture["wateruse_data"], id_list = ["256", "241", "222", "220"], wateruse_factors = fixture["wateruse_factors_variable"])  
+
+    # assert equality
+    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
+
+def test_get_total_wateruse5():
+    """ Test get_total_wateruse() part 5 - ids [12, 11, 8] WITH water use factors"""    
+
+    # description of test        
+    description = "Test get_total_wateruse() : part 5 - test getting the total sum of water use for ids (hydroids) [256, 241, 222, 220] WITH water use factors that are VARIABLE"     
+
+    # expected values to test with actual values
+    expected = {"January": 92.0,
+                "February": 92.0,
+                "March": 92.0,
+    }  
+
+    # actual values       
+    actual = wateruse.get_total_wateruse(wateruse_data = fixture["wateruse_data"], id_list = ["12", "11", "8"], wateruse_factors = fixture["wateruse_factors_variable"])  
+
+    # assert equality
+    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)  
+
+
 def test_get_all_total_wateruse1():
     """ Test get_all_total_wateruse() part 1 - ids [256, 241, 222, 220] """
 
@@ -539,3 +620,66 @@ def test_get_all_total_wateruse3():
     # assert equality
     _perform_assertion(actual, expected, verbose = VERBOSE, description = description)     
     
+def test_get_all_total_wateruse4():
+    """ Test get_all_total_wateruse() part 4 - ids [256, 241, 222, 220] WITH water use factors """
+
+    # description of test        
+    description = "Test get_all_total_wateruse() : part 4 - test getting the total sum of water use for ids (hydroids) [256, 241, 222, 220] for multiple water use files (the entire year) WITH water use factors"     
+
+    # expected values to test with actual values
+    expected = {"January": 100.0,
+                "February": 100.0,
+                "March": 100.0,
+                "April": 100.0,
+                "May": 100.0,
+                "June": 100.0,
+                "July": 100.0,
+                "August": 100.0,
+                "September": 100.0,
+                "October": 100.0,
+                "November": 100.0,
+                "December": 100.0
+    } 
+
+    # make a list of water use files   
+    wateruse_files_list = [fixture["data_file_JFM"], fixture["data_file_AMJ"], fixture["data_file_JAS"], fixture["data_file_OND"]]
+
+    wateruse_factor_file = fixture["factor_file"]
+
+    # actual values       
+    actual = _get_all_total_wateruse_for_tests(wateruse_files = wateruse_files_list, id_list = ["256", "241", "222", "220"], wateruse_factor_file = wateruse_factor_file)  
+
+    # assert equality
+    _perform_assertion(actual, expected, verbose = VERBOSE, description = description) 
+
+def test_get_all_total_wateruse5():
+    """ Test get_all_total_wateruse() part 5 - ids [256, 241, 222, 220] WITH water use factors """
+
+    # description of test        
+    description = "Test get_all_total_wateruse() : part 5 - test getting the total sum of water use for ids (hydroids) [256, 241, 222, 220] for multiple water use files (the entire year) WITH water use factors that are VARIABLE"     
+
+    # expected values to test with actual values
+    expected = {"January": 130.0,
+                "February": 130.0,
+                "March": 130.0,
+                "April": 130.0,
+                "May": 130.0,
+                "June": 130.0,
+                "July": 130.0,
+                "August": 130.0,
+                "September": 130.0,
+                "October": 130.0,
+                "November": 130.0,
+                "December": 130.0
+    } 
+
+    # make a list of water use files   
+    wateruse_files_list = [fixture["data_file_JFM"], fixture["data_file_AMJ"], fixture["data_file_JAS"], fixture["data_file_OND"]]
+
+    wateruse_factor_file = fixture["factor_file_variable"]
+
+    # actual values       
+    actual = _get_all_total_wateruse_for_tests(wateruse_files = wateruse_files_list, id_list = ["256", "241", "222", "220"], wateruse_factor_file = wateruse_factor_file)  
+
+    # assert equality
+    _perform_assertion(actual, expected, verbose = VERBOSE, description = description)
