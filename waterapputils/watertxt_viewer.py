@@ -22,6 +22,25 @@ import os
 
 # my modules
 import watertxt
+
+# Global colors dictionary
+COLORS = {"Discharge": "b",
+          "Subsurface Flow": "g",
+          "Impervious Flow": "SteelBlue",
+          "Infiltration Excess": "SeaGreen",
+          "Initial Abstracted Flow": "MediumBlue",
+          "Overland Flow": "RoyalBlue",
+          "PET": "orange",
+          "AET": "DarkOrange",
+          "Average Soil Root zone": "Gray",
+          "Average Soil Unsaturated Zone": "DarkGray",
+          "Snow Pack": "PowderBlue",
+          "Precipitation": "SkyBlue",
+          "Storage Deficit": "Brown",
+          "Return Flow": "Aqua",
+          "Water Use": "DarkCyan",
+          "Discharge + Water Use": "DarkBlue"
+}
         
 def print_watertxt_data(watertxt_data):
     """   
@@ -106,51 +125,54 @@ def plot_watertxt_data(watertxt_data, is_visible = True, save_path = None):
         ylabel = "\n".join(wrap(parameter["name"], 60))
         ax.set_ylabel(ylabel)
         ax.grid(True)
+#
+#        if "Discharge" in parameter["name"]:
+#            color_str = "b"
+#            
+#        elif "Subsurface Flow" in parameter["name"]:
+#            color_str = "g"       
+#            
+#        elif "Impervious Flow" in parameter["name"]:
+#            color_str = "SteelBlue"
+#            
+#        elif "Infiltration Excess" in parameter["name"]:
+#            color_str = "SeaGreen"
+#            
+#        elif "Initial Abstracted Flow" in parameter["name"]:
+#            color_str = "MediumBlue"
+#                        
+#        elif "Overland Flow" in parameter["name"]:
+#            color_str = "RoyalBlue"
+#                        
+#        elif "PET" in parameter["name"]:
+#            color_str = "orange"
+#                        
+#        elif "AET" in parameter["name"]:
+#            color_str = "DarkOrange"
+#                                    
+#        elif "Average Soil Root zone" in parameter["name"]:
+#            color_str = "Gray"
+#                        
+#        elif "Average Soil Unsaturated Zone" in parameter["name"]:
+#            color_str = "DarkGray"
+#                        
+#        elif "Snow Pack" in parameter["name"]:
+#            color_str = "PowderBlue"
+#            
+#        elif "Precipitation" in parameter["name"]:
+#            color_str = "SkyBlue"
+#            
+#        elif "Storage Deficit" in parameter["name"]:
+#            color_str = "k"
+#                        
+#        elif "Return Flow" in parameter["name"]:
+#            color_str = "Aqua"
+#                        
+#        else:
+#            color_str = "k"
 
-        if "Discharge" in parameter["name"]:
-            color_str = "b"
-            
-        elif "Subsurface Flow" in parameter["name"]:
-            color_str = "g"       
-            
-        elif "Impervious Flow" in parameter["name"]:
-            color_str = "SteelBlue"
-            
-        elif "Infiltration Excess" in parameter["name"]:
-            color_str = "SeaGreen"
-            
-        elif "Initial Abstracted Flow" in parameter["name"]:
-            color_str = "MediumBlue"
-                        
-        elif "Overland Flow" in parameter["name"]:
-            color_str = "RoyalBlue"
-                        
-        elif "PET" in parameter["name"]:
-            color_str = "orange"
-                        
-        elif "AET" in parameter["name"]:
-            color_str = "DarkOrange"
-                                    
-        elif "Average Soil Root zone" in parameter["name"]:
-            color_str = "Gray"
-                        
-        elif "Average Soil Unsaturated Zone" in parameter["name"]:
-            color_str = "DarkGray"
-                        
-        elif "Snow Pack" in parameter["name"]:
-            color_str = "PowderBlue"
-            
-        elif "Precipitation" in parameter["name"]:
-            color_str = "SkyBlue"
-            
-        elif "Storage Deficit" in parameter["name"]:
-            color_str = "k"
-                        
-        elif "Return Flow" in parameter["name"]:
-            color_str = "Aqua"
-                        
-        else:
-            color_str = "k"
+        # get proper color that corresponds to parameter name
+        color_str = COLORS[parameter["name"].split("(")[0].strip()]
                         
         plt.plot(watertxt_data["dates"], parameter["data"], color = color_str, label = ylabel) 
         
@@ -267,7 +289,6 @@ def plot_watertxt_comparison(watertxt_data1, watertxt_data2, is_visible = True, 
         # because this method does it
         fig.autofmt_xdate()
 
-
         # save plots
         if save_path:        
             # set the size of the figure to be saved
@@ -285,6 +306,84 @@ def plot_watertxt_comparison(watertxt_data1, watertxt_data2, is_visible = True, 
         else:
             plt.close()
 
+def plot_watertxt_parameter(watertxt_data, name, is_visible = True, save_path = None):
+    """   
+    Plot a parameters contained in WATER.txt data file. Save 
+    plots to a particular path.
+    
+    Parameters
+    ----------
+    watertxtdata_data : dictionary 
+        A dictionary containing data found in WATER data file.
+        
+    name : string
+        String name of parameter
+
+    is_visible : bool
+        Boolean value to show plots   
+        
+    save_path : string 
+        String path to save plot(s) 
+    """
+    parameter = watertxt.get_parameter(watertxt_data, name = name)
+
+    assert parameter is not None, "Parameter name {} is not in watertxt_data".format(name)
+
+    dates = watertxt_data["dates"]
+    fig = plt.figure(figsize = (12,10))
+    ax = fig.add_subplot(111)
+    ax.grid(True)
+    ax.set_title("Parameter: {}".format(parameter["name"]))
+    ax.set_xlabel("Date")
+    ylabel = "\n".join(wrap(parameter["name"], 60))
+    ax.set_ylabel(ylabel)
+
+    # get proper color that corresponds to parameter name
+    color_str = COLORS[name]
+
+    # plot parameter    
+    ax.plot(dates, parameter["data"], color = color_str, label = parameter["name"], linewidth = 2)   
+ 
+    # rotate and align the tick labels so they look better
+    fig.autofmt_xdate()
+    
+    # use a more precise date string for the x axis locations in the
+    # toolbar
+    ax.fmt_xdata = mdates.DateFormatter("%Y-%m-%d")
+ 
+    # legend; make it transparent    
+    handles, labels = ax.get_legend_handles_labels()
+    legend = ax.legend(handles, labels, fancybox = True)
+    legend.get_frame().set_alpha(0.5)
+    legend.draggable(state=True)
+    
+    # show text of mean, max, min values on graph; use matplotlib.patch.Patch properies and bbox
+    text = "mean = %.2f\nmax = %.2f\nmin = %.2f" % (parameter["mean"], parameter["max"], parameter["min"])
+    patch_properties = {"boxstyle": "round",
+                        "facecolor": "wheat",
+                        "alpha": 0.5
+                        }
+                   
+    ax.text(0.05, 0.95, text, transform = ax.transAxes, fontsize = 14, 
+            verticalalignment = "top", horizontalalignment = "left", bbox = patch_properties)
+    
+    # save plots
+    if save_path:        
+        # set the size of the figure to be saved
+        curr_fig = plt.gcf()
+        curr_fig.set_size_inches(12, 10)
+        
+        # split the parameter name to not include units because some units contain / character which Python interprets as an escape character
+        filename = "-".join([watertxt_data["user"], watertxt_data["stationid"], parameter["name"].split("(")[0]])  + ".png"           
+        filepath = os.path.join(save_path, filename)
+        plt.savefig(filepath, dpi = 100)                        
+      
+    # show plots
+    if is_visible:
+        plt.show()
+    else:
+        plt.close()
+   
 def plot_watertxt_parameter_comparison(watertxt_data, name1, name2, is_visible = True, save_path = None):
     """   
     Plot a comparison of two parameters contained in WATER.txt data file. Save 
@@ -495,6 +594,20 @@ def test_plot_watertxt_comprison():
     print("Plotting completed")
     print("")
 
+def test_plot_watertxt_parameter():
+    """ Test plot_watertxt_data() """
+    
+    print("--- Testing plot_watertxt_data() ---")    
+    
+    data = _create_test_data()
+    plot_watertxt_parameter(watertxt_data = data, name = "Discharge", is_visible = True, save_path = None)
+    plot_watertxt_parameter(watertxt_data = data, name = "Subsurface Flow", is_visible = True, save_path = None) 
+    plot_watertxt_parameter(watertxt_data = data, name = "Water Use", is_visible = True, save_path = None) 
+    plot_watertxt_parameter(watertxt_data = data, name = "Discharge + Water Use", is_visible = True, save_path = None)   
+
+    print("Plotting completed")
+    print("")
+
 def test_plot_watertxt_parameter_comprison():
     """ Test plot_watertxt_parameter_comprison() """
     
@@ -505,6 +618,7 @@ def test_plot_watertxt_parameter_comprison():
     
     print("Plotting completed")
     print("")
+
      
 def main():
     """ Test functionality of waterapputils_viewer() """
@@ -512,23 +626,27 @@ def main():
     print("")
     print("RUNNING TESTS ...")
     print("")
+#
+#    ans_print_watertxt_data = raw_input("Do you want to test print_watertxt_data()? y/n ")
+#    if ans_print_watertxt_data == "y":
+#         test_print_watertxt_data()
+#
+#    ans_plot_watertxt_data = raw_input("Do you want to test plot_watertxt_data()? y/n ")
+#    if ans_plot_watertxt_data == "y":
+#         test_plot_watertxt_data()  
+#
+#    ans_plot_watertxt_comprison = raw_input("Do you want to test plot_watertxt_comprison()? y/n ")
+#    if ans_plot_watertxt_comprison == "y":
+#         test_plot_watertxt_comprison()     
+#
+#    ans_plot_watertxt_parameter = raw_input("Do you want to test plot_watertxt_parameter_comprison()? y/n ")
+#    if ans_plot_watertxt_parameter == "y":
+#         test_plot_watertxt_parameter()   
+#        
+#    ans_plot_watertxt_parameter_comprison = raw_input("Do you want to test plot_watertxt_parameter_comprison()? y/n ")
+#    if ans_plot_watertxt_parameter_comprison == "y":
+#         test_plot_watertxt_parameter_comprison()    
 
-    ans_print_watertxt_data = raw_input("Do you want to test print_watertxt_data()? y/n ")
-    if ans_print_watertxt_data == "y":
-         test_print_watertxt_data()
-
-    ans_plot_watertxt_data = raw_input("Do you want to test plot_watertxt_data()? y/n ")
-    if ans_plot_watertxt_data == "y":
-         test_plot_watertxt_data()  
-
-    ans_plot_watertxt_comprison = raw_input("Do you want to test plot_watertxt_comprison()? y/n ")
-    if ans_plot_watertxt_comprison == "y":
-         test_plot_watertxt_comprison()     
-        
-    ans_plot_watertxt_parameter_comprison = raw_input("Do you want to test plot_watertxt_parameter_comprison()? y/n ")
-    if ans_plot_watertxt_parameter_comprison == "y":
-         test_plot_watertxt_parameter_comprison()    
-
-
+    test_plot_watertxt_data()  
 if __name__ == "__main__":
     main() 

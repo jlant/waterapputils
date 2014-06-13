@@ -217,51 +217,6 @@ def get_date(date_str):
     date = datetime.datetime(int(year), int(month), int(day))
     
     return date
-                
-def write_file(watertxt_data, save_path, filename = "WATER.txt"):
-    """   
-    Write data contained in water data dictionary to an output file in the 
-    same format as the original WATER output text file.
-    
-    Parameters
-    ----------
-    watertxt_data : dictionary 
-        Dictionary holding data found in WATER output text file.
-    save_path : string 
-        String path to save file.
-    filename : string
-        String name of output file. Default name is WATER.txt.
-    """ 
-    
-    header = "\
- ------------------------------------------------------------------------------\n\
- ----- WATER ------------------------------------------------------------------\n\
- ------------------------------------------------------------------------------\n"
-   
-    filepath = os.path.join(save_path, filename)    
-
-    with open(filepath, "w") as output_file:
-        output_file.write(header)
-        output_file.writelines("\n".join(["User:\t{}".format(watertxt_data["user"]),
-                                          "Date:\t{}".format(watertxt_data["date_created"]),
-                                          "StationID:\t{}".format(watertxt_data["stationid"]),
-                                          "Date\t{}\n".format("\t".join(watertxt_data["column_names"]))
-        ]))
-        
-        # make a single list of all the data values from the watertxt_data["parameters"] list            
-        values_all = get_all_values(watertxt_data)
-
-        nrows = len(values_all[0])
-        ncols = len(values_all)        
-        dates = watertxt_data["dates"]
-        for i in range(nrows):
-            date_str = dates[i].strftime("%m/%d/%Y")
-            output_file.write(date_str + "\t")
-            row = []
-            for j in range(ncols):
-                row.append("{}".format(values_all[j][i]))
-
-            output_file.write("\t".join(row) + "\n")
        
 def add_parameter(watertxt_data, name, param_data):
     """
@@ -477,16 +432,16 @@ def apply_wateruse(watertxt_data, wateruse_totals):
     # get the discharge parameter
     discharge = get_parameter(watertxt_data = watertxt_data, name = "Discharge") 
 
-    # create a water use parameter containing water use totals
+    # create a water use parameter containing only zeros
     watertxt_data = add_parameter(watertxt_data = watertxt_data, name = "Water Use (cfs)", param_data = np.zeros(np.shape(discharge["data"])))
     
-    # apply water use factors
+    # fill water use parameter with water use totals 
     watertxt_data = apply_factors(watertxt_data = watertxt_data, name = "Water Use (cfs)", factors = wateruse_totals, is_additive = True)    
     
-    # temporarily fill water use parameter with original discharge data
+    # create another parameter containing original discharge data to apply water use totals to
     watertxt_data = add_parameter(watertxt_data = watertxt_data, name = "Discharge + Water Use (cfs)", param_data = discharge["data"])
     
-    # apply water use factors
+    # apply water use totals
     watertxt_data = apply_factors(watertxt_data = watertxt_data, name = "Discharge + Water Use (cfs)", factors = wateruse_totals, is_additive = True)    
     
     return watertxt_data
@@ -562,7 +517,82 @@ def _create_test_data(multiplicative_factor = 1, stationid = "012345"):
 
     return data
 
+def write_file(watertxt_data, save_path, filename = "WATER.txt"):
+    """   
+    Write data contained in water data dictionary to an output file in the 
+    same format as the original WATER output text file.
+    
+    Parameters
+    ----------
+    watertxt_data : dictionary 
+        Dictionary holding data found in WATER output text file.
+    save_path : string 
+        String path to save file.
+    filename : string
+        String name of output file. Default name is WATER.txt.
+    """ 
+    
+    header = "\
+ ------------------------------------------------------------------------------\n\
+ ----- WATER ------------------------------------------------------------------\n\
+ ------------------------------------------------------------------------------\n"
+   
+    filepath = os.path.join(save_path, filename)    
 
+    with open(filepath, "w") as output_file:
+        output_file.write(header)
+        output_file.writelines("\n".join(["User:\t{}".format(watertxt_data["user"]),
+                                          "Date:\t{}".format(watertxt_data["date_created"]),
+                                          "StationID:\t{}".format(watertxt_data["stationid"]),
+                                          "Date\t{}\n".format("\t".join(watertxt_data["column_names"]))
+        ]))
+        
+        # make a single list of all the data values from the watertxt_data["parameters"] list            
+        values_all = get_all_values(watertxt_data)
+
+        nrows = len(values_all[0])
+        ncols = len(values_all)        
+        dates = watertxt_data["dates"]
+        for i in range(nrows):
+            date_str = dates[i].strftime("%m/%d/%Y")
+            output_file.write(date_str + "\t")
+            row = []
+            for j in range(ncols):
+                row.append("{}".format(values_all[j][i]))
+
+            output_file.write("\t".join(row) + "\n")
+
+def write_oasis_file(watertxt_data, save_path, filename = "oasis-file.txt"):
+    """   
+    Write the timeseries of discharge or discharge + water use data contained 
+    in water data dictionary to an output file.
+    
+    Parameters
+    ----------
+    watertxt_data : dictionary 
+        Dictionary holding data found in WATER output text file.
+    save_path : string 
+        String path to save file.
+    filename : string
+        String name of output file. Default name is oasis-file.txt
+    """ 
+    # get the discharge parameter
+    parameter = get_parameter(watertxt_data, name = "Discharge + Water Use")
+
+    # if the parameter discharge with water use applied does not exist, then use the original discharge parameter    
+    if parameter is None:
+        parameter = get_parameter(watertxt_data, name = "Discharge")
+        
+    filepath = os.path.join(save_path, filename)   
+
+    with open(filepath, "w") as output_file:
+        output_file.write("{}\t{}\n".format("Date", parameter["name"]))
+
+        for i in range(len(watertxt_data["dates"])):
+            date_str = watertxt_data["dates"][i].strftime("%m/%d/%Y")
+            output_file.write("{}\t{}\n".format(date_str, parameter["data"][i]))
+            
+            
 def _print_test_info(actual, expected):
     """   
     For testing purposes, assert that all expected values and actual values match. 
@@ -950,7 +980,7 @@ def test_write_file():
     print("--- Testing write_file ---") 
     
     data = _create_test_data()
-    write_file(watertxt_data = data , save_path = os.getcwd())
+    write_file(watertxt_data = data, save_path = os.getcwd())
 
     data = _create_test_data()
     new_discharge_data = np.array([230, 240, 280])
@@ -968,6 +998,48 @@ def test_write_file():
     
     print("Created 3 files {}, {}, and {} in current working directory. Please check for proper writing".format("WATER.txt", "WATER_new_discharge_data.txt" , "WATER_wateruse.txt")) 
     print("")    
+
+def test_write_oasis_file():
+    """ Test write_oasis_file functionality """
+
+    # create water use totals
+    wateruse_totals = {
+        'January': 2.0,
+        'February': 2.0,
+        'March': 2.0,
+        'April': 3.0,
+        'May': 3.0,
+        'June': 0.0,
+        'July': 4.0,
+        'August': 4.0,
+        'September': 4.0,
+        'October': 5.0,
+        'November': 5.0,
+        'December': 5.0
+    }  
+
+    print("--- Testing write_file ---") 
+    
+    data = _create_test_data()
+    write_file(watertxt_data = data, save_path = os.getcwd())
+
+    data = _create_test_data()
+    new_discharge_data = np.array([230, 240, 280])
+    data = set_parameter_values(watertxt_data = data, name = "Discharge", values = new_discharge_data)
+    write_file(watertxt_data = data , save_path = os.getcwd(), filename = "WATER_new_discharge_data.txt")
+    
+    # create test data
+    data = _create_test_data()
+    
+    # apply water use
+    data = apply_wateruse(watertxt_data = data, wateruse_totals = wateruse_totals)     
+    
+    # write file
+    write_oasis_file(watertxt_data = data, save_path = os.getcwd()) 
+    
+    print("Created a fileas {}in current working directory. Please check for proper writing".format("oasis-file.txt")) 
+    print("")    
+
     
 def main():
     """ Test functionality of watertxt """
@@ -976,27 +1048,29 @@ def main():
     print("RUNNING TESTS ...")
     print("")
     
-    test_get_date()
-    
-    test_create_parameter()
+#    test_get_date()
+#    
+#    test_create_parameter()
+#
+#    test_get_all_values()
+#
+#    test_get_parameter()
+#
+#    test_add_parameter()
+#
+#    test_set_parameter_values() 
+#
+#    test_read_file_in()
+#
+#    test_apply_factors1()
+#
+#    test_apply_factors2()
+#    
+#    test_apply_wateruse()
+#
+#    test_write_file()
 
-    test_get_all_values()
-
-    test_get_parameter()
-
-    test_add_parameter()
-
-    test_set_parameter_values() 
-
-    test_read_file_in()
-
-    test_apply_factors1()
-
-    test_apply_factors2()
-    
-    test_apply_wateruse()
-
-    test_write_file()
+    test_write_oasis_file()
     
 if __name__ == "__main__":
     main()
