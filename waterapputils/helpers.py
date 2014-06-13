@@ -457,6 +457,30 @@ def find_start_end_dates(dates1, dates2):
        raise ValueError("No matching dates for find_start_end_dates()") 
 
 
+def create_nan_array(shape, dtype = float):
+    """  
+    Find start and end dates between two different sized arrays of datetime
+    objects.
+
+    Parameters 
+    ----------
+    shape : tuple 
+        Tuple containing shape of desired nan array.
+        
+    dtype : data type
+        Data type desired for the array; e.g. float
+    
+    Returns
+    -------
+    nan_array : array
+        Array containing only nan values
+    """     
+    nan_array = np.empty(shape, dtype)
+    nan_array.fill(np.nan)
+    
+    return nan_array
+
+
 def _print_test_info(expected, actual):
     """   
     For testing purposes, assert that all expected values and actual values match. 
@@ -696,6 +720,22 @@ def test_find_start_end_dates2():
     # print results
     _print_test_info(actual, expected)
        
+def test_create_nan_array():
+    """ Testing create_nan_array() """    
+    
+    print("--- Testing create_nan_array() ---")  
+
+    # expected values
+    expected = {"array_2x2": np.array([[np.nan, np.nan], [np.nan, np.nan]]),
+                "array_1x5": np.array([[np.nan, np.nan, np.nan, np.nan, np.nan]])} 
+
+    # actual values
+    actual = {}    
+    actual["array_2x2"] = create_nan_array(shape = (2, 2))
+    actual["array_1x5"] = create_nan_array(shape = (1, 5))
+
+    # print results
+    _print_test_info(actual, expected)
     
 def main():
     """ Test functionality of helpers """
@@ -727,6 +767,8 @@ def main():
     test_find_start_end_dates1()
 
     test_find_start_end_dates2()
+
+    test_create_nan_array()
     
 if __name__ == "__main__":
     main()        

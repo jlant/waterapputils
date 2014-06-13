@@ -1,4 +1,5 @@
-# OND_WU																								
+# OND_WU
+# Units: Mgal/day																								
 # released 2014, March 7																								
 huc12	newhydroid	AqGwWL	CoGwWL	DoGwWL	InGwWL	IrGwWL	LvGwWL	MiGwWL	ReGwWL	TeGwWL	WsGwWL	AqSwWL	CoSwWL	InSwWL	IrSwWL	MiSwWL	TeSwWL	WsSwWL	InGwRT	InSwRT	STswRT	WsGwRT	WSunkTR	WStrans
 20401010101	1	0	0	0	0	0	0	0		0	0	0	0	0	0	0	0	-0.029994411	0	0	0	0		0

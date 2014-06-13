@@ -48,8 +48,6 @@ def teardown():
 def test_create_shapefile_dict():
     """ Test create_shapefile_dict() """
 
-    print("--- create_shapefile_dict() ---") 
-
     # expected values to test with actual values
     expected = {"shapefile_datatype": None, "type": None, "path": None, "name": None, "num_features": None, "fields": [], "spatialref": None, "extents": ()}
     

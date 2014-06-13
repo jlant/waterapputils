@@ -306,7 +306,7 @@ def test_fill_shapefile_dict1():
     
     # actual values
     actual = fill_shapefile_dict(shapefile = basin_shapefile)
-  
+
     # print results
     _print_test_info(actual, expected) 
 
@@ -642,8 +642,7 @@ def test_get_intersected_field_values6():
     # Open the shapefiles
     basin_shapefile = osgeo.ogr.Open(basin_file)    
     point_shapefile = osgeo.ogr.Open(point_file)
-
-
+   
     # actual values    
     actual = {}
     actual["newhydroid"] = get_intersected_field_values(intersector = basin_shapefile, intersectee = point_shapefile, intersectee_field = "newhydroid")    

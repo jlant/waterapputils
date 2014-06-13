@@ -23,10 +23,12 @@ import osgeo.ogr
 import helpers
 import watertxt
 import waterxml
-import waterapputils_viewer
+import watertxt_viewer
+import waterxml_viewer
 import waterapputils_logging
 import deltas
 import spatialvectors
+import wateruse
 
 def process_txt_files(file_list, arguments):
     """    
@@ -53,11 +55,11 @@ def process_txt_files(file_list, arguments):
         data = watertxt.read_file(f)  
 
         # plot data                            
-        waterapputils_viewer.plot_watertxt_data(data, is_visible = arguments.showplot, save_path = outputdirpath)             
+        watertxt_viewer.plot_watertxt_data(data, is_visible = arguments.showplot, save_path = outputdirpath)             
 
         # print data
         if arguments.verbose: 
-            waterapputils_viewer.print_watertxt_data(data)  
+            watertxt_viewer.print_watertxt_data(data)  
 
         # close error logging
         waterapputils_logging.remove_loggers()
@@ -87,12 +89,12 @@ def process_xml_files(file_list, arguments):
         data = waterxml.read_file(f)  
 
         # plot data                            
-        waterapputils_viewer.plot_waterxml_timeseries_data(data, is_visible = arguments.showplot, save_path = outputdirpath)             
-        waterapputils_viewer.plot_waterxml_topographic_wetness_index_data(data, is_visible = arguments.showplot, save_path = outputdirpath) 
+        waterxml_viewer.plot_waterxml_timeseries_data(data, is_visible = arguments.showplot, save_path = outputdirpath)             
+        waterxml_viewer.plot_waterxml_topographic_wetness_index_data(data, is_visible = arguments.showplot, save_path = outputdirpath) 
         
         # print data
         if arguments.verbose: 
-            waterapputils_viewer.print_waterxml_data(data)  
+            waterxml_viewer.print_waterxml_data(data)  
 
         # close error logging
         waterapputils_logging.remove_loggers()
@@ -125,12 +127,12 @@ def process_txtcmp(file_list, arguments):
     watertxt_data2 = watertxt.read_file(watertxt_file2) 
     
     # plot data                            
-    waterapputils_viewer.plot_watertxt_comparison(watertxt_data1, watertxt_data2, is_visible = arguments.showplot, save_path = outputdirpath)             
+    watertxt_viewer.plot_watertxt_comparison(watertxt_data1, watertxt_data2, is_visible = arguments.showplot, save_path = outputdirpath)             
             
     # print data
     if arguments.verbose: 
-        waterapputils_viewer.print_watertxt_data(watertxt_data1)  
-        waterapputils_viewer.print_watertxt_data(watertxt_data2)  
+        watertxt_viewer.print_watertxt_data(watertxt_data1)  
+        watertxt_viewer.print_watertxt_data(watertxt_data2)  
 
     # close error logging
     waterapputils_logging.remove_loggers()
@@ -161,17 +163,14 @@ def process_xmlcmp(file_list, arguments):
     # read data
     waterxml_data1 = waterxml.read_file(waterxml_file1)  
     waterxml_data2 = waterxml.read_file(waterxml_file2) 
- 
-#    import pdb
-#    pdb.set_trace()
    
     # plot data                            
-    waterapputils_viewer.plot_waterxml_timeseries_comparison(waterxml_data1, waterxml_data2, is_visible = arguments.showplot, save_path = outputdirpath) 
+    waterxml_viewer.plot_waterxml_timeseries_comparison(waterxml_data1, waterxml_data2, is_visible = arguments.showplot, save_path = outputdirpath) 
             
     # print data
     if arguments.verbose: 
-        waterapputils_viewer.print_watertxt_data(waterxml_data1)  
-        waterapputils_viewer.print_watertxt_data(waterxml_data2)  
+        waterxml_viewer.print_watertxt_data(waterxml_data1)  
+        waterxml_viewer.print_watertxt_data(waterxml_data2)  
 
     # close error logging
     waterapputils_logging.remove_loggers()
@@ -212,8 +211,8 @@ def apply_deltas_to_txt(file_list, arguments):
            
     # print data
     if arguments.verbose: 
-        waterapputils_viewer.print_watertxt_data(watertxt_data)  
-        waterapputils_viewer.print_watertxt_data(watertxt_data_with_deltas)  
+        watertxt_viewer.print_watertxt_data(watertxt_data)  
+        watertxt_viewer.print_watertxt_data(watertxt_data_with_deltas)  
 
     # close error logging
     waterapputils_logging.remove_loggers()
@@ -221,8 +220,8 @@ def apply_deltas_to_txt(file_list, arguments):
 
 def apply_deltas_to_xml_files(files_dict, arguments):
     """    
-    Apply delta factors to a WATER *.xml file. The new file created is saved to the same
-    directory as the *.xml file.
+    Apply delta factors to a WATER *.xml file. The new file created is saved to a directory
+    chosen by the user.
 
     Parameters
     ----------
@@ -282,16 +281,79 @@ def apply_deltas_to_xml_files(files_dict, arguments):
         xml_output_filename = "-".join([waterxml_filename.split(".xml")[0], "updated", files_dict["basin_field"], featureid]) + ".xml"                
         waterxml.write_file(waterxml_tree = waterxml_tree, save_path = files_dict["outputxml_directory"], filename = xml_output_filename)
 
-#        import pdb
-#        pdb.set_trace()
-
         # plot comparison
         updated_waterxml_file = os.path.join(files_dict["outputxml_directory"], xml_output_filename)
         process_xmlcmp(file_list = [updated_waterxml_file, waterxml_file], arguments = arguments)
-#        orig_waterxml_tree = waterxml.read_file(waterxml_file)
-#        updated_waterxml_tree = waterxml.read_file()
-#        waterapputils_viewer.plot_waterxml_timeseries_comparison(waterxml_tree1 = orig_waterxml_tree, waterxml_tree2 = updated_waterxml_tree, is_visible = False, save_path = files_dict["outputxml_directory"])
 
+    # close error logging
+    waterapputils_logging.remove_loggers()
+
+def apply_wateruse_to_txt_files(files_dict, arguments):
+    """    
+    Apply water use data to a WATER *.txt file. The new file created is saved to the same
+    directory as the *.xml file.
+
+    Parameters
+    ----------
+    files_dict : dictionary
+        Dictionary of 
+    arguments : argparse object
+        An argparse object containing user options.                    
+
+    Notes
+    -----
+    files_dict = {"wateruse_files": list of water use text files,
+                  "wateruse_factor_file": path to water use factor file 
+                  "basin_centroids_shapefile": shapefile corresponding to basin centroids,
+                  "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with basin centroid shapefile
+                  "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
+                  "watertxt_directory": path to directory containing txt file or files
+                  "outputtxt_directory": path of directory to store new updated txt files}    
+    """    
+    # initialize error logging
+    waterapputils_logging.initialize_loggers(output_dir = files_dict["outputtxt_directory"])
+    
+    # open shapefiles
+    centroids_shapefile = osgeo.ogr.Open(files_dict["basin_centroids_shapefile"]) 
+    basin_shapefile = osgeo.ogr.Open(files_dict["basin_shapefile"]) 
+
+    # find intersecting points (centroids) based on water basin supplied
+    intersecting_centroids = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = centroids_shapefile, intersectee_field = "newhydroid", intersector_field = files_dict["basin_field"])
+
+    print("Intersecting centroids: {}\n".format(intersecting_centroids))        
+    for featureid, centroids in intersecting_centroids.iteritems():                    
+        print("FeatureId: {}\n".format(featureid))  
+        print("Centroids: {}\n".format(centroids))  
+
+        # get sum of the water use data
+        if files_dict["wateruse_factor_file"]:
+            total_wateruse_dict = wateruse.get_all_total_wateruse(wateruse_files = files_dict["wateruse_files"], id_list = centroids, wateruse_factor_file = files_dict["wateruse_factor_file"], in_cfs = True)
+
+        else:
+            total_wateruse_dict = wateruse.get_all_total_wateruse(wateruse_files = files_dict["wateruse_files"], id_list = centroids, wateruse_factor_file = None, in_cfs = True)
+
+        print("Total water use dictionary: {}\n".format(total_wateruse_dict))
+
+        # get the txt data file that has a parent directory matching the current featureid
+        path = os.path.join(files_dict["watertxt_directory"], featureid)
+        watertxt_file = helpers.find_file(name = "WATER.txt", path = path)
+
+        # get file info
+        watertxt_filedir_path, watertxt_filename = helpers.get_file_info(watertxt_file)
+
+        # read the txt
+        watertxt_data = watertxt.read_file(watertxt_file)            
+
+        # apply water use
+        watertxt_data = watertxt.apply_wateruse(watertxt_data, wateruse_totals = total_wateruse_dict) 
+
+        # write updated txt
+        txt_output_filename = "-".join([watertxt_filename.split(".txt")[0], "updated", files_dict["basin_field"], featureid]) + ".txt"  
+        watertxt.write_file(watertxt_data = watertxt_data, save_path = files_dict["outputtxt_directory"], filename = txt_output_filename)              
+
+        # plot comparison
+        updated_watertxt_file = os.path.join(files_dict["outputtxt_directory"], txt_output_filename)
+        process_txt_files(file_list = [updated_watertxt_file, watertxt_file], arguments = arguments)
 
     # close error logging
     waterapputils_logging.remove_loggers()
@@ -319,6 +381,8 @@ def main():
     group.add_argument("-applydeltastxt", "--applydeltastxt", nargs = 2, help = "List WATER text data file followed by delta file to be applied.")
     group.add_argument("-applydeltasxml", "--applydeltasxml", nargs = 2, help = "List WATER xml data file followed by delta file to be applied.")
     group.add_argument("-applydeltasxmlfd", "--applydeltasxmlfiledialog", action = "store_true", help = "Open a series of file dialog windows to apply deltas to WATER XML data file(s)")
+
+    group.add_argument("-applywateruse", "--applywaterusefiledialog", action = "store_true", help = "Open a series of file dialog windows to apply deltas to WATER XML data file(s)")
 
     parser.add_argument("-v", "--verbose", action = "store_true",  help = "Print general information about data file(s)")
     parser.add_argument("-p", "--showplot", action = "store_true",  help = "Show plots of parameters contained in data file(s)")
@@ -420,7 +484,28 @@ def main():
             
             apply_deltas_to_xml_files(files_dict = files_dict, arguments = args)
             sys.exit() 
+
+        elif args.applywaterusefiledialog:
+            # test using test file batch and test water use data files
+            files_dict = {"wateruse_files": ["../data/wateruse-datafiles/test-files/test_wateruse_JFM.txt", "../data/wateruse-datafiles/test-files/test_wateruse_AMJ.txt", "../data/wateruse-datafiles/test-files/test_wateruse_JAS.txt", "../data/wateruse-datafiles/test-files/test_wateruse_OND.txt"], 
+                          "wateruse_factor_file": "../data/wateruse-datafiles/test-files/test_wateruse_factors.txt",
+                          "basin_centroids_shapefile": "../data/spatial-datafiles/basins/dem_basin_centroids_tests_proj_wgs.shp", 
+                          "basin_shapefile": "../data/spatial-datafiles/basins/waterbasin_multi_tests_proj_wgs.shp",
+                          "basin_field": "STAID",
+                          "watertxt_directory": "../data/wateruse-datafiles/test-files/wateruse_batch_test/",
+                          "outputtxt_directory": "../data/wateruse-datafiles/test-files/"}
+
+#            # test using full batch and water use data files
+#            files_dict = {"wateruse_files": ["../data/wateruse-datafiles/test_JFM.txt", "../data/wateruse-datafiles/test_AMJ.txt", "../data/wateruse-datafiles/test_JAS.txt", "../data/wateruse-datafiles/test_OND.txt"], 
+#                          "wateruse_factor_file": "../data/wateruse-datafiles/test_wateruse_factors.txt",
+#                          "basin_centroids_shapefile": "../data/spatial-datafiles/basins/dem_basin_centroids_proj_wgs.shp", 
+#                          "basin_shapefile": "../data/spatial-datafiles/basins/waterbasin_multi_clean_proj_wgs.shp",
+#                          "basin_field": "STAID",
+#                          "watertxt_directory": "C:/Users/jlant/jeremiah/temp/2014-06-06_testbatch_clean/",
+#                          "outputtxt_directory": "../data/wateruse-datafiles/"}
             
+            apply_wateruse_to_txt_files(files_dict = files_dict, arguments = args)
+
     except IOError as error:
         logging.exception("IO error: {0}".format(error.message))
         sys.exit(1)

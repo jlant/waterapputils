@@ -322,9 +322,6 @@ def test_get_all_values():
 
 @with_setup(setup, teardown)
 def test_set_parameter_values():
-    """ Test set_parameter functionality """
-    
-    print("--- Testing set_parameter ---") 
     
     subsurface_data = np.array([100, 110, 120])
     watertxt_data = watertxt.set_parameter_values(watertxt_data = fixture["sample_data_dict"], name = "Subsurface Flow", values = subsurface_data)
@@ -428,7 +425,7 @@ def test_data_file_bad_single_parameter():
         np.testing.assert_equal(actual["parameters"][i]["min"], expected["parameters"][i]["min"])  
 
 @with_setup(setup, teardown) 
-def test_apply_factors_single_parameter():
+def test_apply_factors_single_parameter1():
     
     factors = {
         'January': 1.5,
@@ -479,6 +476,59 @@ def test_apply_factors_single_parameter():
     nose.tools.assert_almost_equals(actual["parameters"][0]["max"], expected["parameters"][0]["max"])
     nose.tools.assert_almost_equals(actual["parameters"][0]["min"], expected["parameters"][0]["min"])
 
+@with_setup(setup, teardown)
+def test_apply_factors_single_parameter2():
+    
+    factors = {
+        'January': 1.5,
+        'February': 2.0,
+        'March': 2.5,
+        'April': 3.0,
+        'May': 3.5,
+        'June': 4.0,
+        'July': 4.5,
+        'August': 5.5,
+        'September': 6.0,
+        'October': 6.5,
+        'November': 7.0,
+        'December': 7.5
+    }     
+
+    dates = np.array([datetime.datetime(2014, 04, 01, 0, 0), 
+                      datetime.datetime(2014, 04, 02, 0, 0), 
+                      datetime.datetime(2014, 04, 03, 0, 0)
+    ])
+   
+    updated_discharge_data = np.array([5, 9, 13])  
+ 
+    expected = {
+        "user": "jlant",
+        "date_created": "4/9/2014 15:50:47 PM",
+        "stationid": "012345",
+        "column_names": ['Discharge (cfs)', 'Subsurface Flow (mm/day)', 'Impervious Flow (mm/day)', 'Infiltration Excess (mm/day)', 'Initial Abstracted Flow (mm/day)', 'Overland Flow (mm/day)', 'PET (mm/day)', 'AET(mm/day)', 'Average Soil Root zone (mm)', 'Average Soil Unsaturated Zone (mm)', 'Snow Pack (mm)', 'Precipitation (mm/day)', 'Storage Deficit (mm/day)', 'Return Flow (mm/day)'],
+        "dates": dates,
+        "parameters": [
+            {"name": "Discharge (cfs)",
+            "index": 0,
+            "data": updated_discharge_data,
+            "mean": np.mean(updated_discharge_data),
+            "max": np.max(updated_discharge_data),
+            "min": np.min(updated_discharge_data)
+            }]
+    }
+
+    actual = watertxt.apply_factors(watertxt_data = fixture["sample_data_dict"], name = "Discharge", factors = factors, is_additive = True)    
+    
+    nose.tools.assert_equals(expected["parameters"][0]["name"], actual["parameters"][0]["name"])
+    nose.tools.assert_equals(expected["parameters"][0]["index"], actual["parameters"][0]["index"])
+    
+    nose.tools.assert_almost_equals(actual["parameters"][0]["data"].all(), expected["parameters"][0]["data"].all())
+       
+    nose.tools.assert_almost_equals(actual["parameters"][0]["mean"], expected["parameters"][0]["mean"])
+    nose.tools.assert_almost_equals(actual["parameters"][0]["max"], expected["parameters"][0]["max"])
+    nose.tools.assert_almost_equals(actual["parameters"][0]["min"], expected["parameters"][0]["min"])
+
+@with_setup(setup, teardown)
 def test_apply_factors_multi_parameters():
     
     factors = {
@@ -554,3 +604,59 @@ def test_apply_factors_multi_parameters():
     nose.tools.assert_almost_equals(actual_s["parameters"][1]["mean"], expected["parameters"][1]["mean"])
     nose.tools.assert_almost_equals(actual_s["parameters"][1]["max"], expected["parameters"][1]["max"])
     nose.tools.assert_almost_equals(actual_s["parameters"][1]["min"], expected["parameters"][1]["min"])
+
+@with_setup(setup, teardown)
+def test_apply_wateruse():
+    """ Test apply_wateruse() functionality """
+
+    # create water use totals
+    wateruse_totals = {
+        'January': 2.0,
+        'February': 2.0,
+        'March': 2.0,
+        'April': 3.0,
+        'May': 3.0,
+        'June': 3.0,
+        'July': 4.0,
+        'August': 4.0,
+        'September': 4.0,
+        'October': -5.0,
+        'November': -5.0,
+        'December': -5.0
+    }  
+
+    wateruse_totals_data = np.array([2.0, 2.0, 2.0, 3.0, 3.0, 3.0, 4.0, 4.0, 4.0, -5.0, -5.0, -5.0])
+
+    discharge_and_wateruse_data = np.array([5.0, 8.0, 12.0, 15.0, 18.0, 19.0, 22.0, 19.0, 15.0, 2.0, 0.0, -3.0])
+
+    # expected values to test with actual values
+    expected_wateruse_totals = {"name": "Water Use (cfs)", "index": 2, "data": wateruse_totals_data, "mean": np.mean(wateruse_totals_data), "max": np.max(wateruse_totals_data), "min": np.min(wateruse_totals_data)}    
+    expected_discharge_and_wateruse = {"name": "Discharge + Water Use (cfs)", "index": 3, "data": discharge_and_wateruse_data, "mean": np.mean(discharge_and_wateruse_data), "max": np.max(discharge_and_wateruse_data), "min": np.min(discharge_and_wateruse_data)}
+
+    # apply water use
+    data = watertxt.apply_wateruse(watertxt_data = fixture["sample_data_dict_all_months"], wateruse_totals = wateruse_totals) 
+    
+    # actual values
+    actual_wateruse_totals = watertxt.get_parameter(watertxt_data = data, name = "Water Use")
+    actual_discharge_and_wateruse = watertxt.get_parameter(watertxt_data = data, name = "Discharge + Water Use") 
+
+    # make assertions for wateruse_totals
+    nose.tools.assert_almost_equals(actual_wateruse_totals["name"], expected_wateruse_totals["name"])
+    nose.tools.assert_almost_equals(actual_wateruse_totals["index"], expected_wateruse_totals["index"])
+    
+    nose.tools.assert_almost_equals(actual_wateruse_totals["mean"], expected_wateruse_totals["mean"])          
+    nose.tools.assert_almost_equals(actual_wateruse_totals["max"], expected_wateruse_totals["max"])
+    nose.tools.assert_almost_equals(actual_wateruse_totals["min"], expected_wateruse_totals["min"])
+
+    nose.tools.assert_almost_equals(actual_wateruse_totals["data"].all(), expected_wateruse_totals["data"].all())
+    
+    # make assertions for discharge and wateruse_totals
+    nose.tools.assert_almost_equals(actual_discharge_and_wateruse["name"], expected_discharge_and_wateruse["name"])
+    nose.tools.assert_almost_equals(actual_discharge_and_wateruse["index"], expected_discharge_and_wateruse["index"])
+    
+    nose.tools.assert_almost_equals(actual_discharge_and_wateruse["mean"], expected_discharge_and_wateruse["mean"])          
+    nose.tools.assert_almost_equals(actual_discharge_and_wateruse["max"], expected_discharge_and_wateruse["max"])
+    nose.tools.assert_almost_equals(actual_discharge_and_wateruse["min"], expected_discharge_and_wateruse["min"])
+
+    nose.tools.assert_almost_equals(actual_discharge_and_wateruse["data"].all(), expected_discharge_and_wateruse["data"].all())
+   
