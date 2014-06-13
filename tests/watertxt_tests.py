@@ -1,7 +1,7 @@
 import nose.tools
 from nose import with_setup 
 
-import sys
+import sys, os
 import numpy as np
 import datetime
 from StringIO import StringIO
@@ -659,4 +659,79 @@ def test_apply_wateruse():
     nose.tools.assert_almost_equals(actual_discharge_and_wateruse["min"], expected_discharge_and_wateruse["min"])
 
     nose.tools.assert_almost_equals(actual_discharge_and_wateruse["data"].all(), expected_discharge_and_wateruse["data"].all())
-   
+
+def test_write_file():
+    """ Test write_file functionality """
+
+    # create water use totals
+    wateruse_totals = {
+        'January': 2.0,
+        'February': 2.0,
+        'March': 2.0,
+        'April': 3.0,
+        'May': 3.0,
+        'June': 0.0,
+        'July': 4.0,
+        'August': 4.0,
+        'September': 4.0,
+        'October': 5.0,
+        'November': 5.0,
+        'December': 5.0
+    }  
+
+
+    # write water formatted file   
+    data = fixture["sample_data_dict"]
+    watertxt.write_file(watertxt_data = data, save_path = os.path.join(os.getcwd(), "tests"))
+
+    # write water formatted file with new values set in discharge
+    data = fixture["sample_data_dict"]
+    new_discharge_data = np.array([230, 240, 280])
+    data = watertxt.set_parameter_values(watertxt_data = data, name = "Discharge", values = new_discharge_data)
+    watertxt.write_file(watertxt_data = data , save_path = os.path.join(os.getcwd(), "tests"), filename = "WATER_new_discharge_data.txt")
+    
+    # apply water use
+    data = fixture["sample_data_dict"]
+    data = watertxt.apply_wateruse(watertxt_data = data, wateruse_totals = wateruse_totals)     
+    watertxt.write_file(watertxt_data = data , save_path = os.path.join(os.getcwd(), "tests"), filename = "WATER_wateruse.txt") 
+        
+def test_write_oasis_file1():
+    """ Test write_oasis_file functionality part 1 - Discharge only; NO water use applied """
+      
+    # create test data
+    data = fixture["sample_data_dict"]
+    
+    # write file
+    watertxt.write_oasis_file(watertxt_data = data, save_path = os.path.join(os.getcwd(), "tests"), filename = "oasis-file_discharge.txt")  
+
+def test_write_oasis_file2():
+    """ Test write_oasis_file functionality part 2 - Discharge + Water Use; water use is applied """
+
+    # create water use totals
+    wateruse_totals = {
+        'January': 2.0,
+        'February': 2.0,
+        'March': 2.0,
+        'April': 3.0,
+        'May': 3.0,
+        'June': 0.0,
+        'July': 4.0,
+        'August': 4.0,
+        'September': 4.0,
+        'October': 5.0,
+        'November': 5.0,
+        'December': 5.0
+    }  
+
+    print("--- Testing write_oasis_file part 2 - Discharge + Water Use; water use is applied ---") 
+       
+    # create test data
+    data = fixture["sample_data_dict"]
+    
+    # apply water use
+    data = watertxt.apply_wateruse(watertxt_data = data, wateruse_totals = wateruse_totals)     
+    
+    # write file
+    watertxt.write_oasis_file(watertxt_data = data, save_path = os.path.join(os.getcwd(), "tests"), filename = "oasis-file_discharge_and_wateruse.txt") 
+    
+     
