@@ -591,7 +591,36 @@ def write_oasis_file(watertxt_data, save_path, filename = "oasis-file.txt"):
         for i in range(len(watertxt_data["dates"])):
             date_str = watertxt_data["dates"][i].strftime("%m/%d/%Y")
             output_file.write("{}\t{}\n".format(date_str, parameter["data"][i]))
-            
+
+def write_timeseries_file(watertxt_data, name, save_path, filename = "timeseries-file.txt"):
+    """   
+    Write the timeseries of a parameter contained in water data dictionary
+     to an output file.
+    
+    Parameters
+    ----------
+    watertxt_data : dictionary 
+        Dictionary holding data found in WATER output text file.
+    name : string
+        String name of parameter
+    save_path : string 
+        String path to save file.
+    filename : string
+        String name of output file. Default name is oasis-file.txt
+    """ 
+    # get the parameter
+    parameter = get_parameter(watertxt_data, name = name)
+
+    assert parameter is not None, "Parameter name {} not found in watertxt_data".format(name)
+           
+    filepath = os.path.join(save_path, filename)   
+
+    with open(filepath, "w") as output_file:
+        output_file.write("{}\t{}\n".format("Date", parameter["name"]))
+
+        for i in range(len(watertxt_data["dates"])):
+            date_str = watertxt_data["dates"][i].strftime("%m/%d/%Y")
+            output_file.write("{}\t{}\n".format(date_str, parameter["data"][i]))            
             
 def _print_test_info(actual, expected):
     """   

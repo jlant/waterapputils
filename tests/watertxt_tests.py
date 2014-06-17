@@ -694,7 +694,8 @@ def test_write_file():
     data = fixture["sample_data_dict"]
     data = watertxt.apply_wateruse(watertxt_data = data, wateruse_totals = wateruse_totals)     
     watertxt.write_file(watertxt_data = data , save_path = os.path.join(os.getcwd(), "tests"), filename = "WATER_wateruse.txt") 
-        
+
+@with_setup(setup, teardown)        
 def test_write_oasis_file1():
     """ Test write_oasis_file functionality part 1 - Discharge only; NO water use applied """
       
@@ -702,8 +703,19 @@ def test_write_oasis_file1():
     data = fixture["sample_data_dict"]
     
     # write file
-    watertxt.write_oasis_file(watertxt_data = data, save_path = os.path.join(os.getcwd(), "tests"), filename = "oasis-file_discharge.txt")  
+    watertxt.write_oasis_file(watertxt_data = data, save_path = os.path.join(os.getcwd(), "tests"), filename = "oasis-file1.txt")  
 
+@with_setup(setup, teardown) 
+def test_write_timeseries_file1():
+    """ Test write_oasis_file functionality part 1 - Discharge only; NO water use applied """
+      
+    # create test data
+    data = fixture["sample_data_dict"]
+    
+    # write file
+    watertxt.write_timeseries_file(watertxt_data = data, name = "Discharge + Water Use", save_path = os.path.join(os.getcwd(), "tests"), filename = "oasis-file2.txt")  
+
+@with_setup(setup, teardown) 
 def test_write_oasis_file2():
     """ Test write_oasis_file functionality part 2 - Discharge + Water Use; water use is applied """
 
