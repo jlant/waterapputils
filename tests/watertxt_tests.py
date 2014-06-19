@@ -688,36 +688,37 @@ def test_write_file():
     data = fixture["sample_data_dict"]
     new_discharge_data = np.array([230, 240, 280])
     data = watertxt.set_parameter_values(watertxt_data = data, name = "Discharge", values = new_discharge_data)
-    watertxt.write_file(watertxt_data = data , save_path = os.path.join(os.getcwd(), "tests"), filename = "WATER_new_discharge_data.txt")
+    watertxt.write_file(watertxt_data = data , save_path = os.path.join(os.getcwd(), "tests"), filename = "_WATER-with-new-discharge.txt")
     
     # apply water use
     data = fixture["sample_data_dict"]
     data = watertxt.apply_wateruse(watertxt_data = data, wateruse_totals = wateruse_totals)     
-    watertxt.write_file(watertxt_data = data , save_path = os.path.join(os.getcwd(), "tests"), filename = "WATER_wateruse.txt") 
-
-@with_setup(setup, teardown)        
-def test_write_oasis_file1():
-    """ Test write_oasis_file functionality part 1 - Discharge only; NO water use applied """
-      
-    # create test data
-    data = fixture["sample_data_dict"]
-    
-    # write file
-    watertxt.write_oasis_file(watertxt_data = data, save_path = os.path.join(os.getcwd(), "tests"), filename = "oasis-file1.txt")  
+    watertxt.write_file(watertxt_data = data , save_path = os.path.join(os.getcwd(), "tests"), filename = "_WATER-with-wateruse.txt") 
 
 @with_setup(setup, teardown) 
 def test_write_timeseries_file1():
-    """ Test write_oasis_file functionality part 1 - Discharge only; NO water use applied """
+    """ Test write_timeseries_file functionality part 1 - Discharge with only and no file name """
       
     # create test data
     data = fixture["sample_data_dict"]
     
     # write file
-    watertxt.write_timeseries_file(watertxt_data = data, name = "Discharge + Water Use", save_path = os.path.join(os.getcwd(), "tests"), filename = "oasis-file2.txt")  
+    watertxt.write_timeseries_file(watertxt_data = data, name = "Discharge", save_path = os.path.join(os.getcwd(), "tests"))  
 
 @with_setup(setup, teardown) 
-def test_write_oasis_file2():
-    """ Test write_oasis_file functionality part 2 - Discharge + Water Use; water use is applied """
+def test_write_timeseries_file2():
+    """ Test write_timeseries_file functionality part 2 - Discharge with only """
+      
+    # create test data
+    data = fixture["sample_data_dict"]
+    
+    # write file
+    watertxt.write_timeseries_file(watertxt_data = data, name = "Discharge", save_path = os.path.join(os.getcwd(), "tests"), filename = "_q-timeseries.txt")  
+
+
+@with_setup(setup, teardown) 
+def test_write_timeseries_file3():
+    """ Test write_timeseries_file functionality part 3 - Discharge + Water Use; water use is applied """
 
     # create water use totals
     wateruse_totals = {
@@ -734,9 +735,7 @@ def test_write_oasis_file2():
         'November': 5.0,
         'December': 5.0
     }  
-
-    print("--- Testing write_oasis_file part 2 - Discharge + Water Use; water use is applied ---") 
-       
+      
     # create test data
     data = fixture["sample_data_dict"]
     
@@ -744,6 +743,6 @@ def test_write_oasis_file2():
     data = watertxt.apply_wateruse(watertxt_data = data, wateruse_totals = wateruse_totals)     
     
     # write file
-    watertxt.write_oasis_file(watertxt_data = data, save_path = os.path.join(os.getcwd(), "tests"), filename = "oasis-file_discharge_and_wateruse.txt") 
+    watertxt.write_timeseries_file(watertxt_data = data, name = "Discharge + Water Use", save_path = os.path.join(os.getcwd(), "tests"), filename = "_q-and-wateruse-timeseries.txt")  
+
     
-     
