@@ -243,7 +243,7 @@ def get_wateruse_values(wateruse_data, id_list, wateruse_factors = None):
 
     if wateruse_factors:
         # make sure that wateruse_factors have same keys as wateruse types from wateruse_data
-        assert wateruse_factors["column_names"] == wateruse_types, "Water use column names {} do not equal water use types {}".format(wateruse_factors.keys(), wateruse_types)
+        assert wateruse_factors["column_names"] == wateruse_types, "Water use column names {} do not equal water use types {}".format(wateruse_factors["column_names"], wateruse_types)
     
     # put all values into a list of lists; apply water use factors if they exist    
     values = []

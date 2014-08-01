@@ -1,5 +1,6 @@
 # JAS_WU																								
-"# released 2014, March 7"																								
+# Units: Mgal/day																								
+# released 2014, March
 huc12	newhydroid	AqGwWL	CoGwWL	DoGwWL	InGwWL	IrGwWL	LvGwWL	MiGwWL	ReGwWL	TeGwWL	WsGwWL	AqSwWL	CoSwWL	InSwWL	IrSwWL	MiSwWL	TeSwWL	WsSwWL	InGwRT	InSwRT	STswRT	WSgwRT	WSunkTR	WStrans
 20401010101	1	0	0	0	0	0	0	0	0	0	0	0	0	0	-0.827379821	0	0	-0.034187805	0	0	0	0	0	0
 20401010101	11	0	0	0	0	0	0	0	0	0	-5.36E-05	0	0	0	-0.299680736	0	0	-0.012371392	0	0	0	0	0	0
