@@ -1,7 +1,7 @@
 import nose.tools
 from nose import with_setup
 
-import sys
+import sys, os
 import numpy as np
 import datetime
 
@@ -26,6 +26,45 @@ def teardown():
     """ Print to standard error when all tests are finished """
     
     print >> sys.stderr, "TEARDOWN: helpers tests" 
+
+
+def test_find_file():
+    """ Test find_file() """  
+
+    expected = "c:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\tests\\helpers_tests.py"
+    
+    actual = helpers.find_file(name = "helpers_tests.py", path = os.path.join(os.getcwd(), "tests"))
+
+    nose.tools.assert_equals(actual, expected)
+
+def test_get_file_info():
+    """ Test get_file_info functionality """
+
+    # expected values
+    expected = {}
+    expected["filedir"] = "c:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\tests"
+    expected["filename"] = "helpers_tests.py"
+
+    # tests directory
+    tests_path = os.path.join(os.getcwd(), "tests")
+
+    # actual values
+    actual = {}    
+    actual["filedir"], actual["filename"] = helpers.get_file_info(path = os.path.join(tests_path, "helpers_tests.py"))
+
+    nose.tools.assert_equals(actual["filedir"], expected["filedir"])
+    nose.tools.assert_equals(actual["filename"], expected["filename"])
+
+def test_make_directory():
+    """ Test make_directory() """
+
+    # expected values
+    expected = "c:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\tests\\test-dir"
+
+    # actual values    
+    actual = helpers.make_directory(path = os.path.join(os.getcwd(), "tests"), directory_name = "test-dir")
+
+    nose.tools.assert_equals(actual, expected)
 
 def test_isfloat():
     
