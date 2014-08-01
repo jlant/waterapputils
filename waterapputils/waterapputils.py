@@ -480,30 +480,36 @@ def main():
                           "delta_shapefile": "../data/spatial-datafiles/gcm-tiles/CanES_proj_wgs.shp", 
                           "basin_shapefile": "../data/spatial-datafiles/basins/waterbasin_multi_clean_proj_wgs.shp",
                           "basin_field": "STAID",
-                          "waterxml_directory": "C:/Users/jlant/jeremiah/temp/2014-05-19_testbatch/",
-                          "outputxml_directory": "../data/waterxml-datafiles/"}
+                          "waterxml_directory": "../data/waterxml-datafiles/",
+                          "outputxml_directory": "C:/Users/jlant/jeremiah/temp/water-delaware-river-basin/2014-08-01_testing/waterxml/output/"}
             
             apply_deltas_to_xml_files(files_dict = files_dict, arguments = args)
             sys.exit() 
 
         elif args.applywaterusefiledialog:
-            # test using test file batch and test water use data files
-            files_dict = {"wateruse_files": ["../data/wateruse-datafiles/test-files/test_wateruse_JFM.txt", "../data/wateruse-datafiles/test-files/test_wateruse_AMJ.txt", "../data/wateruse-datafiles/test-files/test_wateruse_JAS.txt", "../data/wateruse-datafiles/test-files/test_wateruse_OND.txt"], 
-                          "wateruse_factor_file": "../data/wateruse-datafiles/test-files/test_wateruse_factors.txt",
-                          "basin_centroids_shapefile": "../data/spatial-datafiles/basins/dem_basin_centroids_tests_proj_wgs.shp", 
-                          "basin_shapefile": "../data/spatial-datafiles/basins/waterbasin_multi_tests_proj_wgs.shp",
-                          "basin_field": "STAID",
-                          "watertxt_directory": "../data/wateruse-datafiles/test-files/wateruse_batch_test/",
-                          "outputtxt_directory": "../data/wateruse-datafiles/test-files/"}
-
-#            # test using full batch and water use data files
-#            files_dict = {"wateruse_files": ["../data/wateruse-datafiles/test_JFM.txt", "../data/wateruse-datafiles/test_AMJ.txt", "../data/wateruse-datafiles/test_JAS.txt", "../data/wateruse-datafiles/test_OND.txt"], 
-#                          "wateruse_factor_file": "../data/wateruse-datafiles/test_wateruse_factors.txt",
-#                          "basin_centroids_shapefile": "../data/spatial-datafiles/basins/dem_basin_centroids_proj_wgs.shp", 
-#                          "basin_shapefile": "../data/spatial-datafiles/basins/waterbasin_multi_clean_proj_wgs.shp",
+            # test using full batch and water use data files
+#            files_dict = {"wateruse_files": ["C:/Users/jlant/jeremiah/temp/water-delaware-river-basin/2014-08-01_testing/wateruse/test_JFM.txt", 
+#                                             "C:/Users/jlant/jeremiah/temp/water-delaware-river-basin/2014-08-01_testing/wateruse/test_AMJ.txt", 
+#                                             "C:/Users/jlant/jeremiah/temp/water-delaware-river-basin/2014-08-01_testing/wateruse/test_JAS.txt", 
+#                                             "C:/Users/jlant/jeremiah/temp/water-delaware-river-basin/2014-08-01_testing/wateruse/test_OND.txt"], 
+#                          "wateruse_factor_file": "C:/Users/jlant/jeremiah/temp/water-delaware-river-basin/2014-08-01_testing/wateruse/test_wateruse_factors.txt",
+#                          "basin_centroids_shapefile": "C:/Users/jlant/jeremiah/temp/water-delaware-river-basin/2014-08-01_testing/spatial-datafiles/basins/dem_basin_centroids_proj_wgs.shp", 
+#                          "basin_shapefile": "C:/Users/jlant/jeremiah/temp/water-delaware-river-basin/2014-08-01_testing/spatial-datafiles/basins/waterbasin_multi_clean_proj_wgs.shp",
 #                          "basin_field": "STAID",
-#                          "watertxt_directory": "C:/Users/jlant/jeremiah/temp/2014-06-06_testbatch_clean/",
-#                          "outputtxt_directory": "../data/wateruse-datafiles/"}
+#                          "watertxt_directory": "C:/Users/jlant/jeremiah/temp/water-delaware-river-basin/2014-06-06_testbatch_clean/",
+#                          "outputtxt_directory": "C:/Users/jlant/jeremiah/temp/water-delaware-river-basin/2014-08-01_testing/wateruse/output/"}
+
+            files_dict = {"wateruse_files": ["../data/wateruse-datafiles/test_JFM.txt", 
+                                             "../data/wateruse-datafiles/test_AMJ.txt", 
+                                             "../data/wateruse-datafiles/test_JAS.txt", 
+                                             "../data/wateruse-datafiles/test_OND.txt"], 
+                          "wateruse_factor_file": "../data/wateruse-datafiles/test_wateruse_factors.txt",
+                          "basin_centroids_shapefile": "../data/spatial-datafiles/basins/dem_basin_centroids_proj_wgs.shp", 
+                          "basin_shapefile": "../data/spatial-datafiles/basins/waterbasin_multi_clean_proj_wgs.shp",
+                          "basin_field": "STAID",
+                          "watertxt_directory": "C:/Users/jlant/jeremiah/temp/water-delaware-river-basin/2014-06-06_testbatch_clean/",
+                          "outputtxt_directory": "C:/Users/jlant/jeremiah/temp/water-delaware-river-basin/2014-08-01_testing/wateruse/output/"}
+
             
             apply_wateruse_to_txt_files(files_dict = files_dict, arguments = args)
 
