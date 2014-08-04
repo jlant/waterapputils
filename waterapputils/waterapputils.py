@@ -29,7 +29,10 @@ import waterapputils_logging
 import deltas
 import spatialvectors
 import wateruse
+
+# editable files containing path
 import wateruse_batch_variables
+import waterdeltas_batch_variables
 
 def process_txt_files(file_list, arguments):
     """    
@@ -268,6 +271,12 @@ def apply_deltas_to_xml_files(files_dict, arguments):
         # get file info
         waterxml_filedir_path, waterxml_filename = helpers.get_file_info(waterxml_file)
 
+        # create an output directory
+        output_dir = helpers.make_directory(waterxml_filedir_path, "waterdeltas-output")
+
+        # initialize error logging
+        waterapputils_logging.initialize_loggers(output_dir = output_dir)
+
         # read the xml
         waterxml_tree = waterxml.read_file(waterxml_file)            
 
@@ -281,10 +290,10 @@ def apply_deltas_to_xml_files(files_dict, arguments):
 
         # write updated xml
         xml_output_filename = "-".join([waterxml_filename.split(".xml")[0], "updated", files_dict["basin_field"], featureid]) + ".xml"                
-        waterxml.write_file(waterxml_tree = waterxml_tree, save_path = files_dict["outputxml_directory"], filename = xml_output_filename)
+        waterxml.write_file(waterxml_tree = waterxml_tree, save_path = output_dir, filename = xml_output_filename)
 
         # plot comparison
-        updated_waterxml_file = os.path.join(files_dict["outputxml_directory"], xml_output_filename)
+        updated_waterxml_file = os.path.join(output_dir, xml_output_filename)
         process_xmlcmp(file_list = [updated_waterxml_file, waterxml_file], arguments = arguments)
 
     # close error logging
@@ -311,10 +320,7 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
                   "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
                   "watertxt_directory": path to directory containing txt file or files
                   "outputtxt_directory": path of directory to store new updated txt files}    
-    """    
-    # initialize error logging
-    waterapputils_logging.initialize_loggers(output_dir = files_dict["outputtxt_directory"])
-    
+    """        
     # open shapefiles
     centroids_shapefile = osgeo.ogr.Open(files_dict["basin_centroids_shapefile"]) 
     basin_shapefile = osgeo.ogr.Open(files_dict["basin_shapefile"]) 
@@ -341,7 +347,13 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
         watertxt_file = helpers.find_file(name = "WATER.txt", path = path)
 
         # get file info
-        watertxt_filedir_path, watertxt_filename = helpers.get_file_info(watertxt_file)
+        watertxt_filedir_path, watertxt_filename = helpers.get_file_info(watertxt_file)       
+
+        # create an output directory
+        output_dir = helpers.make_directory(watertxt_filedir_path, "wateruse-output")
+
+        # initialize error logging
+        waterapputils_logging.initialize_loggers(output_dir = output_dir)
 
         # read the txt
         watertxt_data = watertxt.read_file(watertxt_file)            
@@ -351,10 +363,11 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
 
         # write updated txt
         txt_output_filename = "-".join([watertxt_filename.split(".txt")[0], "updated", files_dict["basin_field"], featureid]) + ".txt"  
-        watertxt.write_file(watertxt_data = watertxt_data, save_path = files_dict["outputtxt_directory"], filename = txt_output_filename)              
+
+        watertxt.write_file(watertxt_data = watertxt_data, save_path = output_dir, filename = txt_output_filename)              
 
         # plot comparison
-        updated_watertxt_file = os.path.join(files_dict["outputtxt_directory"], txt_output_filename)
+        updated_watertxt_file = os.path.join(output_dir, txt_output_filename)
         process_txt_files(file_list = [updated_watertxt_file, watertxt_file], arguments = arguments)
 
     # close error logging
@@ -380,11 +393,9 @@ def main():
     group.add_argument("-waterxmlcmp", "--waterxmlcompare", nargs = 2, help = "List 2 WATER xml data file(s) to be compared")
     group.add_argument("-waterxmlcmpfd", "--waterxmlcomparefiledialog", action = "store_true", help = "Open 2 separate file dialog windows to select WATER XML data file(s) to be compared")
     
-    group.add_argument("-applydeltastxt", "--applydeltastxt", nargs = 2, help = "List WATER text data file followed by delta file to be applied.")
-    group.add_argument("-applydeltasxml", "--applydeltasxml", nargs = 2, help = "List WATER xml data file followed by delta file to be applied.")
-    group.add_argument("-applydeltasxmlfd", "--applydeltasxmlfiledialog", action = "store_true", help = "Open a series of file dialog windows to apply deltas to WATER XML data file(s)")
+    group.add_argument("-applydeltas", "--applydeltas", action = "store_true", help = "Apply global climate deltas to a WATERSimulation.xml file for a WATER simulations.  Use waterdelta_batch_variables.py to enter paths to data files.")
 
-    group.add_argument("-applywateruse", "--applywaterusefiledialog", action = "store_true", help = "Open a series of file dialog windows to apply deltas to WATER XML data file(s)")
+    group.add_argument("-applywateruse", "--applywateruse", action = "store_true", help = "Apply water use data to a WATER.txt file for a WATER simulation.  Use wateruse_batch_variables.py to enter paths to data files.")
 
     parser.add_argument("-v", "--verbose", action = "store_true",  help = "Print general information about data file(s)")
     parser.add_argument("-p", "--showplot", action = "store_true",  help = "Show plots of parameters contained in data file(s)")
@@ -450,55 +461,21 @@ def main():
             sys.exit()
 
         # apply deltas
-        elif args.applydeltastxt:
-            apply_deltas_to_txt(file_list = args.applydeltastxt, arguments = args)
-            sys.exit()
+        elif args.applydeltas:
 
-        elif args.applydeltasxml:
-            apply_deltas_to_xml(file_list = args.applydeltasxml, arguments = args)
-            sys.exit() 
-
-        elif args.applydeltasxmlfiledialog:
-            # get delta_files
-#            root = Tkinter.Tk() 
-#            delta_files = tkFileDialog.askopenfilenames(title = "Select Global Climate Model Delta Files To Apply", filetypes = [("All files", ".*"), ("Text file","*.txt")])       
-#            delta_files = root.tk.splitlist(delta_files)
-#            root.destroy()   
-#            
-#            # get delta shapefile
-#            root = Tkinter.Tk() 
-#            delta_shapefile = tkFileDialog.askopenfilename(title = "Select Global Climate Model Shapefile To Use", filetypes = [("All files", ".*"), ("Shapefile file","*.shp")])
-#            root.destroy()   
-#            
-#            # get basin shapefile
-#            root = Tkinter.Tk() 
-#            water_shapefile = tkFileDialog.askopenfilename(title = "Select WATER Basin Shapefile To Use", filetypes = [("All files", ".*"), ("Shapefile file","*.shp")])
-#            root.destroy() 
-
-#            files_dict = {"delta_files": delta_files, "delta_shapefile": delta_shapefile, "basin_shapefile": water_shapefile}
-
-            files_dict = {"delta_files": ["../data/deltas-gcm/CanES/RCP45/2030/Ppt.txt", "../data/deltas-gcm/CanES/RCP45/2030/Tmax.txt"], 
-                          "delta_shapefile": "../data/spatial-datafiles/gcm-tiles/CanES_proj_wgs.shp", 
-                          "basin_shapefile": "../data/spatial-datafiles/basins/waterbasin_multi_clean_proj_wgs.shp",
-                          "basin_field": "STAID",
-                          "waterxml_directory": "../data/waterxml-datafiles/",
-                          "outputxml_directory": "C:/Users/jlant/jeremiah/temp/water-delaware-river-basin/2014-08-01_testing/waterxml/output/"}
+            files_dict = {"delta_files": waterdeltas_batch_variables.delta_files,
+                          "delta_shapefile": waterdeltas_batch_variables.delta_shapefile, 
+                          "basin_shapefile": waterdeltas_batch_variables.basin_shapefile,
+                          "basin_field": waterdeltas_batch_variables.basin_field,
+                          "waterxml_directory": waterdeltas_batch_variables.waterbatch_directory,
+                          "outputxml_directory": waterdeltas_batch_variables.output_directory
+            }
             
             apply_deltas_to_xml_files(files_dict = files_dict, arguments = args)
             sys.exit() 
 
-        elif args.applywaterusefiledialog:          
-
-#            files_dict = {"wateruse_files": ["../data/wateruse-datafiles/test_JFM.txt", 
-#                                             "../data/wateruse-datafiles/test_AMJ.txt", 
-#                                             "../data/wateruse-datafiles/test_JAS.txt", 
-#                                             "../data/wateruse-datafiles/test_OND.txt"], 
-#                          "wateruse_factor_file": "../data/wateruse-datafiles/test_wateruse_factors.txt",
-#                          "basin_centroids_shapefile": "../data/spatial-datafiles/basins/dem_basin_centroids_proj_wgs.shp", 
-#                          "basin_shapefile": "../data/spatial-datafiles/basins/waterbasin_multi_clean_proj_wgs.shp",
-#                          "basin_field": "STAID",
-#                          "watertxt_directory": "C:/Users/jlant/jeremiah/temp/water-delaware-river-basin/2014-06-06_testbatch_clean/",
-#                          "outputtxt_directory": "C:/Users/jlant/jeremiah/temp/water-delaware-river-basin/2014-08-01_testing/wateruse/output/"}
+        # apply water use
+        elif args.applywateruse:          
 
             files_dict = {"wateruse_files": wateruse_batch_variables.wateruse_files,
                           "wateruse_factor_file": wateruse_batch_variables.wateruse_factor_file,
@@ -506,7 +483,8 @@ def main():
                           "basin_shapefile": wateruse_batch_variables.basin_shapefile,
                           "basin_field": wateruse_batch_variables.basin_field,
                           "watertxt_directory": wateruse_batch_variables.waterbatch_directory,
-                          "outputtxt_directory": wateruse_batch_variables.output_directory}
+                          "outputtxt_directory": wateruse_batch_variables.output_directory
+            }
             
             apply_wateruse_to_txt_files(files_dict = files_dict, arguments = args)
 
