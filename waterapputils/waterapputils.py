@@ -242,10 +242,7 @@ def apply_deltas_to_xml_files(files_dict, arguments):
                   "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with delta shapefile
                   "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
                   "waterxml_directory": path to directory containing xml file or files}    
-    """
-    # initialize error logging
-    waterapputils_logging.initialize_loggers(output_dir = files_dict["outputxml_directory"])
-    
+    """    
     # open shapefiles
     delta_shapefile = osgeo.ogr.Open(files_dict["delta_shapefile"]) 
     basin_shapefile = osgeo.ogr.Open(files_dict["basin_shapefile"]) 
