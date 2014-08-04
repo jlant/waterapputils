@@ -1,5 +1,6 @@
 # JFM_WU																								
-"# released 2014, March 7"																								
+# Units: Mgal/day																								
+# released 2014, March 7
 huc12	newhydroid	AqGwWL	CoGwWL	DoGwWL	InGwWL	IrGwWL	LvGwWL	MiGwWL	ReGwWL	TeGwWL	WsGwWL	AqSwWL	CoSwWL	InSwWL	IrSwWL	MiSwWL	TeSwWL	WsSwWL	InGwRT	InSwRT	STswRT	WSgwRT	WSunkTR	WStrans
 20401010101	9	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	-0.00225682	0	0	0	0	0	0
 20401010101	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	-0.016137437	0	0	0	0	0	0
