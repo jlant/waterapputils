@@ -17,8 +17,6 @@ basin_field = "Id"
 # path to WATER batch run directory
 waterbatch_directory = "../data/wateruse-batch-run/Batch01440400/"
 
-# path to output directory that will contain all the output (updated WATERSimulation.xml file
-output_directory = "../data/waterdeltas-batch-run/Batch01440400/output"
 
 
  

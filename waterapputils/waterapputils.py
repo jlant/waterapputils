@@ -241,8 +241,7 @@ def apply_deltas_to_xml_files(files_dict, arguments):
                   "delta_shapefile": shapefile corresponding to delta files,
                   "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with delta shapefile
                   "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
-                  "waterxml_directory": path to directory containing xml file or files
-                  "outputxml_directory": path of directory to store new updated xml files}    
+                  "waterxml_directory": path to directory containing xml file or files}    
     """
     # initialize error logging
     waterapputils_logging.initialize_loggers(output_dir = files_dict["outputxml_directory"])
@@ -318,8 +317,7 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
                   "basin_centroids_shapefile": shapefile corresponding to basin centroids,
                   "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with basin centroid shapefile
                   "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
-                  "watertxt_directory": path to directory containing txt file or files
-                  "outputtxt_directory": path of directory to store new updated txt files}    
+                  "watertxt_directory": path to directory containing txt file or files}    
     """        
     # open shapefiles
     centroids_shapefile = osgeo.ogr.Open(files_dict["basin_centroids_shapefile"]) 
@@ -467,8 +465,7 @@ def main():
                           "delta_shapefile": waterdeltas_batch_variables.delta_shapefile, 
                           "basin_shapefile": waterdeltas_batch_variables.basin_shapefile,
                           "basin_field": waterdeltas_batch_variables.basin_field,
-                          "waterxml_directory": waterdeltas_batch_variables.waterbatch_directory,
-                          "outputxml_directory": waterdeltas_batch_variables.output_directory
+                          "waterxml_directory": waterdeltas_batch_variables.waterbatch_directory
             }
             
             apply_deltas_to_xml_files(files_dict = files_dict, arguments = args)
@@ -482,8 +479,7 @@ def main():
                           "basin_centroids_shapefile": wateruse_batch_variables.basin_centroids_shapefile, 
                           "basin_shapefile": wateruse_batch_variables.basin_shapefile,
                           "basin_field": wateruse_batch_variables.basin_field,
-                          "watertxt_directory": wateruse_batch_variables.waterbatch_directory,
-                          "outputtxt_directory": wateruse_batch_variables.output_directory
+                          "watertxt_directory": wateruse_batch_variables.waterbatch_directory
             }
             
             apply_wateruse_to_txt_files(files_dict = files_dict, arguments = args)
