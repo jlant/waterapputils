@@ -295,17 +295,20 @@ def apply_deltas_to_xml_files(files_dict, arguments):
     # close error logging
     waterapputils_logging.remove_loggers()
 
-def apply_wateruse_to_txt_files(files_dict, arguments):
+def process_intersecting_centroids(intersecting_centroids, files_dict, arguments):
     """    
     Apply water use data to a WATER *.txt file. The new file created is saved to the same
     directory as the *.xml file.
 
     Parameters
     ----------
+    intersecting_centroids : dictionary
+        Dictionary containing lists of values for a particular field that were intersected by another shapefile.  
     files_dict : dictionary
-        Dictionary of 
+        Dictionary of user file paths to necessary datasets.
     arguments : argparse object
-        An argparse object containing user options.                    
+        An argparse object containing user options. 
+                 
 
     Notes
     -----
@@ -315,15 +318,7 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
                   "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with basin centroid shapefile
                   "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
                   "watertxt_directory": path to directory containing txt file or files}    
-    """        
-    # open shapefiles
-    centroids_shapefile = osgeo.ogr.Open(files_dict["basin_centroids_shapefile"]) 
-    basin_shapefile = osgeo.ogr.Open(files_dict["basin_shapefile"]) 
-
-    # find intersecting points (centroids) based on water basin supplied
-    intersecting_centroids = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = centroids_shapefile, intersectee_field = "newhydroid", intersector_field = files_dict["basin_field"])
-
-    print("Intersecting centroids: {}\n".format(intersecting_centroids))        
+    """     
     for featureid, centroids in intersecting_centroids.iteritems():                    
         print("FeatureId: {}\n".format(featureid))  
         print("Centroids: {}\n".format(centroids))  
@@ -367,6 +362,47 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
 
     # close error logging
     waterapputils_logging.remove_loggers()
+
+
+def apply_wateruse_to_txt_files(files_dict, arguments):
+    """    
+    Apply water use data to a WATER *.txt file. The new file created is saved to the same
+    directory as the *.xml file.
+
+    Parameters
+    ----------
+    files_dict : dictionary
+        Dictionary of user file paths to necessary datasets.
+    arguments : argparse object
+        An argparse object containing user options.                    
+
+    Notes
+    -----
+    files_dict = {"wateruse_files": list of water use text files,
+                  "wateruse_factor_file": path to water use factor file 
+                  "basin_centroids_shapefile": shapefile corresponding to basin centroids,
+                  "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with basin centroid shapefile
+                  "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
+                  "watertxt_directory": path to directory containing txt file or files}    
+    """        
+    # open shapefiles
+    centroids_shapefile = osgeo.ogr.Open(files_dict["basin_centroids_shapefile"]) 
+    basin_shapefile = osgeo.ogr.Open(files_dict["basin_shapefile"]) 
+
+    # find intersecting points (centroids) based on water basin supplied
+    intersecting_centroids_all = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = centroids_shapefile, intersectee_field = "newhydroid", intersector_field = files_dict["basin_field"])
+
+    intersecting_centroids, nonintersecting_centroids = spatialvectors.validate_field_values(field_values_dict = intersecting_centroids_all)
+
+    print("Intersecting centroids: {}\n".format(intersecting_centroids))        
+
+    if intersecting_centroids:    
+        process_intersecting_centroids(intersecting_centroids, files_dict, arguments)
+
+    if nonintersecting_centroids:    
+        print("Non-intersecting centroids: {}\n".format(nonintersecting_centroids)) 
+    
+    
 
 def main():  
     """

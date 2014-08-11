@@ -2,10 +2,10 @@
 
 ################ EDIT BELOW #######################
 # path to WATER batch run directory
-waterbatch_directory = "../data/wateruse-batch-run/Batch01440400/"
+waterbatch_directory = r"C:\Users\jlant\jeremiah\temp\water-delaware-river-basin\2014-08-11_test_wateruse_no_intersection"
 
 # path to the basin shapefile used in the WATER batch run
-basin_shapefile = "../data/wateruse-batch-run/Batch01440400/Watersheds.shp"
+basin_shapefile = r"C:\Users\jlant\jeremiah\temp\spatial_files/waterbasin_small_couple.shp"
 
 ######### DO NOT NEED TO EDIT BELOW UNLESS YOU MOVE THESE FILES #######
 # list of paths to water use files to use
@@ -18,10 +18,10 @@ wateruse_files = ["../data/wateruse-datafiles/S1_JFM_WU_2014jul7.txt",
 wateruse_factor_file =  "../data/wateruse-datafiles/wateruse_factors.txt"
 
 # path to the basin centroids shapefile
-basin_centroids_shapefile = "../data/spatial-datafiles/basins/dem_basin_centroids.shp"
+basin_centroids_shapefile = r"C:\Users\jlant\jeremiah\temp\spatial_files/dem_basin_centroids_small.shp"
 
 # field in the basin shapefile used in the WATER batch run to link to water use files
-basin_field = "Id"
+basin_field = "STAID"
 
  
   
