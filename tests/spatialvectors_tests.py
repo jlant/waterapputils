@@ -38,6 +38,8 @@ def setup():
     fixture["test_basinsmall_proj_nad83"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/basins/test_basinsmall.shp"))    
     fixture["dem_basin_centroids_proj_nad83"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/basins/dem_basin_centroids.shp"))
 
+    fixture["test_basinsmall_no_intersection_proj_wgs"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/basins/test_basinsmall_no_intersection.shp"))
+    fixture["dem_basin_centroids_small_proj_wgs"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/basins/dem_basin_centroids_small.shp"))
 
 def teardown():
     """ Print to standard error when all tests are finished """
@@ -434,4 +436,39 @@ def test_get_intersected_field_values6():
         shapefile.Destroy()  
 
     np.testing.assert_equal(actual["newhydroid"], expected["newhydroid"])
+
+def test_get_intersected_field_values7():
+
+    # expected values to test with actual values
+    expected = {}
+    expected["newhydroid"] = {"0": ["12", "11", "8"], "1": None}   
+
+    # open the shapefiles
+    basin_shapefile = osgeo.ogr.Open(fixture["test_basinsmall_no_intersection_proj_wgs"])    
+    point_shapefile = osgeo.ogr.Open(fixture["dem_basin_centroids_small_proj_wgs"])
+  
+    # actual values    
+    actual = {}
+    actual["newhydroid"] = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = point_shapefile, intersectee_field = "newhydroid")    
+
+    for shapefile in [basin_shapefile, point_shapefile]:
+        shapefile.Destroy()  
+
+    np.testing.assert_equal(actual["newhydroid"], expected["newhydroid"])
+
+def test_validate_field_values():
+
+    # expected values to test with actual values
+    expected = {} 
+    expected["intersected"] = {"0": ["12", "11", "8"]}
+    expected["non_intersected"] = {"1": None}
+
+    # sample field values dictionary
+    field_values_dict = {"0": ["12", "11", "8"], "1": None} 
     
+    # actual values    
+    actual = {}
+    actual["intersected"], actual["non_intersected"] = spatialvectors.validate_field_values(field_values_dict)
+
+    np.testing.assert_equal(actual["intersected"], expected["intersected"])    
+    np.testing.assert_equal(actual["non_intersected"], expected["non_intersected"]) 

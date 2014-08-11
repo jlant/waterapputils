@@ -203,11 +203,43 @@ def get_intersected_field_values(intersector, intersectee, intersectee_field, in
             intersector_field_value = str(intersector_feature.GetFID())
         else:
             intersector_field_value = str(intersector_feature.GetField(intersector_field))
-        
-        field_values_dict[intersector_field_value] = field_values
+
+        # check that intersections were found; if not, then assign None for field values
+        if field_values:       
+            field_values_dict[intersector_field_value] = field_values
+        else:
+            field_values_dict[intersector_field_value] = None
 
     return field_values_dict
 
+def validate_field_values(field_values_dict):
+    """   
+    Validate field values from field values dictionary supplied by returning a
+    dictionary containing field values without None and a dictionary containing field 
+    values that have None.
+    
+    Parameters
+    ----------
+    field_values_dict : dictionary
+        Dictionary containing lists of values for a particular field that were intersected by another shapefile.
+
+    Returns
+    -------
+    field_values_dict_without_none : dictionary
+        Dictionary containing lists of values for a particular field that were intersected by another shapefile.
+        
+    field_values_dict_with_none : dictionary
+        Dictionary containing lists of values for a particular field that were not intersected by another shapefile.
+    """
+    field_values_dict_with_none = {}
+    field_values_dict_without_none = {}
+    for key, value in field_values_dict.iteritems():
+        if value is None:
+            field_values_dict_with_none[key] = value
+        else:
+            field_values_dict_without_none[key] = value
+            
+    return field_values_dict_without_none, field_values_dict_with_none
 
 def _print_test_info(expected, actual):
     """   
@@ -653,6 +685,52 @@ def test_get_intersected_field_values6():
     # print test results        
     _print_test_info(expected, actual)
 
+def test_get_intersected_field_values7():
+    """ Test get_intersected_field_values() """
+
+    print("--- Testing get_intersected_field_values() part 7 - sample shapefile with multiple features using points as the intersectee; missing intersections ---")  
+
+    # expected values to test with actual values
+    expected = {}
+    expected["newhydroid"] = {"0": ["12", "11", "8"], "1": None}   
+
+    # paths to files
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/test_basinsmall_no_intersection.shp"))
+    point_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/dem_basin_centroids_small.shp"))
+
+    # Open the shapefiles
+    basin_shapefile = osgeo.ogr.Open(basin_file)    
+    point_shapefile = osgeo.ogr.Open(point_file)
+   
+    # actual values    
+    actual = {}
+    actual["newhydroid"] = get_intersected_field_values(intersector = basin_shapefile, intersectee = point_shapefile, intersectee_field = "newhydroid")    
+
+    for shapefile in [basin_shapefile, point_shapefile]:
+        shapefile.Destroy()  
+
+    # print test results        
+    _print_test_info(expected, actual)
+
+def test_validate_field_values():
+    """ Test validate_field_values() """
+
+    print("--- Testing validate_field_values() - remove field value dictionary if value is None because that means missing intersections ---")  
+
+    # expected values to test with actual values
+    expected = {} 
+    expected["intersected"] = {"0": ["12", "11", "8"]}
+    expected["non_intersected"] = {"1": None}
+
+    # sample field values dictionary
+    field_values_dict = {"0": ["12", "11", "8"], "1": None} 
+    
+    # actual values    
+    actual = {}
+    actual["intersected"], actual["non_intersected"] = validate_field_values(field_values_dict)
+
+    # print test results        
+    _print_test_info(expected, actual)
    
 def main():
     """ Test functionality geospatialvectors.py """
@@ -688,6 +766,10 @@ def main():
     test_get_intersected_field_values5()
 
     test_get_intersected_field_values6()
+    
+    test_get_intersected_field_values7()
+
+    test_remove_field_values()
     
 if __name__ == "__main__":
     main()    
