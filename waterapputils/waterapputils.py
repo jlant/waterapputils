@@ -50,7 +50,7 @@ def process_txt_files(file_list, arguments):
         filedir, filename = helpers.get_file_info(f)
           
         # create output directory     
-        outputdirpath = helpers.make_directory(path = filedir, directory_name = "-".join([filename.split(".txt")[0], "output"]))      
+        outputdirpath = helpers.make_directory(path = filedir, directory_name = "_".join(["_waterapputils", filename.split(".txt")[0], "output"]))      
         
         # initialize error logging
         waterapputils_logging.initialize_loggers(output_dir = outputdirpath)        
@@ -318,10 +318,10 @@ def process_intersecting_centroids(intersecting_centroids, files_dict, arguments
                   "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with basin centroid shapefile
                   "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
                   "watertxt_directory": path to directory containing txt file or files}    
-    """ 
-    # initialize error logging
-    waterapputils_logging.initialize_loggers(output_dir = os.getcwd())    
-    for featureid, centroids in intersecting_centroids.iteritems():                    
+    """      
+    # create a file for the output  
+    for featureid, centroids in intersecting_centroids.iteritems():
+           
         print("FeatureId: {}\n".format(featureid))  
         print("Centroids: {}\n".format(centroids))  
 
@@ -332,7 +332,7 @@ def process_intersecting_centroids(intersecting_centroids, files_dict, arguments
         else:
             total_wateruse_dict = wateruse.get_all_total_wateruse(wateruse_files = files_dict["wateruse_files"], id_list = centroids, wateruse_factor_file = None, in_cfs = True)
 
-        print("Total water use dictionary: {}\n".format(total_wateruse_dict))
+        print("Total water use: {}\n".format(total_wateruse_dict))
 
         # get the txt data file that has a parent directory matching the current featureid
         path = os.path.join(files_dict["watertxt_directory"], featureid)
@@ -342,7 +342,7 @@ def process_intersecting_centroids(intersecting_centroids, files_dict, arguments
         watertxt_filedir_path, watertxt_filename = helpers.get_file_info(watertxt_file)       
 
         # create an output directory
-        output_dir = helpers.make_directory(watertxt_filedir_path, "wateruse-output")
+        output_dir = helpers.make_directory(watertxt_filedir_path, "_waterapputils_wateruse_output")
 
         # initialize error logging
         waterapputils_logging.initialize_loggers(output_dir = output_dir)
@@ -361,9 +361,6 @@ def process_intersecting_centroids(intersecting_centroids, files_dict, arguments
         # plot comparison
         updated_watertxt_file = os.path.join(output_dir, txt_output_filename)
         process_txt_files(file_list = [updated_watertxt_file, watertxt_file], arguments = arguments)
-
-    # close error logging
-    waterapputils_logging.remove_loggers()
 
 
 def apply_wateruse_to_txt_files(files_dict, arguments):
@@ -386,7 +383,13 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
                   "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with basin centroid shapefile
                   "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
                   "watertxt_directory": path to directory containing txt file or files}    
-    """        
+    """   
+    # initialize error logging
+    waterapputils_logging.initialize_loggers(output_dir = files_dict["watertxt_directory"]) 
+
+    info_file = os.path.join(files_dict["watertxt_directory"], "_waterapputils_wateruse_batchrun_info.txt")
+    sys.stdout = open(info_file, "a")  
+     
     # open shapefiles
     centroids_shapefile = osgeo.ogr.Open(files_dict["basin_centroids_shapefile"]) 
     basin_shapefile = osgeo.ogr.Open(files_dict["basin_shapefile"]) 
@@ -394,29 +397,40 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
     # find intersecting points (centroids) based on water basin supplied
     intersecting_centroids_all = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = centroids_shapefile, intersectee_field = "newhydroid", intersector_field = files_dict["basin_field"])
 
-    intersecting_centroids, nonintersecting_centroids = spatialvectors.validate_field_values(field_values_dict = intersecting_centroids_all)
-
-    print("Intersecting centroids: {}\n".format(intersecting_centroids))        
+    intersecting_centroids, nonintersecting_centroids = spatialvectors.validate_field_values(field_values_dict = intersecting_centroids_all)     
 
     if intersecting_centroids:    
         process_intersecting_centroids(intersecting_centroids, files_dict, arguments)
 
-    if nonintersecting_centroids:    
-        print("The following are basins that do not intersect with the centroids for water use: {}\n".format(nonintersecting_centroids)) 
+    if nonintersecting_centroids:
+        # initialize error logging
+        waterapputils_logging.initialize_loggers(output_dir = files_dict["watertxt_directory"]) 
         
-        outfilename = "non_intersecting_basins.txt"
+        logging.warn("The following are basins that do not intersect with the centroids for water use: {}\n".format(nonintersecting_centroids)) 
+        
+        outfilename = "_waterapputils_non_intersecting_basins.txt"
         spatialvectors.write_field_values_file(filepath = files_dict["watertxt_directory"], filename = outfilename, field_values_dict = nonintersecting_centroids)
         outfilepath = os.path.join(files_dict["watertxt_directory"], outfilename)
         
-        print("Writing file: \n{}\n Please add the centroids (separated by commas) that you would like to use for each non-intersecting basin".format(outfilepath))
+        logging.warn("Writing file: \n{}\n Please add the centroids (separated by commas) that you would like to use for each non-intersecting basin".format(outfilepath))
+
+    # close error logging
+    waterapputils_logging.remove_loggers()
 
 def apply_subwateruse_to_txt_files(files_dict, arguments):
 
+    # initialize error logging
+    waterapputils_logging.initialize_loggers(output_dir = files_dict["watertxt_directory"]) 
+
+    info_file = os.path.join(files_dict["watertxt_directory"], "waterapputils_wateruse_batchrun_info.txt")
+    sys.stdout = open(info_file, "a")  
+
     intersecting_centroids = spatialvectors.read_field_values_file(filepath = files_dict["non_intersecting_basins_file"])
 
-    
-
     process_intersecting_centroids(intersecting_centroids, files_dict, arguments) 
+
+    # close error logging
+    waterapputils_logging.remove_loggers()
 
 def main():  
     """
