@@ -318,7 +318,9 @@ def process_intersecting_centroids(intersecting_centroids, files_dict, arguments
                   "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with basin centroid shapefile
                   "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
                   "watertxt_directory": path to directory containing txt file or files}    
-    """     
+    """ 
+    # initialize error logging
+    waterapputils_logging.initialize_loggers(output_dir = os.getcwd())    
     for featureid, centroids in intersecting_centroids.iteritems():                    
         print("FeatureId: {}\n".format(featureid))  
         print("Centroids: {}\n".format(centroids))  
@@ -400,9 +402,21 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
         process_intersecting_centroids(intersecting_centroids, files_dict, arguments)
 
     if nonintersecting_centroids:    
-        print("Non-intersecting centroids: {}\n".format(nonintersecting_centroids)) 
+        print("The following are basins that do not intersect with the centroids for water use: {}\n".format(nonintersecting_centroids)) 
+        
+        outfilename = "non_intersecting_basins.txt"
+        spatialvectors.write_field_values_file(filepath = files_dict["watertxt_directory"], filename = outfilename, field_values_dict = nonintersecting_centroids)
+        outfilepath = os.path.join(files_dict["watertxt_directory"], outfilename)
+        
+        print("Writing file: \n{}\n Please add the centroids (separated by commas) that you would like to use for each non-intersecting basin".format(outfilepath))
+
+def apply_subwateruse_to_txt_files(files_dict, arguments):
+
+    intersecting_centroids = spatialvectors.read_field_values_file(filepath = files_dict["non_intersecting_basins_file"])
+
     
-    
+
+    process_intersecting_centroids(intersecting_centroids, files_dict, arguments) 
 
 def main():  
     """
@@ -427,6 +441,8 @@ def main():
     group.add_argument("-applydeltas", "--applydeltas", action = "store_true", help = "Apply global climate deltas to a WATERSimulation.xml file for a WATER simulations.  Use waterdelta_batch_variables.py to enter paths to data files.")
 
     group.add_argument("-applywateruse", "--applywateruse", action = "store_true", help = "Apply water use data to a WATER.txt file for a WATER simulation.  Use wateruse_batch_variables.py to enter paths to data files.")
+
+    group.add_argument("-applysubwateruse", "--applysubwateruse", action = "store_true", help = "Apply updated water use data from 'non_intersecting_basins.txt' to a WATER.txt file for a WATER simulation.  Use wateruse_batch_variables.py to enter paths to data files.")
 
     parser.add_argument("-v", "--verbose", action = "store_true",  help = "Print general information about data file(s)")
     parser.add_argument("-p", "--showplot", action = "store_true",  help = "Show plots of parameters contained in data file(s)")
@@ -516,6 +532,20 @@ def main():
             }
             
             apply_wateruse_to_txt_files(files_dict = files_dict, arguments = args)
+
+        elif args.applysubwateruse:
+            files_dict = {"wateruse_files": wateruse_batch_variables.wateruse_files,
+                          "wateruse_factor_file": wateruse_batch_variables.wateruse_factor_file,
+                          "basin_centroids_shapefile": wateruse_batch_variables.basin_centroids_shapefile, 
+                          "basin_shapefile": wateruse_batch_variables.basin_shapefile,
+                          "basin_field": wateruse_batch_variables.basin_field,
+                          "watertxt_directory": wateruse_batch_variables.waterbatch_directory,
+                          "non_intersecting_basins_file": wateruse_batch_variables.subwateruse_file,
+            }
+            
+            apply_subwateruse_to_txt_files(files_dict = files_dict, arguments = args)
+
+            sys.exit()
 
     except IOError as error:
         logging.exception("IO error: {0}".format(error.message))

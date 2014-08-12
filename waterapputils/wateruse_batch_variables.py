@@ -7,6 +7,9 @@ waterbatch_directory = r"C:\Users\jlant\jeremiah\temp\water-delaware-river-basin
 # path to the basin shapefile used in the WATER batch run
 basin_shapefile = r"C:\Users\jlant\jeremiah\temp\spatial_files/waterbasin_small_couple.shp"
 
+# path to substitute water use file - use when basins do not intersect with centroids used for water use batch
+subwateruse_file = waterbatch_directory + "/non_intersecting_basins.txt"
+
 ######### DO NOT NEED TO EDIT BELOW UNLESS YOU MOVE THESE FILES #######
 # list of paths to water use files to use
 wateruse_files = ["../data/wateruse-datafiles/S1_JFM_WU_2014jul7.txt", 
