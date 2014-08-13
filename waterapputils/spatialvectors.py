@@ -14,7 +14,8 @@ __contact__   = __author__
 
 import os, sys
 import osgeo.ogr
-import pdb
+from StringIO import StringIO
+import re
 import numpy as np
 
 # my modules
@@ -240,6 +241,67 @@ def validate_field_values(field_values_dict):
             field_values_dict_without_none[key] = value
             
     return field_values_dict_without_none, field_values_dict_with_none
+
+def read_field_values_file(filepath):
+    """
+    Read a file containing rows of basin ids that are not intersected by any water use basin centroids
+
+    Parameters
+    ----------    
+    filepath : string
+        String path to file
+
+    """    
+    with open(filepath, "r") as f:
+        field_values_dict = read_field_values_file_in(f)
+            
+    return field_values_dict
+
+def read_field_values_file_in(filestream):
+    """
+    Read a file containing rows of basin ids that are not intersected by any water use basin centroids
+
+    Parameters
+    ----------    
+    filepath : string
+        String path to file
+
+    """    
+    datafile = filestream.readlines()  
+
+    pattern = "[0-9].+"
+    
+    field_values_dict = {}
+    for line in datafile:
+        line = line.strip()
+        
+        match = re.search(pattern, line)        
+        if match:
+            line_list = match.group(0).split(",")
+            items = [item.strip() for item in line_list[1:]]
+            field_values_dict[line_list[0]] = items
+
+    return field_values_dict
+        
+
+def write_field_values_file(filepath, filename, field_values_dict):
+    """
+    Write a file containing rows of basin ids that are not intersected by any water use basin centroids
+
+    Parameters
+    ----------
+    filepath : string
+        String path to directory where file will be saved
+    filename : string
+        String name of file to be saved
+    field_values_dict : dictionary
+        Dictionary containing lists of values for a particular field that were intersected by another shapefile.
+    """
+    fullpath = os.path.join(filepath, filename)
+    with open(fullpath, "w") as f:
+        f.write("basinid,centroids\n")        
+        for key in field_values_dict.keys():
+            f.write(key + ",\n")
 
 def _print_test_info(expected, actual):
     """   
@@ -731,6 +793,33 @@ def test_validate_field_values():
 
     # print test results        
     _print_test_info(expected, actual)
+
+def test_read_field_values_file_in():
+    """ Test read_field_values_file() """
+
+    print("--- Testing read_field_values_file() - read standard file - csv format ---")  
+
+    fixture = {}
+    fixture["data_file"] = \
+    """
+    basin, centroids
+    0123456, 45, 50, 55, 60 
+    7890123, 65, 70, 75, 80 
+    """
+    
+    file_obj = StringIO(fixture["data_file"])
+
+    # expected values to test with actual values
+    expected = {} 
+    expected["data"] = {"0123456": ["45", "50", "55", "60"], "7890123": ["65", "70", "75", "80"]}
+    
+    # actual values    
+    actual = {}
+    actual["data"] = read_field_values_file_in(file_obj)
+
+    # print test results        
+    _print_test_info(expected, actual)
+
    
 def main():
     """ Test functionality geospatialvectors.py """
@@ -769,7 +858,9 @@ def main():
     
     test_get_intersected_field_values7()
 
-    test_remove_field_values()
+    test_validate_field_values()
+
+    test_read_field_values_file_in()
     
 if __name__ == "__main__":
     main()    

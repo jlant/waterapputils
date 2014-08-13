@@ -381,7 +381,7 @@ def get_total_wateruse(wateruse_data, id_list, wateruse_factors = None):
     # check that each id in id list is contained in the wateruse_data     
     for id_num in id_list:
         if id_num not in wateruse_data["newhydroid"]:
-            raise ValueError, "newhydroid {} is not contined in wateruse_data".format(id_num)
+            raise ValueError, "newhydroid {} is not contained in wateruse_data".format(id_num)
   
     # get wateruse values that correspond to a list of ids
     values = get_wateruse_values(wateruse_data, id_list = id_list, wateruse_factors = wateruse_factors) 

@@ -125,51 +125,6 @@ def plot_watertxt_data(watertxt_data, is_visible = True, save_path = None):
         ylabel = "\n".join(wrap(parameter["name"], 60))
         ax.set_ylabel(ylabel)
         ax.grid(True)
-#
-#        if "Discharge" in parameter["name"]:
-#            color_str = "b"
-#            
-#        elif "Subsurface Flow" in parameter["name"]:
-#            color_str = "g"       
-#            
-#        elif "Impervious Flow" in parameter["name"]:
-#            color_str = "SteelBlue"
-#            
-#        elif "Infiltration Excess" in parameter["name"]:
-#            color_str = "SeaGreen"
-#            
-#        elif "Initial Abstracted Flow" in parameter["name"]:
-#            color_str = "MediumBlue"
-#                        
-#        elif "Overland Flow" in parameter["name"]:
-#            color_str = "RoyalBlue"
-#                        
-#        elif "PET" in parameter["name"]:
-#            color_str = "orange"
-#                        
-#        elif "AET" in parameter["name"]:
-#            color_str = "DarkOrange"
-#                                    
-#        elif "Average Soil Root zone" in parameter["name"]:
-#            color_str = "Gray"
-#                        
-#        elif "Average Soil Unsaturated Zone" in parameter["name"]:
-#            color_str = "DarkGray"
-#                        
-#        elif "Snow Pack" in parameter["name"]:
-#            color_str = "PowderBlue"
-#            
-#        elif "Precipitation" in parameter["name"]:
-#            color_str = "SkyBlue"
-#            
-#        elif "Storage Deficit" in parameter["name"]:
-#            color_str = "k"
-#                        
-#        elif "Return Flow" in parameter["name"]:
-#            color_str = "Aqua"
-#                        
-#        else:
-#            color_str = "k"
 
         # get proper color that corresponds to parameter name
         color_str = COLORS[parameter["name"].split("(")[0].strip()]
@@ -308,7 +263,7 @@ def plot_watertxt_comparison(watertxt_data1, watertxt_data2, is_visible = True, 
 
 def plot_watertxt_parameter(watertxt_data, name, is_visible = True, save_path = None):
     """   
-    Plot a parameters contained in WATER.txt data file. Save 
+    Plot a parameter contained in WATER.txt data file. Save 
     plots to a particular path.
     
     Parameters

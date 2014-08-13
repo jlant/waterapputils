@@ -35,9 +35,9 @@ def initialize_loggers(output_dir):
     logger.addHandler(handler)
 
     # create file handler and set level to WARN - write to a file only if a message is sent to this handler
-    handler = logging.FileHandler(os.path.join(output_dir, "error.log"), "w", encoding = None, delay = "true")
+    handler = logging.FileHandler(os.path.join(output_dir, "_waterapputils_error.log"), "w", encoding = None, delay = "true")
     handler.setLevel(logging.WARN)
-    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    formatter = logging.Formatter("%(asctime)s - %(levelname)s :\n %(message)s")
     handler.setFormatter(formatter)
     logger.addHandler(handler)    
 

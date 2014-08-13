@@ -50,7 +50,7 @@ def process_txt_files(file_list, arguments):
         filedir, filename = helpers.get_file_info(f)
           
         # create output directory     
-        outputdirpath = helpers.make_directory(path = filedir, directory_name = "-".join([filename.split(".txt")[0], "output"]))      
+        outputdirpath = helpers.make_directory(path = filedir, directory_name = "_".join(["_waterapputils", filename.split(".txt")[0], "output"]))      
         
         # initialize error logging
         waterapputils_logging.initialize_loggers(output_dir = outputdirpath)        
@@ -179,57 +179,15 @@ def process_xmlcmp(file_list, arguments):
     # close error logging
     waterapputils_logging.remove_loggers()
 
-def apply_deltas_to_txt(file_list, arguments):
-    """    
-    Apply delta factors to a WATER *.txt file. The new file created is saved to the same
-    directory as the *.txt file.
-
-    Parameters
-    ----------
-    file_list : list 
-        List of files to parse, process, and plot.        
-    arguments : argparse object
-        An argparse object containing user options.                    
-    """
-    watertxt_file = file_list[0]
-    delta_file = file_list[1]
-                
-    water_filedir, water_filename = helpers.get_file_info(watertxt_file)
-    delta_filedir, delta_filename = helpers.get_file_info(delta_file)
-          
-    # initialize error logging
-    waterapputils_logging.initialize_loggers(output_dir = water_filedir)        
-    
-    # read data
-    watertxt_data = watertxt.read_file(watertxt_file)  
-    deltas_data = deltas.read_file(delta_file) 
-    
-    # calculate average deltas for a list of tiles
-    avg_delta_values = deltas.calculate_avg_delta_values(deltas_data = deltas_data, tile_list = ["31", "32"])
-    
-    for key, value in avg_delta_values.iteritems():
-        # apply deltas
-        watertxt_data_with_deltas = watertxt.apply_factors(watertxt_data = watertxt_data, name = key, factors = avg_delta_values[key])
-
-    watertxt.write_file(watertxt_data = watertxt_data_with_deltas, save_path = water_filedir, filename = "-".join([water_filename.split(".txt")[0], "with", delta_filename.split(".txt")[0] , "applied2.txt"]))
-    watertxt.write_timeseries_file(watertxt_data = watertxt_data_with_deltas, name = "PET", save_path = water_filedir)
-           
-    # print data
-    if arguments.verbose: 
-        watertxt_viewer.print_watertxt_data(watertxt_data)  
-        watertxt_viewer.print_watertxt_data(watertxt_data_with_deltas)  
-
-    # close error logging
-    waterapputils_logging.remove_loggers()
-
-
-def apply_deltas_to_xml_files(files_dict, arguments):
+def process_intersecting_tiles(intersecting_tiles, files_dict, arguments):
     """    
     Apply delta factors to a WATER *.xml file. The new file created is saved to a directory
     chosen by the user.
 
     Parameters
     ----------
+    intersecting_tiles : dictionary
+        Dictionary containing lists of values for a particular field that were intersected by another shapefile.  
     files_dict : dictionary
         Dictionary of 
     arguments : argparse object
@@ -242,23 +200,20 @@ def apply_deltas_to_xml_files(files_dict, arguments):
                   "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with delta shapefile
                   "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
                   "waterxml_directory": path to directory containing xml file or files}    
-    """    
-    # open shapefiles
-    delta_shapefile = osgeo.ogr.Open(files_dict["delta_shapefile"]) 
-    basin_shapefile = osgeo.ogr.Open(files_dict["basin_shapefile"]) 
-
-    # find intersecting tiles based on water basin supplied
-    intersecting_tiles = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = delta_shapefile, intersectee_field = "Tile", intersector_field = files_dict["basin_field"])
-
-    print("Intersecting tiles: {}\n".format(intersecting_tiles))        
+    """ 
     for featureid, tiles in intersecting_tiles.iteritems():                    
         print("FeatureId: {}\n".format(featureid))  
-        print("Tiles: {}\n".format(tiles))  
-
+        print("\tTiles: {}\n".format(tiles))  
+        print("\tAverage Deltas: \n")
+        
         # get average values for a list of delta files
         avg_deltas = deltas.get_avg_deltas(delta_files = files_dict["delta_files"], tiles = tiles)  
 
-        print("Avg deltas: {}\n".format(avg_deltas))
+        print("\t  Tmax\n")
+        helpers.print_monthly_dict(monthly_dict = avg_deltas["Tmax"])
+
+        print("\t  Ppt\n")
+        helpers.print_monthly_dict(monthly_dict = avg_deltas["Ppt"])
 
         # get the xml data file that has a parent directory matching the current featureid
         path = os.path.join(files_dict["waterxml_directory"], featureid)
@@ -268,7 +223,7 @@ def apply_deltas_to_xml_files(files_dict, arguments):
         waterxml_filedir_path, waterxml_filename = helpers.get_file_info(waterxml_file)
 
         # create an output directory
-        output_dir = helpers.make_directory(waterxml_filedir_path, "waterdeltas-output")
+        output_dir = helpers.make_directory(waterxml_filedir_path, "_waterapputils_waterdeltas_output")
 
         # initialize error logging
         waterapputils_logging.initialize_loggers(output_dir = output_dir)
@@ -292,8 +247,6 @@ def apply_deltas_to_xml_files(files_dict, arguments):
         updated_waterxml_file = os.path.join(output_dir, xml_output_filename)
         process_xmlcmp(file_list = [updated_waterxml_file, waterxml_file], arguments = arguments)
 
-    # close error logging
-    waterapputils_logging.remove_loggers()
 
 def process_intersecting_centroids(intersecting_centroids, files_dict, arguments):
     """    
@@ -318,11 +271,13 @@ def process_intersecting_centroids(intersecting_centroids, files_dict, arguments
                   "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with basin centroid shapefile
                   "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
                   "watertxt_directory": path to directory containing txt file or files}    
-    """     
-    for featureid, centroids in intersecting_centroids.iteritems():                    
+    """      
+    # create a file for the output  
+    for featureid, centroids in intersecting_centroids.iteritems():
+           
         print("FeatureId: {}\n".format(featureid))  
-        print("Centroids: {}\n".format(centroids))  
-
+        print("\tCentroids: {}\n".format(centroids))  
+        print("\tTotal Water Use: \n")
         # get sum of the water use data
         if files_dict["wateruse_factor_file"]:
             total_wateruse_dict = wateruse.get_all_total_wateruse(wateruse_files = files_dict["wateruse_files"], id_list = centroids, wateruse_factor_file = files_dict["wateruse_factor_file"], in_cfs = True)
@@ -330,8 +285,9 @@ def process_intersecting_centroids(intersecting_centroids, files_dict, arguments
         else:
             total_wateruse_dict = wateruse.get_all_total_wateruse(wateruse_files = files_dict["wateruse_files"], id_list = centroids, wateruse_factor_file = None, in_cfs = True)
 
-        print("Total water use dictionary: {}\n".format(total_wateruse_dict))
-
+        # print monthly output in nice format
+        helpers.print_monthly_dict(monthly_dict = total_wateruse_dict)
+       
         # get the txt data file that has a parent directory matching the current featureid
         path = os.path.join(files_dict["watertxt_directory"], featureid)
         watertxt_file = helpers.find_file(name = "WATER.txt", path = path)
@@ -340,7 +296,7 @@ def process_intersecting_centroids(intersecting_centroids, files_dict, arguments
         watertxt_filedir_path, watertxt_filename = helpers.get_file_info(watertxt_file)       
 
         # create an output directory
-        output_dir = helpers.make_directory(watertxt_filedir_path, "wateruse-output")
+        output_dir = helpers.make_directory(watertxt_filedir_path, "_waterapputils_wateruse_output")
 
         # initialize error logging
         waterapputils_logging.initialize_loggers(output_dir = output_dir)
@@ -360,9 +316,59 @@ def process_intersecting_centroids(intersecting_centroids, files_dict, arguments
         updated_watertxt_file = os.path.join(output_dir, txt_output_filename)
         process_txt_files(file_list = [updated_watertxt_file, watertxt_file], arguments = arguments)
 
+
+def apply_deltas_to_xml_files(files_dict, arguments):
+    """    
+    Apply delta factors to a WATER *.xml file. The new file created is saved to a directory
+    chosen by the user.
+
+    Parameters
+    ----------
+    files_dict : dictionary
+        Dictionary of 
+    arguments : argparse object
+        An argparse object containing user options.                    
+
+    Notes
+    -----
+    files_dict = {"delta_files": list of delta text files,
+                  "delta_shapefile": shapefile corresponding to delta files,
+                  "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with delta shapefile
+                  "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
+                  "waterxml_directory": path to directory containing xml file or files}    
+    """    
+    # initialize error logging
+    waterapputils_logging.initialize_loggers(output_dir = files_dict["waterxml_directory"]) 
+
+    info_file = os.path.join(files_dict["waterxml_directory"], "_waterapputils_waterdeltas_batchrun_info.txt")
+    sys.stdout = open(info_file, "w")  
+
+    # open shapefiles
+    delta_shapefile = osgeo.ogr.Open(files_dict["delta_shapefile"]) 
+    basin_shapefile = osgeo.ogr.Open(files_dict["basin_shapefile"]) 
+
+    # find intersecting tiles based on water basin supplied
+    intersecting_tiles_all = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = delta_shapefile, intersectee_field = "Tile", intersector_field = files_dict["basin_field"])
+       
+    intersecting_tiles, nonintersecting_tiles = spatialvectors.validate_field_values(field_values_dict = intersecting_tiles_all)     
+
+    if intersecting_tiles:    
+        process_intersecting_tiles(intersecting_tiles, files_dict, arguments)
+
+    if nonintersecting_tiles:
+        # initialize error logging
+        waterapputils_logging.initialize_loggers(output_dir = files_dict["waterxml_directory"]) 
+        
+        logging.warn("The following are basins that do not intersect with the tiles for water deltas: {}\n".format(nonintersecting_tiles)) 
+        
+        outfilename = "_waterapputils_non_intersecting_basin_tiles.txt"
+        spatialvectors.write_field_values_file(filepath = files_dict["waterxml_directory"], filename = outfilename, field_values_dict = nonintersecting_tiles)
+        outfilepath = os.path.join(files_dict["watertxt_directory"], outfilename)
+        
+        logging.warn("Writing file: \n{}\n Please add the tiles (separated by commas) that you would like to use for each non-intersecting basin".format(outfilepath))
+
     # close error logging
     waterapputils_logging.remove_loggers()
-
 
 def apply_wateruse_to_txt_files(files_dict, arguments):
     """    
@@ -384,7 +390,14 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
                   "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with basin centroid shapefile
                   "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
                   "watertxt_directory": path to directory containing txt file or files}    
-    """        
+    """   
+    # initialize error logging
+    waterapputils_logging.initialize_loggers(output_dir = files_dict["watertxt_directory"]) 
+
+    info_file = os.path.join(files_dict["watertxt_directory"], "_waterapputils_wateruse_batchrun_info.txt")
+    
+    sys.stdout = open(info_file, "w")  
+     
     # open shapefiles
     centroids_shapefile = osgeo.ogr.Open(files_dict["basin_centroids_shapefile"]) 
     basin_shapefile = osgeo.ogr.Open(files_dict["basin_shapefile"]) 
@@ -392,17 +405,55 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
     # find intersecting points (centroids) based on water basin supplied
     intersecting_centroids_all = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = centroids_shapefile, intersectee_field = "newhydroid", intersector_field = files_dict["basin_field"])
 
-    intersecting_centroids, nonintersecting_centroids = spatialvectors.validate_field_values(field_values_dict = intersecting_centroids_all)
-
-    print("Intersecting centroids: {}\n".format(intersecting_centroids))        
+    intersecting_centroids, nonintersecting_centroids = spatialvectors.validate_field_values(field_values_dict = intersecting_centroids_all)     
 
     if intersecting_centroids:    
         process_intersecting_centroids(intersecting_centroids, files_dict, arguments)
 
-    if nonintersecting_centroids:    
-        print("Non-intersecting centroids: {}\n".format(nonintersecting_centroids)) 
-    
-    
+    if nonintersecting_centroids:
+        # initialize error logging
+        waterapputils_logging.initialize_loggers(output_dir = files_dict["watertxt_directory"]) 
+        
+        logging.warn("The following are basins that do not intersect with the centroids for water use: {}\n".format(nonintersecting_centroids)) 
+        
+        outfilename = "_waterapputils_non_intersecting_basin_centroids.txt"
+        spatialvectors.write_field_values_file(filepath = files_dict["watertxt_directory"], filename = outfilename, field_values_dict = nonintersecting_centroids)
+        outfilepath = os.path.join(files_dict["watertxt_directory"], outfilename)
+        
+        logging.warn("Writing file: \n{}\n Please add the centroids (separated by commas) that you would like to use for each non-intersecting basin".format(outfilepath))
+
+    # close error logging
+    waterapputils_logging.remove_loggers()
+
+def apply_subwaterdeltas_to_xml_files(files_dict, arguments):
+
+    # initialize error logging
+    waterapputils_logging.initialize_loggers(output_dir = files_dict["watertxt_directory"]) 
+
+    info_file = os.path.join(files_dict["watertxt_directory"], "_waterapputils_waterdelta_batchrun_info.txt")
+    sys.stdout = open(info_file, "w")  
+
+    intersecting_tiles = spatialvectors.read_field_values_file(filepath = files_dict["non_intersecting_basin_tiles_file"])
+
+    process_intersecting_tiles(intersecting_tiles, files_dict, arguments) 
+
+    # close error logging
+    waterapputils_logging.remove_loggers()
+
+def apply_subwateruse_to_txt_files(files_dict, arguments):
+
+    # initialize error logging
+    waterapputils_logging.initialize_loggers(output_dir = files_dict["watertxt_directory"]) 
+
+    info_file = os.path.join(files_dict["watertxt_directory"], "_waterapputils_wateruse_batchrun_info.txt")
+    sys.stdout = open(info_file, "a")  
+
+    intersecting_centroids = spatialvectors.read_field_values_file(filepath = files_dict["non_intersecting_basin_centroids_file"])
+
+    process_intersecting_centroids(intersecting_centroids, files_dict, arguments) 
+
+    # close error logging
+    waterapputils_logging.remove_loggers()
 
 def main():  
     """
@@ -427,6 +478,10 @@ def main():
     group.add_argument("-applydeltas", "--applydeltas", action = "store_true", help = "Apply global climate deltas to a WATERSimulation.xml file for a WATER simulations.  Use waterdelta_batch_variables.py to enter paths to data files.")
 
     group.add_argument("-applywateruse", "--applywateruse", action = "store_true", help = "Apply water use data to a WATER.txt file for a WATER simulation.  Use wateruse_batch_variables.py to enter paths to data files.")
+
+    group.add_argument("-applysubwateruse", "--applysubwateruse", action = "store_true", help = "Apply updated water use data from '_non_intersecting_basin_centroids.txt' to a WATER.txt file for a WATER simulation.  Use wateruse_batch_variables.py to enter paths to data files.")
+
+    group.add_argument("-applysubdeltas", "--applysubdeltas", action = "store_true", help = "Apply updated water deltas data from '_non_intersecting_basin_tiles.txt' to a WaterSimulation.xml file for a WATER simulation.  Use wateruse_deltas_variables.py to enter paths to data files.")
 
     parser.add_argument("-v", "--verbose", action = "store_true",  help = "Print general information about data file(s)")
     parser.add_argument("-p", "--showplot", action = "store_true",  help = "Show plots of parameters contained in data file(s)")
@@ -504,6 +559,19 @@ def main():
             apply_deltas_to_xml_files(files_dict = files_dict, arguments = args)
             sys.exit() 
 
+        elif args.applysubdeltas:
+            files_dict = {"delta_files": waterdeltas_batch_variables.delta_files,
+                          "delta_shapefile": waterdeltas_batch_variables.delta_shapefile, 
+                          "basin_shapefile": waterdeltas_batch_variables.basin_shapefile,
+                          "basin_field": waterdeltas_batch_variables.basin_field,
+                          "waterxml_directory": waterdeltas_batch_variables.waterbatch_directory,
+                          "non_intersecting_basin_tile_file": wateruse_batch_variables.subwaterdeltas_file,
+            }
+            
+            apply_subwateruse_to_txt_files(files_dict = files_dict, arguments = args)
+
+            sys.exit()
+
         # apply water use
         elif args.applywateruse:          
 
@@ -516,6 +584,20 @@ def main():
             }
             
             apply_wateruse_to_txt_files(files_dict = files_dict, arguments = args)
+
+        elif args.applysubwateruse:
+            files_dict = {"wateruse_files": wateruse_batch_variables.wateruse_files,
+                          "wateruse_factor_file": wateruse_batch_variables.wateruse_factor_file,
+                          "basin_centroids_shapefile": wateruse_batch_variables.basin_centroids_shapefile, 
+                          "basin_shapefile": wateruse_batch_variables.basin_shapefile,
+                          "basin_field": wateruse_batch_variables.basin_field,
+                          "watertxt_directory": wateruse_batch_variables.waterbatch_directory,
+                          "non_intersecting_basin_centroids_file": wateruse_batch_variables.subwateruse_file,
+            }
+            
+            apply_subwateruse_to_txt_files(files_dict = files_dict, arguments = args)
+
+            sys.exit()
 
     except IOError as error:
         logging.exception("IO error: {0}".format(error.message))
