@@ -328,6 +328,19 @@ def create_monthly_dict():
 
     return monthly_dict
 
+def print_monthly_dict(monthly_dict):
+    """    
+    Print a dictionary in a nice format.
+    
+    Parameters
+    ----------
+    monthly_dict : dictionary
+        Dictionary containing monthly keys.  
+    """      
+    months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]       
+    for month in months:
+        print("\t\t{0:<15}\t{1:<15}\n".format(month, monthly_dict[month]))
+
 def compute_simple_stats(data):
     """   
     Compute simple statistics (mean, max, min) on a data array. Can handle nan values.
