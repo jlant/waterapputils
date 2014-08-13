@@ -4,6 +4,7 @@ from nose import with_setup
 import os, sys
 import numpy as np
 import osgeo.ogr
+from StringIO import StringIO
 
 # my module
 from waterapputils import spatialvectors
@@ -40,6 +41,13 @@ def setup():
 
     fixture["test_basinsmall_no_intersection_proj_wgs"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/basins/test_basinsmall_no_intersection.shp"))
     fixture["dem_basin_centroids_small_proj_wgs"] = os.path.abspath(os.path.join(os.getcwd(), "./data/spatial-datafiles/basins/dem_basin_centroids_small.shp"))
+
+    fixture["csv_data_file"] = \
+    """
+    basin, centroids
+    0123456, 45, 50, 55, 60 
+    7890123, 65, 70, 75, 80 
+    """
 
 def teardown():
     """ Print to standard error when all tests are finished """
@@ -472,3 +480,18 @@ def test_validate_field_values():
 
     np.testing.assert_equal(actual["intersected"], expected["intersected"])    
     np.testing.assert_equal(actual["non_intersected"], expected["non_intersected"]) 
+
+def test_read_field_values_file_in():
+
+    # expected values to test with actual values
+    expected = {} 
+    expected["data"] = {"0123456": ["45", "50", "55", "60"], "7890123": ["65", "70", "75", "80"]}
+
+    # convert string to a file object
+    file_obj = StringIO(fixture["csv_data_file"])
+    
+    # actual values    
+    actual = {}
+    actual["data"] = spatialvectors.read_field_values_file_in(file_obj)
+
+    np.testing.assert_equal(actual["data"], expected["data"]) 
