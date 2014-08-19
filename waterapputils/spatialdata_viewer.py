@@ -84,7 +84,7 @@ def get_map_extents(shapefiles):
         
     return extent_coords, center_coords, standard_parallels
 
-def plot_shapefiles_map(shapefiles, display_fields = [], title = None, is_visible = True, save_path = None):
+def plot_shapefiles_map(shapefiles, display_fields = [], colors = [], title = None, is_visible = True, save_path = None):
     """   
     Generate a map showing all the shapefiles in the shapefile_list.  
     Shapefiles should be in a Geographic Coordinate System (longitude and 
@@ -139,7 +139,9 @@ def plot_shapefiles_map(shapefiles, display_fields = [], title = None, is_visibl
         
         # set up colors to use
         colors_list = ["b", "g", "y", "r", "c", "y", "m", "orange", "aqua", "darksalmon", "gold", "k"]
-        if colors_index > len(colors_list) - 1:
+        if colors:
+            color = colors[colors_index]        
+        elif colors_index > len(colors_list) - 1:
             color = np.random.rand(3,)
         else:
             color = colors_list[colors_index]         
@@ -321,20 +323,21 @@ def test_plot_shapefiles_map():
     
     fixture = _create_shapefile_test_data()
     
-    plot_shapefiles_map(shapefiles = [fixture["testbasin"], fixture["waterbasin"], fixture["pourpoint"]], display_fields = ["Id", "Id", "POINTID"], title = "Testing plotting of map")    
+#    plot_shapefiles_map(shapefiles = [fixture["testbasin"], fixture["waterbasin"], fixture["pourpoint"]], display_fields = ["Id", "Id", "POINTID"], title = "Testing plotting of map")    
+#
+#    plot_shapefiles_map(shapefiles = [fixture["testbasin"], fixture["waterbasin_multi"]], display_fields = ["STAID"], title = "Sample test basins")
+#
+#    plot_shapefiles_map(shapefiles = [fixture["canes"], fixture["waterbasin_multi"]], display_fields = ["Tile", "STAID"], title = "CanES GCM with sample basins")
+#
+#    plot_shapefiles_map(shapefiles = [fixture["canes"], fixture["gfdl"], fixture["giss"], fixture["ncar"], fixture["waterbasin_multi"]], display_fields = ["Tile"], title = "Many GCM's with sample basins")
+#    
+#    plot_shapefiles_map(shapefiles = [fixture["basin_centroids"], fixture["waterbasin_multi"]], display_fields = ["STAID"], title = "CanES GCM with sample basins")
+#
+#    plot_shapefiles_map(shapefiles = [fixture["basin_centroids"], fixture["testbasin_small"]], display_fields = ["newhydroid", "FID"], title = "CanES GCM with sample basins")
 
-    plot_shapefiles_map(shapefiles = [fixture["testbasin"], fixture["waterbasin_multi"]], display_fields = ["STAID"], title = "Sample test basins")
+#    plot_shapefiles_map(shapefiles = [fixture["canes"], fixture["waterbasin"], fixture["pourpoint"]], display_fields = ["Tile", "STAID"], colors = ["g", "gold", "r"], title = "CanES Global Climate Model (GCM) with sample basin")
 
-    plot_shapefiles_map(shapefiles = [fixture["canes"], fixture["waterbasin_multi"]], display_fields = ["Tile", "STAID"], title = "Canes GCM with sample basins")
-
-    plot_shapefiles_map(shapefiles = [fixture["canes"], fixture["gfdl"], fixture["giss"], fixture["ncar"], fixture["waterbasin_multi"]], display_fields = ["Tile"], title = "Many GCM's with sample basins")
-    
-    plot_shapefiles_map(shapefiles = [fixture["basin_centroids"], fixture["waterbasin_multi"]], display_fields = ["STAID"], title = "Canes GCM with sample basins")
-
-    plot_shapefiles_map(shapefiles = [fixture["basin_centroids"], fixture["testbasin_small"]], display_fields = ["newhydroid", "FID"], title = "Canes GCM with sample basins")
-
-    
-    print("")
+    plot_shapefiles_map(shapefiles = [fixture["waterbasin_multi"], fixture["basin_centroids"]], display_fields = ["STAID"], colors = ["g", "y"], title = "Sample basins with sample water use points")
 
 def main():
     """ Test functionality of waterapputils_viewer() """
