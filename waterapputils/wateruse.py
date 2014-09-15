@@ -89,7 +89,7 @@ def read_file_in(filestream):
         "months": "(#)\s([JFMASOND].+)",
         "units": "(#)\s(Units:)(.+)",
         "column_names": "(huc12)\t(.+)",
-        "data_row": "(^[0-9]{,11})\t(.+)"
+        "data_row": "(^[0-9]{,12})\t(.+)"
     }  
 
    # initialize a temporary dictionary to hold data of interest
@@ -377,7 +377,7 @@ def get_total_wateruse(wateruse_data, id_list, wateruse_factors = None):
 
         "March": 5.0
     }   
-    """ 
+    """       
     # check that each id in id list is contained in the wateruse_data     
     for id_num in id_list:
         if id_num not in wateruse_data["newhydroid"]:
