@@ -7,15 +7,17 @@ waterapputils
 Description
 -----------    
 
-**waterapputils** is a tool used for analysing, processing, and updating model simulations from the [U.S. Geological Survey 
+**waterapputils** is a tool used for analyzing, processing, and updating model simulations from the [U.S. Geological Survey 
 Indiana and Kentucky Water Science Centers (INKY)] WATER application. **waterapputils** is written in [Python](https://www
 .python.org/), and adds new functionality, outside the WATER application, by allowing users to apply various future climate 
-projections from a group of statistically downscaled global climate models ([GCMs]) available at the [USGS Derived Downscaled Climate Projection Portal] and water use data to model simulations.  
+projections using a change-factor (delta) approach with data from the Coupled Model Intercomparison Project ([CIMP5]), and 
+aggregated water use data to model simulations.  
+
 The WATER application is a graphical user interface, written in VB.NET, wrapped around a variant of the rainfall-runoff model 
 called Topmodel (Topography based hydrological mode) by Keith Beven, Professor at Lancaster University. Topmodel estimates 
 river discharge and spatial soil water saturation patterns for a particular catchment basin using topographic, climatic, and 
 geological input data parameters. The original WATER application was developed by the [U.S. Geological Survey Indiana and 
-Kentucky Water Science Centers (INKY)]. Referencesfor the WATER application include:
+Kentucky Water Science Centers (INKY)]. References for the WATER application include:
 
 * [Williamson T.N., Odom K.R., Newson J.K., Downs A.C., Nelson Jr. H.L., Cinotto P.J., Ayers M.A. 2009. The Water Availability Tool for Environmental Resources (WATER)—A water-budget modeling approach for managing water-supply resources in Kentucky—Phase I—Data processing, model development, and application to non-karst areas, U.S. Geological Survey Scientific Investigations Report 2009-5248. pp. 34.](http://pubs.usgs.gov/sir/2009/5248/)
     
@@ -78,7 +80,7 @@ will look something like the following:
 
 ```bash
 $ pwd
-/path/to/waterapputils	
+/path/to/waterapputils    
 
 $ nosetests
 SETUP: deltatxt tests
@@ -171,6 +173,5 @@ Author
     jlant@ugs.gov
 
 [U.S. Geological Survey Indiana and Kentucky Water Science Centers (INKY)]:http://ky.water.usgs.gov/
-[GCMs]:http://cida.usgs.gov/thredds/catalog.html?dataset=cida.usgs.gov/thredds/dcp/conus
-[USGS Derived Downscaled Climate Projection Portal]:http://cida.usgs.gov/climate/derivative/
+[CIMP5]:http://cmip-pcmdi.llnl.gov/cmip5/
 [nose]:https://nose.readthedocs.org/en/latest/
