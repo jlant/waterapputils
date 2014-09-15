@@ -1,5 +1,6 @@
-#JAS																									
-#released March 2014, reprocessed Sept. 2014																									
+# JAS																									
+# Units: Mgal/day																									
+# released March 2014, reprocessed Sept. 2014																									
 huc12	newhydroid	AqGwWL	CoGwWL	DoGwWL	InGwWL	IrGwWL	LvGwWL	MiGwWL	ReGwWL	TeGwWL	WsGwWL	AqSwWL	CoSwWL	InSwWL	IrSwWL	LvSwWL	MiSwWL	TeSwWL	WsSwWL	InGwRT	InSwRT	STswRT	WSgwRT	WSTransRC	WStransNY
 020401010101	1	0	0	-0.0105449	0	-0.00101238	-0.00604406	0	0	0	0	0	0	0	-2.84184726	-0.00082419	0	0	-0.1174	0	0	0	0	0	0
 020401010101	2	0	0	-0.0030638	0	-0.000137754	-0.002292338	0	0	0	0	0	0	0	-8.80725E-05	-0.000312592	0	0	0	0	0	0	0	0	0

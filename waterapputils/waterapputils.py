@@ -397,7 +397,7 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
     info_file = os.path.join(files_dict["watertxt_directory"], "_waterapputils_wateruse_batchrun_info.txt")
     
     sys.stdout = open(info_file, "w")  
-     
+    
     # open shapefiles
     centroids_shapefile = osgeo.ogr.Open(files_dict["basin_centroids_shapefile"]) 
     basin_shapefile = osgeo.ogr.Open(files_dict["basin_shapefile"]) 
