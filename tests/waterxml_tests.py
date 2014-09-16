@@ -1,6 +1,4 @@
 import nose.tools
-from nose import with_setup 
-
 import sys
 import numpy as np
 import datetime

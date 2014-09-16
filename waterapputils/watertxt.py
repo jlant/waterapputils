@@ -15,8 +15,6 @@ __contact__   = __author__
 import re
 import numpy as np
 import datetime
-import logging
-from StringIO import StringIO
 import os
 
 # my modules

@@ -1,12 +1,6 @@
 from __future__ import print_function
-
-import nose.tools
-from nose import with_setup 
-
 import sys
-
 import numpy as np
-import datetime
 from StringIO import StringIO
 
 # my module
@@ -175,7 +169,7 @@ def _perform_assertion(actual, expected, description = "", do_almost_equal = Fal
         print("    expected: {}\n".format(expected[key]), file = sys.stdout) 
 
 def _get_all_total_wateruse_for_tests(wateruse_files, id_list, wateruse_factor_file = None, in_cfs = False):
-    """ Test get_all_total_wateruse - strictly a test function here that mirrors get_all_totoal_wateruse in water.py but creates fileobj from StringIO instead of reading a file path """
+    """ Test get_all_total_wateruse - strictly a test function here that mirrors get_all_total_wateruse in water.py but creates fileobj from StringIO instead of reading a file path """
 
     # calculate average values for a list of water use files
     all_total_wateruse_dict = {}
