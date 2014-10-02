@@ -1,9 +1,6 @@
 import nose.tools
-from nose import with_setup 
-
 import sys
 import numpy as np
-import datetime
 from StringIO import StringIO
 
 # my module

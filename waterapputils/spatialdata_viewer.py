@@ -18,8 +18,6 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
-# my modules
-import spatialvectors
 
 def print_shapefile_data(shapefile_dict):
     """   
@@ -100,6 +98,8 @@ def plot_shapefiles_map(shapefiles, display_fields = [], colors = [], title = No
         String title for plot
     display_fields : list 
         List of strings that correspond to a shapefile field where the corresponding value(s) will be displayed.
+    colors : list
+        List of strings that correspond to colors to be displayed
     is_visible : bool
         Boolean value to show plots         
     save_path : string 
@@ -107,7 +107,7 @@ def plot_shapefiles_map(shapefiles, display_fields = [], colors = [], title = No
     """   
     # get the map extents to map center the map appropriately around shapefile data; buffer the extents a bit as well
     extent_coords, center_coords, standard_parallels = get_map_extents(shapefiles)    
-    buff = 10   
+    buff = 2   
 
     # create the figure
     plt.figure(figsize = (12,10))    
@@ -146,9 +146,10 @@ def plot_shapefiles_map(shapefiles, display_fields = [], colors = [], title = No
         else:
             color = colors_list[colors_index]         
         
-        full_path = "/".join([shapefile_data["path"], shapefile_data["name"].split(".")[0]])
-        shp_tuple = bmap.readshapefile(full_path, "shp", drawbounds = False)          # use basemap shapefile reader for ease of plotting
-        for shape_dict, shape in zip(bmap.shp_info, bmap.shp):                                        # zip the shapefile information and its shape as defined by basemap
+        full_path = os.path.join(shapefile_data["path"], shapefile_data["name"].split(".")[0])
+        
+        shp_tuple = bmap.readshapefile(full_path, "shp", drawbounds = False)                            # use basemap shapefile reader for ease of plotting
+        for shape_dict, shape in zip(bmap.shp_info, bmap.shp):                                          # zip the shapefile information and its shape as defined by basemap
 
             if shapefile_data["type"] == "POLYGON":
                 p1 = mpl.patches.Polygon(shape, facecolor = color, edgecolor = color,
@@ -211,98 +212,25 @@ def plot_shapefiles_map(shapefiles, display_fields = [], colors = [], title = No
 
 def _create_shapefile_test_data():
     """ Create test data for tests """
+    import spatialvectors
+    import osgeo.ogr
     
     fixture = {}
-   
-    fixture["testbasin"] = {"extents": (-76.86408896229581, -73.5013706471868, 38.33140005688545, 43.986783289578774), 
-                            "name": "testbasin_proj_wgs.shp", 
-                            "fields": ["Id"], 
-                            "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
-                            "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\basins", 
-                            "num_features": 1, 
-                            "type": "POLYGON", 
-                            "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
 
-    fixture["testbasin_small"] = {"extents": (-74.65523090397193, -74.36488125936603, 41.9520891488861, 42.397621499584034), 
-                            "name": "test_basinsmall_proj_wgs.shp", 
-                            "fields": ["Id"], 
-                            "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
-                            "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\basins", 
-                            "num_features": 2, 
-                            "type": "POLYGON", 
-                            "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
+    # open the shapefiles
+    test_poly_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/test_poly_wgs84.shp")))  
+    water_basin_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basin_wgs84.shp")))      
+    water_basins_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basins_wgs84.shp")))  
+    water_basin_pourpoint_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basin_pourpoint_wgs84.shp")))      
+    canes_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/gcm-tiles/CanES_wgs84.shp"))) 
+    wateruse_centroids_sample_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/wateruse-centroids/wateruse_centroids_sample_wgs84.shp"))) 
 
-    fixture["waterbasin"] = {"extents": (-76.3557164298209, -75.83406785380727, 40.52224451815593, 40.89012237818175), 
-                            "name": "waterbasin_proj_wgs.shp", 
-                            "fields": ["OBJECTID", "Id", "Shape_Leng", "Shape_Area"], 
-                            "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
-                            "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\basins", 
-                            "num_features": 1, 
-                            "type": "POLYGON", 
-                            "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
-
-    fixture["waterbasin_multi"] = {"extents": (-75.46839351213258, -74.35718960764397, 39.85602095657912, 42.36690057316007), 
-                                    "name": "waterbasin_multi_proj_wgs.shp", 
-                                    "fields": ["STAID", "da_sqmi", "ForestSum", "AgSum", "DevSum", "FORdivAG"], 
-                                    "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
-                                    "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\basins", 
-                                    "num_features": 12, 
-                                    "type": "POLYGON", 
-                                    "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
-
-    fixture["canes"] = {"extents": (-77.34375265636656, -71.71875035838741, 36.27781521345216, 44.64950905729846), 
-                        "name": "CanES_proj_wgs.shp", 
-                        "fields": ["OBJECTID", "SHAPE_Leng", "SHAPE_Area", "TileDRB", "Tile"], 
-                        "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
-                        "path": "C:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\gcm-tiles", 
-                        "num_features": 6, 
-                        "type": "POLYGON", 
-                        "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
-
-    fixture["gfdl"] = {"extents": (-77.50000269499992, -72.50000069999992, 38.426973659000055, 44.49439100300006), 
-                "name": "GFDL_proj_wgs.shp", 
-                "fields": ["OBJECTID", "SHAPE_Leng", "Tile_DRB", "Tile", "Shape_Le_1", "Shape_Area"], 
-                "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
-                "path": "c:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\gcm-tiles", 
-                "num_features": 6, 
-                "type": "POLYGON", 
-                "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
-
-    fixture["giss"] = {"extents": (-77.50000282499991, -72.50000059199992, 36.000007148000066, 46.00000926800006), 
-                "name": "GISS_proj_wgs.shp", 
-                "fields": ["OBJECTID", "SHAPE_Leng", "Tile_DRB", "Tile", "Shape_Le_1", "Shape_Area"], 
-                "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
-                "path": "c:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\gcm-tiles", 
-                "num_features": 10, 
-                "type": "POLYGON", 
-                "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
-
-    fixture["ncar"] = {"extents": (-78.125002881412, -73.12500082090243, 36.753934288860414, 44.293199945821605), 
-                "name": "NCAR_proj_wgs.shp", 
-                "fields": ["OBJECTID", "SHAPE_Leng", "SHAPE_Area", "Tile_DRB", "Tile"], 
-                "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
-                "path": "c:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\gcm-tiles", 
-                "num_features": 32, 
-                "type": "POLYGON", 
-                "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
-
-    fixture["basin_centroids"] = {"extents": (-75.019333717554, -74.39059291460879, 41.750875935559804, 42.41551178030361), 
-                "name": "dem_basin_centroids_small_proj_wgs.shp", 
-                "fields": ["newhydroid", "HUC_12"], 
-                "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
-                "path": "c:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\basins", 
-                "num_features": 326, 
-                "type": "POINT", 
-                "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
-
-    fixture["pourpoint"] = {"extents": (-75.99795597969509, -75.99795597969509, 40.52231614829165, 40.52231614829165), 
-                "name": "pourpoint_proj_wgs.shp", 
-                "fields": ["OBJECTID", "POINTID", "GRID_CODE"], 
-                "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
-                "path": "c:\\Users\\jlant\\jeremiah\\projects\\python-projects\\waterapputils\\data\\spatial-datafiles\\basins", 
-                "num_features": 1, 
-                "type": "POINT", 
-                "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
+    fixture["test_poly_wgs84"] = spatialvectors.fill_shapefile_dict(shapefile = test_poly_wgs84_shapefile)
+    fixture["water_basin_wgs84"] = spatialvectors.fill_shapefile_dict(shapefile = water_basin_wgs84_shapefile)
+    fixture["water_basins_wgs84"] = spatialvectors.fill_shapefile_dict(shapefile = water_basins_wgs84_shapefile)
+    fixture["water_basin_pourpoint_wgs84"] = spatialvectors.fill_shapefile_dict(shapefile = water_basin_pourpoint_wgs84_shapefile)
+    fixture["canes_wgs84"] = spatialvectors.fill_shapefile_dict(shapefile = canes_wgs84_shapefile)  
+    fixture["wateruse_centroids_sample_wgs84"] = spatialvectors.fill_shapefile_dict(shapefile = wateruse_centroids_sample_wgs84_shapefile)  
 
     return fixture
 
@@ -312,32 +240,29 @@ def test_print_shapefile_data():
     print("--- Testing print_shapefile_data ---")
     
     fixture = _create_shapefile_test_data()
-    print_shapefile_data(shapefile_dict = fixture["testbasin"])
+    print_shapefile_data(shapefile_dict = fixture["test_poly_wgs84"])
     
     print("")
 
-def test_plot_shapefiles_map():
+def test_plot_shapefiles_map(map_type = "test_poly"):
     """ Test plot_shapefile_data """
     
     print("--- Testing plot_shapefile_data() ---")
     
     fixture = _create_shapefile_test_data()
-    
-#    plot_shapefiles_map(shapefiles = [fixture["testbasin"], fixture["waterbasin"], fixture["pourpoint"]], display_fields = ["Id", "Id", "POINTID"], title = "Testing plotting of map")    
-#
-#    plot_shapefiles_map(shapefiles = [fixture["testbasin"], fixture["waterbasin_multi"]], display_fields = ["STAID"], title = "Sample test basins")
-#
-#    plot_shapefiles_map(shapefiles = [fixture["canes"], fixture["waterbasin_multi"]], display_fields = ["Tile", "STAID"], title = "CanES GCM with sample basins")
-#
-#    plot_shapefiles_map(shapefiles = [fixture["canes"], fixture["gfdl"], fixture["giss"], fixture["ncar"], fixture["waterbasin_multi"]], display_fields = ["Tile"], title = "Many GCM's with sample basins")
-#    
-#    plot_shapefiles_map(shapefiles = [fixture["basin_centroids"], fixture["waterbasin_multi"]], display_fields = ["STAID"], title = "CanES GCM with sample basins")
-#
-#    plot_shapefiles_map(shapefiles = [fixture["basin_centroids"], fixture["testbasin_small"]], display_fields = ["newhydroid", "FID"], title = "CanES GCM with sample basins")
 
-#    plot_shapefiles_map(shapefiles = [fixture["canes"], fixture["waterbasin"], fixture["pourpoint"]], display_fields = ["Tile", "STAID"], colors = ["g", "gold", "r"], title = "CanES Global Climate Model (GCM) with sample basin")
+    if map_type == "test_poly":
+        plot_shapefiles_map(shapefiles = [fixture["test_poly_wgs84"]], display_fields = ["Id"], title = "Testing plotting of map")   
 
-    plot_shapefiles_map(shapefiles = [fixture["waterbasin_multi"], fixture["basin_centroids"]], display_fields = ["STAID"], colors = ["g", "y"], title = "Sample basins with sample water use points")
+    if map_type == "water_basin":
+        plot_shapefiles_map(shapefiles = [fixture["water_basin_wgs84"], fixture["water_basin_pourpoint_wgs84"]], display_fields = ["Id", "POINTID"], colors = ["g", "r"], title = "Water basin with pour point")       
+        
+    if map_type == "climate_change":
+        plot_shapefiles_map(shapefiles = [fixture["canes_wgs84"], fixture["water_basins_wgs84"]], display_fields = ["Tile", "STAID"], title = "Climate Change: CanES GCM with sample basins")   
+
+    if map_type == "water_use":
+        plot_shapefiles_map(shapefiles = [fixture["water_basins_wgs84"], fixture["wateruse_centroids_sample_wgs84"]], display_fields = ["Tile", "STAID"], colors = ["g", "b"], title = "Water Use: Sample water use point with sample basins")   
+
 
 def main():
     """ Test functionality of waterapputils_viewer() """
@@ -352,7 +277,12 @@ def main():
 
     ans_plot_shapefile_data = raw_input("Do you want to test plot_shapefiles_map()? y/n ")
     if ans_plot_shapefile_data == "y":
-        test_plot_shapefiles_map()
+        map_types = ["test_poly", "water_basin", "climate_change", "water_use"]
+        map_type = raw_input("Please type one of the following map types to plot:\n{}\n".format(map_types))
+        if map_type in map_types:
+            test_plot_shapefiles_map(map_type)
+        else:
+            print("invalid map type selected: {}".format(map_type))
 
 if __name__ == "__main__":
     main()  
