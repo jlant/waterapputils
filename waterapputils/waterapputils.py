@@ -30,9 +30,10 @@ import deltas
 import spatialvectors
 import wateruse
 
-# editable files containing path
-import wateruse_batch_variables
-import waterdeltas_batch_variables
+# editable files for batch simulations; files contains paths to data needed
+sys.path.insert(0, "../data/water-batch-run-datafiles/sample-user-files/")
+import water_use_batch_variables
+import deltas_gcm_batch_variables
 
 def process_txt_files(file_list, arguments):
     """    
@@ -485,6 +486,7 @@ def main():
 
     parser.add_argument("-v", "--verbose", action = "store_true",  help = "Print general information about data file(s)")
     parser.add_argument("-p", "--showplot", action = "store_true",  help = "Show plots of parameters contained in data file(s)")
+    
     args = parser.parse_args()  
 
     # get files from command line arguments and process
