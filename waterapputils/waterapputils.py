@@ -472,7 +472,7 @@ def main():
         # ---------------------------------------------------------------------
         elif args.waterxmlfiles:
             
-            process_water_files(file_list = args.watertxtfiles, arguments = args)      
+            process_water_files(file_list = args.waterxmlfiles, arguments = args)      
                      
             sys.exit()
         
