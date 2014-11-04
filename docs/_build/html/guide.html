@@ -1,0 +1,261 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WATER simulation output file &mdash; waterapputils 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="waterapputils 1.0.0 documentation" href="index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="index.html"><img src="_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+
+      <div class="header"><h1 class="heading"><a href="index.html">
+          <span>waterapputils 1.0.0 documentation</span></a></h1>
+        <h2 class="heading"><span>WATER simulation output file</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        <a class="uplink" href="index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="water-simulation-output-file">
+<h1>WATER simulation output file<a class="headerlink" href="#water-simulation-output-file" title="Permalink to this headline">¶</a></h1>
+<p>Process WATER simulation output text files (<tt class="docutils literal"><span class="pre">WATER.txt</span></tt>).</p>
+<p><strong>-watertxt</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -watertxt [file1] [file2] ...
+</pre></div>
+</div>
+<p>Processes <tt class="docutils literal"><span class="pre">WATER.txt</span></tt> file(s) and produces plots of each parameter for
+each file. Plots are saved to an output directory named as
+*_waterapputils-output/filename-output*. If an output text file name
+is <tt class="docutils literal"><span class="pre">WATER-basin-0123.txt</span></tt>, then the output directory would be named
+<tt class="docutils literal"><span class="pre">_waterapputils-output/WATER-basin-0123-output</span></tt>. The output directory
+is created in the same directory as the respective<tt class="docutils literal"><span class="pre">WATER.txt</span></tt> file.</p>
+<hr class="docutils" />
+<p><strong>-watertxtfd</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -watertxtfd
+</pre></div>
+</div>
+<p>Spawns a file dialog window to select <tt class="docutils literal"><span class="pre">WATER.txt</span></tt> file(s), then
+processes the <tt class="docutils literal"><span class="pre">WATER.txt</span></tt> file(s) in the same manner as the
+<tt class="docutils literal"><span class="pre">-watertxt</span></tt> flag.</p>
+<hr class="docutils" />
+<p><strong>-watertxtcmp</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -watertxtcmp [file1] [file2]
+</pre></div>
+</div>
+<p>Produces comparison plots of each respective parameter in two
+<tt class="docutils literal"><span class="pre">WATER.txt</span></tt> files. Plots are saved to an output directory named as
+*_waterapputils-output/filename1-vs-filename2-output<em>. If the
+*filename1* is ``WATER-basin-0123.txt`` and *filename2</em> is
+<tt class="docutils literal"><span class="pre">WATER-basin-456.txt</span></tt>, then the output directory would be named
+<tt class="docutils literal"><span class="pre">_waterapputils-output/WATER-basin-0123-vs-WATER-basin-456-output</span></tt>.
+The output directory is located in the same directory as the
+<tt class="docutils literal"><span class="pre">WATER.txt</span></tt> file.</p>
+<hr class="docutils" />
+<p><strong>-watertxtcmpfd</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -watertxtcmpfd
+</pre></div>
+</div>
+<p>Spawns a file dialog window to select two <tt class="docutils literal"><span class="pre">WATER.txt</span></tt> files, then
+compares and processes the <tt class="docutils literal"><span class="pre">WATER.txt</span></tt> files in the same manner as
+using the <tt class="docutils literal"><span class="pre">-watertxtcmp</span></tt> flag.</p>
+</div>
+<div class="section" id="water-simulation-database-file">
+<h1>WATER simulation database file<a class="headerlink" href="#water-simulation-database-file" title="Permalink to this headline">¶</a></h1>
+<p>Process WATER simulation output database files
+(<tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt>).</p>
+<div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -waterxml [file]
+</pre></div>
+</div>
+<p>Processes a <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt> file and produces plots timeseries
+parameters and topographic wetness index values. Plots are saved to an
+output directory named as *_waterapputils-output/filename-output*. If
+the output text file name is <tt class="docutils literal"><span class="pre">WATERSimulation-basin-0123.txt</span></tt>, then
+the output directory would be named
+<tt class="docutils literal"><span class="pre">_waterapputils-output/WATERSimulation-basin-0123-output</span></tt>. The output
+directory is created in the same directory as the
+<tt class="docutils literal"><span class="pre">WATERSimulation.txt</span></tt> file.</p>
+<hr class="docutils" />
+<div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -waterxmlfd
+</pre></div>
+</div>
+<p>Spawns a file dialog window to select a <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt> file,
+then processes the <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt> in the same manner as using
+the <tt class="docutils literal"><span class="pre">-waterxml</span></tt> flag.</p>
+<hr class="docutils" />
+<p><strong>-waterxmlcmp</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -waterxmlcmp [file1] [file2]
+</pre></div>
+</div>
+<p>Produces comparison plots of each respective parameter in two
+<tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt> files. Plots are saved to an output directory
+named as *_waterapputils-output/filename1-vs-filename2-output<em>. If
+the *filename1* is ``WATERSimulation-0123.txt`` and *filename2</em> is
+<tt class="docutils literal"><span class="pre">WATERSimulation-456.txt</span></tt>, then the output directory would be named
+<tt class="docutils literal"><span class="pre">_waterapputils-output/WATERSimulation-0123-vs-WATERSimulation-456-output</span></tt>.
+The output directory is located in the same directory as the
+<tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt> file.</p>
+<hr class="docutils" />
+<p><strong>-waterxmlcmpfd</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -waterxmlcmpfd
+</pre></div>
+</div>
+<p>Spawns a file dialog window to select two <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt> files,
+then compares and processes the <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt> files in the
+same manner as using the <tt class="docutils literal"><span class="pre">-waterxmlcmp</span></tt> flag.</p>
+</div>
+<div class="section" id="applying-water-use">
+<h1>Applying Water Use<a class="headerlink" href="#applying-water-use" title="Permalink to this headline">¶</a></h1>
+<p>Apply water use to WATER simulation batch runs.</p>
+<div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -applywateruse
+</pre></div>
+</div>
+<p>Applies water use data to a WATER simulation batch run. A WATER
+simulation batch run has the following directory structure:</p>
+<div class="highlight-python"><div class="highlight"><pre>WATER-batch-run/
+    &lt;basinid&gt;/        # directory containing data for a specific basin id in the batch run
+        amask         # ArcMap raster of agriculture area
+        basinmask     # ArcMap raster of basin area
+        fmask         # ArcMap raster of forest area
+        WATER.txt     # WATER simulation output file
+        WATERAnnual.txt        # WATER simulation annual output file
+        WATERMonth.txt         # WATER simulation monthly output file
+        WATERSimulation.txt    # WATER simulation database file
+    &lt;basinid&gt;/        # directory containing data for a specific basin id in the batch run
+    ...
+    Water.txt         # ?
+    Watersheds.shp    # shapefile and all its associated data files (.dbf, .prj, .sbn, .sbx, .shp.xml, .shx)                         # containing all the basins used in the batch run
+</pre></div>
+</div>
+<p>At this time, in order to apply water use to a WATER simulation batch
+run, information regarding the location of a series of files and
+directories must be entered in a file called
+<tt class="docutils literal"><span class="pre">water_use_batch_variables.py</span></tt> located in the
+<tt class="docutils literal"><span class="pre">waterapputils/data/water-batch-run-datafiles/sample-user-files/</span></tt>
+directory. The following variables are to be assigned in a
+<tt class="docutils literal"><span class="pre">water_use_batch_variables.py</span></tt> file:</p>
+<div class="highlight-python"><div class="highlight"><pre>Variables                       Meaning
+---------                       -------
+
+waterbatch_directory        -   path to a WATER batch run directory
+basin_shapefile             -   path to the basin shapefile used in the WATER batch run
+basin_field                 -   unique field in the basin shapefile used in the WATER batch run that names the batch run directories; e.g. STAID
+subwateruse_file            -   path to substitute water use file; used when basins in the basin shapefile do not intersect with water use centroids
+wateruse_files              -   list of paths to water use files to use
+wateruse_factor_file        -   path to the water use factor file
+basin_centroids_shapefile   -   path to the water use centroids shapefile
+</pre></div>
+</div>
+<p>The following is an example <tt class="docutils literal"><span class="pre">water_batch_variables.py</span></tt> file:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">waterbatch_directory</span> <span class="o">=</span> <span class="s">&quot;../data/water-batch-run-datafiles/sample-batch-run-output/&quot;</span>
+<span class="n">basin_shapefile</span> <span class="o">=</span> <span class="n">waterbatch_directory</span> <span class="o">+</span> <span class="s">&quot;Watersheds.shp&quot;</span>
+<span class="n">basin_field</span> <span class="o">=</span> <span class="s">&quot;STAID&quot;</span>
+<span class="n">subwateruse_file</span> <span class="o">=</span> <span class="n">waterbatch_directory</span> <span class="o">+</span> <span class="s">&quot;/_waterapputils_non_intersecting_basin_centroids.txt&quot;</span>
+<span class="n">wateruse_files</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;../data/wateruse-datafiles/010203-JFM-sample.txt&quot;</span><span class="p">,</span>
+                  <span class="s">&quot;../data/wateruse-datafiles/040506-AMJ-sample.txt&quot;</span><span class="p">,</span>
+                  <span class="s">&quot;../data/wateruse-datafiles/070809-JAS-sample.txt&quot;</span><span class="p">,</span>
+                  <span class="s">&quot;../data/wateruse-datafiles/101112-OND-sample.txt&quot;</span><span class="p">]</span>
+<span class="n">wateruse_factor_file</span> <span class="o">=</span>  <span class="s">&quot;../data/wateruse-datafiles/wateruse-factors-sample.txt&quot;</span>
+<span class="n">basin_centroids_shapefile</span> <span class="o">=</span> <span class="s">&quot;../data/spatial-datafiles/wateruse-centroids/wateruse_centroids_sample_nad83.shp&quot;</span>
+</pre></div>
+</div>
+<p>The information in the <tt class="docutils literal"><span class="pre">water_use_batch_variables.py</span></tt> file is used to
+apply water use to each respective basin in the batch run.</p>
+<p>The intersection between each respective basin in the batch run and the
+points that specify the rough approximate location of water use data are
+found. The water use point(s) that intersect a respective basin are
+totaled and applied to the original WATER simulation output file
+<tt class="docutils literal"><span class="pre">WATER.txt</span></tt>.</p>
+<p>Results of applying water use to each basin in a batch run are contained
+within each respective basin directory in the <tt class="docutils literal"><span class="pre">waterbatch_directory</span></tt>.
+Two directories, <tt class="docutils literal"><span class="pre">_waterapputils-output</span></tt> and <tt class="docutils literal"><span class="pre">_wateruse-output</span></tt>,
+that contain detailed results and plots of applying water use are
+created in each respective basin directory.</p>
+<div class="highlight-python"><div class="highlight"><pre>water-batch-dir/
+    _wateruse-batchrun-info/        # information about applying water use to the batch run
+        _waterapputils_error.log
+        wateruse_batchrun_info.txt
+        wateruse_non_intersecting_centroids.txt
+    basin-1/
+
+    basin-2/
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">_waterapputils-output</span></tt> directory contains plots of all the
+parameters in the <tt class="docutils literal"><span class="pre">WATER.txt</span></tt> file.</p>
+<p>The <tt class="docutils literal"><span class="pre">_wateruse-output</span></tt> directory contains an updated WATER simulation
+output file (<tt class="docutils literal"><span class="pre">WATER.txt-with-wateruse.txt</span></tt>) containing additional
+columns of water use (cfs) and discharge + water use (cfs). In addition,
+the updated WATER simulation file is processed and plots of each
+parameter in the updated WATER simulation file are created and contained
+in the <tt class="docutils literal"><span class="pre">_waterapputils-output/WATER.txt-with-wateruse.txt-output</span></tt>
+directory.</p>
+<p>Detailed information regarding applying water use to a batch run are
+contained in a directory called <tt class="docutils literal"><span class="pre">_wateruse_batch_info</span></tt> which is
+created in the <tt class="docutils literal"><span class="pre">waterbatch_directory</span></tt> specified in the
+<tt class="docutils literal"><span class="pre">water_batch_variables.py</span></tt> file. The <tt class="docutils literal"><span class="pre">_wateruse_batch_info</span></tt> will
+contain a summary file of the water use data applied and which water use
+points were used (<tt class="docutils literal"><span class="pre">wateruse_batchrun_info.txt</span></tt>). If there are basins
+that do not intersect any water use points, then a file logging those
+the non-intersection water use points (<tt class="docutils literal"><span class="pre">_waterapputils_error.log</span></tt>) is
+created, along with a comma-separated file
+(<tt class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></tt>) listing the specific
+basins that do not intersect any water use points. To apply water use
+point(s) to basins that originally do not intersect any water use
+points, a user can edit the <tt class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></tt>
+file and specify water use point(s) to be applied. To apply the
+information specified in the <tt class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></tt>
+to the batch run, the following command is used:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -applysubwateruse
+</pre></div>
+</div>
+<p>The above command uses the <tt class="docutils literal"><span class="pre">subwateruse_file</span></tt> variable in the
+<tt class="docutils literal"><span class="pre">water_batch_variables.py</span></tt> file which specifies the location of the
+<tt class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></tt> file.</p>
+</div>
+
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        <a class="uplink" href="index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, Jeremiah Lant.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

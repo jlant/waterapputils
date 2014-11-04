@@ -1,34 +1,21 @@
 Code Documentation
 ==================
 
-nwispy
-------
-.. automodule:: nwispy
+waterapputils - "main controller" module
+----------------------------------------
+.. automodule:: waterapputils
    :members:
    
-nwispy_filereader
------------------
-.. automodule:: nwispy_filereader
+watertxt - WATER.txt file reader and processor
+----------------------------------------------
+.. automodule:: watertxt
    :members:
 
-nwispy_webservice
------------------
-.. automodule:: nwispy_webservice
+waterxml - WATERSimulation.xml file reader and processor
+--------------------------------------------------------
+.. automodule:: watertxt
    :members:
 
-nwispy_viewer
------------------
-.. automodule:: nwispy_viewer
-   :members:
-   
-nwispy_logging
------------------
-.. automodule:: nwispy_logging
-   :members: 
 
-nwispy_helpers
------------------
-.. automodule:: nwispy_helpers
-   :members:
    
  

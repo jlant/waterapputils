@@ -4,7 +4,7 @@
 
 :Author: Jeremiah Lant, jlant@usgs.gov, U.S. Geological Survey, Kentucky Water Science Center, http://www.usgs.gov/ 
 
-:Synopsis: Main controller that handles user input options for processing WATER application output filesb
+:Synopsis: Main controller that handles user input options for processing WATER application output files
 """
 
 __version__   = "1.0.0"
@@ -133,17 +133,24 @@ def process_intersecting_tiles(intersecting_tiles, files_dict, arguments):
     intersecting_tiles : dictionary
         Dictionary containing lists of values for a particular field that were intersected by another shapefile.  
     files_dict : dictionary
-        Dictionary of 
+        Dictionary of user file paths to necessary datasets.
     arguments : argparse object
         An argparse object containing user options.                    
 
     Notes
     -----
-    files_dict = {"delta_files": list of delta text files,
-                  "delta_shapefile": shapefile corresponding to delta files,
-                  "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with delta shapefile
-                  "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
-                  "waterxml_directory": path to directory containing xml file or files}    
+    files_dict = {
+
+        "delta_files": list of delta text files,
+
+        "delta_shapefile": shapefile corresponding to delta files,
+
+        "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with delta shapefile
+
+        "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
+
+        "waterxml_directory": path to directory containing xml file or files
+    }    
     """ 
     for featureid, tiles in intersecting_tiles.iteritems():                    
         print("FeatureId: {}\n".format(featureid))  
@@ -200,17 +207,24 @@ def apply_deltas_to_xml_files(files_dict, arguments):
     Parameters
     ----------
     files_dict : dictionary
-        Dictionary of 
+        Dictionary of user file paths to necessary datasets.
     arguments : argparse object
         An argparse object containing user options.                    
 
     Notes
     -----
-    files_dict = {"delta_files": list of delta text files,
-                  "delta_shapefile": shapefile corresponding to delta files,
-                  "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with delta shapefile
-                  "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
-                  "waterxml_directory": path to directory containing xml file or files}    
+    files_dict = {
+
+        "delta_files": list of delta text files,
+
+        "delta_shapefile": shapefile corresponding to delta files,
+
+        "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with delta shapefile
+
+        "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
+
+        "waterxml_directory": path to directory containing xml file or files
+    } 
     """    
     # initialize error logging
     waterapputils_logging.initialize_loggers(output_dir = files_dict["waterxml_directory"]) 
@@ -263,12 +277,20 @@ def process_intersecting_centroids(intersecting_centroids, files_dict, arguments
 
     Notes
     -----
-    files_dict = {"wateruse_files": list of water use text files,
-                  "wateruse_factor_file": path to water use factor file 
-                  "basin_centroids_shapefile": shapefile corresponding to basin centroids,
-                  "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with basin centroid shapefile
-                  "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
-                  "watertxt_directory": path to directory containing txt file or files}    
+    files_dict = {
+
+        "wateruse_files": list of water use text files,
+        
+        "wateruse_factor_file": path to water use factor file 
+        
+        "basin_centroids_shapefile": shapefile corresponding to basin centroids,
+        
+        "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with basin centroid shapefile
+        
+        "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
+        
+        "watertxt_directory": path to directory containing txt file or files
+    }    
     """      
     # create a file for the output  
     for featureid, centroids in intersecting_centroids.iteritems():
@@ -329,12 +351,20 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
 
     Notes
     -----
-    files_dict = {"wateruse_files": list of water use text files,
-                  "wateruse_factor_file": path to water use factor file 
-                  "basin_centroids_shapefile": shapefile corresponding to basin centroids,
-                  "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with basin centroid shapefile
-                  "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
-                  "watertxt_directory": path to directory containing txt file or files}    
+    files_dict = {
+
+        "wateruse_files": list of water use text files,
+        
+        "wateruse_factor_file": path to water use factor file 
+        
+        "basin_centroids_shapefile": shapefile corresponding to basin centroids,
+        
+        "basin_shapefile": shapefile of WATER basin of interest; used in finding intersection with basin centroid shapefile
+        
+        "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
+        
+        "watertxt_directory": path to directory containing txt file or files
+    }    
     """   
    
     outputdirpath = helpers.make_directory(path = files_dict["watertxt_directory"], directory_name = "_wateruse-batchrun-info")    
