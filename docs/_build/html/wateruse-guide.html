@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Water Use Data Files &mdash; waterapputils 1.0.0 documentation</title>
+    <title>Water Use Guide &mdash; waterapputils 1.0.0 documentation</title>
     
     <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="waterapputils 1.0.0 documentation" href="index.html" />
     <link rel="next" title="Code Documentation" href="code.html" />
-    <link rel="prev" title="WATER simulation output file" href="guide.html" /> 
+    <link rel="prev" title="General Guide" href="guide.html" /> 
   </head>
   <body>
 
@@ -36,12 +36,12 @@
 
       <div class="header"><h1 class="heading"><a href="index.html">
           <span>waterapputils 1.0.0 documentation</span></a></h1>
-        <h2 class="heading"><span>Water Use Data Files</span></h2>
+        <h2 class="heading"><span>Water Use Guide</span></h2>
       </div>
       <div class="topnav">
       
         <p>
-        «&#160;&#160;<a href="guide.html">WATER simulation output file</a>
+        «&#160;&#160;<a href="guide.html">General Guide</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
@@ -52,8 +52,10 @@
       <div class="content">
         
         
-  <div class="section" id="water-use-data-files">
-<h1>Water Use Data Files<a class="headerlink" href="#water-use-data-files" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="water-use-guide">
+<h1>Water Use Guide<a class="headerlink" href="#water-use-guide" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="water-use-data-files">
+<h2>Water use data files<a class="headerlink" href="#water-use-data-files" title="Permalink to this headline">¶</a></h2>
 <p>The water use data files contain seasonal totals of median water use
 values for each respective DEM-derived HUC12 basin. Basin centroids were
 created to represent a respective water use point within a HUC12 basin.</p>
@@ -79,7 +81,7 @@ The water use values are divided into various categories:</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="steps-to-compute-total-water-use-for-each-respective-basin">
-<h1>Steps to Compute Total Water Use For Each Respective Basin<a class="headerlink" href="#steps-to-compute-total-water-use-for-each-respective-basin" title="Permalink to this headline">¶</a></h1>
+<h2>Steps to Compute Total Water Use For Each Respective Basin<a class="headerlink" href="#steps-to-compute-total-water-use-for-each-respective-basin" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li>Find water use centroids that are contained within the basin
 boundaries.</li>
@@ -92,10 +94,11 @@ contained within the basin boundaries.</li>
 feet per second (cfs) to the total water use. (1 million gallons per
 day = 1.54722865 cubic feet per second)</li>
 </ol>
-<div class="section" id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="example-using-sample-randomly-generated-data">
+<h2>Example - using sample randomly generated data<a class="headerlink" href="#example-using-sample-randomly-generated-data" title="Permalink to this headline">¶</a></h2>
 <p>Consider the following sample water use data files.</p>
-<p><strong>Sample water use data file</strong></p>
+<p><strong>Sample water use data file for winter season</strong></p>
 <div class="highlight-python"><div class="highlight"><pre># JFM_WU
 # Units: Mgal/day
 # sample data set
@@ -109,16 +112,19 @@ huc12    newhydroid    AqGwWL   CoGwWL  DoGwWL  InGwWL  IrGwWL
 20401010102    8       1        1        1        0        0
 </pre></div>
 </div>
+<p><strong>Column details</strong></p>
+<ul class="simple">
+<li>huc12 - HUC 12 id values</li>
+<li>newhydroid - id values for water use centroids</li>
+<li>AqGwWL, CoGwWL, DoGwWL, InGwWL, IrGwWL - various water use contributions</li>
+</ul>
 <p><strong>Sample water factor file</strong></p>
 <div class="highlight-python"><div class="highlight"><pre># water use factors
 AqGwWL  CoGwWL  DoGwWL  InGwWL  IrGwWL
 1.5     1.5     1.5     1.5    1.5
 </pre></div>
 </div>
-<p>where</p>
-<blockquote>
-<div>newhydroid - centroid id&#8217;s AqGwWL, CoGwWL, DoGwWL, InGwWL, IrGwWL -
-various water use contributions</div></blockquote>
+<p><strong>Compute total water use</strong></p>
 <ol class="arabic simple">
 <li>Let the following centroids be contained within a respective basin:</li>
 </ol>
@@ -168,6 +174,105 @@ day = 1.54722865 cubic feet per second)</li>
 <div class="highlight-python"><div class="highlight"><pre>total water use = 6.96 cfs
 </pre></div>
 </div>
+<p>The same steps are followed for the spring, summer, autumn seasons for each respective seasonal water use file.</p>
+<p><strong>Applying seasonal total water use to a WATER output simulation file (WATER.txt)</strong></p>
+<p>Let the following table be the water use totals for each season:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="20%" />
+<col width="55%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Month</th>
+<th class="head">Season</th>
+<th class="head">Water Use Total (cfs)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>January</td>
+<td>JFM</td>
+<td>6.96</td>
+</tr>
+<tr class="row-odd"><td>Feburary</td>
+<td>JFM</td>
+<td>6.96</td>
+</tr>
+<tr class="row-even"><td>March</td>
+<td>JFM</td>
+<td>6.96</td>
+</tr>
+<tr class="row-odd"><td>April</td>
+<td>AMJ</td>
+<td>7.50</td>
+</tr>
+<tr class="row-even"><td>May</td>
+<td>AMJ</td>
+<td>7.50</td>
+</tr>
+<tr class="row-odd"><td>June</td>
+<td>AMJ</td>
+<td>7.50</td>
+</tr>
+<tr class="row-even"><td>July</td>
+<td>JAS</td>
+<td>-0.5</td>
+</tr>
+<tr class="row-odd"><td>August</td>
+<td>JAS</td>
+<td>-0.5</td>
+</tr>
+<tr class="row-even"><td>September</td>
+<td>JAS</td>
+<td>-0.5</td>
+</tr>
+<tr class="row-odd"><td>October</td>
+<td>OND</td>
+<td>2.25</td>
+</tr>
+<tr class="row-even"><td>November</td>
+<td>OND</td>
+<td>2.25</td>
+</tr>
+<tr class="row-odd"><td>December</td>
+<td>OND</td>
+<td>2.25</td>
+</tr>
+</tbody>
+</table>
+<p>Let the following be part of a sample WATER output simulation file (WATER.txt):</p>
+<div class="highlight-python"><div class="highlight"><pre>Date    Discharge (cfs)
+1/1/2014    100
+...
+3/31/2014   200
+4/1/2014    200
+...
+6/30/2014   50
+7/1/2014    50
+...
+9/30/2014   80
+10/1/2014   80
+...
+12/31/2014  150
+</pre></div>
+</div>
+<p>Applying the seasonal water use totals from the table above results in the following
+updated WATER output simulation file (WATER.txt):</p>
+<div class="highlight-python"><div class="highlight"><pre>Date    Discharge (cfs) Discharge + Water Use (cfs) Water Use (cfs)
+1/1/2014    100         106.96                      6.96
+...         ...         ...                         ...
+3/31/2014   200         206.96                      6.96
+4/1/2014    200         207.50                      7.50
+...         ...         ...                         ...
+6/30/2014   50          57.50                       7.50
+7/1/2014    50          49.50                       -0.5
+...         ...         ...                         ...
+9/30/2014   80          79.50                       -0.5
+10/1/2014   80          82.25                       2.25
+...         ...         ...                         ...
+12/31/2014  150         152.25                      2.25
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -176,7 +281,7 @@ day = 1.54722865 cubic feet per second)</li>
       <div class="bottomnav">
       
         <p>
-        «&#160;&#160;<a href="guide.html">WATER simulation output file</a>
+        «&#160;&#160;<a href="guide.html">General Guide</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         &#160;&#160;::&#160;&#160;

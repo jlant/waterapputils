@@ -1,5 +1,8 @@
-WATER simulation output file
-============================
+General Guide
+=============
+
+Processing WATER simulation output files - WATER.txt
+----------------------------------------------------
 
 Process WATER simulation output text files (``WATER.txt``).
 
@@ -57,8 +60,9 @@ Spawns a file dialog window to select two ``WATER.txt`` files, then
 compares and processes the ``WATER.txt`` files in the same manner as
 using the ``-watertxtcmp`` flag.
 
-WATER simulation database file
-==============================
+
+Processing WATER simulation database file - WATERSimulation.xml
+---------------------------------------------------------------
 
 Process WATER simulation output database files
 (``WATERSimulation.xml``).
@@ -115,8 +119,9 @@ Spawns a file dialog window to select two ``WATERSimulation.xml`` files,
 then compares and processes the ``WATERSimulation.xml`` files in the
 same manner as using the ``-waterxmlcmp`` flag.
 
-Applying Water Use
-==================
+
+Applying water use to WATER batch runs
+--------------------------------------
 
 Apply water use to WATER simulation batch runs.
 

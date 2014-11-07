@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>WATER simulation output file &mdash; waterapputils 1.0.0 documentation</title>
+    <title>General Guide &mdash; waterapputils 1.0.0 documentation</title>
     
     <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -23,7 +23,9 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="waterapputils 1.0.0 documentation" href="index.html" /> 
+    <link rel="top" title="waterapputils 1.0.0 documentation" href="index.html" />
+    <link rel="next" title="Water Use Guide" href="wateruse-guide.html" />
+    <link rel="prev" title="waterapputils" href="overview.html" /> 
   </head>
   <body>
 
@@ -34,20 +36,26 @@
 
       <div class="header"><h1 class="heading"><a href="index.html">
           <span>waterapputils 1.0.0 documentation</span></a></h1>
-        <h2 class="heading"><span>WATER simulation output file</span></h2>
+        <h2 class="heading"><span>General Guide</span></h2>
       </div>
       <div class="topnav">
       
         <p>
+        «&#160;&#160;<a href="overview.html">waterapputils</a>
+        &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="wateruse-guide.html">Water Use Guide</a>&#160;&#160;»
         </p>
 
       </div>
       <div class="content">
         
         
-  <div class="section" id="water-simulation-output-file">
-<h1>WATER simulation output file<a class="headerlink" href="#water-simulation-output-file" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="general-guide">
+<h1>General Guide<a class="headerlink" href="#general-guide" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="processing-water-simulation-output-files-water-txt">
+<h2>Processing WATER simulation output files - WATER.txt<a class="headerlink" href="#processing-water-simulation-output-files-water-txt" title="Permalink to this headline">¶</a></h2>
 <p>Process WATER simulation output text files (<tt class="docutils literal"><span class="pre">WATER.txt</span></tt>).</p>
 <p><strong>-watertxt</strong></p>
 <div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -watertxt [file1] [file2] ...
@@ -89,8 +97,8 @@ The output directory is located in the same directory as the
 compares and processes the <tt class="docutils literal"><span class="pre">WATER.txt</span></tt> files in the same manner as
 using the <tt class="docutils literal"><span class="pre">-watertxtcmp</span></tt> flag.</p>
 </div>
-<div class="section" id="water-simulation-database-file">
-<h1>WATER simulation database file<a class="headerlink" href="#water-simulation-database-file" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="processing-water-simulation-database-file-watersimulation-xml">
+<h2>Processing WATER simulation database file - WATERSimulation.xml<a class="headerlink" href="#processing-water-simulation-database-file-watersimulation-xml" title="Permalink to this headline">¶</a></h2>
 <p>Process WATER simulation output database files
 (<tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt>).</p>
 <div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -waterxml [file]
@@ -133,8 +141,8 @@ The output directory is located in the same directory as the
 then compares and processes the <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt> files in the
 same manner as using the <tt class="docutils literal"><span class="pre">-waterxmlcmp</span></tt> flag.</p>
 </div>
-<div class="section" id="applying-water-use">
-<h1>Applying Water Use<a class="headerlink" href="#applying-water-use" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="applying-water-use-to-water-batch-runs">
+<h2>Applying water use to WATER batch runs<a class="headerlink" href="#applying-water-use-to-water-batch-runs" title="Permalink to this headline">¶</a></h2>
 <p>Apply water use to WATER simulation batch runs.</p>
 <div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -applywateruse
 </pre></div>
@@ -242,13 +250,18 @@ to the batch run, the following command is used:</p>
 <tt class="docutils literal"><span class="pre">water_batch_variables.py</span></tt> file which specifies the location of the
 <tt class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></tt> file.</p>
 </div>
+</div>
 
 
       </div>
       <div class="bottomnav">
       
         <p>
+        «&#160;&#160;<a href="overview.html">waterapputils</a>
+        &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="wateruse-guide.html">Water Use Guide</a>&#160;&#160;»
         </p>
 
       </div>

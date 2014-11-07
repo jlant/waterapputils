@@ -133,16 +133,20 @@ simulation database files.</li>
 <h1>Guides<a class="headerlink" href="#guides" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="guide.html">WATER simulation output file</a></li>
-<li class="toctree-l1"><a class="reference internal" href="guide.html#water-simulation-database-file">WATER simulation database file</a></li>
-<li class="toctree-l1"><a class="reference internal" href="guide.html#applying-water-use">Applying Water Use</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide.html">General Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guide.html#processing-water-simulation-output-files-water-txt">Processing WATER simulation output files - WATER.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide.html#processing-water-simulation-database-file-watersimulation-xml">Processing WATER simulation database file - WATERSimulation.xml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide.html#applying-water-use-to-water-batch-runs">Applying water use to WATER batch runs</a></li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="wateruse-guide.html">Water Use Data Files</a></li>
-<li class="toctree-l1"><a class="reference internal" href="wateruse-guide.html#steps-to-compute-total-water-use-for-each-respective-basin">Steps to Compute Total Water Use For Each Respective Basin</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="wateruse-guide.html#example">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wateruse-guide.html">Water Use Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wateruse-guide.html#water-use-data-files">Water use data files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wateruse-guide.html#steps-to-compute-total-water-use-for-each-respective-basin">Steps to Compute Total Water Use For Each Respective Basin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wateruse-guide.html#example-using-sample-randomly-generated-data">Example - using sample randomly generated data</a></li>
 </ul>
 </li>
 </ul>
@@ -153,9 +157,18 @@ simulation database files.</li>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="code.html">Code Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="code.html#module-waterapputils">waterapputils - &#8220;main controller&#8221; module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="code.html#module-watertxt">watertxt - WATER.txt file reader and processor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="code.html#module-watertxt">waterxml - WATERSimulation.xml file reader and processor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#module-waterapputils">waterapputils.py - &#8220;main controller&#8221;</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#module-watertxt">watertxt.py - reads and processes WATER output simulation files (WATER.txt)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#module-watertxt_viewer">watertxt_viewer.py - plots WATER output simulation files (WATER.txt)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#module-waterxml">waterxml.py - reads and processes WATER database simulation files (WATERSimulation.xml)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#module-waterxml_viewer">waterxml_viewer.py - plots WATER database simulation files (WATERSimulation.xml)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#module-waterapputils_logging">waterapputils_logging.py - handles errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#module-wateruse">wateruse.py - reads, processes, and computes water use from water use data files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#module-deltas">deltas.py - reads and processes global climate model files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#module-deltas_viewer">deltas_viewer.py - plots global climate model files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#module-helpers">helpers.py - mix of helper functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#module-spatialvectors">spatialvectors.py - handles spatial data processing of shapefiles; performs spatial intersection between shapefiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#module-spatialdata_viewer">spatialdata_viewer.py - creates maps of shapefiles</a></li>
 </ul>
 </li>
 </ul>

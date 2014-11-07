@@ -1,5 +1,8 @@
-Water Use Data Files
-====================
+Water Use Guide
+===============
+
+Water use data files
+--------------------
 
 The water use data files contain seasonal totals of median water use
 values for each respective DEM-derived HUC12 basin. Basin centroids were
@@ -27,7 +30,7 @@ for different sources:
 --------------
 
 Steps to Compute Total Water Use For Each Respective Basin
-==========================================================
+----------------------------------------------------------
 
 1. Find water use centroids that are contained within the basin
    boundaries.
@@ -40,12 +43,12 @@ Steps to Compute Total Water Use For Each Respective Basin
    feet per second (cfs) to the total water use. (1 million gallons per
    day = 1.54722865 cubic feet per second)
 
-Example
--------
+Example - using sample randomly generated data
+------------------------------------------------
 
 Consider the following sample water use data files.
 
-**Sample water use data file**
+**Sample water use data file for winter season**
 
 ::
 
@@ -61,6 +64,15 @@ Consider the following sample water use data files.
     20401010101    11     -1        0        0        0       -1
     20401010102    8       1        1        1        0        0
 
+**Column details**
+
+* huc12 - HUC 12 id values
+
+* newhydroid - id values for water use centroids
+
+* AqGwWL, CoGwWL, DoGwWL, InGwWL, IrGwWL - various water use contributions
+
+
 **Sample water factor file**
 
 ::
@@ -69,10 +81,8 @@ Consider the following sample water use data files.
     AqGwWL  CoGwWL  DoGwWL  InGwWL  IrGwWL
     1.5     1.5     1.5     1.5    1.5
 
-where
 
-    newhydroid - centroid id's AqGwWL, CoGwWL, DoGwWL, InGwWL, IrGwWL -
-    various water use contributions
+**Compute total water use**
 
 1) Let the following centroids be contained within a respective basin:
 
@@ -123,3 +133,73 @@ where
 
     total water use = 6.96 cfs
 
+The same steps are followed for the spring, summer, autumn seasons for each respective seasonal water use file.
+
+**Applying seasonal total water use to a WATER output simulation file (WATER.txt)**
+
+Let the following table be the water use totals for each season:
+
++-----------+---------+------------------------+
+| Month     | Season  | Water Use Total (cfs)  |
++===========+=========+========================+
+| January   | JFM     | 6.96                   |
++-----------+---------+------------------------+
+| Feburary  | JFM     | 6.96                   |
++-----------+---------+------------------------+
+| March     | JFM     | 6.96                   |
++-----------+---------+------------------------+
+| April     | AMJ     | 7.50                   |
++-----------+---------+------------------------+
+| May       | AMJ     | 7.50                   |
++-----------+---------+------------------------+
+| June      | AMJ     | 7.50                   |
++-----------+---------+------------------------+
+| July      | JAS     | -0.5                   |
++-----------+---------+------------------------+
+| August    | JAS     | -0.5                   |
++-----------+---------+------------------------+
+| September | JAS     | -0.5                   |
++-----------+---------+------------------------+
+| October   | OND     | 2.25                   |
++-----------+---------+------------------------+
+| November  | OND     | 2.25                   |
++-----------+---------+------------------------+
+| December  | OND     | 2.25                   |
++-----------+---------+------------------------+
+
+Let the following be part of a sample WATER output simulation file (WATER.txt):
+
+::
+
+    Date    Discharge (cfs)
+    1/1/2014    100
+    ...
+    3/31/2014   200
+    4/1/2014    200
+    ...
+    6/30/2014   50
+    7/1/2014    50
+    ...
+    9/30/2014   80
+    10/1/2014   80
+    ...
+    12/31/2014  150
+
+Applying the seasonal water use totals from the table above results in the following 
+updated WATER output simulation file (WATER.txt):
+
+::
+
+    Date    Discharge (cfs) Discharge + Water Use (cfs) Water Use (cfs)
+    1/1/2014    100         106.96                      6.96
+    ...         ...         ...                         ...
+    3/31/2014   200         206.96                      6.96
+    4/1/2014    200         207.50                      7.50
+    ...         ...         ...                         ...
+    6/30/2014   50          57.50                       7.50
+    7/1/2014    50          49.50                       -0.5
+    ...         ...         ...                         ...
+    9/30/2014   80          79.50                       -0.5
+    10/1/2014   80          82.25                       2.25
+    ...         ...         ...                         ...
+    12/31/2014  150         152.25                      2.25
