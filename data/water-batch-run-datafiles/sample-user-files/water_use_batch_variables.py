@@ -19,20 +19,13 @@ Note: If copying and pasting paths on Windows machines:
 
 """
 
-waterbatch_directory = "../sample-batch-run-output/"
+waterbatch_directory = "../data/water-batch-run-datafiles/sample-batch-run-output/"
 basin_shapefile = waterbatch_directory + "Watersheds.shp"
 basin_field = "STAID"
-subwateruse_file = waterbatch_directory + "/_waterapputils_non_intersecting_basin_centroids.txt"
+subwateruse_file = waterbatch_directory + "_wateruse-batchrun-info/wateruse_non_intersecting_centroids.txt"
 wateruse_files = ["../data/wateruse-datafiles/010203-JFM-sample.txt", 
                   "../data/wateruse-datafiles/040506-AMJ-sample.txt", 
                   "../data/wateruse-datafiles/070809-JAS-sample.txt", 
                   "../data/wateruse-datafiles/101112-OND-sample.txt"]                  
-wateruse_factor_file =  "../data/wateruse-datafiles/wateruse_factors.txt"
-basin_centroids_shapefile = "../data/spatial-datafiles/wateruse-centroids/wateruse_centroids_nad83.shp"
-
-
-
- 
-  
-
-
+wateruse_factor_file =  "../data/wateruse-datafiles/wateruse-factors-sample.txt"
+basin_centroids_shapefile = "../data/spatial-datafiles/wateruse-centroids/wateruse_centroids_sample_nad83.shp"

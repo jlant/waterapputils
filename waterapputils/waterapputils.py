@@ -410,7 +410,7 @@ def apply_subwaterdeltas_to_xml_files(files_dict, arguments):
 
     waterapputils_logging.initialize_loggers(output_dir = files_dict["watertxt_directory"]) 
 
-    info_file = os.path.join(files_dict["watertxt_directory"], "_waterapputils_waterdelta_batchrun_info.txt")
+    info_file = os.path.join(files_dict["watertxt_directory"], "_wateruse-batchrun-info", "_waterapputils_waterdelta_batchrun_info.txt")
     sys.stdout = open(info_file, "w")  
 
     intersecting_tiles = spatialvectors.read_field_values_file(filepath = files_dict["non_intersecting_basin_tiles_file"])
@@ -421,14 +421,17 @@ def apply_subwaterdeltas_to_xml_files(files_dict, arguments):
 
 def apply_subwateruse_to_txt_files(files_dict, arguments):
 
-    waterapputils_logging.initialize_loggers(output_dir = files_dict["watertxt_directory"]) 
+    outputdirpath = os.path.join(files_dict["watertxt_directory"], "_wateruse-batchrun-info")   
 
-    info_file = os.path.join(files_dict["watertxt_directory"], "_waterapputils_wateruse_batchrun_info.txt")
+    waterapputils_logging.initialize_loggers(output_dir = outputdirpath) 
+
+    info_file = os.path.join(outputdirpath, "_waterapputils_wateruse_batchrun_info.txt")
     sys.stdout = open(info_file, "a")  
 
     intersecting_centroids = spatialvectors.read_field_values_file(filepath = files_dict["non_intersecting_basin_centroids_file"])
 
-    process_intersecting_centroids(intersecting_centroids, files_dict, arguments) 
+    process_intersecting_centroids(intersecting_centroids, files_dict, arguments, outputdirpath)
+
     waterapputils_logging.remove_loggers()
 
 def main():  
