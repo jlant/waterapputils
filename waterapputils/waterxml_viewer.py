@@ -68,12 +68,12 @@ def print_waterxml_data(waterxml_tree):
 
 def plot_waterxml_topographic_wetness_index_data(waterxml_tree, is_visible = True, save_path = None):
     """   
-    Plot histogram of topographic_wetness_index data from the WATER *.xml file.
+    Plot histogram of topographic_wetness_index data from the WATER \*.xml file.
     
     Parameters
     ----------
     waterxml_data : dictionary 
-        A dictionary containing data found in WATER *.xml data file.
+        A dictionary containing data found in WATER \*.xml data file.
     is_visible : bool
         Boolean value to show plots         
     save_path : string 
@@ -127,7 +127,7 @@ def plot_waterxml_topographic_wetness_index_data(waterxml_tree, is_visible = Tru
             
 def plot_waterxml_timeseries_data(waterxml_tree, is_visible = True, save_path = None):
     """   
-    Plot timeseries data from the WATER *.xml file.  The timeseries data are contained 
+    Plot timeseries data from the WATER \*.xml file.  The timeseries data are contained 
     in the study simulation dictionary. The following timeseries data are plotted:
     discharge - from xml element called "StudyUnitDischargeSeries", 
     precipitation - from xml element called "ClimaticPrecipitationSeries",
@@ -136,7 +136,7 @@ def plot_waterxml_timeseries_data(waterxml_tree, is_visible = True, save_path = 
     Parameters
     ----------
     waterxml_data : dictionary 
-        A dictionary containing data found in WATER *.xml data file.
+        A dictionary containing data found in WATER \*.xml data file.
     is_visible : bool
         Boolean value to show plots         
     save_path : string 
@@ -218,14 +218,14 @@ def plot_waterxml_timeseries_data(waterxml_tree, is_visible = True, save_path = 
 
 def plot_waterxml_timeseries_comparison(waterxml_tree1, waterxml_tree2, is_visible = True, save_path = None):
     """   
-    Compare each timeseries for 2 WATER *.xml files.
+    Compare each timeseries for 2 WATER \*.xml files.
     
     Parameters
     ----------
     waterxml_data1 : dictionary 
-        A dictionary containing data found in WATER *.xml data file.
+        A dictionary containing data found in WATER \*.xml data file.
     waterxml_data2 : dictionary 
-        A dictionary containing data found in WATER *.xml data file.
+        A dictionary containing data found in WATER \*.xml data file.
     is_visible : bool
         Boolean value to show plots         
     save_path : string 

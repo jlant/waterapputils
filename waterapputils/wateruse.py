@@ -53,7 +53,7 @@ def read_file(filepath, factor_file = None):
 
 def read_file_in(filestream):
     """    
-    Read and process a water use *.txt file. Finds any parameter and its respective data.
+    Read and process a water use \*.txt file. Finds any parameter and its respective data.
     
     Parameters
     ----------
@@ -78,6 +78,7 @@ def read_file_in(filestream):
         "CoGwWL": list of float water use values,
 
         ...
+
     }
     """
     
@@ -144,7 +145,7 @@ def read_file_in(filestream):
 
 def read_factor_file_in(filestream):
     """    
-    Read and process a water use factor *.txt file. Finds any parameter and its respective data.
+    Read and process a water use factor \*.txt file. Finds any parameter and its respective data.
     
     Parameters
     ----------
@@ -165,6 +166,7 @@ def read_factor_file_in(filestream):
         "CoGwWL": float water use factor value,
 
         ...
+        
     }
     """
     
@@ -313,6 +315,7 @@ def create_monthly_wateruse_dict(wateruse_data, wateruse_value):
         "February": 5.0,
 
         "March": 5.0
+
     }        
     """
     wateruse_month_conversion = {"JFM": ["January", "February", "March"],
@@ -376,6 +379,7 @@ def get_total_wateruse(wateruse_data, id_list, wateruse_factors = None):
         "February": 5.0,
 
         "March": 5.0
+
     }   
     """       
     # check that each id in id list is contained in the wateruse_data     

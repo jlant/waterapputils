@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -\*- coding: utf-8 -*-
 """
 :Module: waterxml.py
 
@@ -45,7 +45,7 @@ def read_file(filepath):
 def create_project_dict():
     """
     Create dictionary containing keys that correspond to project elements in the 
-    WATER *.xml file.
+    WATER \*.xml file.
     
     Returns
     -------
@@ -64,7 +64,7 @@ def create_project_dict():
 def create_study_dict():
     """
     Create dictionary containing keys that correspond to study elements in the 
-    WATER *.xml file.
+    WATER \*.xml file.
     
     Returns
     -------
@@ -83,7 +83,7 @@ def create_study_dict():
 def create_simulation_dict():
     """
     Create dictionary containing keys that correspond to simulation elements in the 
-    WATER *.xml file. Contains simulation feature information, topographic wetness data, 
+    WATER \*.xml file. Contains simulation feature information, topographic wetness data, 
     discharge values, precipitation values, and temperature values.
     
     Returns
@@ -112,7 +112,7 @@ def fill_dict(waterxml_tree, data_dict, element, keys):
     Parameters
     ----------
     waterxml_tree : ElementTree object 
-        Tree object of WATER *.xml file 
+        Tree object of WATER \*.xml file 
     data_dict : dictionary 
         Dictionary containing keys that match particular children in a particular element
     element : string 
@@ -143,7 +143,7 @@ def get_simulation_data(waterxml_tree, element, sim_id_num):
     Parameters
     ----------
     waterxml_tree : ElementTree object 
-        Tree object of WATER *.xml file 
+        Tree object of WATER \*.xml file 
     element : string 
         String of a particular element of interest
     sim_id_num : int
@@ -174,7 +174,7 @@ def fill_simulation_dict(waterxml_tree, simulation_dict):
     Parameters
     ----------
     waterxml_tree : ElementTree object 
-        Tree object of WATER *.xml file 
+        Tree object of WATER \*.xml file 
     data_dict : dictionary 
         Dictionary containing keys that match particular children in a particular element
     element : string 
@@ -208,7 +208,7 @@ def get_xml_data(waterxml_tree):
     Parameters
     ----------
     waterxml_tree : ElementTree object 
-        Tree object of WATER *.xml file 
+        Tree object of WATER \*.xml file 
     
     Returns
     -------
@@ -220,7 +220,7 @@ def get_xml_data(waterxml_tree):
         Dictionary containing information found in the 'StudySimulation' element
         
     See Also
-    -------
+    --------
     create_project_dict(), create_study_dict(), create_simulation_dict()       
     """    
     
@@ -351,9 +351,9 @@ def get_timeseries_data(simulation_dict, timeseries_key):
     'SeriesUnitCode'
     'SeriesUnit' 
 
-    The original structure of the WATER *.xml unfortunately has lots of repeated data across SimulID's
-    The original *.xml structure repeats each timeseries 3 times since there are always 3 SimulID's.
-    This is why the *.xml has such a large size.
+    The original structure of the WATER \*.xml unfortunately has lots of repeated data across SimulID's
+    The original \*.xml structure repeats each timeseries 3 times since there are always 3 SimulID's.
+    This is why the \*.xml has such a large size.
     
     For example, for StudyUnitDischargeSeries if there were 2 dates and 2 corresponding values, there would be 3 repeated arrays of data each corresponding to a particular SimulID
     
@@ -401,7 +401,7 @@ def apply_factors(waterxml_tree, element, factors):
     Parameters
     ----------
     waterxml_tree : ElementTree object 
-        Tree object of WATER *.xml file 
+        Tree object of WATER \*.xml file 
     element : string
         String name of parameter
     factors : dictionary
@@ -410,18 +410,31 @@ def apply_factors(waterxml_tree, element, factors):
     Notes
     -----    
     factors = {
+
         'January': 2.0,
+        
         'February': 0.98,
+        
         'March': 0.97,
+        
         'April': 1.04,
+        
         'May': 1.10,
+        
         'June': 0.99,
+        
         'July': 0.97,
+        
         'August': 1.25,
+        
         'September': 1.21,
+        
         'October': 1.11,
+        
         'November': 1.10,
+        
         'December': 2.0
+
     }  
     """
     for elem in waterxml_tree.iter(tag = element):
@@ -452,7 +465,7 @@ def write_file(waterxml_tree, save_path, filename = "WATERSimulation.xml"):
     Parameters
     ----------
     waterxml_tree : ElementTree object 
-        Tree object of WATER *.xml file 
+        Tree object of WATER \*.xml file 
     save_path : string 
         String path to save file.
     filename : string

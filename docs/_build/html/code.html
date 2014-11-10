@@ -8,7 +8,7 @@
     
     <title>Code Documentation &mdash; waterapputils 1.0.0 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="waterapputils 1.0.0 documentation" href="index.html" />
     <link rel="next" title="Gallery" href="gallery.html" />
-    <link rel="prev" title="Overview" href="overview.html" /> 
+    <link rel="prev" title="Water Use Guide" href="wateruse-guide.html" /> 
   </head>
   <body>
 
@@ -33,116 +33,3133 @@
 <a href="index.html"><img src="_static/logo.png" border="0" alt="py4sci"/></a>
 </div>
 
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="gallery.html" title="Gallery"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="overview.html" title="Overview"
-             accesskey="P">previous</a> |</li>
-        <li><a href="index.html">home</a>|&nbsp;</li>
-        <li><a href="search.html">search</a>|&nbsp;</li>
- 
-      </ul>
-    </div>
 
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Code Documentation</a><ul>
-<li><a class="reference internal" href="#nwispy">nwispy</a></li>
-<li><a class="reference internal" href="#nwispy-filereader">nwispy_filereader</a></li>
-<li><a class="reference internal" href="#nwispy-webservice">nwispy_webservice</a></li>
-<li><a class="reference internal" href="#nwispy-viewer">nwispy_viewer</a></li>
-<li><a class="reference internal" href="#nwispy-logging">nwispy_logging</a></li>
-<li><a class="reference internal" href="#nwispy-helpers">nwispy_helpers</a></li>
-</ul>
-</li>
-</ul>
-
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="overview.html"
-                        title="previous chapter">Overview</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="gallery.html"
-                        title="next chapter">Gallery</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/code.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
+      <div class="header"><h1 class="heading"><a href="index.html">
+          <span>waterapputils 1.0.0 documentation</span></a></h1>
+        <h2 class="heading"><span>Code Documentation</span></h2>
       </div>
+      <div class="topnav">
+      
+        <p>
+        «&#160;&#160;<a href="wateruse-guide.html">Water Use Guide</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="gallery.html">Gallery</a>&#160;&#160;»
+        </p>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
-            
+      </div>
+      <div class="content">
+        
+        
   <div class="section" id="code-documentation">
 <h1>Code Documentation<a class="headerlink" href="#code-documentation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="nwispy">
-<h2>nwispy<a class="headerlink" href="#nwispy" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-waterapputils">
+<span id="waterapputils-py-main-controller"></span><h2>waterapputils.py - &#8220;main controller&#8221;<a class="headerlink" href="#module-waterapputils" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Module:</th><td class="field-body">waterapputils.py</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Jeremiah Lant, <a class="reference external" href="mailto:jlant&#37;&#52;&#48;usgs&#46;gov">jlant<span>&#64;</span>usgs<span>&#46;</span>gov</a>, U.S. Geological Survey, Kentucky Water Science Center, <a class="reference external" href="http://www.usgs.gov/">http://www.usgs.gov/</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Synopsis:</th><td class="field-body">Main controller that handles user input options for processing WATER application output files</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="waterapputils.apply_deltas_to_xml_files">
+<tt class="descclassname">waterapputils.</tt><tt class="descname">apply_deltas_to_xml_files</tt><big>(</big><em>files_dict</em>, <em>arguments</em><big>)</big><a class="headerlink" href="#waterapputils.apply_deltas_to_xml_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply delta factors to a WATER *.xml file. The new file created is saved to a directory
+chosen by the user.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>files_dict</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary of user file paths to necessary datasets.</p>
+</div></blockquote>
+<p><strong>arguments</strong> : argparse object</p>
+<blockquote class="last">
+<div><p>An argparse object containing user options.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>files_dict = {</p>
+<blockquote>
+<div><p>&#8220;delta_files&#8221;: list of delta text files,</p>
+<p>&#8220;delta_shapefile&#8221;: shapefile corresponding to delta files,</p>
+<p>&#8220;basin_shapefile&#8221;: shapefile of WATER basin of interest; used in finding intersection with delta shapefile</p>
+<p>&#8220;basin_field&#8221;: string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files</p>
+<p>&#8220;waterxml_directory&#8221;: path to directory containing xml file or files</p>
+</div></blockquote>
+<p>}</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterapputils.apply_wateruse_to_txt_files">
+<tt class="descclassname">waterapputils.</tt><tt class="descname">apply_wateruse_to_txt_files</tt><big>(</big><em>files_dict</em>, <em>arguments</em><big>)</big><a class="headerlink" href="#waterapputils.apply_wateruse_to_txt_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply water use data to a WATER *.txt file. The new file created is saved to the same
+directory as the *.xml file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>files_dict</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary of user file paths to necessary datasets.</p>
+</div></blockquote>
+<p><strong>arguments</strong> : argparse object</p>
+<blockquote class="last">
+<div><p>An argparse object containing user options.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>files_dict = {</p>
+<blockquote>
+<div><p>&#8220;wateruse_files&#8221;: list of water use text files,</p>
+<p>&#8220;wateruse_factor_file&#8221;: path to water use factor file</p>
+<p>&#8220;basin_centroids_shapefile&#8221;: shapefile corresponding to basin centroids,</p>
+<p>&#8220;basin_shapefile&#8221;: shapefile of WATER basin of interest; used in finding intersection with basin centroid shapefile</p>
+<p>&#8220;basin_field&#8221;: string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files</p>
+<p>&#8220;watertxt_directory&#8221;: path to directory containing txt file or files</p>
+</div></blockquote>
+<p>}</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterapputils.main">
+<tt class="descclassname">waterapputils.</tt><tt class="descname">main</tt><big>(</big><big>)</big><a class="headerlink" href="#waterapputils.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run program based on user input arguments. Program will automatically process file(s) supplied,
+log any errors found in the data file, and will save plots of every parameter. Error log and plots are saved to 
+a directory (tagged with &#8220;output&#8221;) at the same level as the supplied or downloaded data files.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterapputils.process_cmp">
+<tt class="descclassname">waterapputils.</tt><tt class="descname">process_cmp</tt><big>(</big><em>file_list</em>, <em>arguments</em><big>)</big><a class="headerlink" href="#waterapputils.process_cmp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compare two WATER text files according to options contained in arguments parameter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>file_list</strong> : list</p>
+<blockquote>
+<div><p>List of files to parse, process, and plot.</p>
+</div></blockquote>
+<p><strong>arguments</strong> : argparse object</p>
+<blockquote class="last">
+<div><p>An argparse object containing user options.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterapputils.process_intersecting_centroids">
+<tt class="descclassname">waterapputils.</tt><tt class="descname">process_intersecting_centroids</tt><big>(</big><em>intersecting_centroids</em>, <em>files_dict</em>, <em>arguments</em>, <em>outputdirpath</em><big>)</big><a class="headerlink" href="#waterapputils.process_intersecting_centroids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply water use data to a WATER *.txt file. The new file created is saved to the same
+directory as the *.xml file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>intersecting_centroids</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing lists of values for a particular field that were intersected by another shapefile.</p>
+</div></blockquote>
+<p><strong>files_dict</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary of user file paths to necessary datasets.</p>
+</div></blockquote>
+<p><strong>arguments</strong> : argparse object</p>
+<blockquote>
+<div><p>An argparse object containing user options.</p>
+</div></blockquote>
+<p><strong>outputdirpath</strong> : string</p>
+<blockquote class="last">
+<div><p>String path to directory that will contain all the output</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>files_dict = {</p>
+<blockquote>
+<div><p>&#8220;wateruse_files&#8221;: list of water use text files,</p>
+<p>&#8220;wateruse_factor_file&#8221;: path to water use factor file</p>
+<p>&#8220;basin_centroids_shapefile&#8221;: shapefile corresponding to basin centroids,</p>
+<p>&#8220;basin_shapefile&#8221;: shapefile of WATER basin of interest; used in finding intersection with basin centroid shapefile</p>
+<p>&#8220;basin_field&#8221;: string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files</p>
+<p>&#8220;watertxt_directory&#8221;: path to directory containing txt file or files</p>
+</div></blockquote>
+<p>}</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterapputils.process_intersecting_tiles">
+<tt class="descclassname">waterapputils.</tt><tt class="descname">process_intersecting_tiles</tt><big>(</big><em>intersecting_tiles</em>, <em>files_dict</em>, <em>arguments</em><big>)</big><a class="headerlink" href="#waterapputils.process_intersecting_tiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply delta factors to a WATER *.xml file. The new file created is saved to a directory
+chosen by the user.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>intersecting_tiles</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing lists of values for a particular field that were intersected by another shapefile.</p>
+</div></blockquote>
+<p><strong>files_dict</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary of user file paths to necessary datasets.</p>
+</div></blockquote>
+<p><strong>arguments</strong> : argparse object</p>
+<blockquote class="last">
+<div><p>An argparse object containing user options.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>files_dict = {</p>
+<blockquote>
+<div><p>&#8220;delta_files&#8221;: list of delta text files,</p>
+<p>&#8220;delta_shapefile&#8221;: shapefile corresponding to delta files,</p>
+<p>&#8220;basin_shapefile&#8221;: shapefile of WATER basin of interest; used in finding intersection with delta shapefile</p>
+<p>&#8220;basin_field&#8221;: string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files</p>
+<p>&#8220;waterxml_directory&#8221;: path to directory containing xml file or files</p>
+</div></blockquote>
+<p>}</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterapputils.process_water_files">
+<tt class="descclassname">waterapputils.</tt><tt class="descname">process_water_files</tt><big>(</big><em>file_list</em>, <em>arguments</em><big>)</big><a class="headerlink" href="#waterapputils.process_water_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a list of WATER xml files according to options contained in arguments parameter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>file_list</strong> : list</p>
+<blockquote>
+<div><p>List of files to parse, process, and plot.</p>
+</div></blockquote>
+<p><strong>arguments</strong> : argparse object</p>
+<blockquote class="last">
+<div><p>An argparse object containing user options.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
-<div class="section" id="nwispy-filereader">
-<h2>nwispy_filereader<a class="headerlink" href="#nwispy-filereader" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-watertxt">
+<span id="watertxt-py-reads-and-processes-water-output-simulation-files-water-txt"></span><h2>watertxt.py - reads and processes WATER output simulation files (WATER.txt)<a class="headerlink" href="#module-watertxt" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Module:</th><td class="field-body">watertxt.py</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Jeremiah Lant, <a class="reference external" href="mailto:jlant&#37;&#52;&#48;usgs&#46;gov">jlant<span>&#64;</span>usgs<span>&#46;</span>gov</a>, U.S. Geological Survey, Kentucky Water Science Center, <a class="reference external" href="http://www.usgs.gov/">http://www.usgs.gov/</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Synopsis:</th><td class="field-body">Handles reading, writing, processing, and logging errors in WATER output text data files.</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="watertxt.add_parameter">
+<tt class="descclassname">watertxt.</tt><tt class="descname">add_parameter</tt><big>(</big><em>watertxt_data</em>, <em>name</em>, <em>param_data</em><big>)</big><a class="headerlink" href="#watertxt.add_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a parameter to the list of existing parameters in watertxt_data and the
+list of column names. The new parameter will is appended to the end of the 
+existing parameter list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>watertxt_data</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary holding data found in WATER output text file.</p>
+</div></blockquote>
+<p><strong>name</strong> : string</p>
+<blockquote>
+<div><p>String name of parameter</p>
+</div></blockquote>
+<p><strong>param_data</strong> : numpy array</p>
+<blockquote>
+<div><p>Array of parameter data values</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>watertxt_data</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Updated dictionary with the new parameter added.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="watertxt.apply_factors">
+<tt class="descclassname">watertxt.</tt><tt class="descname">apply_factors</tt><big>(</big><em>watertxt_data</em>, <em>name</em>, <em>factors</em>, <em>is_additive=False</em><big>)</big><a class="headerlink" href="#watertxt.apply_factors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply monthly factors to a specific parameter.  Factors are multiplicative
+by default, however the factors can be additive if the is_additive flag 
+is set to True.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>watertxt_data</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary holding data found in WATER output text file.</p>
+</div></blockquote>
+<p><strong>name</strong> : string</p>
+<blockquote>
+<div><p>String name of parameter</p>
+</div></blockquote>
+<p><strong>factors</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary holding monthly factors</p>
+</div></blockquote>
+<p><strong>is_additive</strong> : boolean</p>
+<blockquote>
+<div><p>String multiplicative or additive which specifies how to apply the factor</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>watertxt_data</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary holding updated data with factors applied.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>factors = {</p>
+<blockquote>
+<div><p>&#8216;January&#8217;: 2.0,</p>
+<p>&#8216;February&#8217;: 0.98,</p>
+<p>&#8216;March&#8217;: 0.97,</p>
+<p>&#8216;April&#8217;: 1.04,</p>
+<p>&#8216;May&#8217;: 1.10,</p>
+<p>&#8216;June&#8217;: 0.99,</p>
+<p>&#8216;July&#8217;: 0.97,</p>
+<p>&#8216;August&#8217;: 1.25,</p>
+<p>&#8216;September&#8217;: 1.21,</p>
+<p>&#8216;October&#8217;: 1.11,</p>
+<p>&#8216;November&#8217;: 1.10,</p>
+<p>&#8216;December&#8217;: 2.0</p>
+</div></blockquote>
+<p>}</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="watertxt.apply_wateruse">
+<tt class="descclassname">watertxt.</tt><tt class="descname">apply_wateruse</tt><big>(</big><em>watertxt_data</em>, <em>wateruse_totals</em><big>)</big><a class="headerlink" href="#watertxt.apply_wateruse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply monthly water use factors to discharge parameter.  Factors are additive.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>watertxt_data</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary holding data found in WATER output text file.</p>
+</div></blockquote>
+<p><strong>factors</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary holding monthly multiplicative factors</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>watertxt_data</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary holding updated data with factors applied.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>factors = {</p>
+<blockquote>
+<div><p>&#8216;January&#8217;: 2.0,</p>
+<p>&#8216;February&#8217;: 0.98,</p>
+<p>&#8216;March&#8217;: 0.97,</p>
+<p>&#8216;April&#8217;: 1.04,</p>
+<p>&#8216;May&#8217;: 1.10,</p>
+<p>&#8216;June&#8217;: 0.99,</p>
+<p>&#8216;July&#8217;: 0.97,</p>
+<p>&#8216;August&#8217;: 1.25,</p>
+<p>&#8216;September&#8217;: 1.21,</p>
+<p>&#8216;October&#8217;: 1.11,</p>
+<p>&#8216;November&#8217;: 1.10,</p>
+<p>&#8216;December&#8217;: 2.0</p>
+</div></blockquote>
+<p>}</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="watertxt.create_parameter">
+<tt class="descclassname">watertxt.</tt><tt class="descname">create_parameter</tt><big>(</big><em>name=None</em>, <em>index=None</em>, <em>data=</em>, <span class="optional">[</span><span class="optional">]</span><em>mean=None</em>, <em>max=None</em>, <em>min=None</em><big>)</big><a class="headerlink" href="#watertxt.create_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new dictionary that contains keys and associated data for watertxt_data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>parameter</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Parameter that can be added to watertxt_data dictionary</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>parameters = {</p>
+<blockquote>
+<div><p>&#8220;name&#8221;: string of parameter name,</p>
+<p>&#8220;index&#8221;: integer of column index data is located,</p>
+<p>&#8220;data&#8221;: numpy array of data values,</p>
+<p>&#8220;mean&#8221;: mean of data values,</p>
+<p>&#8220;max&#8221;: max of data values,</p>
+<p>&#8220;min&#8221;: min of data values</p>
+</div></blockquote>
+<p>}</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="watertxt.get_all_values">
+<tt class="descclassname">watertxt.</tt><tt class="descname">get_all_values</tt><big>(</big><em>watertxt_data</em><big>)</big><a class="headerlink" href="#watertxt.get_all_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all numeric data values from watertxt_data dictionary in same order as 
+the column_names list in watertxt_data. Just ensuring proper ordering here as
+values should already be in same order as the column_names because the 
+watertxt_data[&#8220;parameters&#8221;] is a list that was assembled in column_name order.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>watertxt_data</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary holding data found in WATER output text file.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>values_all</strong> : list</p>
+<blockquote class="last">
+<div><p>List of data arrays.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="watertxt.get_date">
+<tt class="descclassname">watertxt.</tt><tt class="descname">get_date</tt><big>(</big><em>date_str</em><big>)</big><a class="headerlink" href="#watertxt.get_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse date strings and return a datetime object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>date_str</strong> : str</p>
+<blockquote>
+<div><p>String in a daily forma. i.e. 4/9/2014</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>date</strong> : datetime object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="watertxt.get_parameter">
+<tt class="descclassname">watertxt.</tt><tt class="descname">get_parameter</tt><big>(</big><em>watertxt_data</em>, <em>name</em><big>)</big><a class="headerlink" href="#watertxt.get_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get dates, values, and units from a particular parameter contained in the 
+water_data dictionary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>watertxt_data</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary holding data found in WATER output text file.</p>
+</div></blockquote>
+<p><strong>name</strong> : string</p>
+<blockquote>
+<div><p>String name of parameter</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>values</strong> : numpy array of floats</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="watertxt.main">
+<tt class="descclassname">watertxt.</tt><tt class="descname">main</tt><big>(</big><big>)</big><a class="headerlink" href="#watertxt.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test functionality of watertxt</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="watertxt.read_file">
+<tt class="descclassname">watertxt.</tt><tt class="descname">read_file</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#watertxt.read_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open WATER text file, create a file object for read_file_in(filestream) to process.
+This function is responsible to opening the file, removing the file opening  
+responsibility from read_file_in(filestream) so that read_file_in(filestream)  
+can be unit tested.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filestream</strong> : file object</p>
+<blockquote>
+<div><p>A file object that contains an open data file.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>data</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Returns a dictionary containing data found in data file.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#watertxt.read_file_in" title="watertxt.read_file_in"><tt class="xref py py-obj docutils literal"><span class="pre">read_file_in</span></tt></a></dt>
+<dd>Read data file object</dd>
+</dl>
 </div>
-<div class="section" id="nwispy-webservice">
-<h2>nwispy_webservice<a class="headerlink" href="#nwispy-webservice" title="Permalink to this headline">¶</a></h2>
+</dd></dl>
+
+<dl class="function">
+<dt id="watertxt.read_file_in">
+<tt class="descclassname">watertxt.</tt><tt class="descname">read_file_in</tt><big>(</big><em>filestream</em><big>)</big><a class="headerlink" href="#watertxt.read_file_in" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read and process a WATER *.txt file. Finds any parameter and its respective data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filestream</strong> : file object</p>
+<blockquote>
+<div><p>A python file object that contains an open data file.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>data</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Returns a dictionary containing data found in data file.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#watertxt.create_parameter" title="watertxt.create_parameter"><tt class="xref py py-obj docutils literal"><span class="pre">create_parameter</span></tt></a></dt>
+<dd>Create new dictionary to hold parameter data</dd>
+</dl>
 </div>
-<div class="section" id="nwispy-viewer">
-<h2>nwispy_viewer<a class="headerlink" href="#nwispy-viewer" title="Permalink to this headline">¶</a></h2>
+<p class="rubric">Notes</p>
+<p>data = {</p>
+<blockquote>
+<div><p>&#8220;user&#8221;: None,</p>
+<p>&#8220;date_created&#8221;: None,</p>
+<p>&#8220;stationid&#8221;: None,</p>
+<p>&#8220;column_names&#8221;: None,</p>
+<p>&#8220;dates&#8221;: [],</p>
+<p>&#8220;parameters&#8221;: [],</p>
+</div></blockquote>
+<p>}</p>
+<p>The &#8220;parameters&#8221; key contains a list of dictionaries containing
+the parameters found in the data file</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="watertxt.set_parameter_values">
+<tt class="descclassname">watertxt.</tt><tt class="descname">set_parameter_values</tt><big>(</big><em>watertxt_data</em>, <em>name</em>, <em>values</em><big>)</big><a class="headerlink" href="#watertxt.set_parameter_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set new values for a particular parameter contained in the watertxt_data
+dictionary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>watertxt_data</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary holding data found in WATER output text file.</p>
+</div></blockquote>
+<p><strong>name</strong> : string</p>
+<blockquote>
+<div><p>String name of parameter</p>
+</div></blockquote>
+<p><strong>values</strong> : numpy array</p>
+<blockquote>
+<div><p>Array of data values</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>watertxt_data</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary holding updated data values</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="watertxt.write_file">
+<tt class="descclassname">watertxt.</tt><tt class="descname">write_file</tt><big>(</big><em>watertxt_data</em>, <em>save_path</em>, <em>filename='WATER.txt'</em><big>)</big><a class="headerlink" href="#watertxt.write_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write data contained in water data dictionary to an output file in the 
+same format as the original WATER output text file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>watertxt_data</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary holding data found in WATER output text file.</p>
+</div></blockquote>
+<p><strong>save_path</strong> : string</p>
+<blockquote>
+<div><p>String path to save file.</p>
+</div></blockquote>
+<p><strong>filename</strong> : string</p>
+<blockquote class="last">
+<div><p>String name of output file. Default name is WATER.txt.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="watertxt.write_timeseries_file">
+<tt class="descclassname">watertxt.</tt><tt class="descname">write_timeseries_file</tt><big>(</big><em>watertxt_data</em>, <em>name</em>, <em>save_path</em>, <em>filename=''</em><big>)</big><a class="headerlink" href="#watertxt.write_timeseries_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the timeseries of a parameter contained in water data dictionary
+to an output file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>watertxt_data</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary holding data found in WATER output text file.</p>
+</div></blockquote>
+<p><strong>name</strong> : string</p>
+<blockquote>
+<div><p>String name of parameter</p>
+</div></blockquote>
+<p><strong>save_path</strong> : string</p>
+<blockquote>
+<div><p>String path to save file.</p>
+</div></blockquote>
+<p><strong>filename</strong> : string</p>
+<blockquote class="last">
+<div><p>String name of output file. Default name-timeseries.txt</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
-<div class="section" id="nwispy-logging">
-<h2>nwispy_logging<a class="headerlink" href="#nwispy-logging" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-watertxt_viewer">
+<span id="watertxt-viewer-py-plots-water-output-simulation-files-water-txt"></span><h2>watertxt_viewer.py - plots WATER output simulation files (WATER.txt)<a class="headerlink" href="#module-watertxt_viewer" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Module:</th><td class="field-body">watertxt_viewer.py</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Jeremiah Lant, <a class="reference external" href="mailto:jlant&#37;&#52;&#48;usgs&#46;gov">jlant<span>&#64;</span>usgs<span>&#46;</span>gov</a>, U.S. Geological Survey, Kentucky Water Science Center, <a class="reference external" href="http://www.usgs.gov/">http://www.usgs.gov/</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Synopsis:</th><td class="field-body">Handles views of the data, such as printing and plotting.</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="watertxt_viewer.main">
+<tt class="descclassname">watertxt_viewer.</tt><tt class="descname">main</tt><big>(</big><big>)</big><a class="headerlink" href="#watertxt_viewer.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test functionality of waterapputils_viewer()</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="watertxt_viewer.plot_watertxt_comparison">
+<tt class="descclassname">watertxt_viewer.</tt><tt class="descname">plot_watertxt_comparison</tt><big>(</big><em>watertxt_data1</em>, <em>watertxt_data2</em>, <em>is_visible=True</em>, <em>save_path=None</em><big>)</big><a class="headerlink" href="#watertxt_viewer.plot_watertxt_comparison" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a comparison of two parameters contained in WATER.txt data file. Save 
+plots to a particular path.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>watertxtdata_data</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary containing data found in WATER data file.</p>
+</div></blockquote>
+<p><strong>is_visible</strong> : bool</p>
+<blockquote>
+<div><p>Boolean value to show plots</p>
+</div></blockquote>
+<p><strong>save_path</strong> : string</p>
+<blockquote class="last">
+<div><p>String path to save plot(s)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="watertxt_viewer.plot_watertxt_data">
+<tt class="descclassname">watertxt_viewer.</tt><tt class="descname">plot_watertxt_data</tt><big>(</big><em>watertxt_data</em>, <em>is_visible=True</em>, <em>save_path=None</em><big>)</big><a class="headerlink" href="#watertxt_viewer.plot_watertxt_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot each parameter contained in watertxt_data. Save plots to a particular
+path.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>watertxt_data</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary containing data found in WATER *.txt output data file.</p>
+</div></blockquote>
+<p><strong>is_visible</strong> : bool</p>
+<blockquote>
+<div><p>Boolean value to show plots</p>
+</div></blockquote>
+<p><strong>save_path</strong> : string</p>
+<blockquote class="last">
+<div><p>String path to save plot(s)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="watertxt_viewer.plot_watertxt_parameter">
+<tt class="descclassname">watertxt_viewer.</tt><tt class="descname">plot_watertxt_parameter</tt><big>(</big><em>watertxt_data</em>, <em>name</em>, <em>is_visible=True</em>, <em>save_path=None</em><big>)</big><a class="headerlink" href="#watertxt_viewer.plot_watertxt_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a parameter contained in WATER.txt data file. Save 
+plots to a particular path.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>watertxtdata_data</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary containing data found in WATER data file.</p>
+</div></blockquote>
+<p><strong>name</strong> : string</p>
+<blockquote>
+<div><p>String name of parameter</p>
+</div></blockquote>
+<p><strong>is_visible</strong> : bool</p>
+<blockquote>
+<div><p>Boolean value to show plots</p>
+</div></blockquote>
+<p><strong>save_path</strong> : string</p>
+<blockquote class="last">
+<div><p>String path to save plot(s)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="watertxt_viewer.plot_watertxt_parameter_comparison">
+<tt class="descclassname">watertxt_viewer.</tt><tt class="descname">plot_watertxt_parameter_comparison</tt><big>(</big><em>watertxt_data</em>, <em>name1</em>, <em>name2</em>, <em>is_visible=True</em>, <em>save_path=None</em><big>)</big><a class="headerlink" href="#watertxt_viewer.plot_watertxt_parameter_comparison" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a comparison of two parameters contained in WATER.txt data file. Save 
+plots to a particular path.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>watertxtdata_data</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary containing data found in WATER data file.</p>
+</div></blockquote>
+<p><strong>name1</strong> : string</p>
+<blockquote>
+<div><p>String name of parameter</p>
+</div></blockquote>
+<p><strong>name2</strong> : string</p>
+<blockquote>
+<div><p>String name of parameter</p>
+</div></blockquote>
+<p><strong>is_visible</strong> : bool</p>
+<blockquote>
+<div><p>Boolean value to show plots</p>
+</div></blockquote>
+<p><strong>save_path</strong> : string</p>
+<blockquote class="last">
+<div><p>String path to save plot(s)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="watertxt_viewer.print_watertxt_data">
+<tt class="descclassname">watertxt_viewer.</tt><tt class="descname">print_watertxt_data</tt><big>(</big><em>watertxt_data</em><big>)</big><a class="headerlink" href="#watertxt_viewer.print_watertxt_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print information contained in the water data dictionary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>watertxt_data</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>A dictionary containing data found in WATER output text file.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">waterapputils_viewer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">start_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2014</span><span class="p">,</span> <span class="mo">04</span><span class="p">,</span> <span class="mo">01</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dates</span> <span class="o">=</span> <span class="p">[</span><span class="n">start_date</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">11</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">discharge_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">100</span> <span class="o">+</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">11</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subsurfaceflow_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">11</span><span class="p">)])</span>      
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parameters</span> <span class="o">=</span> <span class="p">[{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;Discharge (cfs)&quot;</span><span class="p">,</span> <span class="s">&quot;index&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="go">               ... &quot;data&quot;: discharge_data, &quot;mean&quot;: np.mean(discharge_data), &quot;max&quot;: np.b(discharge_data), </span>
+<span class="go">               ... &quot;min&quot;: np.min(discharge_data)}, </span>
+<span class="go">                  {&quot;name&quot;: &quot;Subsurface Flow (mm/day)&quot;, &quot;index&quot;: 1,</span>
+<span class="go">               ... &quot;data&quot;: subsurfaceflow_data, &quot;mean&quot;: np.mean(subsurfaceflow_data), &quot;max&quot;: np.max(subsurfaceflow_data), </span>
+<span class="go">               ... &quot;min&quot;: np.min(subsurfaceflow_data)}, ]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">user</span><span class="s">&quot;: &quot;</span><span class="n">jlant</span><span class="s">&quot;, &quot;</span><span class="n">date_created</span><span class="s">&quot;: &quot;</span><span class="mi">4</span><span class="o">/</span><span class="mi">9</span><span class="o">/</span><span class="mi">2014</span> <span class="mi">15</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mo">00</span> <span class="n">PM</span><span class="s">&quot;, &quot;</span><span class="n">stationid</span><span class="s">&quot;: &quot;</span><span class="mo">012345</span><span class="s">&quot;,</span>
+<span class="go">        ... &quot;column_names&quot;: [&quot;Discharge (cfs)&quot;, &quot;Subsurface Flow (mm/day)&quot;, &quot;Impervious Flow (mm/day)&quot;, &quot;Infiltration Excess (mm/day)&quot;, &quot;Initial Abstracted Flow (mm/day)&quot;, &quot;Overland Flow (mm/day)&quot;, &quot;PET (mm/day)&quot;, &quot;AET(mm/day)&quot;, &quot;Average Soil Root zone (mm)&quot;, &quot;Average Soil Unsaturated Zone (mm)&quot;, &quot;Snow Pack (mm)&quot;, &quot;Precipitation (mm/day)&quot;, &quot;Storage Deficit (mm/day)&quot;, &quot;Return Flow (mm/day)&quot;],</span>
+<span class="go">        ... &quot;parameters&quot;: parameters, &quot;dates&quot;: dates}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">waterapputils_viewer</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="n">watertxt_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">)</span>
+<span class="go">--- DATA FILE INFORMATION ---</span>
+<span class="go">User: jlant</span>
+<span class="go">Date created: 4/9/2014 15:30:00 PM</span>
+<span class="go">StationID: 012345</span>
+<span class="go">Parameters:</span>
+<span class="go">  Discharge (cfs)</span>
+<span class="go">      mean: 105.0</span>
+<span class="go">      max: 100</span>
+<span class="go">      min: 110</span>
+<span class="go">  Subsurface Flow (mm/day)</span>
+<span class="go">      mean: 7.0</span>
+<span class="go">      max: 2</span>
+<span class="go">      min: 12</span>
+</pre></div>
 </div>
-<div class="section" id="nwispy-helpers">
-<h2>nwispy_helpers<a class="headerlink" href="#nwispy-helpers" title="Permalink to this headline">¶</a></h2>
+</dd></dl>
+
+<dl class="function">
+<dt id="watertxt_viewer.test_plot_watertxt_comprison">
+<tt class="descclassname">watertxt_viewer.</tt><tt class="descname">test_plot_watertxt_comprison</tt><big>(</big><big>)</big><a class="headerlink" href="#watertxt_viewer.test_plot_watertxt_comprison" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test plot_watertxt_comprison()</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="watertxt_viewer.test_plot_watertxt_data">
+<tt class="descclassname">watertxt_viewer.</tt><tt class="descname">test_plot_watertxt_data</tt><big>(</big><big>)</big><a class="headerlink" href="#watertxt_viewer.test_plot_watertxt_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test plot_watertxt_data()</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="watertxt_viewer.test_plot_watertxt_parameter">
+<tt class="descclassname">watertxt_viewer.</tt><tt class="descname">test_plot_watertxt_parameter</tt><big>(</big><big>)</big><a class="headerlink" href="#watertxt_viewer.test_plot_watertxt_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test plot_watertxt_data()</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="watertxt_viewer.test_plot_watertxt_parameter_comprison">
+<tt class="descclassname">watertxt_viewer.</tt><tt class="descname">test_plot_watertxt_parameter_comprison</tt><big>(</big><big>)</big><a class="headerlink" href="#watertxt_viewer.test_plot_watertxt_parameter_comprison" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test plot_watertxt_parameter_comprison()</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="watertxt_viewer.test_print_watertxt_data">
+<tt class="descclassname">watertxt_viewer.</tt><tt class="descname">test_print_watertxt_data</tt><big>(</big><big>)</big><a class="headerlink" href="#watertxt_viewer.test_print_watertxt_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test print_watertxt_data()</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-waterxml">
+<span id="waterxml-py-reads-and-processes-water-database-simulation-files-watersimulation-xml"></span><h2>waterxml.py - reads and processes WATER database simulation files (WATERSimulation.xml)<a class="headerlink" href="#module-waterxml" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Module:</th><td class="field-body">waterxml.py</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Jeremiah Lant, <a class="reference external" href="mailto:jlant&#37;&#52;&#48;usgs&#46;gov">jlant<span>&#64;</span>usgs<span>&#46;</span>gov</a>, U.S. Geological Survey, Kentucky Water Science Center, <a class="reference external" href="http://www.usgs.gov/">http://www.usgs.gov/</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Synopsis:</th><td class="field-body">Handles reading, processing, and writing WATER XML data files.</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="waterxml.apply_factors">
+<tt class="descclassname">waterxml.</tt><tt class="descname">apply_factors</tt><big>(</big><em>waterxml_tree</em>, <em>element</em>, <em>factors</em><big>)</big><a class="headerlink" href="#waterxml.apply_factors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply monthly factors to a specific element (parameter). The factors are applied 
+to the particular element tag.  If the element is &#8216;ClimaticTemperatureSeries&#8217;
+the factor is additive, otherwise the factor is multiplicative.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>waterxml_tree</strong> : ElementTree object</p>
+<blockquote>
+<div><p>Tree object of WATER *.xml file</p>
+</div></blockquote>
+<p><strong>element</strong> : string</p>
+<blockquote>
+<div><p>String name of parameter</p>
+</div></blockquote>
+<p><strong>factors</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary holding monthly multiplicative factors</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>factors = {</p>
+<blockquote>
+<div><p>&#8216;January&#8217;: 2.0,</p>
+<p>&#8216;February&#8217;: 0.98,</p>
+<p>&#8216;March&#8217;: 0.97,</p>
+<p>&#8216;April&#8217;: 1.04,</p>
+<p>&#8216;May&#8217;: 1.10,</p>
+<p>&#8216;June&#8217;: 0.99,</p>
+<p>&#8216;July&#8217;: 0.97,</p>
+<p>&#8216;August&#8217;: 1.25,</p>
+<p>&#8216;September&#8217;: 1.21,</p>
+<p>&#8216;October&#8217;: 1.11,</p>
+<p>&#8216;November&#8217;: 1.10,</p>
+<p>&#8216;December&#8217;: 2.0</p>
+</div></blockquote>
+<p>}</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml.create_project_dict">
+<tt class="descclassname">waterxml.</tt><tt class="descname">create_project_dict</tt><big>(</big><big>)</big><a class="headerlink" href="#waterxml.create_project_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create dictionary containing keys that correspond to project elements in the 
+WATER *.xml file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>project</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary containing information found in the project element</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>project = {&#8220;ProjID&#8221;: None, &#8220;UserName&#8221;: None, &#8220;DateCreated&#8221;: None, &#8220;ProjName&#8221;: None}</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml.create_simulation_dict">
+<tt class="descclassname">waterxml.</tt><tt class="descname">create_simulation_dict</tt><big>(</big><big>)</big><a class="headerlink" href="#waterxml.create_simulation_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create dictionary containing keys that correspond to simulation elements in the 
+WATER *.xml file. Contains simulation feature information, topographic wetness data, 
+discharge values, precipitation values, and temperature values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>study</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary containing information found in the study element</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>simulation = {&#8220;SimulID&#8221;: [], &#8220;StudyID&#8221;: [], &#8220;RegionType&#8221;: [], &#8220;SimulationFeatures&#8221;: [],</dt>
+<dd>&#8220;SimulationTopographicWetnessIndex&#8221;: [], &#8220;StudyUnitDischargeSeries&#8221;: [],
+&#8220;ClimaticPrecipitationSeries&#8221;: [], &#8220;ClimaticTemperatureSeries&#8221;: []}</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml.create_study_dict">
+<tt class="descclassname">waterxml.</tt><tt class="descname">create_study_dict</tt><big>(</big><big>)</big><a class="headerlink" href="#waterxml.create_study_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create dictionary containing keys that correspond to study elements in the 
+WATER *.xml file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>study</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary containing information found in the study element</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>study = {&#8220;StudyID&#8221;: None, &#8220;StudyLocDecDeg&#8221;: None, &#8220;StudyDescription&#8221;: None}</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml.fill_dict">
+<tt class="descclassname">waterxml.</tt><tt class="descname">fill_dict</tt><big>(</big><em>waterxml_tree</em>, <em>data_dict</em>, <em>element</em>, <em>keys</em><big>)</big><a class="headerlink" href="#waterxml.fill_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fills a dictionary with information of interest contained in a 
+particular xml element and set of keys.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>waterxml_tree</strong> : ElementTree object</p>
+<blockquote>
+<div><p>Tree object of WATER *.xml file</p>
+</div></blockquote>
+<p><strong>data_dict</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing keys that match particular children in a particular element</p>
+</div></blockquote>
+<p><strong>element</strong> : string</p>
+<blockquote>
+<div><p>String of a particular element of interest</p>
+</div></blockquote>
+<p><strong>keys: list</strong></p>
+<blockquote>
+<div><p>List of keys to get information from</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>data_dict</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary containing keys that match particular children in a particular element</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml.fill_simulation_dict">
+<tt class="descclassname">waterxml.</tt><tt class="descname">fill_simulation_dict</tt><big>(</big><em>waterxml_tree</em>, <em>simulation_dict</em><big>)</big><a class="headerlink" href="#waterxml.fill_simulation_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fills the simulation dictionary with feature, topographic wetness, and climatic timeseries data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>waterxml_tree</strong> : ElementTree object</p>
+<blockquote>
+<div><p>Tree object of WATER *.xml file</p>
+</div></blockquote>
+<p><strong>data_dict</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing keys that match particular children in a particular element</p>
+</div></blockquote>
+<p><strong>element</strong> : string</p>
+<blockquote>
+<div><p>String of a particular element of interest</p>
+</div></blockquote>
+<p><strong>keys: list</strong></p>
+<blockquote>
+<div><p>List of keys to get information from</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>simulation_dict</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary containing keys that match particular children in the simulation element</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml.get_series_date">
+<tt class="descclassname">waterxml.</tt><tt class="descname">get_series_date</tt><big>(</big><em>date_time</em><big>)</big><a class="headerlink" href="#waterxml.get_series_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get dates, values, and units from timeseries parameters contained in the 
+simulation dictionary. i.e. 2014-01-01T00:00:00-05:00</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>date_time</strong> : string</p>
+<blockquote>
+<div><p>String date value</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>date</strong> : Datetime object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml.get_simulation_data">
+<tt class="descclassname">waterxml.</tt><tt class="descname">get_simulation_data</tt><big>(</big><em>waterxml_tree</em>, <em>element</em>, <em>sim_id_num</em><big>)</big><a class="headerlink" href="#waterxml.get_simulation_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the data associated with the feature, topographic wetness, and climatic timeseries data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>waterxml_tree</strong> : ElementTree object</p>
+<blockquote>
+<div><p>Tree object of WATER *.xml file</p>
+</div></blockquote>
+<p><strong>element</strong> : string</p>
+<blockquote>
+<div><p>String of a particular element of interest</p>
+</div></blockquote>
+<p><strong>sim_id_num</strong> : int</p>
+<blockquote>
+<div><p>Integer of the simulation id of interest</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>data</strong> : list</p>
+<blockquote class="last">
+<div><p>List of dictionaries each containing data found in the element of interest</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml.get_timeseries_data">
+<tt class="descclassname">waterxml.</tt><tt class="descname">get_timeseries_data</tt><big>(</big><em>simulation_dict</em>, <em>timeseries_key</em><big>)</big><a class="headerlink" href="#waterxml.get_timeseries_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get dates, values, and units for a timeseries for all &#8216;SimulID&#8217; contained in the 
+simulation dictionary. Return lists of dates, values, and units which correspond to
+the number of simulations</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>simulation_dict</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing keys that match particular children in the simulation element</p>
+</div></blockquote>
+<p><strong>timeseries_key</strong> : string</p>
+<blockquote>
+<div><p>String parameter name of a timeseries parameter</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>dates</strong> : list</p>
+<blockquote>
+<div><p>list of numpy arrays of datetime objects</p>
+</div></blockquote>
+<p><strong>values</strong> : list</p>
+<blockquote>
+<div><p>list of numpy arrays of float values</p>
+</div></blockquote>
+<p><strong>units</strong> : list</p>
+<blockquote class="last">
+<div><p>list of strings</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Valid key values for the timeseries parameter include &#8220;StudyUnitDischargeSeries&#8221;, 
+&#8220;ClimaticPrecipitationSeries&#8221;, or &#8220;ClimaticTemperatureSeries&#8221;</p>
+<p>Each timeseries parameter has the following xml elements:
+&#8216;SeriesID&#8217;
+&#8216;SimulID&#8217;
+&#8216;SeriesDate&#8217;
+&#8216;SeriesValue&#8217;
+&#8216;SeriesUnitCode&#8217;
+&#8216;SeriesUnit&#8217;</p>
+<p>The original structure of the WATER *.xml unfortunately has lots of repeated data across SimulID&#8217;s
+The original *.xml structure repeats each timeseries 3 times since there are always 3 SimulID&#8217;s.
+This is why the *.xml has such a large size.</p>
+<p>For example, for StudyUnitDischargeSeries if there were 2 dates and 2 corresponding values, there would be 3 repeated arrays of data each corresponding to a particular SimulID</p>
+<p>&#8220;SimulID&#8221; = [&#8216;1&#8217;, &#8216;2&#8217;, &#8216;3&#8217;]    
+dates = [array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0), array([datetime.datetime(2014, 1, 1, 0, 0), datetime.datetime(2014, 1, 2, 0, 0) ]       
+values = [array([ 100.,  110.]), array([ 100.,  110.]), array([ 100.,  110.])]
+units = [&#8216;mm per day&#8217;, &#8216;mm per day&#8217;, &#8216;mm per day&#8217;]</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml.get_topographic_wetness_index_data">
+<tt class="descclassname">waterxml.</tt><tt class="descname">get_topographic_wetness_index_data</tt><big>(</big><em>simulation_dict</em><big>)</big><a class="headerlink" href="#waterxml.get_topographic_wetness_index_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get bin id, bin mean value, and bin fraction for topographic wetness index data contained in the 
+simulation dictionary. &#8216;</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>simulation_dict</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing keys that match particular children in the simulation element</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>bin_ids</strong> : numpy array</p>
+<blockquote>
+<div><p>Array of float values</p>
+</div></blockquote>
+<p><strong>bin_value_means</strong> : numpy array</p>
+<blockquote>
+<div><p>Array of float values</p>
+</div></blockquote>
+<p><strong>bin_value_fractions</strong> : numpy array</p>
+<blockquote class="last">
+<div><p>Array of float values</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Each topographic wetness index parameter has the following xml elements:
+&#8216;BinID&#8217;
+&#8216;SimulID&#8217;
+&#8216;BinValueMean&#8217;
+&#8216;BinValueFraction&#8217;</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml.get_xml_data">
+<tt class="descclassname">waterxml.</tt><tt class="descname">get_xml_data</tt><big>(</big><em>waterxml_tree</em><big>)</big><a class="headerlink" href="#waterxml.get_xml_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get information of interest contained in the &#8216;Project&#8217;, &#8216;Study&#8217;, and 
+&#8216;StudySimulation&#8217; xml elements. Return three dictionaries containing 
+information of interest:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>waterxml_tree</strong> : ElementTree object</p>
+<blockquote>
+<div><p>Tree object of WATER *.xml file</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>project</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing information found in the &#8216;Project&#8217; element</p>
+</div></blockquote>
+<p><strong>study</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing information found in the &#8216;Study&#8217; element</p>
+</div></blockquote>
+<p><strong>simulation</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary containing information found in the &#8216;StudySimulation&#8217; element</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#waterxml.create_project_dict" title="waterxml.create_project_dict"><tt class="xref py py-obj docutils literal"><span class="pre">create_project_dict</span></tt></a>, <a class="reference internal" href="#waterxml.create_study_dict" title="waterxml.create_study_dict"><tt class="xref py py-obj docutils literal"><span class="pre">create_study_dict</span></tt></a>, <a class="reference internal" href="#waterxml.create_simulation_dict" title="waterxml.create_simulation_dict"><tt class="xref py py-obj docutils literal"><span class="pre">create_simulation_dict</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml.main">
+<tt class="descclassname">waterxml.</tt><tt class="descname">main</tt><big>(</big><big>)</big><a class="headerlink" href="#waterxml.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test functionality waterxml.py</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml.read_file">
+<tt class="descclassname">waterxml.</tt><tt class="descname">read_file</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#waterxml.read_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open WATER xml file using parser from ElementTree library</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filepath</strong> : string</p>
+<blockquote>
+<div><p>A string path to file.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>tree</strong> : ElementTree object</p>
+<blockquote class="last">
+<div><p>Object that contains xml data in a tree.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml.test_apply_factors">
+<tt class="descclassname">waterxml.</tt><tt class="descname">test_apply_factors</tt><big>(</big><big>)</big><a class="headerlink" href="#waterxml.test_apply_factors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test apply_factors functionality</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml.test_create_project_dict">
+<tt class="descclassname">waterxml.</tt><tt class="descname">test_create_project_dict</tt><big>(</big><big>)</big><a class="headerlink" href="#waterxml.test_create_project_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test functionality of create_project_dict</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml.test_create_simulation_dict">
+<tt class="descclassname">waterxml.</tt><tt class="descname">test_create_simulation_dict</tt><big>(</big><big>)</big><a class="headerlink" href="#waterxml.test_create_simulation_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test functionality of create_simulation_dict</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml.test_create_study_dict">
+<tt class="descclassname">waterxml.</tt><tt class="descname">test_create_study_dict</tt><big>(</big><big>)</big><a class="headerlink" href="#waterxml.test_create_study_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test functionality of create_study_dict</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml.test_fill_dict">
+<tt class="descclassname">waterxml.</tt><tt class="descname">test_fill_dict</tt><big>(</big><big>)</big><a class="headerlink" href="#waterxml.test_fill_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test functionality of fill_dict</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml.test_fill_simulation_dict">
+<tt class="descclassname">waterxml.</tt><tt class="descname">test_fill_simulation_dict</tt><big>(</big><big>)</big><a class="headerlink" href="#waterxml.test_fill_simulation_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test functionality of fill_dict</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml.test_get_timeseries_data">
+<tt class="descclassname">waterxml.</tt><tt class="descname">test_get_timeseries_data</tt><big>(</big><big>)</big><a class="headerlink" href="#waterxml.test_get_timeseries_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test get_timeseries_data</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml.test_get_topographic_wetness_index_data">
+<tt class="descclassname">waterxml.</tt><tt class="descname">test_get_topographic_wetness_index_data</tt><big>(</big><big>)</big><a class="headerlink" href="#waterxml.test_get_topographic_wetness_index_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test get_topographic_wetness_index_data</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml.test_get_xml_data">
+<tt class="descclassname">waterxml.</tt><tt class="descname">test_get_xml_data</tt><big>(</big><big>)</big><a class="headerlink" href="#waterxml.test_get_xml_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test get_xml_data</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml.test_write_file">
+<tt class="descclassname">waterxml.</tt><tt class="descname">test_write_file</tt><big>(</big><big>)</big><a class="headerlink" href="#waterxml.test_write_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test write_file functionality</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml.write_file">
+<tt class="descclassname">waterxml.</tt><tt class="descname">write_file</tt><big>(</big><em>waterxml_tree</em>, <em>save_path</em>, <em>filename='WATERSimulation.xml'</em><big>)</big><a class="headerlink" href="#waterxml.write_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write xml data contained in water xml tree to an output file in the 
+same format as the original WATER output xml file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>waterxml_tree</strong> : ElementTree object</p>
+<blockquote>
+<div><p>Tree object of WATER *.xml file</p>
+</div></blockquote>
+<p><strong>save_path</strong> : string</p>
+<blockquote>
+<div><p>String path to save file.</p>
+</div></blockquote>
+<p><strong>filename</strong> : string</p>
+<blockquote class="last">
+<div><p>String name of output file. Default name is WATER.txt.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-waterxml_viewer">
+<span id="waterxml-viewer-py-plots-water-database-simulation-files-watersimulation-xml"></span><h2>waterxml_viewer.py - plots WATER database simulation files (WATERSimulation.xml)<a class="headerlink" href="#module-waterxml_viewer" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Module:</th><td class="field-body">waterxml_viewer.py</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Jeremiah Lant, <a class="reference external" href="mailto:jlant&#37;&#52;&#48;usgs&#46;gov">jlant<span>&#64;</span>usgs<span>&#46;</span>gov</a>, U.S. Geological Survey, Kentucky Water Science Center, <a class="reference external" href="http://www.usgs.gov/">http://www.usgs.gov/</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Synopsis:</th><td class="field-body">Handles views of the data, such as printing and plotting.</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="waterxml_viewer.main">
+<tt class="descclassname">waterxml_viewer.</tt><tt class="descname">main</tt><big>(</big><big>)</big><a class="headerlink" href="#waterxml_viewer.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test functionality of waterxml_viewer()</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml_viewer.plot_waterxml_timeseries_comparison">
+<tt class="descclassname">waterxml_viewer.</tt><tt class="descname">plot_waterxml_timeseries_comparison</tt><big>(</big><em>waterxml_tree1</em>, <em>waterxml_tree2</em>, <em>is_visible=True</em>, <em>save_path=None</em><big>)</big><a class="headerlink" href="#waterxml_viewer.plot_waterxml_timeseries_comparison" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compare each timeseries for 2 WATER *.xml files.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>waterxml_data1</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary containing data found in WATER *.xml data file.</p>
+</div></blockquote>
+<p><strong>waterxml_data2</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary containing data found in WATER *.xml data file.</p>
+</div></blockquote>
+<p><strong>is_visible</strong> : bool</p>
+<blockquote>
+<div><p>Boolean value to show plots</p>
+</div></blockquote>
+<p><strong>save_path</strong> : string</p>
+<blockquote class="last">
+<div><p>String path to save plot(s)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml_viewer.plot_waterxml_timeseries_data">
+<tt class="descclassname">waterxml_viewer.</tt><tt class="descname">plot_waterxml_timeseries_data</tt><big>(</big><em>waterxml_tree</em>, <em>is_visible=True</em>, <em>save_path=None</em><big>)</big><a class="headerlink" href="#waterxml_viewer.plot_waterxml_timeseries_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot timeseries data from the WATER *.xml file.  The timeseries data are contained 
+in the study simulation dictionary. The following timeseries data are plotted:
+discharge - from xml element called &#8220;StudyUnitDischargeSeries&#8221;, 
+precipitation - from xml element called &#8220;ClimaticPrecipitationSeries&#8221;,
+temperature = from xml element called &#8220;ClimaticTemperatureSeries&#8221;</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>waterxml_data</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary containing data found in WATER *.xml data file.</p>
+</div></blockquote>
+<p><strong>is_visible</strong> : bool</p>
+<blockquote>
+<div><p>Boolean value to show plots</p>
+</div></blockquote>
+<p><strong>save_path</strong> : string</p>
+<blockquote class="last">
+<div><p>String path to save plot(s)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml_viewer.plot_waterxml_topographic_wetness_index_data">
+<tt class="descclassname">waterxml_viewer.</tt><tt class="descname">plot_waterxml_topographic_wetness_index_data</tt><big>(</big><em>waterxml_tree</em>, <em>is_visible=True</em>, <em>save_path=None</em><big>)</big><a class="headerlink" href="#waterxml_viewer.plot_waterxml_topographic_wetness_index_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot histogram of topographic_wetness_index data from the WATER *.xml file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>waterxml_data</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary containing data found in WATER *.xml data file.</p>
+</div></blockquote>
+<p><strong>is_visible</strong> : bool</p>
+<blockquote>
+<div><p>Boolean value to show plots</p>
+</div></blockquote>
+<p><strong>save_path</strong> : string</p>
+<blockquote class="last">
+<div><p>String path to save plot(s)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml_viewer.print_waterxml_data">
+<tt class="descclassname">waterxml_viewer.</tt><tt class="descname">print_waterxml_data</tt><big>(</big><em>waterxml_tree</em><big>)</big><a class="headerlink" href="#waterxml_viewer.print_waterxml_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print information and data contained in the water xml tree.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>waterxml_tree</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>A dictionary containing data found in WATER output text file.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml_viewer.test_plot_waterxml_timeseries_comparison">
+<tt class="descclassname">waterxml_viewer.</tt><tt class="descname">test_plot_waterxml_timeseries_comparison</tt><big>(</big><big>)</big><a class="headerlink" href="#waterxml_viewer.test_plot_waterxml_timeseries_comparison" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test plot_waterxml_timeseries_comparison functionality()</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml_viewer.test_plot_waterxml_timeseries_data">
+<tt class="descclassname">waterxml_viewer.</tt><tt class="descname">test_plot_waterxml_timeseries_data</tt><big>(</big><big>)</big><a class="headerlink" href="#waterxml_viewer.test_plot_waterxml_timeseries_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test plot_waterxml_timeseries_data</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml_viewer.test_plot_waterxml_topographic_wetness_index_data">
+<tt class="descclassname">waterxml_viewer.</tt><tt class="descname">test_plot_waterxml_topographic_wetness_index_data</tt><big>(</big><big>)</big><a class="headerlink" href="#waterxml_viewer.test_plot_waterxml_topographic_wetness_index_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test plot_waterxml_topographic_wetness_index_data()</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterxml_viewer.test_print_waterxml_data">
+<tt class="descclassname">waterxml_viewer.</tt><tt class="descname">test_print_waterxml_data</tt><big>(</big><big>)</big><a class="headerlink" href="#waterxml_viewer.test_print_waterxml_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test print_waterxml_data()</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-waterapputils_logging">
+<span id="waterapputils-logging-py-handles-errors"></span><h2>waterapputils_logging.py - handles errors<a class="headerlink" href="#module-waterapputils_logging" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Module:</th><td class="field-body">waterapputils_logging.py</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Jeremiah Lant, <a class="reference external" href="mailto:jlant&#37;&#52;&#48;usgs&#46;gov">jlant<span>&#64;</span>usgs<span>&#46;</span>gov</a>, U.S. Geological Survey, Kentucky Water Science Center, <a class="reference external" href="http://www.usgs.gov/">http://www.usgs.gov/</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Synopsis:</th><td class="field-body">Handles logging of errors.</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="waterapputils_logging.initialize_loggers">
+<tt class="descclassname">waterapputils_logging.</tt><tt class="descname">initialize_loggers</tt><big>(</big><em>output_dir</em><big>)</big><a class="headerlink" href="#waterapputils_logging.initialize_loggers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize logging objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>output_dir</strong> : str</p>
+<blockquote class="last">
+<div><p>String path</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterapputils_logging.main">
+<tt class="descclassname">waterapputils_logging.</tt><tt class="descname">main</tt><big>(</big><big>)</big><a class="headerlink" href="#waterapputils_logging.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test functionality of logging errors</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterapputils_logging.remove_loggers">
+<tt class="descclassname">waterapputils_logging.</tt><tt class="descname">remove_loggers</tt><big>(</big><big>)</big><a class="headerlink" href="#waterapputils_logging.remove_loggers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all logging objects.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="waterapputils_logging.test_logging">
+<tt class="descclassname">waterapputils_logging.</tt><tt class="descname">test_logging</tt><big>(</big><big>)</big><a class="headerlink" href="#waterapputils_logging.test_logging" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test functionality of logging errors</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-wateruse">
+<span id="wateruse-py-reads-processes-and-computes-water-use-from-water-use-data-files"></span><h2>wateruse.py - reads, processes, and computes water use from water use data files<a class="headerlink" href="#module-wateruse" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Module:</th><td class="field-body">wateruse.py</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Jeremiah Lant, <a class="reference external" href="mailto:jlant&#37;&#52;&#48;usgs&#46;gov">jlant<span>&#64;</span>usgs<span>&#46;</span>gov</a>, U.S. Geological Survey, Kentucky Water Science Center, <a class="reference external" href="http://www.usgs.gov/">http://www.usgs.gov/</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Synopsis:</th><td class="field-body">Handles reading, writing, processing, and logging errors in water use text data files.</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="wateruse.convert_wateruse_units">
+<tt class="descclassname">wateruse.</tt><tt class="descname">convert_wateruse_units</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#wateruse.convert_wateruse_units" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert values from a mega gallons to cubic feet per second</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>value</strong> : float</p>
+<blockquote>
+<div><p>Float value in mega gallons per day</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">converted_value: float</p>
+<blockquote class="last">
+<div><p>Float value in cubic feet per second</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="wateruse.create_monthly_wateruse_dict">
+<tt class="descclassname">wateruse.</tt><tt class="descname">create_monthly_wateruse_dict</tt><big>(</big><em>wateruse_data</em>, <em>wateruse_value</em><big>)</big><a class="headerlink" href="#wateruse.create_monthly_wateruse_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create monthly wateruse dictionary according to the months in the wateruse_data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>wateruse_data</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing wateruse data from wateruse file</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>monthly_wateruse_dict</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary filled with data from wateruse_value for particular months specified by months in wateruse_data</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>monthly_wateruse_dict = {</p>
+<blockquote>
+<div><p>&#8220;January&#8221;: 5.0,</p>
+<p>&#8220;February&#8221;: 5.0,</p>
+<p>&#8220;March&#8221;: 5.0</p>
+</div></blockquote>
+<p>}</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="wateruse.get_all_total_wateruse">
+<tt class="descclassname">wateruse.</tt><tt class="descname">get_all_total_wateruse</tt><big>(</big><em>wateruse_files</em>, <em>id_list</em>, <em>wateruse_factor_file=None</em>, <em>in_cfs=False</em><big>)</big><a class="headerlink" href="#wateruse.get_all_total_wateruse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all total water use values for a list of specific id values. 
+The base unit in the water use data file is mega gallons per day (Mgal/day) .
+Can convert to cubic feet per second (cfs) using in_cubic_feet_per_sec flag.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>wateruse_files</strong> : list</p>
+<blockquote>
+<div><p>List of water use files to calculate the sum of all water use values</p>
+</div></blockquote>
+<p><strong>ids</strong> : list</p>
+<blockquote>
+<div><p>List of ids values.</p>
+</div></blockquote>
+<p><strong>in_cfs</strong> : boolean</p>
+<blockquote>
+<div><p>Boolean flag to convert units from Mgal to cfs</p>
+</div></blockquote>
+<p><strong>See Also</strong></p>
+<p><strong>&#8212;&#8212;&#8211;</strong></p>
+<p class="last"><strong>get_total_wateruse()</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="wateruse.get_total_wateruse">
+<tt class="descclassname">wateruse.</tt><tt class="descname">get_total_wateruse</tt><big>(</big><em>wateruse_data</em>, <em>id_list</em>, <em>wateruse_factors=None</em><big>)</big><a class="headerlink" href="#wateruse.get_total_wateruse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dictionary with monthly keys containing the total wateruse for a specific list of ids</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>wateruse_data</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing wateruse data from wateruse file.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>total_wateruse_dict</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary filled with data from wateruse_value for particular months specified by months in wateruse_data</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>total_wateruse_dict = {</p>
+<blockquote>
+<div><p>&#8220;January&#8221;: 5.0,</p>
+<p>&#8220;February&#8221;: 5.0,</p>
+<p>&#8220;March&#8221;: 5.0</p>
+</div></blockquote>
+<p>}</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="wateruse.get_wateruse_values">
+<tt class="descclassname">wateruse.</tt><tt class="descname">get_wateruse_values</tt><big>(</big><em>wateruse_data</em>, <em>id_list</em>, <em>wateruse_factors=None</em><big>)</big><a class="headerlink" href="#wateruse.get_wateruse_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get water use values based on id(s) of interest.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>wateruse_data</strong> : list</p>
+<blockquote>
+<div><p>List of dictionaries holding data from many water use data files</p>
+</div></blockquote>
+<p><strong>id_list</strong> : list</p>
+<blockquote>
+<div><p>List of string id values</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>values</strong> : list</p>
+<blockquote class="last">
+<div><p>List containing lists of water use values for each id in id_list; shape is m x n where m is the number of water use values and n is number of ids in id_list</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>values = [[  1.3   2.7   3.3   4.7   5.3   6.7   7.3   8.7   9.3  10.7  11.3  12.7]</dt>
+<dd>[  1.2   2.8   3.2   4.8   5.2   6.8   7.2   8.8   9.2  10.8  11.2  12.8]]</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="wateruse.read_factor_file_in">
+<tt class="descclassname">wateruse.</tt><tt class="descname">read_factor_file_in</tt><big>(</big><em>filestream</em><big>)</big><a class="headerlink" href="#wateruse.read_factor_file_in" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read and process a water use factor *.txt file. Finds any parameter and its respective data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filestream</strong> : file object</p>
+<blockquote>
+<div><p>A python file object that contains an open data file.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>data</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Returns a dictionary containing data found in data file.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>expected = {</p>
+<blockquote>
+<div><p>&#8220;AqGwWL&#8221;: float water use factor value,</p>
+<p>&#8220;CoGwWL&#8221;: float water use factor value,</p>
+<p>...</p>
+</div></blockquote>
+<p>}</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="wateruse.read_file">
+<tt class="descclassname">wateruse.</tt><tt class="descname">read_file</tt><big>(</big><em>filepath</em>, <em>factor_file=None</em><big>)</big><a class="headerlink" href="#wateruse.read_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open WATER text file, create a file object for read_file_in(filestream) to process.
+This function is responsible to opening the file, removing the file opening  
+responsibility from read_file_in(filestream) so that read_file_in(filestream)  
+can be unit tested.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filestream</strong> : file object</p>
+<blockquote>
+<div><p>A file object that contains an open data file.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>data</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Returns a dictionary containing data found in data file.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#wateruse.read_file_in" title="wateruse.read_file_in"><tt class="xref py py-obj docutils literal"><span class="pre">read_file_in</span></tt></a></dt>
+<dd>Read data file object</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="wateruse.read_file_in">
+<tt class="descclassname">wateruse.</tt><tt class="descname">read_file_in</tt><big>(</big><em>filestream</em><big>)</big><a class="headerlink" href="#wateruse.read_file_in" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read and process a water use *.txt file. Finds any parameter and its respective data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filestream</strong> : file object</p>
+<blockquote>
+<div><p>A python file object that contains an open data file.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>data</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Returns a dictionary containing data found in data file.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>expected = {</p>
+<blockquote>
+<div><p>&#8220;huc12&#8221;: list of string ids,</p>
+<p>&#8220;newhydroid&#8221;: list of string ids,</p>
+<p>&#8220;AqGwWL&#8221;: list of float water use values,</p>
+<p>&#8220;CoGwWL&#8221;: list of float water use values,</p>
+<p>...</p>
+</div></blockquote>
+<p>}</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="wateruse.sum_values">
+<tt class="descclassname">wateruse.</tt><tt class="descname">sum_values</tt><big>(</big><em>values</em><big>)</big><a class="headerlink" href="#wateruse.sum_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sum values row-wise, column-wise, and absolute total. Return dictionary containing
+each sum.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>values: list</strong></p>
+<blockquote>
+<div><p>List containing lists of values</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">sums: dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary containing row-wise, column-wise, and total sums</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="wateruse.test_read_factor_file_in">
+<tt class="descclassname">wateruse.</tt><tt class="descname">test_read_factor_file_in</tt><big>(</big><big>)</big><a class="headerlink" href="#wateruse.test_read_factor_file_in" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test read_factor_file_in()</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="wateruse.test_read_file_in">
+<tt class="descclassname">wateruse.</tt><tt class="descname">test_read_file_in</tt><big>(</big><big>)</big><a class="headerlink" href="#wateruse.test_read_file_in" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test read_file_in()</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-deltas">
+<span id="deltas-py-reads-and-processes-global-climate-model-files"></span><h2>deltas.py - reads and processes global climate model files<a class="headerlink" href="#module-deltas" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Module:</th><td class="field-body">deltas.py</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Jeremiah Lant, <a class="reference external" href="mailto:jlant&#37;&#52;&#48;usgs&#46;gov">jlant<span>&#64;</span>usgs<span>&#46;</span>gov</a>, U.S. Geological Survey, Kentucky Water Science Center, <a class="reference external" href="http://www.usgs.gov/">http://www.usgs.gov/</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Synopsis:</th><td class="field-body">Handles reading, processing, and logging errors in delta text files.</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="deltas.calculate_avg_delta_values">
+<tt class="descclassname">deltas.</tt><tt class="descname">calculate_avg_delta_values</tt><big>(</big><em>deltas_data</em>, <em>tile_list</em><big>)</big><a class="headerlink" href="#deltas.calculate_avg_delta_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get monthly averaged delta data values for a specific list of tiles.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>delta_data</strong> : list</p>
+<blockquote>
+<div><p>List of dictionaries holding data from delta data files.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>avg_delta_values</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary keys corresponding to delta variable type (i.e. precipitation (Ppt)) holding averaged data values for a specific list of tiles.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>avg_delta_values = {</p>
+<blockquote>
+<div><p>&#8220;Ppt&#8221;: {</p>
+<blockquote>
+<div><p>&#8220;January&#8221;: 2.0,</p>
+<p>&#8220;February&#8221;: 0.98,</p>
+<p>&#8220;March&#8221;: 0.97,</p>
+<p>&#8220;April&#8221;: 1.04,</p>
+<p>&#8220;May&#8221;: 1.10,</p>
+<p>&#8220;June&#8221;: 0.99,</p>
+<p>&#8220;July&#8221;: 0.87,</p>
+<p>&#8220;August&#8221;: 0.75,</p>
+<p>&#8220;September&#8221;: 0.95,</p>
+<p>&#8220;October&#8221;: 0.98,</p>
+<p>&#8220;November&#8221;: 1.10,</p>
+<p>&#8220;December&#8221;: 2.0</p>
+</div></blockquote>
+<p>}</p>
+</div></blockquote>
+<p>}</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="deltas.format_to_monthly_dict">
+<tt class="descclassname">deltas.</tt><tt class="descname">format_to_monthly_dict</tt><big>(</big><em>values</em><big>)</big><a class="headerlink" href="#deltas.format_to_monthly_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format array of values into a dictionary with monthly keys.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>values: list</strong></p>
+<blockquote>
+<div><p>List containing lists of monthly values; shape is n x 12</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>values_dict</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary containing monthly keys with corresponding values.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>{</p>
+<blockquote>
+<div><p>&#8220;January&#8221;: [2.0, 1.0],</p>
+<p>&#8220;February&#8221;: [0.98, 0.99],</p>
+<p>&#8220;March&#8221;: [0.97, 1.10],</p>
+<p>&#8220;April&#8221;: [1.04, 1.02],</p>
+<p>&#8220;May&#8221;: [1.10, 0.99],</p>
+<p>&#8220;June&#8221;: [0.99, 0.98],</p>
+<p>&#8220;July&#8221;: [0.87, 0.75],</p>
+<p>&#8220;August&#8221;: [0.75, 0.95],</p>
+<p>&#8220;September&#8221;: [0.95, 0.9],</p>
+<p>&#8220;October&#8221;: [0.98, 0.8],</p>
+<p>&#8220;November&#8221;: [1.10, 1.05],</p>
+<p>&#8220;December&#8221;: [2.0, 1.10]</p>
+</div></blockquote>
+<p>}</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="deltas.get_avg_deltas">
+<tt class="descclassname">deltas.</tt><tt class="descname">get_avg_deltas</tt><big>(</big><em>delta_files</em>, <em>tiles</em><big>)</big><a class="headerlink" href="#deltas.get_avg_deltas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all average Global Climate Model (GCM) delta values for a list of specific 
+(GCM) tile values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>delta_files</strong> : list</p>
+<blockquote>
+<div><p>List of delta files to calculate average delta values for</p>
+</div></blockquote>
+<p><strong>tiles</strong> : list</p>
+<blockquote>
+<div><p>List of Global Climate Model tile values.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>avg_deltas</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary containing average delta values for a list of specific tile values for a list of delta files</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#deltas.calculate_avg_delta_values" title="deltas.calculate_avg_delta_values"><tt class="xref py py-obj docutils literal"><span class="pre">calculate_avg_delta_values</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="deltas.get_monthly_values">
+<tt class="descclassname">deltas.</tt><tt class="descname">get_monthly_values</tt><big>(</big><em>delta_data</em>, <em>tile_list</em><big>)</big><a class="headerlink" href="#deltas.get_monthly_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get monthly values based on tile(s) of interest.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>delta_data</strong> : list</p>
+<blockquote>
+<div><p>List of dictionaries holding data from many delta data files</p>
+</div></blockquote>
+<p><strong>tile_list</strong> : list</p>
+<blockquote>
+<div><p>List of string tile values</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">values: list</p>
+<blockquote class="last">
+<div><p>List containing lists of monthly values; shape is n x 12 where n is number of tiles in tile_list</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>values = [[  1.3   2.7   3.3   4.7   5.3   6.7   7.3   8.7   9.3  10.7  11.3  12.7]</dt>
+<dd>[  1.2   2.8   3.2   4.8   5.2   6.8   7.2   8.8   9.2  10.8  11.2  12.8]]</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="deltas.main">
+<tt class="descclassname">deltas.</tt><tt class="descname">main</tt><big>(</big><big>)</big><a class="headerlink" href="#deltas.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test functionality of reading files</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="deltas.read_file">
+<tt class="descclassname">deltas.</tt><tt class="descname">read_file</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#deltas.read_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open delta *.txt file, create a file object for read_file_in(filestream) to process.
+This function is responsible to opening the file, removing the file opening  
+responsibility from read_file_in(filestream) so that read_file_in(filestream)  
+can be unit tested.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filestream</strong> : file object</p>
+<blockquote>
+<div><p>A file object that contains an open data file.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>data</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Returns a dictionary containing data found in data file.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#deltas.read_file_in" title="deltas.read_file_in"><tt class="xref py py-obj docutils literal"><span class="pre">read_file_in</span></tt></a></dt>
+<dd>Read data file object</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="deltas.read_file_in">
+<tt class="descclassname">deltas.</tt><tt class="descname">read_file_in</tt><big>(</big><em>filestream</em><big>)</big><a class="headerlink" href="#deltas.read_file_in" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read and process a delta *.txt file. Returns a dictionary with keys named
+as the column header names found in the file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filestream</strong> : file object</p>
+<blockquote>
+<div><p>A python file object that contains an open data file.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>data</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Returns a dictionary containing data found in data file.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>data = {</p>
+<blockquote>
+<div><p>&#8220;Model&#8221;: string of model name,</p>
+<p>&#8220;Scenario&#8221;: string of scenario name,</p>
+<p>&#8220;Target&#8221;: string of scenario name,</p>
+<p>&#8220;Variable&#8221;: string of variable name,</p>
+<p>&#8220;Tile&#8221;: list of tile numbers,</p>
+<p>&#8220;January&#8221;: array of delta values for each tile</p>
+<p>. . .</p>
+<p>&#8220;December&#8221;: array of delta values for each tile</p>
+</div></blockquote>
+<p>}</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-deltas_viewer">
+<span id="deltas-viewer-py-plots-global-climate-model-files"></span><h2>deltas_viewer.py - plots global climate model files<a class="headerlink" href="#module-deltas_viewer" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Module:</th><td class="field-body">deltas_viewer.py</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Jeremiah Lant, <a class="reference external" href="mailto:jlant&#37;&#52;&#48;usgs&#46;gov">jlant<span>&#64;</span>usgs<span>&#46;</span>gov</a>, U.S. Geological Survey, Kentucky Water Science Center, <a class="reference external" href="http://www.usgs.gov/">http://www.usgs.gov/</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Synopsis:</th><td class="field-body">Handles views of the data, such as printing and plotting.</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="deltas_viewer.main">
+<tt class="descclassname">deltas_viewer.</tt><tt class="descname">main</tt><big>(</big><big>)</big><a class="headerlink" href="#deltas_viewer.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test functionality of deltas_viewer()</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="deltas_viewer.plot_deltas_data">
+<tt class="descclassname">deltas_viewer.</tt><tt class="descname">plot_deltas_data</tt><big>(</big><em>deltas_data</em>, <em>is_visible=True</em>, <em>save_path=None</em><big>)</big><a class="headerlink" href="#deltas_viewer.plot_deltas_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot each parameter contained in the nwis data. Save plots to a particular
+path.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>deltasdata_data</strong> : dictionary</p>
+<blockquote>
+<div><p>A dictionary containing data found in deltas data file.</p>
+</div></blockquote>
+<p><strong>is_visible</strong> : bool</p>
+<blockquote>
+<div><p>Boolean value to show plots</p>
+</div></blockquote>
+<p><strong>save_path</strong> : string</p>
+<blockquote class="last">
+<div><p>String path to save plot(s)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="deltas_viewer.print_deltas_data">
+<tt class="descclassname">deltas_viewer.</tt><tt class="descname">print_deltas_data</tt><big>(</big><em>deltas_data</em><big>)</big><a class="headerlink" href="#deltas_viewer.print_deltas_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print information contained in the delta data dictionary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>watertxt_data</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>A dictionary containing data found in WATER output text file.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="deltas_viewer.test_plot_deltas_data">
+<tt class="descclassname">deltas_viewer.</tt><tt class="descname">test_plot_deltas_data</tt><big>(</big><big>)</big><a class="headerlink" href="#deltas_viewer.test_plot_deltas_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test plot_deltas_data()</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="deltas_viewer.test_print_deltas_data">
+<tt class="descclassname">deltas_viewer.</tt><tt class="descname">test_print_deltas_data</tt><big>(</big><big>)</big><a class="headerlink" href="#deltas_viewer.test_print_deltas_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test print_deltas_data()</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-helpers">
+<span id="helpers-py-mix-of-helper-functions"></span><h2>helpers.py - mix of helper functions<a class="headerlink" href="#module-helpers" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Module:</th><td class="field-body">helpers.py</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Jeremiah Lant, <a class="reference external" href="mailto:jlant&#37;&#52;&#48;usgs&#46;gov">jlant<span>&#64;</span>usgs<span>&#46;</span>gov</a>, U.S. Geological Survey, Kentucky Water Science Center, <a class="reference external" href="http://www.usgs.gov/">http://www.usgs.gov/</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Synopsis:</th><td class="field-body">Collection of helper functions.</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="helpers.compute_simple_stats">
+<tt class="descclassname">helpers.</tt><tt class="descname">compute_simple_stats</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#helpers.compute_simple_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute simple statistics (mean, max, min) on a data array. Can handle nan values.
+If the entire data array consists of only nan values, then log the error and raise a ValueError.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : array</p>
+<blockquote>
+<div><p>An array of numbers to compute simple statistics on.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>(mean, max, min)</strong> : tuple</p>
+<blockquote>
+<div><p>Returns a tuple of mean, max, and min stats.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
+<blockquote class="last">
+<div><p>If data array only contains nan values.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">watertxt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">watertxt</span><span class="o">.</span><span class="n">compute_simple_stats</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="go">(2.5, 4, 1)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">watertxt</span><span class="o">.</span><span class="n">compute_simple_stats</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="go">(3.0, 6.0, 1.0)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="helpers.convert_to_float">
+<tt class="descclassname">helpers.</tt><tt class="descname">convert_to_float</tt><big>(</big><em>value</em>, <em>helper_str=None</em><big>)</big><a class="headerlink" href="#helpers.convert_to_float" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a value to a float. If value is not a valid float, log as an error
+with a helper_str (e.g. value&#8221;s coorsponding date) to help locate the 
+error and replace value with a nan.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>value</strong> : string</p>
+<blockquote>
+<div><p>String value to convert.</p>
+</div></blockquote>
+<p><strong>helper_str</strong> : string</p>
+<blockquote>
+<div><p>String message to be placed in error log if value can not be converted to a float. e.g. value&#8221;s corresponding date of occurance.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>value</strong> : {float, nan}</p>
+<blockquote class="last">
+<div><p>Float or numpy nan value</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="helpers.create_monthly_dict">
+<tt class="descclassname">helpers.</tt><tt class="descname">create_monthly_dict</tt><big>(</big><big>)</big><a class="headerlink" href="#helpers.create_monthly_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a dictionary containing monthly keys and empty lists as initial values</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>values_dict</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary containing monthly keys with corresponding values.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>{</p>
+<blockquote>
+<div><p>&#8220;January&#8221;: [2.0, 1.0],</p>
+<p>&#8220;February&#8221;: [0.98, 0.99],</p>
+<p>&#8220;March&#8221;: [0.97, 1.10],</p>
+<p>&#8220;April&#8221;: [1.04, 1.02],</p>
+<p>&#8220;May&#8221;: [1.10, 0.99],</p>
+<p>&#8220;June&#8221;: [0.99, 0.98],</p>
+<p>&#8220;July&#8221;: [0.87, 0.75],</p>
+<p>&#8220;August&#8221;: [0.75, 0.95],</p>
+<p>&#8220;September&#8221;: [0.95, 0.9],</p>
+<p>&#8220;October&#8221;: [0.98, 0.8],</p>
+<p>&#8220;November&#8221;: [1.10, 1.05],</p>
+<p>&#8220;December&#8221;: [2.0, 1.10]</p>
+</div></blockquote>
+<p>}</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="helpers.create_nan_array">
+<tt class="descclassname">helpers.</tt><tt class="descname">create_nan_array</tt><big>(</big><em>shape</em>, <em>dtype=&lt;type 'float'&gt;</em><big>)</big><a class="headerlink" href="#helpers.create_nan_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find start and end dates between two different sized arrays of datetime
+objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>shape</strong> : tuple</p>
+<blockquote>
+<div><p>Tuple containing shape of desired nan array.</p>
+</div></blockquote>
+<p><strong>dtype</strong> : data type</p>
+<blockquote>
+<div><p>Data type desired for the array; e.g. float</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>nan_array</strong> : array</p>
+<blockquote class="last">
+<div><p>Array containing only nan values</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="helpers.find_file">
+<tt class="descclassname">helpers.</tt><tt class="descname">find_file</tt><big>(</big><em>name</em>, <em>path</em><big>)</big><a class="headerlink" href="#helpers.find_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the full path to a particular file the matches a file name provided.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<blockquote>
+<div><p>String name of file</p>
+</div></blockquote>
+<p><strong>path</strong> : string</p>
+<blockquote>
+<div><p>String path</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>result</strong> : string</p>
+<blockquote class="last">
+<div><p>String of the full path for a file.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="helpers.find_files">
+<tt class="descclassname">helpers.</tt><tt class="descname">find_files</tt><big>(</big><em>name</em>, <em>path</em><big>)</big><a class="headerlink" href="#helpers.find_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of full paths to a file matching a file name provided.  
+Search starts from path provided.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<blockquote>
+<div><p>String name of file</p>
+</div></blockquote>
+<p><strong>path</strong> : string</p>
+<blockquote>
+<div><p>String path</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>results</strong> : list</p>
+<blockquote class="last">
+<div><p>List of strings of full paths for a file.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="helpers.find_files_with_pattern">
+<tt class="descclassname">helpers.</tt><tt class="descname">find_files_with_pattern</tt><big>(</big><em>pattern</em>, <em>path</em><big>)</big><a class="headerlink" href="#helpers.find_files_with_pattern" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of full paths to a file matching a pattern (e.g. *.txt).  
+Search starts from path provided.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pattern</strong> : string</p>
+<blockquote>
+<div><p>String pattern to match a file</p>
+</div></blockquote>
+<p><strong>path</strong> : string</p>
+<blockquote>
+<div><p>String path to start search</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>results</strong> : list</p>
+<blockquote class="last">
+<div><p>List of strings of full paths for a file.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="helpers.find_start_end_dates">
+<tt class="descclassname">helpers.</tt><tt class="descname">find_start_end_dates</tt><big>(</big><em>dates1</em>, <em>dates2</em><big>)</big><a class="headerlink" href="#helpers.find_start_end_dates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find start and end dates between two different sized arrays of datetime
+objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dates1</strong> : list</p>
+<blockquote>
+<div><p>List of datetime objects.</p>
+</div></blockquote>
+<p><strong>dates2</strong> : list</p>
+<blockquote>
+<div><p>List of datetime objects.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>(start_date, end_date)</strong> : tuple</p>
+<blockquote class="last">
+<div><p>Tuple of datetime objects.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="helpers.get_file_info">
+<tt class="descclassname">helpers.</tt><tt class="descname">get_file_info</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#helpers.get_file_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get file directory and name from a file path.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>path</strong> : string</p>
+<blockquote>
+<div><p>String path</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>filedir</strong> : string</p>
+<blockquote>
+<div><p>String file directory path</p>
+</div></blockquote>
+<p><strong>filename</strong> : string</p>
+<blockquote class="last">
+<div><p>String file name</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="helpers.get_file_paths">
+<tt class="descclassname">helpers.</tt><tt class="descname">get_file_paths</tt><big>(</big><em>path</em>, <em>file_ext=None</em><big>)</big><a class="headerlink" href="#helpers.get_file_paths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of full file paths from a directory including its subdirectories.
+Filter files based on its file extension.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>path</strong> : string</p>
+<blockquote>
+<div><p>String path</p>
+</div></blockquote>
+<p><strong>file_ext</strong> : string</p>
+<blockquote>
+<div><p>String file extention; e.g. &#8221;.txt&#8221;</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>file_paths</strong> : list</p>
+<blockquote class="last">
+<div><p>List of strings of full file paths from a directory.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="helpers.isfloat">
+<tt class="descclassname">helpers.</tt><tt class="descname">isfloat</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#helpers.isfloat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if string value can be converted to a float. Return True if
+value can be converted to a float and False otherwise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>value</strong> : string</p>
+<blockquote>
+<div><p>String value to try to convert to a float.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>bool</strong> : bool</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">nwispy_helpers</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nwispy_helpers</span><span class="o">.</span><span class="n">isfloat</span><span class="p">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;2.5&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nwispy_helpers</span><span class="o">.</span><span class="n">isfloat</span><span class="p">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;hello world&quot;</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nwispy_helpers</span><span class="o">.</span><span class="n">isfloat</span><span class="p">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;5.5_&quot;</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="helpers.main">
+<tt class="descclassname">helpers.</tt><tt class="descname">main</tt><big>(</big><big>)</big><a class="headerlink" href="#helpers.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test functionality of helpers</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="helpers.make_directory">
+<tt class="descclassname">helpers.</tt><tt class="descname">make_directory</tt><big>(</big><em>path</em>, <em>directory_name</em><big>)</big><a class="headerlink" href="#helpers.make_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a directory if is does not exist.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>path: string</strong></p>
+<blockquote>
+<div><p>String path</p>
+</div></blockquote>
+<p><strong>directory_name</strong> : string</p>
+<blockquote>
+<div><p>String name</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>directory_path</strong> : string</p>
+<blockquote class="last">
+<div><p>String path to made directory.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="helpers.now">
+<tt class="descclassname">helpers.</tt><tt class="descname">now</tt><big>(</big><big>)</big><a class="headerlink" href="#helpers.now" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return current date and time in a format that can be used as a file name. 
+Format: year-month-day_hour.minute.second.microsecond; e.g. 2014-03-18_15.51.46.25</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>date_time</strong> : string</p>
+<blockquote class="last">
+<div><p>String of current date and time in %Y-%m-%d_%H.%M.%S.%f format.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The length of the microsecond string is trimed to 2 digits.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="helpers.print_monthly_dict">
+<tt class="descclassname">helpers.</tt><tt class="descname">print_monthly_dict</tt><big>(</big><em>monthly_dict</em><big>)</big><a class="headerlink" href="#helpers.print_monthly_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print a dictionary in a nice format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>monthly_dict</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary containing monthly keys.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="helpers.rmspecialchars">
+<tt class="descclassname">helpers.</tt><tt class="descname">rmspecialchars</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#helpers.rmspecialchars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove any special characters except period (.) and negative (-) from numeric values</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>value</strong> : string</p>
+<blockquote>
+<div><p>String value to remove any existing characters from</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>value</strong> : string</p>
+<blockquote class="last">
+<div><p>String value to without any special characters</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">helpers</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">helpers</span><span class="o">.</span><span class="n">rmspecialchars</span><span class="p">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;*6.5_&quot;</span><span class="p">)</span>
+<span class="go">6.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">helpers</span><span class="o">.</span><span class="n">rmspecialchars</span><span class="p">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;ICE&quot;</span><span class="p">)</span>
+<span class="go">ICE</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">helpers</span><span class="o">.</span><span class="n">rmspecialchars</span><span class="p">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;-4.2&quot;</span><span class="p">)</span>
+<span class="go">-4.2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">helpers</span><span class="o">.</span><span class="n">rmspecialchars</span><span class="p">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">helpers</span><span class="o">.</span><span class="n">rmspecialchars</span><span class="p">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;%&amp;!@#8.32&amp;#*;&quot;</span><span class="p">)</span>
+<span class="go">8.32</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="helpers.subset_data">
+<tt class="descclassname">helpers.</tt><tt class="descname">subset_data</tt><big>(</big><em>dates</em>, <em>values</em>, <em>start_date</em>, <em>end_date</em><big>)</big><a class="headerlink" href="#helpers.subset_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subset the dates and values arrays to match the range of the start_date
+and end_date. If start_date and end_date are not within the range of dates
+specified in dates, then the start_date and end_date are set to the
+first and last dates in the array dates.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dates</strong> : array</p>
+<blockquote>
+<div><p>Array of dates as datetime objects.</p>
+</div></blockquote>
+<p><strong>data</strong> : array</p>
+<blockquote>
+<div><p>Array of numbers.</p>
+</div></blockquote>
+<p><strong>start_date</strong> : datetime object</p>
+<blockquote>
+<div><p>A date as a datetime object.</p>
+</div></blockquote>
+<p><strong>end_date</strong> : datetime object</p>
+<blockquote>
+<div><p>A date as a datetime object.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>(subset_dates, subset_values)</strong> : tuple</p>
+<blockquote class="last">
+<div><p>Tuple of arrays of dates and values that were subsetted.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-spatialvectors">
+<span id="spatialvectors-py-handles-spatial-data-processing-of-shapefiles-performs-spatial-intersection-between-shapefiles"></span><h2>spatialvectors.py - handles spatial data processing of shapefiles; performs spatial intersection between shapefiles<a class="headerlink" href="#module-spatialvectors" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Module:</th><td class="field-body">spatialvectors.py</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Jeremiah Lant, <a class="reference external" href="mailto:jlant&#37;&#52;&#48;usgs&#46;gov">jlant<span>&#64;</span>usgs<span>&#46;</span>gov</a>, U.S. Geological Survey, Kentucky Water Science Center, <a class="reference external" href="http://www.usgs.gov/">http://www.usgs.gov/</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Synopsis:</th><td class="field-body">Handles reading and processing shapefiles.</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="spatialvectors.create_shapefile_dict">
+<tt class="descclassname">spatialvectors.</tt><tt class="descname">create_shapefile_dict</tt><big>(</big><big>)</big><a class="headerlink" href="#spatialvectors.create_shapefile_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create dictionary containing keys that correspond to general information contained
+in a shapefile.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>shapefile_dict</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary containing information found in a shapefile</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>shapefile_dict = {&#8220;shapefile_datatype&#8221;: None, &#8220;type&#8221;: None, &#8220;path&#8221;: None, &#8220;name&#8221;: None, &#8220;num_features&#8221;: None, &#8220;fields&#8221;: [], &#8220;spatialref&#8221;: None, &#8220;extents&#8221;: ()}</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="spatialvectors.fill_shapefile_dict">
+<tt class="descclassname">spatialvectors.</tt><tt class="descname">fill_shapefile_dict</tt><big>(</big><em>shapefile</em><big>)</big><a class="headerlink" href="#spatialvectors.fill_shapefile_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get general shapefile information data source.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>shapefile</strong> : osgeo.ogr.DataSource</p>
+<blockquote>
+<div><p>A shapefile object.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>shapefile_dict</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary containing general information about a shapefile</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>shapefile_data = {&#8220;shapefile_datatype&#8221;: osgeo.ogr.DataSource,</dt>
+<dd>&#8220;type&#8221;: string of geometry type (POLYGON, POINT, etc.),
+&#8220;path&#8221;: string path including name of shapefile,
+&#8220;name&#8221;: string name of shapefile
+&#8220;fields&#8221;: list containing fields contained in shapefile,
+&#8220;spatialref&#8221;: string of shapefile&#8217;s spatial reference,
+&#8220;extents&#8221;: tuple of shapefile extents}</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="spatialvectors.get_intersected_field_values">
+<tt class="descclassname">spatialvectors.</tt><tt class="descname">get_intersected_field_values</tt><big>(</big><em>intersector</em>, <em>intersectee</em>, <em>intersectee_field</em>, <em>intersector_field='FID'</em><big>)</big><a class="headerlink" href="#spatialvectors.get_intersected_field_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the intersectee field values of interest associated with a shapefile 
+that is intersected by another shapefile.  A dictionary is returned with key(s) 
+that correspond to the intersector field value of interest (FID by default) and 
+values corresponding to intersectee field values that are intersected. This function 
+returns all the intersected features, and distinguishes between multiple features (FID&#8217;s)
+in the intersector.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>intersector</strong> : osgeo.ogr.DataSource object</p>
+<blockquote>
+<div><p>A shapefile object.</p>
+</div></blockquote>
+<p><strong>intersectee</strong> : osgeo.ogr.DataSource object</p>
+<blockquote>
+<div><p>A shapefile object.</p>
+</div></blockquote>
+<p><strong>intersectee_field: string</strong></p>
+<blockquote>
+<div><p>String name of a field in intersectee whose values will be retrieved if itersection occurs.</p>
+</div></blockquote>
+<p><strong>intersector_field: string</strong></p>
+<blockquote>
+<div><p>String name of a field in intersector whose values will be used as keys in the field values dictionary.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>field_values_dict</strong> : Dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary containing lists of values for a particular field that were intersected by another shapefile.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>For example, this function is used to find Global Climate Model (gcm) tile values intersected by a
+particular basin. If basin shapefile intersects a particular GCM shapefile, the GCM tile values
+that are intersected by the basin shapefile are returned.  So, the intersector would be the basin and 
+the intersectee would be the GCM shapefile.</p>
+<p>For example,
+field_values_dict = {&#8220;0&#8221;: [&#8220;31&#8221;, &#8220;32&#8221;, &#8220;21&#8221;, &#8220;11&#8221;], &#8220;1&#8221;: [&#8220;21&#8221;, &#8220;22&#8221;], &#8220;2&#8221;: [&#8220;12&#8221;]}</p>
+<p>Where the keys are each FID number of the intersector with corrsponding values that are the field values
+from the intersectee that are intersected.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="spatialvectors.get_shapefile_coords">
+<tt class="descclassname">spatialvectors.</tt><tt class="descname">get_shapefile_coords</tt><big>(</big><em>shapefile</em><big>)</big><a class="headerlink" href="#spatialvectors.get_shapefile_coords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the coordinates (longitudes and latitudes) of each feature in a shapefile. 
+Loops through each feature contained in a shapefile (e.g. each FID) and gets the features
+coordinates. Returns a dictionary containing keys that correspond to each feature, namely,
+the features FID number with corresponding longitude and latitude values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>shapefile</strong> : osgeo.ogr.DataSource</p>
+<blockquote>
+<div><p>A shapefile object.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>coordinates</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary containing</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="spatialvectors.main">
+<tt class="descclassname">spatialvectors.</tt><tt class="descname">main</tt><big>(</big><big>)</big><a class="headerlink" href="#spatialvectors.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test functionality geospatialvectors.py</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="spatialvectors.read_field_values_file">
+<tt class="descclassname">spatialvectors.</tt><tt class="descname">read_field_values_file</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#spatialvectors.read_field_values_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a file containing rows of basin ids that are not intersected by any water use basin centroids</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filepath</strong> : string</p>
+<blockquote class="last">
+<div><p>String path to file</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="spatialvectors.read_field_values_file_in">
+<tt class="descclassname">spatialvectors.</tt><tt class="descname">read_field_values_file_in</tt><big>(</big><em>filestream</em><big>)</big><a class="headerlink" href="#spatialvectors.read_field_values_file_in" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a file containing rows of basin ids that are not intersected by any water use basin centroids</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filepath</strong> : string</p>
+<blockquote class="last">
+<div><p>String path to file</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="spatialvectors.test_get_intersected_field_values">
+<tt class="descclassname">spatialvectors.</tt><tt class="descname">test_get_intersected_field_values</tt><big>(</big><big>)</big><a class="headerlink" href="#spatialvectors.test_get_intersected_field_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test get_intersected_field_values()</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="spatialvectors.test_read_field_values_file_in">
+<tt class="descclassname">spatialvectors.</tt><tt class="descname">test_read_field_values_file_in</tt><big>(</big><big>)</big><a class="headerlink" href="#spatialvectors.test_read_field_values_file_in" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test read_field_values_file()</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="spatialvectors.test_validate_field_values">
+<tt class="descclassname">spatialvectors.</tt><tt class="descname">test_validate_field_values</tt><big>(</big><big>)</big><a class="headerlink" href="#spatialvectors.test_validate_field_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test validate_field_values()</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="spatialvectors.validate_field_values">
+<tt class="descclassname">spatialvectors.</tt><tt class="descname">validate_field_values</tt><big>(</big><em>field_values_dict</em><big>)</big><a class="headerlink" href="#spatialvectors.validate_field_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate field values from field values dictionary supplied by returning a
+dictionary containing field values without None and a dictionary containing field 
+values that have None.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>field_values_dict</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing lists of values for a particular field that were intersected by another shapefile.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>field_values_dict_without_none</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing lists of values for a particular field that were intersected by another shapefile.</p>
+</div></blockquote>
+<p><strong>field_values_dict_with_none</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary containing lists of values for a particular field that were not intersected by another shapefile.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="spatialvectors.write_field_values_file">
+<tt class="descclassname">spatialvectors.</tt><tt class="descname">write_field_values_file</tt><big>(</big><em>filepath</em>, <em>filename</em>, <em>field_values_dict</em><big>)</big><a class="headerlink" href="#spatialvectors.write_field_values_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a file containing rows of basin ids that are not intersected by any water use basin centroids</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filepath</strong> : string</p>
+<blockquote>
+<div><p>String path to directory where file will be saved</p>
+</div></blockquote>
+<p><strong>filename</strong> : string</p>
+<blockquote>
+<div><p>String name of file to be saved</p>
+</div></blockquote>
+<p><strong>field_values_dict</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary containing lists of values for a particular field that were intersected by another shapefile.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-spatialdata_viewer">
+<span id="spatialdata-viewer-py-creates-maps-of-shapefiles"></span><h2>spatialdata_viewer.py - creates maps of shapefiles<a class="headerlink" href="#module-spatialdata_viewer" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Module:</th><td class="field-body">spatialvectors.py</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Jeremiah Lant, <a class="reference external" href="mailto:jlant&#37;&#52;&#48;usgs&#46;gov">jlant<span>&#64;</span>usgs<span>&#46;</span>gov</a>, U.S. Geological Survey, Kentucky Water Science Center, <a class="reference external" href="http://www.usgs.gov/">http://www.usgs.gov/</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Synopsis:</th><td class="field-body">Handles viewing shapefiles with a base map.</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="spatialdata_viewer.get_map_extents">
+<tt class="descclassname">spatialdata_viewer.</tt><tt class="descname">get_map_extents</tt><big>(</big><em>shapefiles</em><big>)</big><a class="headerlink" href="#spatialdata_viewer.get_map_extents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get max and min extent coordinates from a list of shapefiles to use as the 
+extents on the map. Use the map extents to calculate the map center and the 
+standard parallels.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>shapefiles</strong> : list</p>
+<blockquote>
+<div><p>List of shapefile_data dictionaries</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>extent_coords</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing &#8220;lon_min&#8221;, &#8220;lon_max&#8221;, &#8220;lat_max&#8221;, &#8220;lat_min&#8221; keys with respective calculated values</p>
+</div></blockquote>
+<p><strong>center_coords</strong> : dictionary</p>
+<blockquote>
+<div><p>Dictionary containing &#8220;lon&#8221;, &#8220;lat&#8221; keys with respective calculated values</p>
+</div></blockquote>
+<p><strong>standard_parallels</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary containing &#8220;first&#8221;, &#8220;second&#8221; keys with respective calculated values (first = min(lat), second = max(lat))</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="spatialdata_viewer.main">
+<tt class="descclassname">spatialdata_viewer.</tt><tt class="descname">main</tt><big>(</big><big>)</big><a class="headerlink" href="#spatialdata_viewer.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test functionality of waterapputils_viewer()</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="spatialdata_viewer.plot_shapefiles_map">
+<tt class="descclassname">spatialdata_viewer.</tt><tt class="descname">plot_shapefiles_map</tt><big>(</big><em>shapefiles</em>, <em>display_fields=</em>, <span class="optional">[</span><span class="optional">]</span><em>colors=</em>, <span class="optional">[</span><span class="optional">]</span><em>title=None</em>, <em>is_visible=True</em>, <em>save_path=None</em><big>)</big><a class="headerlink" href="#spatialdata_viewer.plot_shapefiles_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a map showing all the shapefiles in the shapefile_list.  
+Shapefiles should be in a Geographic Coordinate System (longitude and 
+latitude coordinates) such as World WGS84; Matplotlib&#8221;s basemap library 
+does the proper transformation to a projected coordinate system.  The projected
+coordinate system used is Lambert Conformal Conic.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>shapefiles</strong> : list</p>
+<blockquote>
+<div><p>List of dictionaries containing shapefile information</p>
+</div></blockquote>
+<p><strong>title</strong> : string</p>
+<blockquote>
+<div><p>String title for plot</p>
+</div></blockquote>
+<p><strong>display_fields</strong> : list</p>
+<blockquote>
+<div><p>List of strings that correspond to a shapefile field where the corresponding value(s) will be displayed.</p>
+</div></blockquote>
+<p><strong>colors</strong> : list</p>
+<blockquote>
+<div><p>List of strings that correspond to colors to be displayed</p>
+</div></blockquote>
+<p><strong>is_visible</strong> : bool</p>
+<blockquote>
+<div><p>Boolean value to show plots</p>
+</div></blockquote>
+<p><strong>save_path</strong> : string</p>
+<blockquote class="last">
+<div><p>String path to save plot(s)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="spatialdata_viewer.print_shapefile_data">
+<tt class="descclassname">spatialdata_viewer.</tt><tt class="descname">print_shapefile_data</tt><big>(</big><em>shapefile_dict</em><big>)</big><a class="headerlink" href="#spatialdata_viewer.print_shapefile_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print information contained in the shapefile dictionary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>shapefile_dict</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>Dictionary containing information found in a shapefile</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="spatialdata_viewer.test_plot_shapefiles_map">
+<tt class="descclassname">spatialdata_viewer.</tt><tt class="descname">test_plot_shapefiles_map</tt><big>(</big><em>map_type='test_poly'</em><big>)</big><a class="headerlink" href="#spatialdata_viewer.test_plot_shapefiles_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test plot_shapefile_data</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="spatialdata_viewer.test_print_shapefile_data">
+<tt class="descclassname">spatialdata_viewer.</tt><tt class="descname">test_print_shapefile_data</tt><big>(</big><big>)</big><a class="headerlink" href="#spatialdata_viewer.test_print_shapefile_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test print_shapefile_data</p>
+</dd></dl>
+
 </div>
 </div>
 
 
-          </div>
-        </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="gallery.html" title="Gallery"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="overview.html" title="Overview"
-             >previous</a> |</li>
-        <li><a href="index.html">home</a>|&nbsp;</li>
-        <li><a href="search.html">search</a>|&nbsp;</li>
- 
-      </ul>
-    </div>
+      <div class="bottomnav">
+      
+        <p>
+        «&#160;&#160;<a href="wateruse-guide.html">Water Use Guide</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="gallery.html">Gallery</a>&#160;&#160;»
+        </p>
+
+      </div>
+
     <div class="footer">
         &copy; Copyright 2014, Jeremiah Lant.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.

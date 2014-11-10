@@ -48,7 +48,7 @@ def read_file(filepath):
 
 def read_file_in(filestream):
     """    
-    Read and process a WATER *.txt file. Finds any parameter and its respective data.
+    Read and process a WATER \*.txt file. Finds any parameter and its respective data.
     
     Parameters
     ----------
@@ -63,6 +63,7 @@ def read_file_in(filestream):
     Notes
     -----          
     data = {
+
         "user": None,
         
         "date_created": None,
@@ -77,8 +78,8 @@ def read_file_in(filestream):
           
     }      
             
-    ** Note: The "parameters" key contains a list of dictionaries containing
-    the parameters found in the data file; i.e.
+    The "parameters" key contains a list of dictionaries containing
+    the parameters found in the data file
     
     See Also
     --------
@@ -175,6 +176,7 @@ def create_parameter(name = None, index = None, data = [], mean = None, max = No
     Examples
     --------
     parameters = {
+        
         "name": string of parameter name,
         
         "index": integer of column index data is located,
@@ -186,6 +188,7 @@ def create_parameter(name = None, index = None, data = [], mean = None, max = No
         "max": max of data values,
         
         "min": min of data values
+
     } 
     """  
     parameter = {"name": name, "index": index, "data": data, 
@@ -353,18 +356,31 @@ def apply_factors(watertxt_data, name, factors, is_additive = False):
     Notes
     -----    
     factors = {
+        
         'January': 2.0,
+        
         'February': 0.98,
+        
         'March': 0.97,
+        
         'April': 1.04,
+        
         'May': 1.10,
+        
         'June': 0.99,
+        
         'July': 0.97,
+        
         'August': 1.25,
+        
         'September': 1.21,
+        
         'October': 1.11,
+        
         'November': 1.10,
+        
         'December': 2.0
+
     }  
     """  
     parameter = get_parameter(watertxt_data, name) 
@@ -413,18 +429,31 @@ def apply_wateruse(watertxt_data, wateruse_totals):
     Notes
     -----    
     factors = {
+        
         'January': 2.0,
+        
         'February': 0.98,
+        
         'March': 0.97,
+        
         'April': 1.04,
+        
         'May': 1.10,
+        
         'June': 0.99,
+        
         'July': 0.97,
+        
         'August': 1.25,
+        
         'September': 1.21,
+        
         'October': 1.11,
+        
         'November': 1.10,
+        
         'December': 2.0
+
     }  
     """
     # get the discharge parameter

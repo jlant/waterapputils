@@ -22,7 +22,7 @@ import helpers
 
 def read_file(filename):
     """    
-    Open delta *.txt file, create a file object for read_file_in(filestream) to process.
+    Open delta \*.txt file, create a file object for read_file_in(filestream) to process.
     This function is responsible to opening the file, removing the file opening  
     responsibility from read_file_in(filestream) so that read_file_in(filestream)  
     can be unit tested.
@@ -50,7 +50,7 @@ def read_file(filename):
 
 def read_file_in(filestream):
     """    
-    Read and process a delta *.txt file. Returns a dictionary with keys named
+    Read and process a delta \*.txt file. Returns a dictionary with keys named
     as the column header names found in the file.        
         
     Parameters
@@ -190,18 +190,32 @@ def format_to_monthly_dict(values):
     
     Notes
     -----
-    {"January": [2.0, 1.0],
-     "February": [0.98, 0.99],
-     "March": [0.97, 1.10],
-     "April": [1.04, 1.02],
-     "May": [1.10, 0.99],
-     "June": [0.99, 0.98],
-     "July": [0.87, 0.75],
-     "August": [0.75, 0.95],
-     "September": [0.95, 0.9],
-     "October": [0.98, 0.8],
-     "November": [1.10, 1.05],
-     "December": [2.0, 1.10]
+    {
+
+        "January": [2.0, 1.0],
+     
+        "February": [0.98, 0.99],
+     
+        "March": [0.97, 1.10],
+     
+        "April": [1.04, 1.02],
+        
+        "May": [1.10, 0.99],
+     
+        "June": [0.99, 0.98],
+     
+        "July": [0.87, 0.75],
+     
+        "August": [0.75, 0.95],
+        
+        "September": [0.95, 0.9],
+        
+        "October": [0.98, 0.8],
+        
+        "November": [1.10, 1.05],
+     
+        "December": [2.0, 1.10]
+
     }
     """
     assert np.shape(values)[1] == 12
@@ -233,20 +247,35 @@ def calculate_avg_delta_values(deltas_data, tile_list):
     Notes
     -----          
     avg_delta_values = {
+
         "Ppt": {
+    
             "January": 2.0,
+    
             "February": 0.98,
+    
             "March": 0.97,
+    
             "April": 1.04,
+    
             "May": 1.10,
+    
             "June": 0.99,
+    
             "July": 0.87,
+    
             "August": 0.75,
+    
             "September": 0.95,
+    
             "October": 0.98,
+    
             "November": 1.10,
+    
             "December": 2.0
+    
         }
+    
     }         
     """ 
     # check that each tile in tile list is contained in the deltas_data     
