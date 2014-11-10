@@ -95,7 +95,7 @@ def find_files(name, path):
 
 def find_files_with_pattern(pattern, path):
     """    
-    Return a list of full paths to a file matching a pattern (e.g. *.txt).  
+    Return a list of full paths to a file matching a pattern (e.g. \*.txt).  
     Search starts from path provided.   
     
     Parameters
@@ -305,18 +305,32 @@ def create_monthly_dict():
     
     Notes
     -----
-    {"January": [],
-     "February": [],
-     "March": [],
-     "April": [],
-     "May": [],
-     "June": [],
-     "July": [],
-     "August": [],
-     "September": [],
-     "October": [],
-     "November": [],
-     "December": []
+    {
+
+        "January": [2.0, 1.0],
+     
+        "February": [0.98, 0.99],
+     
+        "March": [0.97, 1.10],
+     
+        "April": [1.04, 1.02],
+        
+        "May": [1.10, 0.99],
+     
+        "June": [0.99, 0.98],
+     
+        "July": [0.87, 0.75],
+     
+        "August": [0.75, 0.95],
+        
+        "September": [0.95, 0.9],
+        
+        "October": [0.98, 0.8],
+        
+        "November": [1.10, 1.05],
+     
+        "December": [2.0, 1.10]
+
     }
     """
     months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]       

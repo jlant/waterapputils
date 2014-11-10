@@ -108,7 +108,7 @@ def plot_watertxt_data(watertxt_data, is_visible = True, save_path = None):
     Parameters
     ----------
     watertxt_data : dictionary 
-        A dictionary containing data found in WATER *.txt output data file.
+        A dictionary containing data found in WATER \*.txt output data file.
     is_visible : bool
         Boolean value to show plots         
     save_path : string 

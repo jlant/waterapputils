@@ -125,7 +125,7 @@ def process_cmp(file_list, arguments):
 
 def process_intersecting_tiles(intersecting_tiles, files_dict, arguments):
     """    
-    Apply delta factors to a WATER *.xml file. The new file created is saved to a directory
+    Apply delta factors to a WATER \*.xml file. The new file created is saved to a directory
     chosen by the user.
 
     Parameters
@@ -150,7 +150,8 @@ def process_intersecting_tiles(intersecting_tiles, files_dict, arguments):
         "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
 
         "waterxml_directory": path to directory containing xml file or files
-    }    
+
+    }   
     """ 
     for featureid, tiles in intersecting_tiles.iteritems():                    
         print("FeatureId: {}\n".format(featureid))  
@@ -201,7 +202,7 @@ def process_intersecting_tiles(intersecting_tiles, files_dict, arguments):
 
 def apply_deltas_to_xml_files(files_dict, arguments):
     """    
-    Apply delta factors to a WATER *.xml file. The new file created is saved to a directory
+    Apply delta factors to a WATER \*.xml file. The new file created is saved to a directory
     chosen by the user.
 
     Parameters
@@ -224,6 +225,7 @@ def apply_deltas_to_xml_files(files_dict, arguments):
         "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
 
         "waterxml_directory": path to directory containing xml file or files
+
     } 
     """    
     # initialize error logging
@@ -261,8 +263,8 @@ def apply_deltas_to_xml_files(files_dict, arguments):
 
 def process_intersecting_centroids(intersecting_centroids, files_dict, arguments, outputdirpath):
     """    
-    Apply water use data to a WATER *.txt file. The new file created is saved to the same
-    directory as the *.xml file.
+    Apply water use data to a WATER \*.txt file. The new file created is saved to the same
+    directory as the \*.xml file.
 
     Parameters
     ----------
@@ -290,6 +292,7 @@ def process_intersecting_centroids(intersecting_centroids, files_dict, arguments
         "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
         
         "watertxt_directory": path to directory containing txt file or files
+
     }    
     """      
     # create a file for the output  
@@ -339,8 +342,8 @@ def process_intersecting_centroids(intersecting_centroids, files_dict, arguments
 
 def apply_wateruse_to_txt_files(files_dict, arguments):
     """    
-    Apply water use data to a WATER *.txt file. The new file created is saved to the same
-    directory as the *.xml file.
+    Apply water use data to a WATER \*.txt file. The new file created is saved to the same
+    directory as the \*.xml file.
 
     Parameters
     ----------
@@ -364,6 +367,7 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
         "basin_field": string name of field of used in WATER batch run; used to find and name updated WATERSimulation.xml files
         
         "watertxt_directory": path to directory containing txt file or files
+
     }    
     """   
    
