@@ -55,7 +55,9 @@ def process_water_files(file_list, arguments):
         outputdirpath = helpers.make_directory(path = filedir, directory_name = os.path.join("_waterapputils-output", "-".join([filename, "output"])))
         
         waterapputils_logging.initialize_loggers(output_dir = outputdirpath) 
-        
+ 
+        print("Processing: \n    {}".format(f))
+
         if ext == ".txt":
             data = watertxt.read_file(f)                           
             watertxt_viewer.plot_watertxt_data(data, is_visible = arguments.showplot, save_path = outputdirpath)             
@@ -68,6 +70,8 @@ def process_water_files(file_list, arguments):
             waterxml_viewer.plot_waterxml_topographic_wetness_index_data(data, is_visible = arguments.showplot, save_path = outputdirpath) 
             if arguments.verbose: 
                 waterxml_viewer.print_waterxml_data(data)  
+
+        print("Output: \n    {}".format(outputdirpath))
 
         waterapputils_logging.remove_loggers()
 
@@ -99,6 +103,8 @@ def process_cmp(file_list, arguments):
 
     waterapputils_logging.initialize_loggers(output_dir = outputdirpath)   
 
+    print("Processing: \n    {}\n    {}".format(waterfile1, water_file2))
+
     if ext1 == ".txt" and ext2 == ".txt":
         watertxt_data1 = watertxt.read_file(water_file1)  
         watertxt_data2 = watertxt.read_file(water_file2)         
@@ -119,6 +125,8 @@ def process_cmp(file_list, arguments):
             
     else:
         print("Can not process files {} and {}. File extensions {} and {} are not .txt or .xml".format(filename1, filename2, ext1, ext2))
+
+    print("Output: \n    {}".format(outputdirpath))
 
     waterapputils_logging.remove_loggers()
 
@@ -410,7 +418,7 @@ def apply_subwaterdeltas_to_xml_files(files_dict, arguments):
 
     waterapputils_logging.initialize_loggers(output_dir = files_dict["watertxt_directory"]) 
 
-    info_file = os.path.join(files_dict["watertxt_directory"], "_waterapputils_waterdelta_batchrun_info.txt")
+    info_file = os.path.join(files_dict["watertxt_directory"], "_wateruse-batchrun-info", "_waterapputils_waterdelta_batchrun_info.txt")
     sys.stdout = open(info_file, "w")  
 
     intersecting_tiles = spatialvectors.read_field_values_file(filepath = files_dict["non_intersecting_basin_tiles_file"])
@@ -421,14 +429,17 @@ def apply_subwaterdeltas_to_xml_files(files_dict, arguments):
 
 def apply_subwateruse_to_txt_files(files_dict, arguments):
 
-    waterapputils_logging.initialize_loggers(output_dir = files_dict["watertxt_directory"]) 
+    outputdirpath = os.path.join(files_dict["watertxt_directory"], "_wateruse-batchrun-info")    
 
-    info_file = os.path.join(files_dict["watertxt_directory"], "_waterapputils_wateruse_batchrun_info.txt")
+    waterapputils_logging.initialize_loggers(output_dir = outputdirpath) 
+
+    info_file = os.path.join(outputdirpath, "_waterapputils_wateruse_batchrun_info.txt")
     sys.stdout = open(info_file, "a")  
 
     intersecting_centroids = spatialvectors.read_field_values_file(filepath = files_dict["non_intersecting_basin_centroids_file"])
 
-    process_intersecting_centroids(intersecting_centroids, files_dict, arguments) 
+    process_intersecting_centroids(intersecting_centroids, files_dict, arguments, outputdirpath)
+
     waterapputils_logging.remove_loggers()
 
 def main():  
