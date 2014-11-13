@@ -35,6 +35,13 @@ sys.path.insert(0, "../data/water-batch-run-datafiles/sample-user-files/")
 import water_use_batch_variables as wu_vars
 import deltas_gcm_batch_variables as gcm_vars
 
+# constants
+OUTPUT_DIRNAME = "waterapputils-output"
+WATERTXT = "watertxt"
+WATERXML = "waterxml"
+GCM_DELTAS = "gcm-deltas"
+WATERUSE = "wateruse"
+
 def process_water_files(file_list, arguments):
     """    
     Process a list of WATER xml files according to options contained in arguments parameter.
@@ -52,7 +59,7 @@ def process_water_files(file_list, arguments):
         assert ext == ".txt" or ext == ".xml", "Can not process file {}. File extension {} is not .txt or .xml".format(f, ext)
         
         filedir, filename = helpers.get_file_info(f)
-        outputdirpath = helpers.make_directory(path = filedir, directory_name = os.path.join("_waterapputils-output", "-".join([filename, "output"])))
+        outputdirpath = helpers.make_directory(path = filedir, directory_name = os.path.join(OUTPUT_DIRNAME))
         
         waterapputils_logging.initialize_loggers(output_dir = outputdirpath) 
  
