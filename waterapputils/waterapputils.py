@@ -385,7 +385,17 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
     waterapputils_logging.initialize_loggers(output_dir = outputdirpath) 
 
     info_file = os.path.join(outputdirpath, "wateruse_batchrun_info.txt")
+
+    print("Using the following data files:\n")
     
+    for key, value in files_dict.iteritems():
+        print("    {} : {}".format(key, value))
+
+    print("")
+    print("Batch Run Information:\n    {}\n".format(outputdirpath))
+
+    print("Water Use Information and Values:\n    {}".format(info_file))
+
     sys.stdout = open(info_file, "w")  
     
     # open shapefiles
