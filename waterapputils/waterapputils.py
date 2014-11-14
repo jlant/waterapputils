@@ -106,11 +106,11 @@ def process_cmp(file_list, arguments):
     assert ext1 == ".txt" or ext1 == ".xml", "Can not process file {}. File extension {} is not .txt or .xml".format(filename1, ext1)
     assert ext2 == ".txt" or ext2 == ".xml", "Can not process file {}. File extension {} is not .txt or .xml".format(filename2, ext2)
 
-    outputdirpath = helpers.make_directory(path = filedir1, directory_name = os.path.join("_waterapputils-output", "-".join([filename1, "vs", filename2,"output"])))
+    outputdirpath = helpers.make_directory(path = filedir1, directory_name = os.path.join(OUTPUT_DIRNAME))
 
     waterapputils_logging.initialize_loggers(output_dir = outputdirpath)   
 
-    print("Processing: \n    {}\n    {}".format(waterfile1, water_file2))
+    print("Processing: \n    {}\n    {}".format(water_file1, water_file2))
 
     if ext1 == ".txt" and ext2 == ".txt":
         watertxt_data1 = watertxt.read_file(water_file1)  

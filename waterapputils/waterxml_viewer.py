@@ -344,7 +344,7 @@ def plot_waterxml_timeseries_comparison(waterxml_tree1, waterxml_tree2, is_visib
                 curr_fig.set_size_inches(12, 10)
                 
                 # split the parameter name to not include units because some units contain / character which Python interprets as an escape character
-                filename = "-".join(["xml1", " vs ", "xml2", timeseries_str, region_type1, sim_id1])  + ".png" 
+                filename = "-".join(["xml1", "vs", "xml2", timeseries_str, region_type1, sim_id1])  + ".png" 
          
                 filepath = os.path.join(save_path, filename)
                 plt.savefig(filepath, dpi = 100)                                          
