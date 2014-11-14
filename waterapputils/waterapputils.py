@@ -31,16 +31,23 @@ import spatialvectors
 import wateruse
 
 # editable files for batch simulations; files contains paths to data needed
-sys.path.insert(0, "../data/water-batch-run-datafiles/sample-user-files/")
-import water_use_batch_variables as wu_vars
-import deltas_gcm_batch_variables as gcm_vars
+import _user_batch_variables_file_wateruse as wu_vars
+import _user_batch_variables_file_gcmdeltas as gcm_vars
 
 # constants
 OUTPUT_DIRNAME = "waterapputils-output"
-WATERTXT = "watertxt"
-WATERXML = "waterxml"
-GCM_DELTAS = "gcm-deltas"
-WATERUSE = "wateruse"
+WATERTXT_DIRNAME = "waterapputils-watertxt"
+WATERXML_DIRNAME = "waterapputils-waterxml"
+
+WATERUSE_DIRNAME = "waterapputils-wateruse"
+WATERUSE_INFO_DIR = "waterapputils-batchrun-info"
+WATERUSE_INFO_FILE = "wateruse_batchrun_info.txt"
+SUBWATERUSE_INFO_FILE = "subwateruse_batchrun_info.txt"
+
+GCMDELTA_DIRNAME = "waterapputils-gcmdelta"
+GCMDELTA_INFO_DIR = "waterapputils-batchrun-info"
+GCMDELTA_INFO_FILE = "gcmdelta_batchrun_info.txt"
+SUBGCMDELTA_INFO_FILE = "gcmdelta_batchrun_info.txt"
 
 def process_water_files(file_list, arguments):
     """    
@@ -58,27 +65,28 @@ def process_water_files(file_list, arguments):
         ext = os.path.splitext(f)[1]       
         assert ext == ".txt" or ext == ".xml", "Can not process file {}. File extension {} is not .txt or .xml".format(f, ext)
         
-        filedir, filename = helpers.get_file_info(f)
-        outputdirpath = helpers.make_directory(path = filedir, directory_name = os.path.join(OUTPUT_DIRNAME))
-        
-        waterapputils_logging.initialize_loggers(output_dir = outputdirpath) 
+        filedir, filename = helpers.get_file_info(f)       
  
         print("Processing: \n    {}".format(f))
 
         if ext == ".txt":
+            outputdirpath = helpers.make_directory(path = filedir, directory_name = WATERTXT_DIRNAME)
+            waterapputils_logging.initialize_loggers(output_dir = outputdirpath) 
             data = watertxt.read_file(f)                           
-            watertxt_viewer.plot_watertxt_data(data, is_visible = arguments.showplot, save_path = outputdirpath)             
+            watertxt_viewer.plot_watertxt_data(data, is_visible = arguments.showplot, save_path = outputdirpath)
             if arguments.verbose: 
                 watertxt_viewer.print_watertxt_data(data) 
+            print("Output: \n    {}".format(outputdirpath))
                 
         elif ext == ".xml":
+            outputdirpath = helpers.make_directory(path = filedir, directory_name = WATERXML_DIRNAME)
+            waterapputils_logging.initialize_loggers(output_dir = outputdirpath) 
             data = waterxml.read_file(f)                           
             waterxml_viewer.plot_waterxml_timeseries_data(data, is_visible = arguments.showplot, save_path = outputdirpath)             
             waterxml_viewer.plot_waterxml_topographic_wetness_index_data(data, is_visible = arguments.showplot, save_path = outputdirpath) 
             if arguments.verbose: 
                 waterxml_viewer.print_waterxml_data(data)  
-
-        print("Output: \n    {}".format(outputdirpath))
+            print("Output: \n    {}".format(outputdirpath))
 
         waterapputils_logging.remove_loggers()
 
@@ -106,39 +114,39 @@ def process_cmp(file_list, arguments):
     assert ext1 == ".txt" or ext1 == ".xml", "Can not process file {}. File extension {} is not .txt or .xml".format(filename1, ext1)
     assert ext2 == ".txt" or ext2 == ".xml", "Can not process file {}. File extension {} is not .txt or .xml".format(filename2, ext2)
 
-    outputdirpath = helpers.make_directory(path = filedir1, directory_name = os.path.join(OUTPUT_DIRNAME))
-
-    waterapputils_logging.initialize_loggers(output_dir = outputdirpath)   
-
     print("Processing: \n    {}\n    {}".format(water_file1, water_file2))
 
     if ext1 == ".txt" and ext2 == ".txt":
+        outputdirpath = helpers.make_directory(path = filedir1, directory_name = WATERTXT_DIRNAME)
+        waterapputils_logging.initialize_loggers(output_dir = outputdirpath) 
         watertxt_data1 = watertxt.read_file(water_file1)  
         watertxt_data2 = watertxt.read_file(water_file2)         
         watertxt_viewer.plot_watertxt_comparison(watertxt_data1, watertxt_data2, is_visible = arguments.showplot, save_path = outputdirpath)         
-           
         if arguments.verbose: 
             watertxt_viewer.print_watertxt_data(watertxt_data1)  
             watertxt_viewer.print_watertxt_data(watertxt_data2)   
-             
+        print("Output: \n    {}".format(outputdirpath))
+
     elif ext1 == ".xml" and ext2 == ".xml":
+        outputdirpath = helpers.make_directory(path = filedir1, directory_name = WATERXML_DIRNAME)
+        waterapputils_logging.initialize_loggers(output_dir = outputdirpath) 
         waterxml_data1 = waterxml.read_file(water_file1)  
         waterxml_data2 = waterxml.read_file(water_file2)         
-        waterxml_viewer.plot_waterxml_timeseries_comparison(waterxml_data1, waterxml_data2, is_visible = arguments.showplot, save_path = outputdirpath)        
-           
+        waterxml_viewer.plot_waterxml_timeseries_comparison(waterxml_data1, waterxml_data2, is_visible = arguments.showplot, save_path = outputdirpath)         
+
         if arguments.verbose: 
             waterxml_viewer.print_watertxt_data(waterxml_data1)  
             waterxml_viewer.print_watertxt_data(waterxml_data2)   
-            
+        
+        print("Output: \n    {}".format(outputdirpath))
+
     else:
         print("Can not process files {} and {}. File extensions {} and {} are not .txt or .xml".format(filename1, filename2, ext1, ext2))
-
-    print("Output: \n    {}".format(outputdirpath))
 
     waterapputils_logging.remove_loggers()
 
 
-def process_intersecting_centroids(intersecting_centroids, files_dict, arguments, outputdirpath):
+def process_intersecting_centroids(intersecting_centroids, files_dict, arguments):
     """    
     Apply water use data to a WATER \*.txt file. The new file created is saved to the same
     directory as the \*.xml file.
@@ -196,7 +204,7 @@ def process_intersecting_centroids(intersecting_centroids, files_dict, arguments
         watertxt_dir, watertxt_filename = helpers.get_file_info(watertxt_file)       
 
         # create an output directory
-        output_dir = helpers.make_directory(path = watertxt_dir, directory_name = "_wateruse-output")
+        output_dir = helpers.make_directory(path = watertxt_dir, directory_name = WATERUSE_DIRNAME)
         
         # initialize error logging
         waterapputils_logging.initialize_loggers(output_dir = output_dir)
@@ -214,7 +222,7 @@ def process_intersecting_centroids(intersecting_centroids, files_dict, arguments
 
         # plot comparison
         updated_watertxt_file = os.path.join(output_dir, watertxt_with_wateruse_file)
-        process_water_files(file_list = [updated_watertxt_file, watertxt_file], arguments = arguments)
+        process_water_files(file_list = [updated_watertxt_file], arguments = arguments)
 
 
 def process_intersecting_tiles(intersecting_tiles, files_dict, arguments):
@@ -325,12 +333,12 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
     }    
     """   
    
-    outputdirpath = helpers.make_directory(path = files_dict["watertxt_directory"], directory_name = "_wateruse-batchrun-info")    
+    info_dir = helpers.make_directory(path = files_dict["watertxt_directory"], directory_name = WATERUSE_INFO_DIR)    
     
     # initialize error logging
-    waterapputils_logging.initialize_loggers(output_dir = outputdirpath) 
+    waterapputils_logging.initialize_loggers(output_dir = info_dir) 
 
-    info_file = os.path.join(outputdirpath, "wateruse_batchrun_info.txt")
+    info_file = os.path.join(info_dir, WATERUSE_INFO_FILE)
 
     print("Using the following data files:\n")
     
@@ -338,9 +346,9 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
         print("    {} : {}".format(key, value))
 
     print("")
-    print("Batch Run Information:\n    {}\n".format(outputdirpath))
+    print("Batch Run Information:\n    {}\n".format(info_dir))
 
-    print("Water Use Information and Values:\n    {}".format(info_file))
+    print("Water Use Information and Values:\n    {}\n".format(info_file))
 
     sys.stdout = open(info_file, "w")  
     
@@ -354,17 +362,17 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
     intersecting_centroids, nonintersecting_centroids = spatialvectors.validate_field_values(field_values_dict = intersecting_centroids_all)     
 
     if intersecting_centroids:    
-        process_intersecting_centroids(intersecting_centroids, files_dict, arguments, outputdirpath)
+        process_intersecting_centroids(intersecting_centroids, files_dict, arguments)
 
     if nonintersecting_centroids:
 
-        waterapputils_logging.initialize_loggers(output_dir = outputdirpath) 
+        waterapputils_logging.initialize_loggers(output_dir = info_dir) 
         
         logging.warn("The following are basins that do not intersect with the centroids for water use: {}\n".format(nonintersecting_centroids)) 
         
         outfilename = "wateruse_non_intersecting_centroids.txt"
-        spatialvectors.write_field_values_file(filepath = outputdirpath, filename = outfilename, field_values_dict = nonintersecting_centroids)
-        outfilepath = os.path.join(outputdirpath, outfilename)
+        spatialvectors.write_field_values_file(filepath = info_dir, filename = outfilename, field_values_dict = nonintersecting_centroids)
+        outfilepath = os.path.join(info_dir, outfilename)
         
         logging.warn("Writing file: \n{}\n Please add the centroids (separated by commas) that you would like to use for each non-intersecting basin".format(outfilepath))
 
@@ -435,16 +443,27 @@ def apply_deltas_to_xml_files(files_dict, arguments):
 
 def apply_subwateruse_to_txt_files(files_dict, arguments):
 
-    outputdirpath = os.path.join(files_dict["watertxt_directory"], "_wateruse-batchrun-info")    
+    info_dir = os.path.join(files_dict["watertxt_directory"], WATERUSE_INFO_DIR)    
+    
+    waterapputils_logging.initialize_loggers(output_dir = info_dir) 
 
-    waterapputils_logging.initialize_loggers(output_dir = outputdirpath) 
+    info_file = os.path.join(info_dir, SUBWATERUSE_INFO_FILE)
 
-    info_file = os.path.join(outputdirpath, "_waterapputils_wateruse_batchrun_info.txt")
+    print("Using the following data files:\n")
+    
+    for key, value in files_dict.iteritems():
+        print("    {} : {}".format(key, value))
+
+    print("")
+    print("Batch Run Information:\n    {}\n".format(info_dir))
+
+    print("Water Use Information and Values:\n    {}\n".format(info_file))
+
     sys.stdout = open(info_file, "a")  
 
     intersecting_centroids = spatialvectors.read_field_values_file(filepath = files_dict["non_intersecting_basin_centroids_file"])
 
-    process_intersecting_centroids(intersecting_centroids, files_dict, arguments, outputdirpath)
+    process_intersecting_centroids(intersecting_centroids, files_dict, arguments)
 
     waterapputils_logging.remove_loggers()
 

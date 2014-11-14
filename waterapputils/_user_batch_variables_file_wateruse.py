@@ -22,7 +22,7 @@ Note: If copying and pasting paths on Windows machines:
 waterbatch_directory = "../data/water-batch-run-datafiles/sample-batch-run-output/"
 basin_shapefile = waterbatch_directory + "Watersheds.shp"
 basin_field = "STAID"
-subwateruse_file = waterbatch_directory + "_wateruse-batchrun-info/wateruse_non_intersecting_centroids.txt"
+subwateruse_file = waterbatch_directory + "waterapputils-batchrun-info/wateruse_non_intersecting_centroids.txt"
 wateruse_files = ["../data/wateruse-datafiles/010203-JFM-sample.txt", 
                   "../data/wateruse-datafiles/040506-AMJ-sample.txt", 
                   "../data/wateruse-datafiles/070809-JAS-sample.txt", 
