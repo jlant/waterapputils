@@ -186,6 +186,7 @@ def process_intersecting_centroids(intersecting_centroids, files_dict, arguments
         print("FeatureId: {}\n".format(featureid))  
         print("\tCentroids: {}\n".format(centroids))  
         print("\tTotal Water Use: \n")
+
         # get sum of the water use data
         if files_dict["wateruse_factor_file"]:
             total_wateruse_dict = wateruse.get_all_total_wateruse(wateruse_files = files_dict["wateruse_files"], id_list = centroids, wateruse_factor_file = files_dict["wateruse_factor_file"], in_cfs = True)
@@ -220,7 +221,7 @@ def process_intersecting_centroids(intersecting_centroids, files_dict, arguments
 
         watertxt.write_file(watertxt_data = watertxt_data, save_path = output_dir, filename = watertxt_with_wateruse_file)              
 
-        # plot comparison
+        # plot 
         updated_watertxt_file = os.path.join(output_dir, watertxt_with_wateruse_file)
         process_water_files(file_list = [updated_watertxt_file], arguments = arguments)
 
@@ -256,6 +257,7 @@ def process_intersecting_tiles(intersecting_tiles, files_dict, arguments):
     }   
     """ 
     for featureid, tiles in intersecting_tiles.iteritems():                    
+
         print("FeatureId: {}\n".format(featureid))  
         print("\tTiles: {}\n".format(tiles))  
         print("\tAverage Deltas: \n")
@@ -277,7 +279,7 @@ def process_intersecting_tiles(intersecting_tiles, files_dict, arguments):
         waterxml_filedir_path, waterxml_filename = helpers.get_file_info(waterxml_file)
 
         # create an output directory
-        output_dir = helpers.make_directory(waterxml_filedir_path, "_waterapputils_waterdeltas_output")
+        output_dir = helpers.make_directory(waterxml_filedir_path, GCMDELTA_DIRNAME)
 
         # initialize error logging
         waterapputils_logging.initialize_loggers(output_dir = output_dir)
