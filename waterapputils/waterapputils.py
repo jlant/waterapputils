@@ -39,14 +39,16 @@ OUTPUT_DIRNAME = "waterapputils-output"
 WATERTXT_DIRNAME = "waterapputils-watertxt"
 WATERXML_DIRNAME = "waterapputils-waterxml"
 
+BATCH_INFO_DIR = "waterapputils-batchrun-info"
+
 WATERUSE_DIRNAME = "waterapputils-wateruse"
-WATERUSE_INFO_DIR = "waterapputils-batchrun-info"
 WATERUSE_INFO_FILE = "wateruse_batchrun_info.txt"
+WATERUSE_NON_INTERSECT_FILE = "wateruse_non_intersecting_centroids.txt"
 SUBWATERUSE_INFO_FILE = "subwateruse_batchrun_info.txt"
 
 GCMDELTA_DIRNAME = "waterapputils-gcmdelta"
-GCMDELTA_INFO_DIR = "waterapputils-batchrun-info"
 GCMDELTA_INFO_FILE = "gcmdelta_batchrun_info.txt"
+GCMDELTA_NON_INTERSECT_FILE = "gcmdelta_non_intersecting_centroids.txt"
 SUBGCMDELTA_INFO_FILE = "gcmdelta_batchrun_info.txt"
 
 def process_water_files(file_list, arguments):
@@ -60,6 +62,10 @@ def process_water_files(file_list, arguments):
     arguments : argparse object
         An argparse object containing user options.                    
     """  
+
+    processing_str = "Processing: \n    {}\n".format(f)
+    output_str = "Output: \n    {}\n\n".format(outputdirpath)
+
     for f in file_list:
         
         ext = os.path.splitext(f)[1]       
@@ -67,7 +73,7 @@ def process_water_files(file_list, arguments):
         
         filedir, filename = helpers.get_file_info(f)       
  
-        print("Processing: \n    {}".format(f))
+        print(processing_str)
 
         if ext == ".txt":
             outputdirpath = helpers.make_directory(path = filedir, directory_name = WATERTXT_DIRNAME)
@@ -76,7 +82,7 @@ def process_water_files(file_list, arguments):
             watertxt_viewer.plot_watertxt_data(data, is_visible = arguments.showplot, save_path = outputdirpath)
             if arguments.verbose: 
                 watertxt_viewer.print_watertxt_data(data) 
-            print("Output: \n    {}".format(outputdirpath))
+            print(output_str)
                 
         elif ext == ".xml":
             outputdirpath = helpers.make_directory(path = filedir, directory_name = WATERXML_DIRNAME)
@@ -86,7 +92,7 @@ def process_water_files(file_list, arguments):
             waterxml_viewer.plot_waterxml_topographic_wetness_index_data(data, is_visible = arguments.showplot, save_path = outputdirpath) 
             if arguments.verbose: 
                 waterxml_viewer.print_waterxml_data(data)  
-            print("Output: \n    {}".format(outputdirpath))
+            print(output_str)
 
         waterapputils_logging.remove_loggers()
 
@@ -335,7 +341,7 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
     }    
     """   
    
-    info_dir = helpers.make_directory(path = files_dict["watertxt_directory"], directory_name = WATERUSE_INFO_DIR)    
+    info_dir = helpers.make_directory(path = files_dict["watertxt_directory"], directory_name = BATCH_INFO_DIR)    
     
     # initialize error logging
     waterapputils_logging.initialize_loggers(output_dir = info_dir) 
@@ -370,13 +376,13 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
 
         waterapputils_logging.initialize_loggers(output_dir = info_dir) 
         
-        logging.warn("The following are basins that do not intersect with the centroids for water use: {}\n".format(nonintersecting_centroids)) 
+        logging.warn("The following are basins that do not intersect with the centroids for water use:\n    {}\n".format(nonintersecting_centroids)) 
         
-        outfilename = "wateruse_non_intersecting_centroids.txt"
+        outfilename = WATERUSE_NON_INTERSECT_FILE
         spatialvectors.write_field_values_file(filepath = info_dir, filename = outfilename, field_values_dict = nonintersecting_centroids)
         outfilepath = os.path.join(info_dir, outfilename)
         
-        logging.warn("Writing file: \n{}\n Please add the centroids (separated by commas) that you would like to use for each non-intersecting basin".format(outfilepath))
+        logging.warn("Writing file:\n    {}\n\n    Please add the centroids (separated by commas) that you would like to use for each non-intersecting basin".format(outfilepath))
 
     waterapputils_logging.remove_loggers()
 
@@ -409,11 +415,25 @@ def apply_deltas_to_xml_files(files_dict, arguments):
 
     } 
     """    
-    # initialize error logging
-    waterapputils_logging.initialize_loggers(output_dir = files_dict["waterxml_directory"]) 
+   
+    info_dir = helpers.make_directory(path = files_dict["waterxml_directory"], directory_name = BATCH_INFO_DIR) 
 
-    info_file = os.path.join(files_dict["waterxml_directory"], "_waterapputils_waterdeltas_batchrun_info.txt")
-    sys.stdout = open(info_file, "w")  
+    # initialize error logging
+    waterapputils_logging.initialize_loggers(output_dir = info_dir) 
+
+    info_file = os.path.join(info_dir, GCMDELTA_INFO_FILE)
+
+    print("Using the following data files:\n")
+    
+    for key, value in files_dict.iteritems():
+        print("    {} : {}".format(key, value))
+
+    print("")
+    print("Batch Run Information:\n    {}\n".format(info_dir))
+
+    print("GCM Delta Information and Values:\n    {}\n".format(info_file))
+
+    sys.stdout = open(info_file, "w")    
 
     # open shapefiles
     delta_shapefile = osgeo.ogr.Open(files_dict["delta_shapefile"]) 
@@ -431,13 +451,13 @@ def apply_deltas_to_xml_files(files_dict, arguments):
         # initialize error logging
         waterapputils_logging.initialize_loggers(output_dir = files_dict["waterxml_directory"]) 
         
-        logging.warn("The following are basins that do not intersect with the tiles for water deltas: {}\n".format(nonintersecting_tiles)) 
+        logging.warn("The following are basins that do not intersect with the centroids for water use:\n    {}\n".format(nonintersecting_tiles)) 
         
-        outfilename = "_waterapputils_non_intersecting_basin_tiles.txt"
+        outfilename = GCMDELTA_NON_INTERSECT_FILE
         spatialvectors.write_field_values_file(filepath = files_dict["waterxml_directory"], filename = outfilename, field_values_dict = nonintersecting_tiles)
         outfilepath = os.path.join(files_dict["watertxt_directory"], outfilename)
         
-        logging.warn("Writing file: \n{}\n Please add the tiles (separated by commas) that you would like to use for each non-intersecting basin".format(outfilepath))
+        logging.warn("Writing file:\n    {}\n\n    Please add the tiles (separated by commas) that you would like to use for each non-intersecting basin".format(outfilepath))
 
     # close error logging
     waterapputils_logging.remove_loggers()
@@ -597,7 +617,8 @@ def main():
                           "basin_field": gcm_vars.basin_field,
                           "waterxml_directory": gcm_vars.waterbatch_directory
             }
-            
+
+            print("\nProcessing gcm deltas ... please wait\n")                                   
             apply_deltas_to_xml_files(files_dict = files_dict, arguments = args)
             sys.exit() 
 
@@ -625,7 +646,7 @@ def main():
                           "watertxt_directory":  wu_vars.waterbatch_directory
             }
 
-            print("Processing wateruse ... please wait")                       
+            print("\nProcessing wateruse ... please wait\n")                       
             apply_wateruse_to_txt_files(files_dict = files_dict, arguments = args)
 
             sys.exit()

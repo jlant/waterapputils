@@ -21,10 +21,11 @@ Note: If copying and pasting paths on Windows machines:
 waterbatch_directory = "../data/water-batch-run-datafiles/sample-batch-run-output/"
 basin_shapefile = waterbatch_directory + "Watersheds.shp"
 basin_field = "STAID"
-subwaterdeltas_file = waterbatch_directory + "/waterapputils_non_intersecting_basin_centroids.txt"
-delta_files = ["../data/deltas-gcm/CanES/RCP45/2030/Ppt.txt",
-               "../data/deltas-gcm/CanES/RCP45/2030/Tmax.txt"]                
-delta_shapefile = "../data/spatial-datafiles/gcm-tiles/CanES.shp"
+subwaterdeltas_file = waterbatch_directory + "waterapputils-batchrun-info/gcmdelta_non_intersecting_centroids.txt"
+delta_files = ["../data/deltas-gcm/Ppt.txt",
+               "../data/deltas-gcm/Tmax.txt"]                
+delta_shapefile = "../data/spatial-datafiles/gcm-tiles/CanES_nad83.shp"
+
 
 
 
