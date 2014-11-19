@@ -45,6 +45,7 @@ WATERUSE_DIRNAME = "waterapputils-wateruse"
 WATERUSE_INFO_FILE = "wateruse_batchrun_info.txt"
 WATERUSE_NON_INTERSECT_FILE = "wateruse_non_intersecting_centroids.txt"
 SUBWATERUSE_INFO_FILE = "sub_wateruse_batchrun_info.txt"
+OASIS_FILENAME = "oasis-discharge-with-wateruse.txt"
 
 GCMDELTA_DIRNAME = "waterapputils-gcmdelta"
 GCMDELTA_INFO_FILE = "gcmdelta_batchrun_info.txt"
@@ -229,6 +230,9 @@ def process_intersecting_centroids(intersecting_centroids, files_dict, arguments
         # plot 
         updated_watertxt_file = os.path.join(output_dir, watertxt_with_wateruse_file)
         process_water_files(file_list = [updated_watertxt_file], arguments = arguments)
+
+        # write timeseries of discharge + water use - used for OASIS
+        watertxt.write_timeseries_file(watertxt_data = watertxt_data, name = "Discharge + Water Use", save_path = output_dir, filename = OASIS_FILENAME)
 
 
 def process_intersecting_tiles(intersecting_tiles, files_dict, arguments):
