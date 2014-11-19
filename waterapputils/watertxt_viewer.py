@@ -161,7 +161,7 @@ def plot_watertxt_data(watertxt_data, is_visible = True, save_path = None):
             curr_fig.set_size_inches(12, 10)
             
             # split the parameter name to not include units because some units contain / character which Python interprets as an escape character
-            filename = "-".join([watertxt_data["user"], watertxt_data["stationid"], parameter["name"].split("(")[0]])  + ".png"           
+            filename = "-".join([watertxt_data["user"], watertxt_data["stationid"], parameter["name"].split("(")[0].strip()])  + ".png"           
             filepath = os.path.join(save_path, filename)
             plt.savefig(filepath, dpi = 100)                        
           
@@ -251,7 +251,7 @@ def plot_watertxt_comparison(watertxt_data1, watertxt_data2, is_visible = True, 
             curr_fig.set_size_inches(12, 10)
             
             # split the parameter name to not include units because some units contain / character which Python interprets as an escape character
-            filename = "-".join([watertxt_data1["user"], watertxt_data1["stationid"], " vs ", watertxt_data2["user"], watertxt_data2["stationid"], parameter1["name"].split("(")[0]])  + ".png"           
+            filename = "-".join([watertxt_data1["user"], watertxt_data1["stationid"], "vs", watertxt_data2["user"], watertxt_data2["stationid"], parameter1["name"].split("(")[0].strip()])  + ".png"           
             filepath = os.path.join(save_path, filename)
             plt.savefig(filepath, dpi = 100)                        
           
@@ -329,7 +329,7 @@ def plot_watertxt_parameter(watertxt_data, name, is_visible = True, save_path = 
         curr_fig.set_size_inches(12, 10)
         
         # split the parameter name to not include units because some units contain / character which Python interprets as an escape character
-        filename = "-".join([watertxt_data["user"], watertxt_data["stationid"], parameter["name"].split("(")[0]])  + ".png"           
+        filename = "-".join([watertxt_data["user"], watertxt_data["stationid"], parameter1["name"].split("(")[0].strip()])  + ".png"           
         filepath = os.path.join(save_path, filename)
         plt.savefig(filepath, dpi = 100)                        
       
@@ -425,7 +425,7 @@ def plot_watertxt_parameter_comparison(watertxt_data, name1, name2, is_visible =
         curr_fig.set_size_inches(12, 10)
         
         # split the parameter name to not include units because some units contain / character which Python interprets as an escape character
-        filename = "-".join([watertxt_data["stationid"], parameter1["name"].split("(")[0], " vs ", parameter2["name"].split("(")[0]])  + ".png"           
+        filename = "-".join([watertxt_data1["user"], watertxt_data1["stationid"], "vs", watertxt_data2["user"], watertxt_data2["stationid"], parameter1["name"].split("(")[0].strip()])  + ".png"           
         filepath = os.path.join(save_path, filename)
         plt.savefig(filepath, dpi = 100)                        
       
