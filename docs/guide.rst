@@ -14,10 +14,8 @@ Process WATER simulation output text files (``WATER.txt``).
 
 Processes ``WATER.txt`` file(s) and produces plots of each parameter for
 each file. Plots are saved to an output directory named as
-\*\_waterapputils-output/filename-output\*. If an output text file name
-is ``WATER-basin-0123.txt``, then the output directory would be named
-``_waterapputils-output/WATER-basin-0123-output``. The output directory
-is created in the same directory as the respective\ ``WATER.txt`` file.
+\*waterappputils-watertxt\*. The output directory
+is created in the same directory as the respective ``WATER.txt`` file.
 
 --------------
 
@@ -41,12 +39,8 @@ processes the ``WATER.txt`` file(s) in the same manner as the
 
 Produces comparison plots of each respective parameter in two
 ``WATER.txt`` files. Plots are saved to an output directory named as
-\*\_waterapputils-output/filename1-vs-filename2-output\ *. If the
-*\ filename1\* is ``WATER-basin-0123.txt`` and *filename2* is
-``WATER-basin-456.txt``, then the output directory would be named
-``_waterapputils-output/WATER-basin-0123-vs-WATER-basin-456-output``.
-The output directory is located in the same directory as the
-``WATER.txt`` file.
+\*waterappputils-watertxt\*. The output directory is located in the same 
+directory as the ``WATER.txt`` file.
 
 --------------
 
@@ -73,11 +67,8 @@ Process WATER simulation output database files
 
 Processes a ``WATERSimulation.xml`` file and produces plots timeseries
 parameters and topographic wetness index values. Plots are saved to an
-output directory named as \*\_waterapputils-output/filename-output\*. If
-the output text file name is ``WATERSimulation-basin-0123.txt``, then
-the output directory would be named
-``_waterapputils-output/WATERSimulation-basin-0123-output``. The output
-directory is created in the same directory as the
+output directory named as \*waterappputils-watertxt\*.
+The output directory is created in the same directory as the
 ``WATERSimulation.txt`` file.
 
 --------------
@@ -100,12 +91,8 @@ the ``-waterxml`` flag.
 
 Produces comparison plots of each respective parameter in two
 ``WATERSimulation.xml`` files. Plots are saved to an output directory
-named as \*\_waterapputils-output/filename1-vs-filename2-output\ *. If
-the *\ filename1\* is ``WATERSimulation-0123.txt`` and *filename2* is
-``WATERSimulation-456.txt``, then the output directory would be named
-``_waterapputils-output/WATERSimulation-0123-vs-WATERSimulation-456-output``.
-The output directory is located in the same directory as the
-``WATERSimulation.xml`` file.
+named as \*waterappputils-waterxml\*.  The output directory is located 
+in the same directory as the ``WATERSimulation.xml`` file.
 
 --------------
 
@@ -151,10 +138,10 @@ simulation batch run has the following directory structure:
 At this time, in order to apply water use to a WATER simulation batch
 run, information regarding the location of a series of files and
 directories must be entered in a file called
-``water_use_batch_variables.py`` located in the
-``waterapputils/data/water-batch-run-datafiles/sample-user-files/``
-directory. The following variables are to be assigned in a
-``water_use_batch_variables.py`` file:
+``_user_batch_variables_file_wateruse.py`` located in the
+``waterapputils/waterapputils/`` directory
+The following variables are to be assigned in a
+``_user_batch_variables_file_wateruse.py`` file:
 
 ::
 
@@ -169,7 +156,7 @@ directory. The following variables are to be assigned in a
     wateruse_factor_file        -   path to the water use factor file
     basin_centroids_shapefile   -   path to the water use centroids shapefile
 
-The following is an example ``water_batch_variables.py`` file:
+The following is an example ``_user_batch_variables_file_wateruse.py`` file:
 
 ::
 
@@ -184,7 +171,7 @@ The following is an example ``water_batch_variables.py`` file:
     wateruse_factor_file =  "../data/wateruse-datafiles/wateruse-factors-sample.txt"
     basin_centroids_shapefile = "../data/spatial-datafiles/wateruse-centroids/wateruse_centroids_sample_nad83.shp"
 
-The information in the ``water_use_batch_variables.py`` file is used to
+The information in the ``_user_batch_variables_file_wateruse.py`` file is used to
 apply water use to each respective basin in the batch run.
 
 The intersection between each respective basin in the batch run and the
@@ -195,40 +182,42 @@ totaled and applied to the original WATER simulation output file
 
 Results of applying water use to each basin in a batch run are contained
 within each respective basin directory in the ``waterbatch_directory``.
-Two directories, ``_waterapputils-output`` and ``_wateruse-output``,
-that contain detailed results and plots of applying water use are
-created in each respective basin directory.
+The following is the directory structure after processing a batch run:
 
 ::
 
     water-batch-dir/
-        _wateruse-batchrun-info/        # information about applying water use to the batch run
-            _waterapputils_error.log
-            wateruse_batchrun_info.txt
-            wateruse_non_intersecting_centroids.txt
+        waterapputils-batchrun-info/                    # information about applying water use to the batch run
+            waterapputils_error.log                     # warnings or errors in processing batch run
+            wateruse_batchrun_info.txt                  # information regarding intersected centroids and respective water use values per basin
+            wateruse_non_intersecting_centroids.txt     # csv file to be filled by user concerning basins that do not intersect any water use centroid
         basin-1/
-            
-        basin-2/
+            WATER.txt-with-wateruse.txt                 # file formatted the same as a typical WATER.txt file, but includes columns of Discharge + Water Use and Water Use
+            waterapputils-wateruse/                     # directory holding plots of all parameters in WATER.txt-with-wateruse.txt file
+                *.png
+        basin-2/                                        
+            WATER.txt-with-wateruse.txt                 # file formatted the same as a typical WATER.txt file, but includes columns of Discharge + Water Use and Water Use
+            waterapputils-wateruse/                     # directory holding plots of all parameters in WATER.txt-with-wateruse.txt file
+                *.png
 
-The ``_waterapputils-output`` directory contains plots of all the
+The ``waterapputils-wateruse/`` directory contains plots of all the
 parameters in the ``WATER.txt`` file.
 
-The ``_wateruse-output`` directory contains an updated WATER simulation
+Each respective basin directory (basin-1) contains an updated WATER simulation
 output file (``WATER.txt-with-wateruse.txt``) containing additional
 columns of water use (cfs) and discharge + water use (cfs). In addition,
 the updated WATER simulation file is processed and plots of each
 parameter in the updated WATER simulation file are created and contained
-in the ``_waterapputils-output/WATER.txt-with-wateruse.txt-output``
-directory.
+in the ``waterapputils-wateruse/ `` directory.
 
 Detailed information regarding applying water use to a batch run are
-contained in a directory called ``_wateruse_batch_info`` which is
+contained in a directory called ``waterapputils-batchrun-info`` which is
 created in the ``waterbatch_directory`` specified in the
-``water_batch_variables.py`` file. The ``_wateruse_batch_info`` will
+``_user_batch_variables_file_wateruse.py`` file. The ``waterapputils_batch_info`` will
 contain a summary file of the water use data applied and which water use
 points were used (``wateruse_batchrun_info.txt``). If there are basins
 that do not intersect any water use points, then a file logging those
-the non-intersection water use points (``_waterapputils_error.log``) is
+the non-intersection water use points (``waterapputils_error.log``) is
 created, along with a comma-separated file
 (``wateruse_non_intersecting_centroids.txt``) listing the specific
 basins that do not intersect any water use points. To apply water use
@@ -243,5 +232,120 @@ to the batch run, the following command is used:
     $ python waterapputils.py -applysubwateruse
 
 The above command uses the ``subwateruse_file`` variable in the
-``water_batch_variables.py`` file which specifies the location of the
+``_user_batch_variables_file_wateruse.py`` file which specifies the location of the
 ``wateruse_non_intersecting_centroids.txt`` file.
+
+
+Applying climate change factors to WATER batch runs
+---------------------------------------------------
+
+Apply climate change factors (GCM deltas) to WATER simulation batch runs.
+
+::
+
+    $ python waterapputils.py -applydeltas
+
+Applies GCM deltas (factors) to a WATER simulation batch run.  Specifically, it
+applies change factors to the WATER simulation database file ``WATERSimulation.xml``
+
+At this time, in order to apply GCM deltas to a WATER simulation batch
+run, information regarding the location of a series of files and
+directories must be entered in a file called
+``_user_batch_variables_file_gcmdeltas.py`` located in the
+``waterapputils/waterapputils/`` directory
+The following variables are to be assigned in a
+``_user_batch_variables_file_gcmdeltas.py`` file:
+
+::
+
+    Variables                       Meaning
+    ---------                       -------
+             
+    waterbatch_directory        -   path to a WATER batch run directory
+    basin_shapefile             -   path to the basin shapefile used in the WATER batch run
+    basin_field                 -   unique field in the basin shapefile used in the WATER batch run that names the batch run directories; e.g. STAID
+    subwaterdeltas_file         -   path to substitute GCM delta file; used when basins in the basin shapefile do not intersect with GCM tile(s)
+    delta_files                 -   list of paths to delta files to use 
+    delta_shapefile             -   path to the GCM delta shapefile
+
+The following is an example ``_user_batch_variables_file_gcmdeltas.py`` file:
+
+::
+
+    waterbatch_directory = "../data/water-batch-run-datafiles/sample-batch-run-output/"
+    basin_shapefile = waterbatch_directory + "Watersheds.shp"
+    basin_field = "STAID"
+    subwaterdeltas_file = waterbatch_directory + "waterapputils-batchrun-info/gcmdelta_non_intersecting_centroids.txt"
+    delta_files = ["../data/deltas-gcm/Ppt.txt",
+                   "../data/deltas-gcm/Tmax.txt"]                
+    delta_shapefile = "../data/spatial-datafiles/gcm-tiles/CanES_nad83.shp"
+
+
+The information in the ``_user_batch_variables_file_gcmdeltas.py`` file is used to
+apply GCM deltas to each respective basin in the batch run.
+
+The intersection between each respective basin in the batch run and the
+GCM tiles specify which deltas are applied. The tiles that
+intersect a basin have there respective monthly GCM deltas averaged and
+the averaged monthly GCM delta values are applied to the original WATER 
+simulation database file ``WATERSimulation.xml``.
+
+Results of applying GCM deltas to each basin in a batch run are contained
+within each respective basin directory in the ``waterbatch_directory``.
+The following is the directory structure after processing a batch run:
+
+::
+
+    water-batch-dir/
+        waterapputils-batchrun-info/                            # information about applying water use to the batch run
+            waterapputils_error.log                             # warnings or errors in processing batch run
+            gcmdeltas_batchrun_info.txt-with-wateruse           # information regarding intersected centroids and respective water use values per basin
+            gcmdeltas_non_intersecting_centroids.txt            # csv file to be filled by user concerning basins that do not intersect any water use centroid
+        basin-1/
+            WATERSimulation-updated-<basin_field>-<basinid>.xml # file formatted the same as a typical WATERSimulation.xml file, but has updated/altered climate parameters (precipitation and temperature)
+            waterapputils-waterxml/                             # directory holding plots of all climate parameters in WATERSimulation-updated-<basin_field>-<basinid>.xml file
+                *.png
+        basin-2/                                        
+            WATER.txt-with-wateruse.txt                         # file formatted the same as a typical WATERSimulation.xml file, but has updated/altered climate parameters (precipitation and temperature)
+            waterapputils-wateruse/                             # directory holding plots of all parameters in WATERSimulation-updated-<basin_field>-<basinid>.xml file
+                *.png
+
+The ``waterapputils-waterxml/`` directory contains plots of all the
+climate parameters in the ``WATERSimulation.xml`` file.
+
+Each respective basin directory (basin-1) contains an updated WATER simulation
+database file (``WATERSimulation-updated-<basin_field>-<basinid>.xml``) containing 
+updated climate parameters. In addition,
+the updated ``WATERSimulation-updated-<basin_field>-<basinid>.xml`` is processed and comparison plots
+between the original ``WATERSimulation.xml`` file and the updated ``WATERSimulation-updated-<basin_field>-<basinid>.xml`` 
+are created and contained in the ``waterapputils-waterxml/ `` directory.
+
+Detailed information regarding applying GCM deltas to a batch run are
+contained in a directory called ``waterapputils-batchrun-info`` which is
+created in the ``waterbatch_directory`` specified in the
+``_user_batch_variables_file_gcmdeltas.py`` file. The ``waterapputils_batch_info`` will
+contain a summary file of the GCM deltas applied and which GCM
+tiles were used. If there are basins
+that do not intersect any water use points, then a file logging those
+the non-intersecting GCM tiles (``waterapputils_error.log``) is
+created, along with a comma-separated file
+(``gcmdeltas_non_intersecting_tiles.txt``) listing the specific
+basins that do not intersect any GCM tiles. To apply GCM deltas
+to basins that originally do not intersect any GCM tile, a user 
+can edit the ``gcmdeltas_non_intersecting_tiles.txt``
+file and specify GCM delta tiles to be applied. To apply the
+information specified in the ``gcmdeltas_non_intersecting_tiles.txt``
+to the batch run, the following command is used:
+
+::
+
+    $ python waterapputils.py -applysubdeltas
+
+The above command uses the ``subwateruse_file`` variable in the
+``_user_batch_variables_file_gcmdeltas.py`` file which specifies the location of the
+``gcmdeltas_non_intersecting_tiles.txt`` file.
+
+
+
+
+
