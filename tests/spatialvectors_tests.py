@@ -204,7 +204,7 @@ def test_fill_shapefile_dict6():
 def test_fill_shapefile_dict7():
 
     # expected values to test with actual values
-    expected = {"extents": (-74.88702164959378, -74.44895756386826, 41.86688996255413, 42.329073891500975), 
+    expected = {"extents": (-74.88702164959378, -74.44895756386826, 41.86688996255413, 42.31789523609384), 
                 "name": "wateruse_centroids_sample_wgs84.shp", 
                 "fields": ["newhydroid", "HUC_12"], 
                 "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
@@ -391,3 +391,21 @@ def test_read_field_values_file_in():
     actual["data"] = spatialvectors.read_field_values_file_in(file_obj)
 
     np.testing.assert_equal(actual["data"], expected["data"]) 
+
+
+def test_get_field_values():
+
+    # expected values to test with actual values
+    expected = {}
+    expected = {'01413500': '163.229819866', '01420500': '242.401970189', '01414500': '25.109982983', '01435000': '66.6622693618'}
+
+    # open the shapefiles
+    basin_shapefile = osgeo.ogr.Open(fixture["water_basins_wgs84"])  
+
+    actual = spatialvectors.get_field_values(shapefile = basin_shapefile, id_field = "STAID", query_field = "da_sqmi")
+
+    basin_shapefile.Destroy()  
+
+    # print test results        
+    np.testing.assert_equal(actual, expected)  
+    

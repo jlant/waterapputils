@@ -303,6 +303,55 @@ def write_field_values_file(filepath, filename, field_values_dict):
         for key in field_values_dict.keys():
             f.write(key + ",\n")
 
+def get_field_values(shapefile, id_field, query_field):
+    """
+    Get specific field values for a shapefile.
+
+    Parameters
+    ----------
+    shapefile : osgeo.ogr.DataSource object
+        A shapefile object.
+    id_field: string
+        String name of a field in shapefile whose values will be used as keys in the field values dictionary.
+    query_field: string
+        String name of a field in shapefile 
+
+    Returns
+    -------
+    field_values_dict : Dictionary
+        Dictionary containing values for a particular field in a shapefile
+    """
+
+    # make sure that the supplied fields are contained in the shapefile datasets
+    shapefile_data = fill_shapefile_dict(shapefile = shapefile)
+
+    assert id_field in shapefile_data["fields"], \
+        "ID Field does not exist in shapefile.\nField: {}\nShapefile: {}\n  fields: {}".format(field, shapefile_data["name"], shapefile_data["fields"])
+
+    assert query_field in shapefile_data["fields"], \
+        "Field does not exist in shapefile.\nField: {}\nShapefile: {}\n  fields: {}".format(field, shapefile_data["name"], shapefile_data["fields"])
+
+    shapefile_layer = shapefile.GetLayer()
+
+    field_values_dict = {}
+    for i in range(shapefile_layer.GetFeatureCount()):
+        shapefile_feature = shapefile_layer.GetFeature(i)
+
+        if id_field == "FID":
+            id_field_value = str(shapefile_feature.GetFID())
+        else:
+            id_field_value = str(shapefile_feature.GetField(id_field))
+
+        query_field_value = str(shapefile_feature.GetField(query_field))
+
+        if id_field_value and query_field_value:       
+            field_values_dict[id_field_value] = query_field_value
+        else:
+            print("Problem with id field value {} and query field value {} ".format(id_field_value, query_field_value))
+
+    return field_values_dict
+
+
 def _print_test_info(expected, actual):
     """   
     For testing purposes, assert that all expected values and actual values match. 
@@ -458,7 +507,27 @@ def test_read_field_values_file_in():
     # print test results        
     _print_test_info(expected, actual)
 
-   
+def test_get_field_values():
+    """ Test read_field_values_file() """
+
+    print("--- Testing read_field_values_file() - read standard file - csv format ---")  
+
+    expected = {}
+    expected = {'01413500': '163.229819866', '01420500': '242.401970189', '01414500': '25.109982983', '01435000': '66.6622693618'}
+
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basins_wgs84.shp"))
+
+    # open the shapefiles
+    basin_shapefile = osgeo.ogr.Open(basin_file)    
+
+    actual = get_field_values(shapefile = basin_shapefile, id_field = "STAID", query_field = "da_sqmi")
+
+    basin_shapefile.Destroy()  
+
+    # print test results        
+    _print_test_info(expected, actual)
+
+
 def main():
     """ Test functionality geospatialvectors.py """
 
@@ -466,16 +535,18 @@ def main():
     print("RUNNING TESTS ...")
     print("")
 
-    test_fill_shapefile_dict()
+    # test_fill_shapefile_dict()
 
-    test_get_shapefile_coords()
+    # test_get_shapefile_coords()
 
-    test_get_intersected_field_values()
+    # test_get_intersected_field_values()
 
-    test_validate_field_values()
+    # test_validate_field_values()
 
-    test_read_field_values_file_in()
+    # test_read_field_values_file_in()
     
+    test_get_field_values()
+
 if __name__ == "__main__":
     main()    
     
