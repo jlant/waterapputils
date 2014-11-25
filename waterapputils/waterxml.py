@@ -475,6 +475,55 @@ def write_file(waterxml_tree, save_path, filename = "WATERSimulation.xml"):
     
     waterxml_tree.write(filepath) 
 
+
+def get_study_unit_total_area(simulation_dict):
+    """   
+    Get study unit total area for simulation feature data contained in the 
+    simulation dictionary. '
+    
+    Parameters
+    ----------
+    simulation_dict : dictionary 
+        Dictionary containing keys that match particular children in the simulation element
+        
+    Returns
+    -------
+    area_means : numpy array
+        Array of float values
+
+    Notes
+    -----
+    Each Simulation Feature parameter has the following xml elements:
+    'SimulID'
+    'AttID'
+    'AttstdDev'
+    'AttCode'
+    'AttName'
+    'AttUnits'
+    'AttUnitsCode'
+    'AttDescription'
+    'AttMaxVal'
+    'AttMeanVal'
+    'AttMinVal'
+    """
+    area_means = []
+    for i in range(len(simulation_dict["SimulID"])):                            
+        area_mean = []
+        parameter = simulation_dict["SimulationFeatures"][i]                    
+        for j in range(len(parameter)):
+            name = parameter[j]["AttName"]                                                  
+            if name == "Study Unit Total Area":
+                mean = parameter[j]["AttMeanVal"]  
+
+                area_mean.append(mean)
+
+        area_mean = np.array(area_mean, dtype = float)
+
+        area_means.append(area_mean)            
+
+    return area_means
+
+
 def _create_test_data():
     """ Create test data to use with tests """
     
@@ -912,6 +961,26 @@ def test_write_file():
     print("")  
 
 
+def test_get_study_unit_total_area():
+    """ Test get_topographic_wetness_index_data """
+
+    print("--- get_topographic_wetness_index_data() ---")     
+
+    expected = {"area_means": [np.array([100.])],
+    }  
+
+    xml_tree = _create_test_data()
+    
+    simulation = create_simulation_dict()
+
+    simulation = fill_simulation_dict(waterxml_tree = xml_tree, simulation_dict = simulation)
+
+    actual = {}
+    actual["area_means"] = get_study_unit_total_area(simulation_dict = simulation)
+
+     # print results
+    _print_test_info(actual, expected)
+
 def main():
     """ Test functionality waterxml.py """
 
@@ -919,25 +988,27 @@ def main():
     print("RUNNING TESTS ...")
     print("")
     
-    test_create_project_dict()
+    # test_create_project_dict()
      
-    test_create_study_dict()
+    # test_create_study_dict()
 
-    test_create_simulation_dict()
+    # test_create_simulation_dict()
     
-    test_fill_dict()
+    # test_fill_dict()
 
-    test_fill_simulation_dict()
+    # test_fill_simulation_dict()
 
-    test_get_xml_data()
+    # test_get_xml_data()
 
-    test_get_topographic_wetness_index_data()
+    # test_get_topographic_wetness_index_data()
     
-    test_get_timeseries_data()
+    # test_get_timeseries_data()
 
-    test_apply_factors()
+    # test_apply_factors()
 
-    test_write_file()
+    # test_write_file()
+
+    test_get_study_unit_total_area()
     
 if __name__ == "__main__":
     main()

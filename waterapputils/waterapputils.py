@@ -40,14 +40,20 @@ WATERTXT_DIRNAME = "waterapputils-watertxt"
 WATERXML_DIRNAME = "waterapputils-waterxml"
 
 BATCH_INFO_DIR = "waterapputils-batchrun-info"
-WISCONSIN_DIR = "waterapputils-wisconsin-output"
+
+ECOFLOW_DIR = "waterapputils-ecoflow"
+ECOFLOW_DAFILE = "drainagearea.csv"
+
+OASIS_DIR = "waterapputils-oasis"
+OASIS_FILENAME = "oasis.txt"
+
 QUERY_FIELD = "da_sqmi"
 
 WATERUSE_DIRNAME = "waterapputils-wateruse"
 WATERUSE_INFO_FILE = "wateruse_batchrun_info.txt"
 WATERUSE_NON_INTERSECT_FILE = "wateruse_non_intersecting_centroids.txt"
 SUBWATERUSE_INFO_FILE = "sub_wateruse_batchrun_info.txt"
-OASIS_FILENAME = "oasis-discharge-with-wateruse.txt"
+
 
 GCMDELTA_DIRNAME = "waterapputils-gcmdelta"
 GCMDELTA_INFO_FILE = "gcmdelta_batchrun_info.txt"
@@ -154,7 +160,7 @@ def process_cmp(file_list, arguments):
     waterapputils_logging.remove_loggers()
 
 
-def process_intersecting_centroids(intersecting_centroids, files_dict, arguments, wisconsin_dir):
+def process_intersecting_centroids(intersecting_centroids, files_dict, arguments, ecoflow_dir, oasis_dir):
     """    
     Apply water use data to a WATER \*.txt file. The new file created is saved to the same
     directory as the \*.xml file.
@@ -167,8 +173,10 @@ def process_intersecting_centroids(intersecting_centroids, files_dict, arguments
         Dictionary of user file paths to necessary datasets.
     arguments : argparse object
         An argparse object containing user options. 
-    wisconsin_dir : string
-        String path to directory that will contain output specific for wisconsin program
+    ecoflow_dir : string
+        String path to directory that will contain output specific for ecoflow program
+    oasis_dir : string
+        String path to directory that will contain output specific for oasis
 
     Notes
     -----
@@ -234,10 +242,10 @@ def process_intersecting_centroids(intersecting_centroids, files_dict, arguments
         process_water_files(file_list = [updated_watertxt_file], arguments = arguments)
 
         # write timeseries of discharge + water use for OASIS
-        watertxt.write_timeseries_file(watertxt_data = watertxt_data, name = "Discharge + Water Use", save_path = output_dir, filename = OASIS_FILENAME)
+        watertxt.write_timeseries_file(watertxt_data = watertxt_data, name = "Discharge + Water Use", save_path = oasis_dir, filename = "-".join([watertxt_data["stationid"], OASIS_FILENAME]))
 
-        # write timeseries of dishcarge + water use for Wisconsin
-        watertxt.write_timeseries_file_stationid(watertxt_data, name = "Discharge + Water Use", save_path = wisconsin_dir, filename = "", stationid = watertxt_data["stationid"])
+        # write timeseries of dishcarge + water use for ecoflow program
+        watertxt.write_timeseries_file_stationid(watertxt_data, name = "Discharge + Water Use", save_path = ecoflow_dir, filename = "", stationid = watertxt_data["stationid"])
 
 
 def process_intersecting_tiles(intersecting_tiles, files_dict, arguments):
@@ -350,7 +358,8 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
     """   
    
     info_dir = helpers.make_directory(path = files_dict["watertxt_directory"], directory_name = BATCH_INFO_DIR)    
-    wisconsin_dir = helpers.make_directory(path = files_dict["watertxt_directory"], directory_name = WISCONSIN_DIR)
+    ecoflow_dir = helpers.make_directory(path = files_dict["watertxt_directory"], directory_name = ECOFLOW_DIR)
+    oasis_dir = helpers.make_directory(path = files_dict["watertxt_directory"], directory_name = OASIS_DIR)
     
     # initialize error logging
     waterapputils_logging.initialize_loggers(output_dir = info_dir) 
@@ -379,7 +388,7 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
     intersecting_centroids, nonintersecting_centroids = spatialvectors.validate_field_values(field_values_dict = intersecting_centroids_all)     
 
     if intersecting_centroids:    
-        process_intersecting_centroids(intersecting_centroids, files_dict, arguments, wisconsin_dir = wisconsin_dir)
+        process_intersecting_centroids(intersecting_centroids, files_dict, arguments, ecoflow_dir = ecoflow_dir, oasis_dir = oasis_dir)
 
     if nonintersecting_centroids:
 
@@ -396,8 +405,8 @@ def apply_wateruse_to_txt_files(files_dict, arguments):
     # get the square miles field value for the basin shapefile
     field_values_dict = spatialvectors.get_field_values(shapefile = basin_shapefile, id_field = files_dict["basin_field"], query_field = QUERY_FIELD)
 
-    # write the drainage area csv file for Wisconsin program
-    watertxt.write_drainagearea_file(area_data = field_values_dict, save_path = wisconsin_dir, filename = "drainagearea.csv")
+    # write the drainage area csv file for ecoflow program
+    watertxt.write_drainagearea_file(area_data = field_values_dict, save_path = ecoflow_dir, filename = ECOFLOW_DAFILE)
 
     waterapputils_logging.remove_loggers()
 
@@ -481,7 +490,7 @@ def apply_deltas_to_xml_files(files_dict, arguments):
 def apply_subwateruse_to_txt_files(files_dict, arguments):
 
     info_dir = os.path.join(files_dict["watertxt_directory"], BATCH_INFO_DIR)    
-    wisconsin_dir = helpers.make_directory(path = files_dict["watertxt_directory"], directory_name = WISCONSIN_DIR)
+    ecoflow_dir = helpers.make_directory(path = files_dict["watertxt_directory"], directory_name = ECOFLOW_DIR)
 
     waterapputils_logging.initialize_loggers(output_dir = info_dir) 
 
@@ -501,7 +510,7 @@ def apply_subwateruse_to_txt_files(files_dict, arguments):
 
     intersecting_centroids = spatialvectors.read_field_values_file(filepath = files_dict["non_intersecting_basin_centroids_file"])
 
-    process_intersecting_centroids(intersecting_centroids, files_dict, arguments, wisconsin_dir)
+    process_intersecting_centroids(intersecting_centroids, files_dict, arguments, ecoflow_dir)
 
     waterapputils_logging.remove_loggers()
 
@@ -528,6 +537,81 @@ def apply_subwaterdeltas_to_xml_files(files_dict, arguments):
 
     process_intersecting_tiles(intersecting_tiles, files_dict, arguments) 
 
+    waterapputils_logging.remove_loggers()
+
+def write_oasis_file(file_list, arguments):
+
+    for f in file_list:
+               
+        filedir, filename = helpers.get_file_info(f)       
+ 
+        print("Processing: \n    {}\n".format(f))
+
+        oasis_dir = helpers.make_directory(path = filedir, directory_name = OASIS_DIR)
+        waterapputils_logging.initialize_loggers(output_dir = oasis_dir) 
+
+        watertxt_data = watertxt.read_file(f)      
+
+        # write timeseries of discharge + water use for OASIS
+        watertxt.write_timeseries_file(watertxt_data = watertxt_data, name = "Discharge + Water Use", save_path = oasis_dir, filename = "-".join([watertxt_data["stationid"], OASIS_FILENAME]))
+
+        print("Output: \n    {}\n\n".format(oasis_dir))
+                
+        waterapputils_logging.remove_loggers()
+
+def write_ecoflow_file_stationid(file_list, arguments):
+
+    for f in file_list:
+               
+        filedir, filename = helpers.get_file_info(f)       
+ 
+        print("Processing: \n    {}\n".format(f))
+
+        ecoflow_dir = helpers.make_directory(path = filedir, directory_name = ECOFLOW_DIR)
+        waterapputils_logging.initialize_loggers(output_dir = ecoflow_dir) 
+
+        watertxt_data = watertxt.read_file(f)      
+
+        # write timeseries of dishcarge + water use for ecoflow program
+        watertxt.write_timeseries_file_stationid(watertxt_data, name = "Discharge + Water Use", save_path = ecoflow_dir, filename = "", stationid = watertxt_data["stationid"])
+
+        print("Output: \n    {}\n\n".format(ecoflow_dir))
+                
+        waterapputils_logging.remove_loggers()
+
+def write_ecoflow_file_drainageareaxml(file_list, arguments):
+
+    area_data = {}
+    for f in file_list:
+               
+        filedir, filename = helpers.get_file_info(f)       
+ 
+        print("Processing: \n    {}\n".format(f))
+
+        ecoflow_dir = helpers.make_directory(path = filedir, directory_name = ECOFLOW_DIR)
+        waterapputils_logging.initialize_loggers(output_dir = ecoflow_dir) 
+
+        # read xml file
+        waterxml_tree = waterxml.read_file(f)       
+
+        # get area from each region from the xml file and sum for a total area
+        project, study, simulation = waterxml.get_xml_data(waterxml_tree = waterxml_tree)
+
+        areas = []
+        for i in range(len(simulation["SimulID"])):                
+            data = waterxml.get_simulation_data(waterxml_tree = waterxml_tree, element = "Study Unit Total Area", sim_id_num = simulation_dict["SimulID"][i])
+            areas.append(data)
+
+        import pdb
+        pdb.set_trace()
+
+        area_data[project["ProjName"]] = total_area
+
+    # write timeseries of dishcarge + water use for ecoflow program
+    watertxt.write_drainagearea_file(area_data, save_path = ecoflow_dir, filename = "drainagearea.csv")
+
+    print("Output: \n    {}\n\n".format(ecoflow_dir))
+            
     waterapputils_logging.remove_loggers()
 
 
@@ -559,6 +643,10 @@ def main():
 
     group.add_argument("-applysubdeltas", "--applysubdeltas", action = "store_true", help = "Apply updated water deltas data from '_non_intersecting_basin_tiles.txt' to a WaterSimulation.xml file for a WATER simulation.  Use wateruse_deltas_variables.py to enter paths to data files.")
 
+    group.add_argument("-oasis", "--oasis", nargs = "+", help = "List WATER text data file(s) that have Discharge + Water Use")
+    group.add_argument("-ecoflowstationid", "--ecoflowstationid", nargs = "+", help = "List WATER text data file(s) that have Discharge + Water Use")
+    group.add_argument("-ecoflowdrainageareaxml", "--ecoflowdrainageareaxml", nargs = "+", help = "List WATER xml data file(s)")
+
     parser.add_argument("-v", "--verbose", action = "store_true",  help = "Print general information about data file(s)")
     parser.add_argument("-p", "--showplot", action = "store_true",  help = "Show plots of parameters contained in data file(s)")
     
@@ -566,7 +654,7 @@ def main():
 
     # get files from command line arguments and process
     try:       
-        
+
         if args.watertxtfiles:
             
             process_water_files(file_list = args.watertxtfiles, arguments = args)            
@@ -690,6 +778,26 @@ def main():
             
             apply_subwateruse_to_txt_files(files_dict = files_dict, arguments = args)
 
+            sys.exit()
+
+        # ---------------------------------------------------------------------
+
+        elif args.oasis:
+           
+            write_oasis_file(file_list = args.oasis, arguments = args)            
+            
+            sys.exit()
+
+        elif args.ecoflowstationid:
+           
+            write_ecoflow_file_stationid(file_list = args.ecoflowstationid, arguments = args)            
+            
+            sys.exit()
+
+        elif args.ecoflowdrainageareaxml:
+           
+            write_ecoflow_file_drainageareaxml(file_list = args.ecoflowdrainageareaxml, arguments = args)            
+            
             sys.exit()
 
     except IOError as error:
