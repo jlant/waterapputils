@@ -585,11 +585,11 @@ def write_ecoflow_file_drainageareaxml(file_list, arguments):
     for f in file_list:
                
         filedir, filename = helpers.get_file_info(f)       
- 
-        print("Processing: \n    {}\n".format(f))
 
         ecoflow_dir = helpers.make_directory(path = filedir, directory_name = ECOFLOW_DIR)
         waterapputils_logging.initialize_loggers(output_dir = ecoflow_dir) 
+ 
+        print("Processing: \n    {}\n".format(f))
 
         # read xml file
         waterxml_tree = waterxml.read_file(f)       
@@ -597,15 +597,17 @@ def write_ecoflow_file_drainageareaxml(file_list, arguments):
         # get area from each region from the xml file and sum for a total area
         project, study, simulation = waterxml.get_xml_data(waterxml_tree = waterxml_tree)
 
-        areas = []
-        for i in range(len(simulation["SimulID"])):                
-            data = waterxml.get_simulation_data(waterxml_tree = waterxml_tree, element = "Study Unit Total Area", sim_id_num = simulation_dict["SimulID"][i])
-            areas.append(data)
+        # get the project name which is the same as the stationid
+        stationid = project["ProjName"]
 
-        import pdb
-        pdb.set_trace()
+        # get the area means for each region
+        areas = waterxml.get_study_unit_areas(simulation_dict = simulation)
 
-        area_data[project["ProjName"]] = total_area
+        # calculate total area
+        total_area = waterxml.calc_total_study_unit_areas(areas)
+
+        # fill area_data with total area
+        area_data[stationid] = str(total_area)
 
     # write timeseries of dishcarge + water use for ecoflow program
     watertxt.write_drainagearea_file(area_data, save_path = ecoflow_dir, filename = "drainagearea.csv")

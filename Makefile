@@ -6,7 +6,8 @@ clean:
 	rm -f tests/*.txt
 	rm -r data/water-batch-run-datafiles/sample-batch-run-output/waterapputils-batchrun-info/
 	rm -r data/water-batch-run-datafiles/sample-batch-run-output/014*/waterapputils*
-	rm -r data/water-batch-run-datafiles/sample-batch-run-output/waterapputils-wisconsin-output/
+	rm -r data/water-batch-run-datafiles/sample-batch-run-output/waterapputils-ecoflow/
+	rm -r data/water-batch-run-datafiles/sample-batch-run-output/waterapputils-oasis/
 	rm -r tests/test-dir
 	rm -f tests/*.csv
 

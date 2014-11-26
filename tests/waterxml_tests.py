@@ -682,4 +682,17 @@ def test_apply_factors():
     np.testing.assert_equal(actual["p_units"][0], expected["p_units"][0])
     np.testing.assert_equal(actual["t_units"][0], expected["t_units"][0])
     
-             
+
+def test_get_study_unit_areas():
+
+    expected = {"area_means": [np.array([100.])],
+    }  
+
+    simulation = waterxml.create_simulation_dict()
+
+    simulation = waterxml.fill_simulation_dict(waterxml_tree = fixture["xml_tree1"], simulation_dict = simulation)
+
+    actual = {}
+    actual["area_means"] = waterxml.get_study_unit_areas(simulation_dict = simulation)
+    
+    np.testing.assert_equal(actual["area_means"][0], expected["area_means"][0])

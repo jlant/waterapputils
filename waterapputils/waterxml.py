@@ -476,10 +476,10 @@ def write_file(waterxml_tree, save_path, filename = "WATERSimulation.xml"):
     waterxml_tree.write(filepath) 
 
 
-def get_study_unit_total_area(simulation_dict):
+def get_study_unit_areas(simulation_dict):
     """   
-    Get study unit total area for simulation feature data contained in the 
-    simulation dictionary. '
+    Get study unit areas for simulation feature data contained in the 
+    simulation dictionary. 
     
     Parameters
     ----------
@@ -488,8 +488,8 @@ def get_study_unit_total_area(simulation_dict):
         
     Returns
     -------
-    area_means : numpy array
-        Array of float values
+    area_means : list 
+        List of numpy arrays containing area values as floats
 
     Notes
     -----
@@ -523,6 +523,25 @@ def get_study_unit_total_area(simulation_dict):
 
     return area_means
 
+def calc_total_study_unit_areas(area_means):
+    """
+    Calculate total study area from a dictionary containing a list
+    of region areas.
+    
+    Parameters
+    ----------
+    area_means : list 
+        List of numpy arrays containing area values as floats        
+    
+    Returns
+    -------
+    total_area : float
+        Float value of total area
+    """
+
+    total_area = np.sum(area_means)
+
+    return total_area
 
 def _create_test_data():
     """ Create test data to use with tests """
@@ -961,7 +980,7 @@ def test_write_file():
     print("")  
 
 
-def test_get_study_unit_total_area():
+def test_get_study_unit_areas():
     """ Test get_topographic_wetness_index_data """
 
     print("--- get_topographic_wetness_index_data() ---")     
@@ -976,7 +995,7 @@ def test_get_study_unit_total_area():
     simulation = fill_simulation_dict(waterxml_tree = xml_tree, simulation_dict = simulation)
 
     actual = {}
-    actual["area_means"] = get_study_unit_total_area(simulation_dict = simulation)
+    actual["area_means"] = get_study_unit_areas(simulation_dict = simulation)
 
      # print results
     _print_test_info(actual, expected)
@@ -988,25 +1007,25 @@ def main():
     print("RUNNING TESTS ...")
     print("")
     
-    # test_create_project_dict()
+    test_create_project_dict()
      
-    # test_create_study_dict()
+    test_create_study_dict()
 
-    # test_create_simulation_dict()
+    test_create_simulation_dict()
     
-    # test_fill_dict()
+    test_fill_dict()
 
-    # test_fill_simulation_dict()
+    test_fill_simulation_dict()
 
-    # test_get_xml_data()
+    test_get_xml_data()
 
-    # test_get_topographic_wetness_index_data()
+    test_get_topographic_wetness_index_data()
     
-    # test_get_timeseries_data()
+    test_get_timeseries_data()
 
-    # test_apply_factors()
+    test_apply_factors()
 
-    # test_write_file()
+    test_write_file()
 
     test_get_study_unit_total_area()
     
