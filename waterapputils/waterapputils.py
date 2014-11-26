@@ -607,10 +607,45 @@ def write_ecoflow_file_drainageareaxml(file_list, arguments):
         total_area = waterxml.calc_total_study_unit_areas(areas)
 
         # fill area_data with total area
-        area_data[stationid] = str(total_area)
+        # area_data[stationid] = str(total_area)
+        area_data[stationid] = total_area
+
+    # convert from km**2 to mi**2
+    area_data = helpers.convert_area_values(area_data, in_units = "km2", out_units = "mi2")
 
     # write timeseries of dishcarge + water use for ecoflow program
-    watertxt.write_drainagearea_file(area_data, save_path = ecoflow_dir, filename = "drainagearea.csv")
+    watertxt.write_drainagearea_file(area_data = area_data, save_path = ecoflow_dir, filename = ECOFLOW_DAFILE)
+
+    print("Output: \n    {}\n\n".format(ecoflow_dir))
+            
+    waterapputils_logging.remove_loggers()
+
+def write_ecoflow_file_drainageareashp(file_list, arguments):
+
+    for f in file_list:
+               
+        filedir, filename = helpers.get_file_info(f)       
+
+        ecoflow_dir = helpers.make_directory(path = filedir, directory_name = ECOFLOW_DIR)
+        waterapputils_logging.initialize_loggers(output_dir = ecoflow_dir) 
+ 
+        print("Processing: \n    {}\n".format(f))
+
+        # Open the shapefiles
+        basin_shapefile = osgeo.ogr.Open(f)  
+
+        # get the area means for each region
+        if arguments.shpfield:
+            field = arguments.shpfield[0]
+            areas = spatialvectors.get_shapefile_areas(basin_shapefile, field = field)
+        else:
+            areas = spatialvectors.get_shapefile_areas(basin_shapefile, field = "FID")
+
+        # convert from m**2 to mi**2
+        areas = helpers.convert_area_values(areas, in_units = "m2", out_units = "mi2")
+
+        # write timeseries of dishcarge + water use for ecoflow program
+        watertxt.write_drainagearea_file(areas, save_path = ecoflow_dir, filename = ECOFLOW_DAFILE)
 
     print("Output: \n    {}\n\n".format(ecoflow_dir))
             
@@ -648,9 +683,11 @@ def main():
     group.add_argument("-oasis", "--oasis", nargs = "+", help = "List WATER text data file(s) that have Discharge + Water Use")
     group.add_argument("-ecoflowstationid", "--ecoflowstationid", nargs = "+", help = "List WATER text data file(s) that have Discharge + Water Use")
     group.add_argument("-ecoflowdrainageareaxml", "--ecoflowdrainageareaxml", nargs = "+", help = "List WATER xml data file(s)")
+    group.add_argument("-ecoflowdrainageareashp", "--ecoflowdrainageareashp", nargs = "+", help = "List shapefiles(s)")
 
     parser.add_argument("-v", "--verbose", action = "store_true",  help = "Print general information about data file(s)")
     parser.add_argument("-p", "--showplot", action = "store_true",  help = "Show plots of parameters contained in data file(s)")
+    parser.add_argument("-shpfield", "--shpfield", nargs = 1,  help = "List shapefile field to use in labeling drainageare.csv")    
     
     args = parser.parse_args()  
 
@@ -801,6 +838,13 @@ def main():
             write_ecoflow_file_drainageareaxml(file_list = args.ecoflowdrainageareaxml, arguments = args)            
             
             sys.exit()
+
+        elif args.ecoflowdrainageareashp:
+           
+            write_ecoflow_file_drainageareashp(file_list = args.ecoflowdrainageareashp, arguments = args)            
+            
+            sys.exit()
+
 
     except IOError as error:
         logging.exception("IO error: {0}".format(error.message))

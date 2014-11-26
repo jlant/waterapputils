@@ -77,6 +77,44 @@ def get_shapefile_coords(shapefile):
     
     return coords
 
+def get_shapefile_areas(shapefile, field = "FID"):
+    """   
+    Get the areas of each feature in a shapefile. 
+    Loops through each feature contained in a shapefile (e.g. each FID) and gets the area. 
+    Returns a dictionary containing keys that correspond to each feature, namely,
+    the features FID number with corresponding area values.
+    
+    Parameters
+    ----------
+    shapefile : osgeo.ogr.DataSource 
+        A shapefile object.        
+
+    Returns
+    -------
+    coordinates : dictionary
+        Dictionary containing feature id and areas
+
+    Notes
+    ----- 
+    Area units are in the linear units of the projected coordinate system
+    """   
+    shapefile_layer = shapefile.GetLayer()
+    
+    areas = {}
+    for feature_num in range(shapefile_layer.GetFeatureCount()):
+        shapefile_feature = shapefile_layer.GetFeature(feature_num)
+        shapefile_geometry = shapefile_feature.GetGeometryRef()            
+        area = shapefile_geometry.GetArea()           
+
+        # assign the features FID as the key in coords with corresponding lon and lat values
+        if field == "FID":
+            field_value = str(shapefile_feature.GetFID())
+        else:
+            field_value = str(shapefile_feature.GetField(field))
+
+        areas[field_value] = area
+    
+    return areas
 
 def fill_shapefile_dict(shapefile):
     """   
@@ -435,6 +473,27 @@ def test_get_shapefile_coords():
     _print_test_info(expected, actual)
 
 
+def test_get_shapefile_areas():
+    """ Test get_shapefile_areas() """
+
+    print("--- Testing get_shapefile_areas() - projected coordinate system is Albers_Equal_Area_Conic_USGS_CONUS_NAD83 with units of meters ")  
+
+    expected = {}
+    expected = {'01413500': 422764983.7640325, '01420500': 627820731.9907457, '01414500': 65034817.5157996, '01435000': 172655175.67497352}
+
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basins_nad83.shp"))
+
+    # open the shapefiles
+    basin_shapefile = osgeo.ogr.Open(basin_file)    
+
+    actual = get_shapefile_areas(shapefile = basin_shapefile, field = "STAID")
+
+    basin_shapefile.Destroy()  
+
+    # print test results        
+    _print_test_info(expected, actual)
+    
+
 def test_get_intersected_field_values():
     """ Test get_intersected_field_values() """
 
@@ -539,13 +598,15 @@ def main():
 
     # test_get_shapefile_coords()
 
+    test_get_shapefile_areas()
+
     # test_get_intersected_field_values()
 
     # test_validate_field_values()
 
     # test_read_field_values_file_in()
     
-    test_get_field_values()
+    # test_get_field_values()
 
 if __name__ == "__main__":
     main()    
