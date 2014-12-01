@@ -66,7 +66,7 @@ def print_waterxml_data(waterxml_tree):
                 print("")    
 
 
-def plot_waterxml_topographic_wetness_index_data(waterxml_tree, is_visible = True, save_path = None):
+def plot_waterxml_topographic_wetness_index_data(waterxml_tree, is_visible = False, save_path = None):
     """   
     Plot histogram of topographic_wetness_index data from the WATER \*.xml file.
     
@@ -125,7 +125,7 @@ def plot_waterxml_topographic_wetness_index_data(waterxml_tree, is_visible = Tru
         else:
             plt.close()
             
-def plot_waterxml_timeseries_data(waterxml_tree, is_visible = True, save_path = None):
+def plot_waterxml_timeseries_data(waterxml_tree, is_visible = False, save_path = None):
     """   
     Plot timeseries data from the WATER \*.xml file.  The timeseries data are contained 
     in the study simulation dictionary. The following timeseries data are plotted:
@@ -216,7 +216,7 @@ def plot_waterxml_timeseries_data(waterxml_tree, is_visible = True, save_path = 
             else:
                 plt.close()
 
-def plot_waterxml_timeseries_comparison(waterxml_tree1, waterxml_tree2, is_visible = True, save_path = None):
+def plot_waterxml_timeseries_comparison(waterxml_tree1, waterxml_tree2, is_visible = False, save_path = None):
     """   
     Compare each timeseries for 2 WATER \*.xml files.
     
