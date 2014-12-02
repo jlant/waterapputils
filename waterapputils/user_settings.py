@@ -20,11 +20,21 @@ Note: If copying and pasting paths on Windows machines:
 """
 
 # ------------------- WATER simulation information ---------------------- #
-simulation_directory = "../data/sample-water-simulations/sample-batch-simulation"
-is_batch_simulation = True
-basin_shapefile_name = "Watersheds.shp"
-basin_shapefile_id_field = "STAID"
-basin_shapefile_area_field = "da_sqmi"
+
+# batch simulation
+# simulation_directory = "../data/sample-water-simulations/sample-batch-simulation"
+# is_batch_simulation = True
+# basin_shapefile_name = "Watersheds.shp"
+# basin_shapefile_id_field = "STAID"
+# basin_shapefile_area_field = "da_sqmi"
+
+# single simulation
+simulation_directory = "../data/sample-water-simulations/sample-single-simulation"
+is_batch_simulation = False
+basin_shapefile_name = "basinMask.shp"
+basin_shapefile_id_field = "FID"
+basin_shapefile_area_field = ""
+
 water_text_file_name = "WATER.txt"
 water_database_file_name = "WATERSimulation.xml"
 

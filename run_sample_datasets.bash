@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# run sample data sets
+# Bash script containing options to run sample data sets
 
 run_txt()
 {
@@ -22,12 +22,20 @@ run_xml()
     echo
 }
 
+run_wateruse()
+{
+    echo
+    python waterapputils/waterapputils.py -applywateruse
+    echo 
+}
+
 run_all()
 {
 
     echo 
     run_txt
     run_xml
+    run_wateruse
     echo
 }
 
@@ -52,6 +60,9 @@ while [ "$1" != "" ]; do
                          ;;
 		-xml )           echo "$0 is running XML sample datasets"
                          run_xml
+                         ;;
+        -wateruse )      echo "$0 is running water use sample datasets as specified in user_settings.py"
+                         run_wateruse
                          ;;
         -all )           echo "$0 is running ALL sample datasets"
                          run_all

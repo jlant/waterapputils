@@ -409,3 +409,16 @@ def test_get_field_values():
     # print test results        
     np.testing.assert_equal(actual, expected)  
     
+def test_get_shapefile_areas():
+    expected = {}
+    expected = {'01413500': 422764983.7640325, '01420500': 627820731.9907457, '01414500': 65034817.5157996, '01435000': 172655175.67497352}
+
+    # open the shapefiles
+    basin_shapefile = osgeo.ogr.Open(fixture["water_basins_nad83"])    
+
+    actual = spatialvectors.get_shapefile_areas(shapefile = basin_shapefile, id_field = "STAID")
+
+    basin_shapefile.Destroy()  
+
+    # print test results        
+    np.testing.assert_equal(actual, expected)  

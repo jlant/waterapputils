@@ -77,7 +77,7 @@ def get_shapefile_coords(shapefile):
     
     return coords
 
-def get_shapefile_areas(shapefile, field = "FID"):
+def get_shapefile_areas(shapefile, id_field = "FID"):
     """   
     Get the areas of each feature in a shapefile. 
     Loops through each feature contained in a shapefile (e.g. each FID) and gets the area. 
@@ -88,10 +88,12 @@ def get_shapefile_areas(shapefile, field = "FID"):
     ----------
     shapefile : osgeo.ogr.DataSource 
         A shapefile object.        
+    id_field : string
+        A string id id_field to use as keys in return dictionary
 
     Returns
     -------
-    coordinates : dictionary
+    areas : dictionary
         Dictionary containing feature id and areas
 
     Notes
@@ -107,12 +109,12 @@ def get_shapefile_areas(shapefile, field = "FID"):
         area = shapefile_geometry.GetArea()           
 
         # assign the features FID as the key in coords with corresponding lon and lat values
-        if field == "FID":
-            field_value = str(shapefile_feature.GetFID())
+        if id_field == "FID":
+            id_field_value = str(shapefile_feature.GetFID())
         else:
-            field_value = str(shapefile_feature.GetField(field))
+            id_field_value = str(shapefile_feature.GetField(id_field))
 
-        areas[field_value] = area
+        areas[id_field_value] = area
     
     return areas
 

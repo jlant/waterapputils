@@ -19,19 +19,8 @@ import Tkinter, tkFileDialog
 import logging
 
 # my modules
-import helpers
-import watertxt
-import waterxml
-import watertxt_viewer
-import waterxml_viewer
-import waterapputils_logging
-import deltas
-import spatialvectors
-import wateruse
-
 import water_files_processing
 import wateruse_processing
-
 import user_settings
 
 
@@ -53,10 +42,10 @@ def main():
     group.add_argument("-waterxmlfd", "--waterxmlfiledialog", action = "store_true", help = "Open a file dialog window to select WATER xml data file(s).")
     group.add_argument("-waterxmlcmp", "--waterxmlcompare", nargs = 2, help = "List 2 WATER xml data file(s) to be compared")
     group.add_argument("-waterxmlcmpfd", "--waterxmlcomparefiledialog", action = "store_true", help = "Open 2 separate file dialog windows to select WATER XML data file(s) to be compared")
-    
-    group.add_argument("-applydeltas", "--applydeltas", action = "store_true", help = "Apply global climate deltas to a WATERSimulation.xml file for a WATER simulations.  Use waterdelta_batch_variables.py to enter paths to data files.")
 
     group.add_argument("-applywateruse", "--applywateruse", action = "store_true", help = "Apply water use data to a WATER.txt file for a WATER simulation.  Use wateruse_batch_variables.py to enter paths to data files.")
+
+    group.add_argument("-applydeltas", "--applydeltas", action = "store_true", help = "Apply global climate deltas to a WATERSimulation.xml file for a WATER simulations.  Use waterdelta_batch_variables.py to enter paths to data files.")
 
     group.add_argument("-applysubwateruse", "--applysubwateruse", action = "store_true", help = "Apply updated water use data from '_non_intersecting_basin_centroids.txt' to a WATER.txt file for a WATER simulation.  Use wateruse_batch_variables.py to enter paths to data files.")
 
@@ -69,7 +58,8 @@ def main():
 
     parser.add_argument("-v", "--verbose", action = "store_true",  help = "Print general information about data file(s)")
     parser.add_argument("-labelfield", "--labelfield", nargs = 1,  help = "Write field name in shapefile to use in labeling drainageare.csv")    
-    
+    parser.add_argument("-areafield", "--areafield", nargs = 1,  help = "Write area field name in shapefile to use in drainageare.csv") 
+
     args = parser.parse_args()  
 
     # get files from command line arguments and process
@@ -148,60 +138,66 @@ def main():
 
         # --------------------------------------------------------------------
 
-        elif args.applydeltas:
-
-
-
-            print("\nProcessing gcm deltas ... please wait\n")                                   
-            apply_deltas_to_xml_files(files_dict = files_dict, arguments = args)
-            sys.exit() 
-
-        elif args.applysubdeltas:
-
-            
-            apply_subwaterdeltas_to_xml_files(files_dict = files_dict, arguments = args)
-
-            sys.exit()
-
         elif args.applywateruse:          
 
             print("\nProcessing wateruse ... please wait\n")                       
 
-            wateruse_processing.applywateruse(settings = user_settings.settings)
+            import pdb
+            pdb.set_trace()
+
+            wateruse_processing.apply_wateruse(settings = user_settings.settings)
 
             sys.exit()
 
-        elif args.applysubwateruse:
+        # elif args.applysubwateruse:
 
             
-            apply_subwateruse_to_txt_files(files_dict = files_dict, arguments = args)
+        #     apply_subwateruse_to_txt_files(files_dict = files_dict, arguments = args)
 
-            sys.exit()
+        #     sys.exit()
+
+        # elif args.applydeltas:
+
+        #     print("\nProcessing gcm deltas ... please wait\n")                                   
+        #     apply_deltas_to_xml_files(files_dict = files_dict, arguments = args)
+        #     sys.exit() 
+
+        # elif args.applysubdeltas:
+
+            
+        #     apply_subwaterdeltas_to_xml_files(files_dict = files_dict, arguments = args)
+
+        #     sys.exit()
 
         # ---------------------------------------------------------------------
 
         elif args.oasis:
            
-            write_oasis_file(file_list = args.oasis, settings = user_settings.settings)            
+            specific_output_file_processing.write_oasis_file(file_list = args.oasis, dir_name = user_settings.settings["oasis_directory_name"], file_name = user_settings.settings["oasis_file_name"])            
             
             sys.exit()
 
         elif args.ecoflowstationid:
            
-            write_ecoflow_file_stationid(file_list = args.ecoflowstationid, settings = user_settings.settings)            
+            specific_output_file_processing.write_ecoflow_file_stationid(file_list = args.ecoflowstationid, dir_name = user_settings.settings["ecoflow_directory_name"], file_name = user_settings.settings["ecoflow_file_name"])        
             
             sys.exit()
 
         elif args.ecoflowdrainageareaxml:
            
-            write_ecoflow_file_drainageareaxml(file_list = args.ecoflowdrainageareaxml, settings = user_settings.settings)            
+            specific_output_file_processing.write_ecoflow_file_drainageareaxml(file_list = args.ecoflowdrainageareaxml, dir_name = user_settings.settings["ecoflow_directory_name"], file_name = user_settings.settings["ecoflow_file_name"])           
             
             sys.exit()
 
         elif args.ecoflowdrainageareashp:
-           
-            write_ecoflow_file_drainageareashp(file_list = args.ecoflowdrainageareashp, settings = user_settings.settings, label_field = args.labelfield)            
-            
+
+            specific_output_file_processing.write_ecoflow_file_drainageareashp(file_list = args.ecoflowdrainageareashp, 
+                                                                               dir_name = user_settings.settings["ecoflow_directory_name"], 
+                                                                               file_name = user_settings.settings["ecoflow_drainage_area_file_name"], 
+                                                                               label_field = user_settings.settings["basin_shapefile_id_field"], 
+                                                                               query_field = user_settings.settings["basin_shapefile_area_field"],
+            )
+
             sys.exit()
 
 
