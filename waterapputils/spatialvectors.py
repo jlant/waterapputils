@@ -77,7 +77,7 @@ def get_shapefile_coords(shapefile):
     
     return coords
 
-def get_shapefile_areas(shapefile, id_field = "FID"):
+def get_shapefile_areas(shapefile, id_field):
     """   
     Get the areas of each feature in a shapefile. 
     Loops through each feature contained in a shapefile (e.g. each FID) and gets the area. 
@@ -100,6 +100,17 @@ def get_shapefile_areas(shapefile, id_field = "FID"):
     ----- 
     Area units are in the linear units of the projected coordinate system
     """   
+    
+    # get shapefile data
+    shapefile_data = fill_shapefile_dict(shapefile)
+
+    # make sure the id field is in the list of fields, if not, then set to "FID"
+    if id_field:
+        assert id_field in shapefile_data["fields"], \
+               "Field does not exist in shapefile.\nField: {}\nShapefile: {}\n  fields: {}".format(intersector_field, intersector_data["name"], intersector_data["fields"])
+    else:
+        id_field = "FID"
+
     shapefile_layer = shapefile.GetLayer()
     
     areas = {}
@@ -217,9 +228,11 @@ def get_intersected_field_values(intersector, intersectee, intersectee_field, in
     assert intersectee_field in intersectee_data["fields"], \
            "Field does not exist in shapefile.\nField: {}\nShapefile: {}\n  fields: {}".format(intersectee_field, intersectee_data["name"], intersectee_data["fields"])
 
-    if intersector_field != "FID":
+    if intersector_field:
         assert intersector_field in intersector_data["fields"], \
                "Field does not exist in shapefile.\nField: {}\nShapefile: {}\n  fields: {}".format(intersector_field, intersector_data["name"], intersector_data["fields"])
+    else:
+        intersector_field = "FID"
 
     # get the shapefile layer    
     intersectee_layer = intersectee.GetLayer()
@@ -365,8 +378,11 @@ def get_field_values(shapefile, id_field, query_field):
     # make sure that the supplied fields are contained in the shapefile datasets
     shapefile_data = fill_shapefile_dict(shapefile = shapefile)
 
-    assert id_field in shapefile_data["fields"], \
+    if id_field:
+        assert id_field in shapefile_data["fields"], \
         "ID Field does not exist in shapefile.\nField: {}\nShapefile: {}\n  fields: {}".format(field, shapefile_data["name"], shapefile_data["fields"])
+    else:
+        id_field = "FID"
 
     assert query_field in shapefile_data["fields"], \
         "Field does not exist in shapefile.\nField: {}\nShapefile: {}\n  fields: {}".format(field, shapefile_data["name"], shapefile_data["fields"])
@@ -382,7 +398,7 @@ def get_field_values(shapefile, id_field, query_field):
         else:
             id_field_value = str(shapefile_feature.GetField(id_field))
 
-        query_field_value = str(shapefile_feature.GetField(query_field))
+        query_field_value = float(shapefile_feature.GetField(query_field))
 
         if id_field_value and query_field_value:       
             field_values_dict[id_field_value] = query_field_value

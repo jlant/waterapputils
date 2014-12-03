@@ -1,17 +1,5 @@
 """
-Purpose: File of variables required to apply water use to a WATER 
-         simulation batch run.
 
-Variables                       Meaning
----------                       -------
-         
-waterbatch_directory        -   path to a WATER batch run directory
-basin_shapefile             -   path to the basin shapefile used in the WATER batch run
-basin_field                 -   unique field in the basin shapefile used in the WATER batch run that names the batch run directories; e.g. STAID
-subwateruse_file            -   path to substitute water use file; used when basins in the basin shapefile do not intersect with water use centroids
-wateruse_files              -   list of paths to water use files to use
-wateruse_factor_file        -   path to the water use factor file
-basin_centroids_shapefile   -   path to the water use centroids shapefile
 
 Note: If copying and pasting paths on Windows machines:
         1. Change '\' to '/' in each path variable, or
@@ -32,7 +20,7 @@ Note: If copying and pasting paths on Windows machines:
 simulation_directory = "../data/sample-water-simulations/sample-single-simulation"
 is_batch_simulation = False
 basin_shapefile_name = "basinMask.shp"
-basin_shapefile_id_field = "FID"
+basin_shapefile_id_field = ""
 basin_shapefile_area_field = ""
 
 water_text_file_name = "WATER.txt"
@@ -68,6 +56,7 @@ gcm_delta_non_intersecting_file_name = "gcm_delta_non_intersecting_tiles.txt"
 sub_gcm_delta_info_file_name = "sub_gcm_delta_info.txt"
 
 ecoflow_directory_name = "waterapputils-ecoflow"
+ecoflow_file_name = ""
 ecoflow_drainage_area_file_name = "drainagearea.csv"
 
 oasis_directory_name = "waterapputils-oasis"
@@ -107,6 +96,7 @@ settings = {
     "sub_gcm_delta_info_file_name": sub_gcm_delta_info_file_name,
 
 	"ecoflow_directory_name": ecoflow_directory_name,
+    "ecoflow_file_name": ecoflow_file_name,
 	"ecoflow_drainage_area_file_name": ecoflow_drainage_area_file_name,
     
 	"oasis_directory_name": oasis_directory_name,

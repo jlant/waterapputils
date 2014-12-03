@@ -553,7 +553,7 @@ def write_timeseries_file(watertxt_data, name, save_path, filename = ""):
             date_str = watertxt_data["dates"][i].strftime("%m/%d/%Y")
             output_file.write("{}\t{}\n".format(date_str, parameter["data"][i]))            
             
-def write_timeseries_file_stationid(watertxt_data, name, save_path, filename = "", stationid = None):
+def write_timeseries_file_stationid(watertxt_data, name, save_path, filename, stationid = None):
     """   
     Write a csv timeseries file containing the stationid, date, and discharge (discharge + water use)
     for a Wisconsin Water Science Center program.

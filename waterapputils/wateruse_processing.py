@@ -11,6 +11,55 @@ import wateruse
 import waterapputils_logging
 import water_files_processing
 
+def create_output_dirs_files(settings, is_sub_wateruse = False):
+    """    
+    Create the output directories and files needed to processes wateruse.
+
+    Parameters
+    ----------
+    settings : dictionary
+        Dictionary of user settings
+
+    Returns
+    -------
+    info_dir : string
+        string path to info directory
+    ecoflow_dir : string 
+        string path to ecoflow directory
+    oasis_dir : string
+        string path to oasis directory
+    info_file : string
+        string path to info file
+
+    Notes
+    -----
+    Uses settings set in user_settings.py 
+    """   
+    # create output directories   
+    info_dir = helpers.make_directory(path = settings["simulation_directory"], directory_name = settings["info_directory_name"])    
+    ecoflow_dir = helpers.make_directory(path = settings["simulation_directory"], directory_name = settings["ecoflow_directory_name"])
+    oasis_dir = helpers.make_directory(path = settings["simulation_directory"], directory_name = settings["oasis_directory_name"])
+    
+    # path to info file
+    if is_sub_wateruse:
+        info_file = os.path.join(info_dir, settings["sub_wateruse_info_file_name"])
+    else:
+        info_file = os.path.join(info_dir, settings["wateruse_info_file_name"])
+
+    # print input and output information
+    helpers.print_input_output_info( 
+        input_dict = {"simulation_directory": settings["simulation_directory"],
+                      "wateruse_prepend_name": settings["wateruse_prepend_name"],
+                      "wateruse_directory_name": settings["wateruse_directory_name"],
+                      "wateruse_info_file_name": settings["wateruse_info_file_name"],
+                      "wateruse_non_intersecting_file_name": settings["wateruse_non_intersecting_file_name"],
+                      "sub_wateruse_info_file_name": settings["sub_wateruse_info_file_name"],
+        },
+        output_dict = {"info_dir": info_dir, "info_file": info_file, "ecoflow_dir": ecoflow_dir, "oasis_dir": oasis_dir}
+    )
+
+    return info_dir, ecoflow_dir, oasis_dir, info_file
+
 def process_intersecting_centroids(intersecting_centroids, settings, ecoflow_dir, oasis_dir):
     """    
     Apply water use data to a WATER \*.txt file. The new file created is saved to the same
@@ -99,31 +148,14 @@ def apply_wateruse(settings):
     Uses settings set in user_settings.py  
     """   
 
-	# create output directories   
-    info_dir = helpers.make_directory(path = settings["simulation_directory"], directory_name = settings["info_directory_name"])    
-    ecoflow_dir = helpers.make_directory(path = settings["simulation_directory"], directory_name = settings["ecoflow_directory_name"])
-    oasis_dir = helpers.make_directory(path = settings["simulation_directory"], directory_name = settings["oasis_directory_name"])
-    
+	# create output directories and files   
+    info_dir, ecoflow_dir, oasis_dir, info_file = create_output_dirs_files(settings)
+
     # initialize error logging in info_dir
     waterapputils_logging.initialize_loggers(output_dir = info_dir) 
 
-    # create full path to info_file
-    wateruse_info_file = os.path.join(info_dir, settings["wateruse_info_file_name"])
-
-    # print input and output information
-    helpers.print_input_output_info( 
-        input_dict = {"simulation_directory": settings["simulation_directory"],
-                      "wateruse_prepend_name": settings["wateruse_prepend_name"],
-                      "wateruse_directory_name": settings["wateruse_directory_name"],
-                      "wateruse_info_file_name": settings["wateruse_info_file_name"],
-                      "wateruse_non_intersecting_file_name": settings["wateruse_non_intersecting_file_name"],
-                      "sub_wateruse_info_file_name": settings["sub_wateruse_info_file_name"],
-        },
-        output_dict = {"info_dir": info_dir, "info_file": wateruse_info_file, "ecoflow_dir": ecoflow_dir, "oasis_dir": oasis_dir}
-    )
-
     # write all future print strings to the info_file
-    sys.stdout = open(wateruse_info_file, "w")  
+    sys.stdout = open(info_file, "w")  
     
     # open shapefiles
     centroids_shapefile = osgeo.ogr.Open(settings["wateruse_centroids_shapefile"]) 
@@ -134,16 +166,18 @@ def apply_wateruse(settings):
 
     intersecting_centroids, nonintersecting_centroids = spatialvectors.validate_field_values(field_values_dict = intersecting_centroids_all)     
 
+    # apply water use
     if intersecting_centroids:    
         process_intersecting_centroids(intersecting_centroids, settings, ecoflow_dir, oasis_dir)
 
+    # if no intersecting centroids, then warn the user and ask user to supply the water use points to a text file that will be contained in the info directory with a name specified in the user_settings.py file
     if nonintersecting_centroids:
         
-        logging.warn("The following basins do not intersect with the water use centroids for water use:\n    {}\n".format(nonintersecting_centroids)) 
+        logging.warn("The following basins do not intersect with the water use centroids for water use:\n\n    {}\n".format(nonintersecting_centroids)) 
               
         spatialvectors.write_field_values_file(filepath = info_dir, filename = settings["wateruse_non_intersecting_file_name"], field_values_dict = nonintersecting_centroids)
         
-        logging.warn("Writing file:\n    {}\n\n    Please add centroids (separated by commas) that you would like to use for each non-intersecting basin".format(os.path.join(info_dir, settings["wateruse_non_intersecting_file_name"])))
+        logging.warn("\nPlease add centroids (separated by commas) that you would like to use for each non-intersecting basin to the file\n    {}".format(os.path.join(info_dir, settings["wateruse_non_intersecting_file_name"])))
 
     # get drainage areas for ecoflow program; if shapefile has an area field, then use that otherwise calculate area
     if settings["basin_shapefile_area_field"]:
@@ -159,30 +193,36 @@ def apply_wateruse(settings):
     waterapputils_logging.remove_loggers()
 
 
-def apply_subwateruse_to_txt_files(files_dict, arguments):
+def apply_subwateruse(settings):
+    """    
+    Apply substitute water use data to a WATER \*.txt file(s).  
+    User supplies the water use points to a text file that will be 
+    contained in the info directory with a name specified in the user_settings.py file 
 
-    info_dir = os.path.join(files_dict["watertxt_directory"], BATCH_INFO_DIR)    
-    ecoflow_dir = helpers.make_directory(path = files_dict["watertxt_directory"], directory_name = ECOFLOW_DIR)
+    Parameters
+    ----------
+    settings : dictionary
+        Dictionary of user settings                 
 
+    Notes
+    -----
+    Uses settings set in user_settings.py  
+    """   
+
+    # create output directories and files   
+    info_dir, ecoflow_dir, oasis_dir, info_file = create_output_dirs_files(settings, is_sub_wateruse = True)
+
+    # initialize error logging in info_dir
     waterapputils_logging.initialize_loggers(output_dir = info_dir) 
 
-    info_file = os.path.join(info_dir, SUBWATERUSE_INFO_FILE)
+    # write all future print strings to the info_file
+    sys.stdout = open(info_file, "w")  
 
-    print("Using the following data files:\n")
-    
-    for key, value in files_dict.iteritems():
-        print("    {} : {}".format(key, value))
+    # get the intersecting points (centroids) based on wateruse non-intersecting_file
+    intersecting_centroids = spatialvectors.read_field_values_file(filepath = os.path.join(info_dir, settings["wateruse_non_intersecting_file_name"]))
 
-    print("")
-    print("Batch Run Information:\n    {}\n".format(info_dir))
-
-    print("Water Use Information and Values:\n    {}\n".format(info_file))
-
-    sys.stdout = open(info_file, "a")  
-
-    intersecting_centroids = spatialvectors.read_field_values_file(filepath = files_dict["non_intersecting_basin_centroids_file"])
-
-    process_intersecting_centroids(intersecting_centroids, files_dict, arguments, ecoflow_dir)
+    # apply the wateruse     
+    process_intersecting_centroids(intersecting_centroids, settings, ecoflow_dir, oasis_dir)
 
     waterapputils_logging.remove_loggers()
 

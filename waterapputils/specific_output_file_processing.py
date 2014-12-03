@@ -6,6 +6,7 @@ import logging
 # my modules
 import helpers
 import watertxt
+import waterxml
 import spatialvectors
 import wateruse
 import waterapputils_logging
@@ -36,8 +37,6 @@ def write_ecoflow_file_stationid(file_list, dir_name, file_name):
     for f in file_list:
                
         filedir, filename = helpers.get_file_info(f)       
- 
-        print("Processing: \n    {}\n".format(f))
 
         ecoflow_dir = helpers.make_directory(path = filedir, directory_name = dir_name)
 
@@ -48,9 +47,7 @@ def write_ecoflow_file_stationid(file_list, dir_name, file_name):
         watertxt_data = watertxt.read_file(f)      
 
         # write timeseries of dishcarge + water use for ecoflow program
-        watertxt.write_timeseries_file_stationid(watertxt_data, name = "Discharge + Water Use", save_path = ecoflow_dir, filename = "", stationid = watertxt_data["stationid"])
-
-        print("Output: \n    {}\n\n".format(ecoflow_dir))
+        watertxt.write_timeseries_file_stationid(watertxt_data, name = "Discharge + Water Use", save_path = ecoflow_dir, filename = file_name, stationid = watertxt_data["stationid"])
                 
         waterapputils_logging.remove_loggers()
 
@@ -112,10 +109,13 @@ def write_ecoflow_file_drainageareashp(file_list, dir_name, file_name, label_fie
     Write a csv file containing a label (basin id number) and its corresponding area.
     Two methods to get the area from each respective shapefile:
 
-        1. if shapefile has an area field and user specifies it in user_settings.py then
-        get the area for each basin using the specified area field name (query_field)
+        1. if shapefile(s) has an area field and user specifies it in user_settings.py 
+        under the *basin_shapefile_area_field* variable then get the area for each
+        basin using the specified area field name (query_field)
         
-        2. if 
+        2. if shapefile(s) do not have an area field or user does not specify is in
+        user_settings.py, then calculate it using osgeo and label each basin according
+        to *basin_shapefile_id_field* in user_settings.py 
 
     Parameters
     ----------
@@ -147,18 +147,21 @@ def write_ecoflow_file_drainageareashp(file_list, dir_name, file_name, label_fie
 
         # get the area means for each region
         if query_field:
-            area_values_dict = spatialvectors.get_field_values(shapefile = basin_shapefile, id_field = label_field, query_field = query_field)   
+            areas = spatialvectors.get_field_values(shapefile = basin_shapefile, id_field = label_field, query_field = query_field)   
         else:
             if label_field:
                 areas = spatialvectors.get_shapefile_areas(basin_shapefile, id_field = label_field)
+
+                # convert from m**2 to mi**2; water application uses NAD83 projection with units of meters
+                areas = helpers.convert_area_values(areas, in_units = "m2", out_units = "mi2")
             else:
                 areas = spatialvectors.get_shapefile_areas(basin_shapefile, id_field = "FID")
 
-        # convert from m**2 to mi**2; water application uses NAD83 projection with units of meters
-        area_data = helpers.convert_area_values(areas, in_units = "m2", out_units = "mi2")
+                # convert from m**2 to mi**2; water application uses NAD83 projection with units of meters
+                areas = helpers.convert_area_values(areas, in_units = "m2", out_units = "mi2")
 
         # write timeseries of dishcarge + water use for ecoflow program
-        watertxt.write_drainagearea_file(area_data = area_data, save_path = ecoflow_dir, filename = file_name)
+        watertxt.write_drainagearea_file(area_data = areas, save_path = ecoflow_dir, filename = file_name)
             
     waterapputils_logging.remove_loggers()
     
