@@ -5,6 +5,7 @@
 run_txt()
 {
 
+    echo "--- $0 is running TEXT sample datasets ---"
     echo
     python waterapputils/waterapputils.py -watertxt data/watertxt-datafiles/WATER-basin-01413500.txt 
     python waterapputils/waterapputils.py -watertxt data/watertxt-datafiles/WATER-basin-01420500.txt
@@ -15,6 +16,7 @@ run_txt()
 run_xml()
 {
 
+    echo "--- $0 is running XML sample datasets ---"
     echo
 	python waterapputils/waterapputils.py -waterxml data/waterxml-datafiles/WATERSimulation-basin-01413500.xml 
 	python waterapputils/waterapputils.py -waterxml data/waterxml-datafiles/WATERSimulation-basin-01420500.xml
@@ -24,18 +26,100 @@ run_xml()
 
 run_wateruse()
 {
+    # applying wateruse requires many inputs, and those inputs are specified in the user_settings.py file which can relative paths from the directory containing the python code
+    # this requires changing directories into the waterapputils directory in order to run the sample datasets
+
+    cd waterapputils/
+    echo "--- $0 is running water use with sample datasets; single and batch ---"
     echo
-    python waterapputils/waterapputils.py -applywateruse
+    echo "single simulation"
+    python waterapputils.py -applywateruse -samplesingle
+    echo
+    echo "batch simulation"
+    python waterapputils.py -applywateruse -samplebatch
     echo 
+}
+
+run_subwateruse()
+{
+    echo "--- $0 is running sub water use with sample datasets ---"
+    echo
+    file=data/sample-water-simulations/sample-batch-simulation/waterapputils-info/wateruse_non_intersecting_centroids.txt
+    if [ -f $file ]; then 
+        echo "substitiuting basin id 262 for 000 in sub water use file"
+        sed -i.bak 's/000/262/g' $file
+        
+        cd waterapputils/
+        python waterapputils.py -applysubwateruse -samplebatch
+    else
+       echo "ERROR - file does not exist - $file" >&2
+       exit 1 
+    fi
+}
+
+run_oasis()
+{
+
+    echo "--- $0 is running oasis output ---"
+    echo
+    python waterapputils/waterapputils.py -oasis data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt 
+    echo     
+}
+
+run_ecoflowstationid()
+{
+
+    echo "--- $0 is running ecoflowstationid output ---"
+    echo
+    python waterapputils/waterapputils.py -ecoflowstationid data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt
+    echo     
+}
+
+run_ecoflowdaxml()
+{
+    
+    echo "--- $0 is running ecoflow drainage area using xml file ---"
+    echo
+    python waterapputils/waterapputils.py -ecoflowdaxml data/sample-water-simulations/sample-datafiles/WATERSimulation-basin0.xml -outfilename drainagearea-from-xml.csv
+    echo     
+
+}
+
+run_ecoflowdashp()
+{
+    
+    echo "--- $0 is running ecoflow drainage area using shapefiles ---"
+    echo
+    python waterapputils/waterapputils.py -ecoflowdashp data/sample-water-simulations/sample-datafiles/Watersheds.shp -outfilename drainagearea-Watersheds.csv -labelfield STAID -areafield da_sqmi
+    python waterapputils/waterapputils.py -ecoflowdashp data/sample-water-simulations/sample-datafiles/basin0.shp -outfilename drainagearea-basin0-sqmi.csv -areafield area_sqmi
+    python waterapputils/waterapputils.py -ecoflowdashp data/sample-water-simulations/sample-datafiles/basin0.shp -outfilename drainagearea-basin0-sqkm.csv -areafield area_sqkm
+    python waterapputils/waterapputils.py -ecoflowdashp data/sample-water-simulations/sample-datafiles/basin0.shp -outfilename drainagearea-basin0-sqm.csv -areafield area_sqm
+    python waterapputils/waterapputils.py -ecoflowdashp data/sample-water-simulations/sample-datafiles/basin0.shp -outfilename drainagearea-basin0-calculated-sqmi.csv 
+    echo     
+
 }
 
 run_all()
 {
 
-    echo 
+    echo "--- $0 is running ALL sample datasets ---"
+    echo
+    run_tests
     run_txt
     run_xml
+    run_oasis
+    run_ecoflowstationid
+    run_ecoflowdaxml
+    run_ecoflowdashp
     run_wateruse
+    echo
+}
+
+run_tests()
+{
+    echo "--- $0 is running tests ---"
+    echo
+    nosetests
     echo
 }
 
@@ -43,8 +127,10 @@ usage()
 {
 
 	echo "Usage:"
-	echo "    run_sample_datasets [[[-txt] [-xml] [-all]] | [-h]]"
+	echo "    run_sample_datasets [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid] [ecoflowdaxml] [-ecoflowdashp] [-all] [tests]] | [-h]]"
 }
+
+# main program
 
 # if no arguments, then run everything
 if [ "$1" = "" ]; then
@@ -55,25 +141,33 @@ fi
 # if there are options, then processing accordingly
 while [ "$1" != "" ]; do
 	case $1 in
-		-txt )           echo "$0 is running TEXT sample datasets"
-		                 run_txt
-                         ;;
-		-xml )           echo "$0 is running XML sample datasets"
-                         run_xml
-                         ;;
-        -wateruse )      echo "$0 is running water use sample datasets as specified in user_settings.py"
-                         run_wateruse
-                         ;;
-        -all )           echo "$0 is running ALL sample datasets"
-                         run_all
-                         ;;
-        -h | --help )    usage
-                         exit
-                         ;;
-        * )              usage
-                         exit
-                         ;;
+		-txt )                       run_txt
+                                     ;;
+		-xml )                       run_xml
+                                     ;;
+        -wateruse )                  run_wateruse
+                                     ;;
+        -subwateruse )               run_subwateruse
+                                     ;;
+        -oasis )                     run_oasis
+                                     ;;
+        -ecoflowstationid )          run_ecoflowstationid
+                                     ;;
+        -ecoflowdaxml )              run_ecoflowdaxml
+                                     ;;
+        -ecoflowdashp )              run_ecoflowdashp
+                                     ;;
+        -all )                       run_all
+                                     ;;
+        -tests )                     run_tests
+                                     ;;
+        -h | --help )                usage
+                                     exit
+                                     ;;
+        * )                          usage
+                                     exit
+                                     ;;
     esac
-    shift
+    shift 
 done
 

@@ -38,7 +38,7 @@ Output:
 --- WATER TEXT FILE INFORMATION ---
 User: jlant
 Date created: 11/28/2014 2:55:34 PM
-StationID: 20141128_test
+StationID: basin0
 Parameters:
   Discharge (cfs)
       mean: 194.830799546

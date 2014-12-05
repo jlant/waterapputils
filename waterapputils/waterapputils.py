@@ -4,7 +4,7 @@
 
 :Author: Jeremiah Lant, jlant@usgs.gov, U.S. Geological Survey, Kentucky Water Science Center, http://www.usgs.gov/ 
 
-:Synopsis: Main controller that handles user input options for processing WATER application output files
+:Synopsis: Main controller that handles user input options for processing WATER application simulations and output files
 """
 
 __version__   = "1.0.0"
@@ -34,6 +34,7 @@ def main():
     # parse arguments from command line
     parser = argparse.ArgumentParser(description = "Read, process, log errors, print, and plot data from WATER capplication output data files.") 
     group = parser.add_mutually_exclusive_group()
+
     group.add_argument("-watertxt", "--watertxtfiles", nargs = "+", help = "List WATER text data file(s) to be processed")
     group.add_argument("-watertxtfd", "--watertxtfiledialog", action = "store_true", help = "Open a file dialog window to select WATER text data file(s).")
     group.add_argument("-watertxtcmp", "--watertxtcompare", nargs = 2, help = "List 2 WATER text data file(s) to be compared")
@@ -44,28 +45,30 @@ def main():
     group.add_argument("-waterxmlcmp", "--waterxmlcompare", nargs = 2, help = "List 2 WATER xml data file(s) to be compared")
     group.add_argument("-waterxmlcmpfd", "--waterxmlcomparefiledialog", action = "store_true", help = "Open 2 separate file dialog windows to select WATER XML data file(s) to be compared")
 
-    group.add_argument("-applywateruse", "--applywateruse", action = "store_true", help = "Apply water use data to a WATER.txt file for a WATER simulation.  Use wateruse_batch_variables.py to enter paths to data files.")
+    group.add_argument("-applywateruse", "--applywateruse", action = "store_true", help = "Apply water use data to a WATER.txt file(s) for a WATER simulation.  Use user_settings.py to enter paths to data files.")
+    group.add_argument("-applysubwateruse", "--applysubwateruse", action = "store_true", help = "Apply substitute water use data. Uses sub_wateruse_info_file_name variable in user_settings.py")
 
-    group.add_argument("-applydeltas", "--applydeltas", action = "store_true", help = "Apply global climate deltas to a WATERSimulation.xml file for a WATER simulations.  Use waterdelta_batch_variables.py to enter paths to data files.")
-
-    group.add_argument("-applysubwateruse", "--applysubwateruse", action = "store_true", help = "Apply updated water use data from '_non_intersecting_basin_centroids.txt' to a WATER.txt file for a WATER simulation.  Use wateruse_batch_variables.py to enter paths to data files.")
-
-    group.add_argument("-applysubdeltas", "--applysubdeltas", action = "store_true", help = "Apply updated water deltas data from '_non_intersecting_basin_tiles.txt' to a WaterSimulation.xml file for a WATER simulation.  Use wateruse_deltas_variables.py to enter paths to data files.")
+    group.add_argument("-applydeltas", "--applydeltas", action = "store_true", help = "Apply global climate deltas to a WATERSimulation.xml file for a WATER simulations.  Use user_settings.py to enter paths to data files.")
+    group.add_argument("-applysubdeltas", "--applysubdeltas", action = "store_true", help = "Apply updated water deltas data. Uses sub_gcm_delta_info_file_name variable in user_settings.py ")
 
     group.add_argument("-oasis", "--oasis", nargs = "+", help = "List WATER text data file(s) that have Discharge + Water Use")
     group.add_argument("-ecoflowstationid", "--ecoflowstationid", nargs = "+", help = "List WATER text data file(s) that have Discharge + Water Use")
-    group.add_argument("-ecoflowdrainageareaxml", "--ecoflowdrainageareaxml", nargs = "+", help = "List WATER xml data file(s)")
-    group.add_argument("-ecoflowdrainageareashp", "--ecoflowdrainageareashp", nargs = "+", help = "List shapefiles(s)")
+    group.add_argument("-ecoflowdaxml", "--ecoflowdaxml", nargs = "+", help = "List WATER xml data file(s)")
+    group.add_argument("-ecoflowdashp", "--ecoflowdashp", nargs = "+", help = "List shapefiles(s)")
 
     parser.add_argument("-v", "--verbose", action = "store_true",  help = "Print general information about data file(s)")
-    parser.add_argument("-labelfield", "--labelfield", nargs = 1,  help = "Write field name in shapefile to use in labeling drainageare.csv")    
-    parser.add_argument("-areafield", "--areafield", nargs = 1,  help = "Write area field name in shapefile to use in drainageare.csv") 
+    parser.add_argument("-outfilename", "--outfilename", nargs = 1,  help = "Write file name to write drainage area csv file.")  
+    parser.add_argument("-labelfield", "--labelfield", nargs = 1,  help = "Write field name in shapefile to use in labeling drainagearea.csv")    
+    parser.add_argument("-areafield", "--areafield", nargs = 1,  help = "Write area field name in shapefile to use in drainagearea.csv")
+    parser.add_argument("-samplesingle", "--samplesingle", action = "store_true",  help = "Flag to use sample single batch settings user_settings.py") 
+    parser.add_argument("-samplebatch", "--samplebatch", action = "store_true",  help = "Flag to use sample batch batch settings user_settings.py") 
 
     args = parser.parse_args()  
 
     # get files from command line arguments and process
     try:       
 
+        # text file processing
         if args.watertxtfiles:
             
             water_files_processing.process_water_files(file_list = args.watertxtfiles, settings = user_settings.settings, print_data = args.verbose)            
@@ -101,8 +104,8 @@ def main():
             water_files_processing.process_cmp(file_list = [file1, file2], settings = user_settings.settings, print_data = args.verbose)   
             
             sys.exit()
-            
-        # ---------------------------------------------------------------------
+        
+        # xml file processing  
         elif args.waterxmlfiles:
             
             water_files_processing.process_water_files(file_list = args.waterxmlfiles, settings = user_settings.settings, print_data = args.verbose)        
@@ -137,13 +140,19 @@ def main():
             
             sys.exit()
 
-        # --------------------------------------------------------------------
-
+        # applying water use
         elif args.applywateruse:          
 
-            print("\nProcessing wateruse ... please wait\n")                       
+            print("\nProcessing wateruse ... please wait\n")
 
-            wateruse_processing.apply_wateruse(settings = user_settings.settings)
+            if args.samplesingle:
+                settings = user_settings.sample_single_settings
+            elif args.samplebatch:
+                settings = user_settings.sample_batch_settings
+            else:
+                settings = user_settings.settings                       
+
+            wateruse_processing.apply_wateruse(settings = settings)
 
             sys.exit()
 
@@ -151,10 +160,18 @@ def main():
 
             print("\nProcessing sub wateruse ... please wait\n")  
 
-            wateruse_processing.apply_subwateruse(settings = user_settings.settings)
+            if args.samplesingle:
+                settings = user_settings.sample_single_settings
+            elif args.samplebatch:
+                settings = user_settings.sample_batch_settings
+            else:
+                settings = user_settings.settings 
+
+            wateruse_processing.apply_subwateruse(settings = settings)
 
             sys.exit()
 
+        # applying gcm deltas
         # elif args.applydeltas:
 
         #     print("\nProcessing gcm deltas ... please wait\n")                                   
@@ -170,31 +187,59 @@ def main():
 
         # ---------------------------------------------------------------------
 
+        # writing specific outputs; oasis and ecoflow files
         elif args.oasis:
+
+            if args.outfilename:
+                oasis_file_name = args.outfilename[0]
+            else:
+                oasis_file_name = user_settings.settings["oasis_file_name"]
            
-            specific_output_file_processing.write_oasis_file(file_list = args.oasis, dir_name = user_settings.settings["oasis_directory_name"], file_name = user_settings.settings["oasis_file_name"])            
+            specific_output_file_processing.write_oasis_file(file_list = args.oasis, dir_name = user_settings.settings["oasis_directory_name"], file_name = oasis_file_name)            
             
             sys.exit()
 
         elif args.ecoflowstationid:
+
+            if args.outfilename:
+                ecoflow_file_name = args.outfilename[0]
+            else:
+                ecoflow_file_name = user_settings.settings["ecoflow_file_name"]
            
-            specific_output_file_processing.write_ecoflow_file_stationid(file_list = args.ecoflowstationid, dir_name = user_settings.settings["ecoflow_directory_name"], file_name = user_settings.settings["ecoflow_file_name"])        
+            specific_output_file_processing.write_ecoflow_file_stationid(file_list = args.ecoflowstationid, dir_name = user_settings.settings["ecoflow_directory_name"], file_name = ecoflow_file_name)        
             
             sys.exit()
 
-        elif args.ecoflowdrainageareaxml:
-           
-            specific_output_file_processing.write_ecoflow_file_drainageareaxml(file_list = args.ecoflowdrainageareaxml, dir_name = user_settings.settings["ecoflow_directory_name"], file_name = user_settings.settings["ecoflow_drainage_area_file_name"])           
+        elif args.ecoflowdaxml:
+
+            if args.outfilename:
+                da_file_name = args.outfilename[0]
+            else:
+                da_file_name = user_settings.settings["ecoflow_drainage_area_file_name"]
+
+            specific_output_file_processing.write_ecoflow_file_drainageareaxml(file_list = args.ecoflowdaxml, dir_name = user_settings.settings["ecoflow_directory_name"], file_name = da_file_name)           
             
             sys.exit()
 
-        elif args.ecoflowdrainageareashp:
+        elif args.ecoflowdashp:
 
-            specific_output_file_processing.write_ecoflow_file_drainageareashp(file_list = args.ecoflowdrainageareashp, 
-                                                                               dir_name = user_settings.settings["ecoflow_directory_name"], 
-                                                                               file_name = user_settings.settings["ecoflow_drainage_area_file_name"], 
-                                                                               label_field = user_settings.settings["basin_shapefile_id_field"], 
-                                                                               query_field = user_settings.settings["basin_shapefile_area_field"],
+            if args.outfilename:
+                da_file_name = args.outfilename[0]
+            else:
+                da_file_name = user_settings.settings["ecoflow_drainage_area_file_name"]
+
+            if args.labelfield:
+                label_field = args.labelfield[0]
+            else:
+                label_field = ""           
+
+            if args.areafield:
+                area_field = args.areafield[0]
+            else:
+                area_field = ""  
+
+            specific_output_file_processing.write_ecoflow_file_drainageareashp(file_list = args.ecoflowdashp, dir_name = user_settings.settings["ecoflow_directory_name"], 
+                                                                               file_name = da_file_name, label_field = label_field, query_field = area_field,
             )
 
             sys.exit()

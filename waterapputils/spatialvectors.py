@@ -77,58 +77,6 @@ def get_shapefile_coords(shapefile):
     
     return coords
 
-def get_shapefile_areas(shapefile, id_field):
-    """   
-    Get the areas of each feature in a shapefile. 
-    Loops through each feature contained in a shapefile (e.g. each FID) and gets the area. 
-    Returns a dictionary containing keys that correspond to each feature, namely,
-    the features FID number with corresponding area values.
-    
-    Parameters
-    ----------
-    shapefile : osgeo.ogr.DataSource 
-        A shapefile object.        
-    id_field : string
-        A string id id_field to use as keys in return dictionary
-
-    Returns
-    -------
-    areas : dictionary
-        Dictionary containing feature id and areas
-
-    Notes
-    ----- 
-    Area units are in the linear units of the projected coordinate system
-    """   
-    
-    # get shapefile data
-    shapefile_data = fill_shapefile_dict(shapefile)
-
-    # make sure the id field is in the list of fields, if not, then set to "FID"
-    if id_field:
-        assert id_field in shapefile_data["fields"], \
-               "Field does not exist in shapefile.\nField: {}\nShapefile: {}\n  fields: {}".format(intersector_field, intersector_data["name"], intersector_data["fields"])
-    else:
-        id_field = "FID"
-
-    shapefile_layer = shapefile.GetLayer()
-    
-    areas = {}
-    for feature_num in range(shapefile_layer.GetFeatureCount()):
-        shapefile_feature = shapefile_layer.GetFeature(feature_num)
-        shapefile_geometry = shapefile_feature.GetGeometryRef()            
-        area = shapefile_geometry.GetArea()           
-
-        # assign the features FID as the key in coords with corresponding lon and lat values
-        if id_field == "FID":
-            id_field_value = str(shapefile_feature.GetFID())
-        else:
-            id_field_value = str(shapefile_feature.GetField(id_field))
-
-        areas[id_field_value] = area
-    
-    return areas
-
 def fill_shapefile_dict(shapefile):
     """   
     Get general shapefile information data source.
@@ -180,7 +128,7 @@ def fill_shapefile_dict(shapefile):
     return shapefile_dict
 
 
-def get_intersected_field_values(intersector, intersectee, intersectee_field, intersector_field = "FID"):
+def get_intersected_field_values(intersector, intersectee, intersectee_field, intersector_field):
     """   
     Get the intersectee field values of interest associated with a shapefile 
     that is intersected by another shapefile.  A dictionary is returned with key(s) 
@@ -337,7 +285,7 @@ def read_field_values_file_in(filestream):
     return field_values_dict
         
 
-def write_field_values_file(filepath, filename, field_values_dict):
+def write_field_values_file(filepath, filename, field_values_dict, special_centroid_number = "000"):
     """
     Write a file containing rows of basin ids that are not intersected by any water use basin centroids
 
@@ -352,9 +300,9 @@ def write_field_values_file(filepath, filename, field_values_dict):
     """
     fullpath = os.path.join(filepath, filename)
     with open(fullpath, "w") as f:
-        f.write("basinid,centroids\n")        
+        f.write("basinid,newhydroid\n")        
         for key in field_values_dict.keys():
-            f.write(key + ",\n")
+            f.write("{},{}".format(key, special_centroid_number))
 
 def get_field_values(shapefile, id_field, query_field):
     """
@@ -380,12 +328,12 @@ def get_field_values(shapefile, id_field, query_field):
 
     if id_field:
         assert id_field in shapefile_data["fields"], \
-        "ID Field does not exist in shapefile.\nField: {}\nShapefile: {}\n  fields: {}".format(field, shapefile_data["name"], shapefile_data["fields"])
+        "ID Field does not exist in shapefile.\nField: {}\nShapefile: {}\n  fields: {}".format(id_field, shapefile_data["name"], shapefile_data["fields"])
     else:
         id_field = "FID"
 
     assert query_field in shapefile_data["fields"], \
-        "Field does not exist in shapefile.\nField: {}\nShapefile: {}\n  fields: {}".format(field, shapefile_data["name"], shapefile_data["fields"])
+        "Field does not exist in shapefile.\nField: {}\nShapefile: {}\n  fields: {}".format(query_field, shapefile_data["name"], shapefile_data["fields"])
 
     shapefile_layer = shapefile.GetLayer()
 
@@ -398,7 +346,7 @@ def get_field_values(shapefile, id_field, query_field):
         else:
             id_field_value = str(shapefile_feature.GetField(id_field))
 
-        query_field_value = float(shapefile_feature.GetField(query_field))
+        query_field_value = str(shapefile_feature.GetField(query_field))
 
         if id_field_value and query_field_value:       
             field_values_dict[id_field_value] = query_field_value
@@ -407,6 +355,100 @@ def get_field_values(shapefile, id_field, query_field):
 
     return field_values_dict
 
+def get_shapefile_areas(shapefile, id_field = ""):
+    """   
+    Get the areas of each feature in a shapefile. 
+    Loops through each feature contained in a shapefile (e.g. each FID) and gets the area. 
+    Returns a dictionary containing keys that correspond to each feature, namely,
+    the features FID number with corresponding area values.
+    
+    Parameters
+    ----------
+    shapefile : osgeo.ogr.DataSource 
+        A shapefile object.        
+    id_field : string
+        A string id id_field to use as keys in return dictionary
+
+    Returns
+    -------
+    areas : dictionary
+        Dictionary containing feature id and areas
+
+    Notes
+    ----- 
+    Area units are in the linear units of the projected coordinate system
+    """   
+    
+    # get shapefile data
+    shapefile_data = fill_shapefile_dict(shapefile)
+
+    # make sure the id field is in the list of fields, if not, then set to "FID"
+    if id_field:
+        assert id_field in shapefile_data["fields"], \
+               "Field does not exist in shapefile.\nField: {}\nShapefile: {}\n  fields: {}".format(intersector_field, intersector_data["name"], intersector_data["fields"])
+    else:
+        id_field = "FID"
+
+    shapefile_layer = shapefile.GetLayer()
+    
+    areas = {}
+    for feature_num in range(shapefile_layer.GetFeatureCount()):
+        shapefile_feature = shapefile_layer.GetFeature(feature_num)
+        shapefile_geometry = shapefile_feature.GetGeometryRef()            
+        area = shapefile_geometry.GetArea()           
+
+        # assign the features FID as the key in coords with corresponding lon and lat values
+        if id_field == "FID":
+            id_field_value = str(shapefile_feature.GetFID())
+        else:
+            id_field_value = str(shapefile_feature.GetField(id_field))
+
+        areas[id_field_value] = area
+    
+    return areas
+
+def get_areas_dict(shapefile, id_field, query_field):
+    """
+    Wrapper for get_shapefile_areas().  If there is no query_field (e.g. area_field),
+    then calculate the area.  All WATER application shapefiles are in the Albers NAD83 projection,
+    so areas are in units of meters squared by default.  Convert from units of meters squared
+    to units of miles squared. 
+
+    Parameters
+    ----------
+    shapefile : osgeo.ogr.DataSource 
+        A shapefile object.        
+    id_field : string
+        A string id id_field to use as keys in return dictionary
+    query_field : string
+        A string field that exists in shapefile
+
+    Returns
+    -------
+    areas : dictionary
+        Dictionary containing feature id and areas
+
+    Notes
+    ----- 
+    Area units are in the linear units of the projected coordinate system. 
+    All WATER application shapefiles are in the Albers NAD83 projection. 
+    """
+    # get the areas for each region
+    if query_field:
+        areas = get_field_values(shapefile = shapefile, id_field = id_field, query_field = query_field)   
+    else:
+        if id_field:
+            areas = get_shapefile_areas(shapefile, id_field = id_field)
+
+            # convert from m**2 to mi**2; water application uses NAD83 projection with units of meters
+            areas = helpers.convert_area_values(areas, in_units = "m2", out_units = "mi2")
+        else:
+            areas = get_shapefile_areas(shapefile)
+
+            # convert from m**2 to mi**2; water application uses NAD83 projection with units of meters
+            areas = helpers.convert_area_values(areas, in_units = "m2", out_units = "mi2")  
+
+    return areas
 
 def _print_test_info(expected, actual):
     """   

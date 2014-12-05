@@ -1,3 +1,18 @@
+# -*- coding: utf-8 -*-
+"""
+:Module: wateruse_processing.py
+
+:Author: Jeremiah Lant, jlant@usgs.gov, U.S. Geological Survey, Kentucky Water Science Center, http://www.usgs.gov/ 
+
+:Synopsis: Handles specific output file processing for external OASIS and Ecoflow programs.
+"""
+
+__version__   = "1.0.0"
+__author__   = "Jeremiah Lant, jlant@usgs.gov, U.S. Geological Survey, Kentucky Water Science Center."
+__copyright__ = "http://www.usgs.gov/visual-id/credit_usgs.html#copyright"
+__license__   = __copyright__
+__contact__   = __author__
+
 import os
 import sys
 import osgeo.ogr
@@ -142,26 +157,15 @@ def write_ecoflow_file_drainageareashp(file_list, dir_name, file_name, label_fie
  
         helpers.print_input_output_info(input_dict = {"input_file": f}, output_dict = {"output_directory": ecoflow_dir})
 
-        # Open the shapefiles
         basin_shapefile = osgeo.ogr.Open(f)  
 
-        # get the area means for each region
-        if query_field:
-            areas = spatialvectors.get_field_values(shapefile = basin_shapefile, id_field = label_field, query_field = query_field)   
-        else:
-            if label_field:
-                areas = spatialvectors.get_shapefile_areas(basin_shapefile, id_field = label_field)
-
-                # convert from m**2 to mi**2; water application uses NAD83 projection with units of meters
-                areas = helpers.convert_area_values(areas, in_units = "m2", out_units = "mi2")
-            else:
-                areas = spatialvectors.get_shapefile_areas(basin_shapefile, id_field = "FID")
-
-                # convert from m**2 to mi**2; water application uses NAD83 projection with units of meters
-                areas = helpers.convert_area_values(areas, in_units = "m2", out_units = "mi2")
+        # get the areas for each region
+        areas = spatialvectors.get_areas_dict(shapefile = basin_shapefile, id_field = label_field, query_field = query_field)
 
         # write timeseries of dishcarge + water use for ecoflow program
         watertxt.write_drainagearea_file(area_data = areas, save_path = ecoflow_dir, filename = file_name)
             
     waterapputils_logging.remove_loggers()
-    
+ 
+
+ 

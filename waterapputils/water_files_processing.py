@@ -1,3 +1,18 @@
+# -*- coding: utf-8 -*-
+"""
+:Module: wateruse_processing.py
+
+:Author: Jeremiah Lant, jlant@usgs.gov, U.S. Geological Survey, Kentucky Water Science Center, http://www.usgs.gov/ 
+
+:Synopsis: Handles the WATER application file processing using settings from the user_settings.py file
+"""
+
+__version__   = "1.0.0"
+__author__   = "Jeremiah Lant, jlant@usgs.gov, U.S. Geological Survey, Kentucky Water Science Center."
+__copyright__ = "http://www.usgs.gov/visual-id/credit_usgs.html#copyright"
+__license__   = __copyright__
+__contact__   = __author__
+
 import os
 
 import watertxt
@@ -32,7 +47,7 @@ def process_water_files(file_list, settings, print_data = True):
             helpers.print_input_output_info(input_dict = {"input_file": f}, output_dict = {"output_directory": output_dir})
             waterapputils_logging.initialize_loggers(output_dir = output_dir) 
 
-            data = watertxt.read_file(f)                           
+            data = watertxt.read_file(f)                   
             watertxt_viewer.plot_watertxt_data(data, save_path = output_dir)
             if print_data: 
                 watertxt_viewer.print_watertxt_data(data) 

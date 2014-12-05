@@ -3,7 +3,7 @@
  ------------------------------------------------------------------------------
 User:	jlant
 Date:	11/28/2014 2:55:34 PM
-StationID:	20141128_test
+StationID:	basin0
 Date	Discharge (cfs)	Subsurface Flow (mm/day)	Impervious Flow (mm/day)	Infiltration Excess (mm/day)	Initial Abstracted Flow (mm/day)	Overland Flow (mm/day)	PET (mm/day)	AET(mm/day)	Average Soil Root zone (mm)	Average Soil Unsaturated Zone (mm)	Snow Pack (mm)	Precipitation (mm/day)	Storage Deficit (mm/day)	Return Flow (mm/day)	Water Use (cfs)	Discharge + Water Use (cfs)
 01/01/1981	48.2674995462	0.689705993486	2.50293901549e-08	0.0	1.02051348602e-05	0.0	1e-07	1e-07	61.3225938885	0.000824240242643	256.829775426	0.0	296.052896878	0.0	20.88765625	69.1551557962
 01/02/1981	46.1797237054	0.65998496723	2.50293902046e-08	0.0	1.02051348602e-05	0.0	1e-07	1e-07	61.3634804834	0.000362109272413	266.747232762	1.04274573359	296.706934472	0.0	20.88765625	67.0673799554

@@ -3,7 +3,7 @@
  ------------------------------------------------------------------------------
 User:	jlant
 Date:	11/28/2014 2:55:34 PM
-StationID:	20141128_test
+StationID:	basin0
 Water Year average monthly flow
 Year	Month	Discharge (cfs)	Subsurface Flow (mm/day)	Impervious Flow (mm/day)	Infiltration Excess (mm/day)	Overland Flow (mm/day)	PET (mm/day)	Snow Pack (mm)	Precipitation (mm/day)	Storage Deficit (mm/day)	Return Flow (mm/day)
 1982	10	172.506112797779	2.35973856133783	0.000291382544459738	0.0813034109837236	0	1.23577080442575	0	4.057915471241	280.75343151627	0

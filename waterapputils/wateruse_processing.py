@@ -1,3 +1,18 @@
+# -*- coding: utf-8 -*-
+"""
+:Module: wateruse_processing.py
+
+:Author: Jeremiah Lant, jlant@usgs.gov, U.S. Geological Survey, Kentucky Water Science Center, http://www.usgs.gov/ 
+
+:Synopsis: Handles the water use processing using settings from the user_settings.py file
+"""
+
+__version__   = "1.0.0"
+__author__   = "Jeremiah Lant, jlant@usgs.gov, U.S. Geological Survey, Kentucky Water Science Center."
+__copyright__ = "http://www.usgs.gov/visual-id/credit_usgs.html#copyright"
+__license__   = __copyright__
+__contact__   = __author__
+
 import os
 import sys
 import osgeo.ogr
@@ -173,21 +188,27 @@ def apply_wateruse(settings):
     # if no intersecting centroids, then warn the user and ask user to supply the water use points to a text file that will be contained in the info directory with a name specified in the user_settings.py file
     if nonintersecting_centroids:
         
-        logging.warn("The following basins do not intersect with the water use centroids for water use:\n\n    {}\n".format(nonintersecting_centroids)) 
-              
         spatialvectors.write_field_values_file(filepath = info_dir, filename = settings["wateruse_non_intersecting_file_name"], field_values_dict = nonintersecting_centroids)
+
+        warn_str = "The following basin(s) do not intersect with the water use centroids shapefile:\n    {}\n\n    centroids shapefile: {}\n    basin shapefile: {}\n".format(nonintersecting_centroids, 
+                                                                                                                                                                     settings["wateruse_centroids_shapefile"] , 
+                                                                                                                                                                     os.path.join(settings["simulation_directory"], settings["basin_shapefile_name"]))
+        instruction_str1 = "Using water use centriod id: 000.  This special water use centriod id specifies 0 cubic feet per second water use.\n"
+        instruction_str2 = "Writing the following wateruse non intersecting file that specifies the non intersecting basin(s) with the special water use centroid id:\n    {}\n".format(os.path.join(info_dir, settings["wateruse_non_intersecting_file_name"]))
+        instruction_str3 = "To apply water use to the non intersecting basin(s), add centroid(s) ids (newhydroid) (separated by commas) that you would like to use for each non intersecting basin to the wateruse non intersecting file."
+        logging.warn("\n{}\n{}\n{}\n{}\n".format(warn_str, instruction_str1, instruction_str2, instruction_str3)) 
         
-        logging.warn("\nPlease add centroids (separated by commas) that you would like to use for each non-intersecting basin to the file\n    {}".format(os.path.join(info_dir, settings["wateruse_non_intersecting_file_name"])))
+        # apply 0 cfs water use using the special centroid id of 000 
+        sub_intersecting_centroids = spatialvectors.read_field_values_file(filepath = os.path.join(info_dir, settings["wateruse_non_intersecting_file_name"]))
 
-    # get drainage areas for ecoflow program; if shapefile has an area field, then use that otherwise calculate area
-    if settings["basin_shapefile_area_field"]:
-    	area_values_dict = spatialvectors.get_field_values(shapefile = basin_shapefile, id_field = settings["basin_shapefile_id_field"], query_field = settings["basin_shapefile_area_field"])    
+        # apply the wateruse     
+        process_intersecting_centroids(sub_intersecting_centroids, settings, ecoflow_dir, oasis_dir)        
 
-    else:
-    	area_values_dict = spatialvectors.get_shapefile_areas(shapefile = basin_shapefile, id_field = settings["basin_shapefile_id_field"])
+    # get the areas (in square miles) for each region 
+    areas = spatialvectors.get_areas_dict(shapefile = basin_shapefile, id_field = settings["basin_shapefile_id_field"], query_field = settings["basin_shapefile_area_field"])
 
     # write the drainage area csv file for ecoflow program
-    watertxt.write_drainagearea_file(area_data = area_values_dict, save_path = ecoflow_dir, filename = settings["ecoflow_drainage_area_file_name"])
+    watertxt.write_drainagearea_file(area_data = areas, save_path = ecoflow_dir, filename = settings["ecoflow_drainage_area_file_name"])
 
     # remove error logger
     waterapputils_logging.remove_loggers()

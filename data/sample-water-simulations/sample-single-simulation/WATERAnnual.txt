@@ -3,7 +3,7 @@
  ------------------------------------------------------------------------------
 User:	jlant
 Date:	11/28/2014 2:55:34 PM
-StationID:	20141128_test
+StationID:	basin0
 Water Year Annual mean
 Date	Discharge (cfs)	Subsurface Flow (mm/day)	Impervious Flow (mm/day)	Infiltration Excess (mm/day)	Overland Flow (mm/day)	PET (mm/year)	Snow Pack (mm)	Precipitation (mm/day)	Storage Deficit (mm/day)	Return Flow (mm/day)
 1982	155.935119745742	2.13302342481625	0.00026560841721941	0.0774929936055079	0	1.60738821706257	217.381994642551	3.68199141386168	284.330460063013	0
