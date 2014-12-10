@@ -100,7 +100,7 @@ def print_watertxt_data(watertxt_data):
         print("      min: {}".format(parameter["min"]))
     print("")
 
-def plot_watertxt_data(watertxt_data, is_visible = True, save_path = None):
+def plot_watertxt_data(watertxt_data, is_visible = False, save_path = None):
     """   
     Plot each parameter contained in watertxt_data. Save plots to a particular
     path.
@@ -171,7 +171,7 @@ def plot_watertxt_data(watertxt_data, is_visible = True, save_path = None):
         else:
             plt.close()
 
-def plot_watertxt_comparison(watertxt_data1, watertxt_data2, is_visible = True, save_path = None):
+def plot_watertxt_comparison(watertxt_data1, watertxt_data2, is_visible = False, save_path = None):
     """   
     Plot a comparison of two parameters contained in WATER.txt data file. Save 
     plots to a particular path.
@@ -261,7 +261,7 @@ def plot_watertxt_comparison(watertxt_data1, watertxt_data2, is_visible = True, 
         else:
             plt.close()
 
-def plot_watertxt_parameter(watertxt_data, name, is_visible = True, save_path = None):
+def plot_watertxt_parameter(watertxt_data, name, is_visible = False, save_path = None):
     """   
     Plot a parameter contained in WATER.txt data file. Save 
     plots to a particular path.
@@ -339,7 +339,7 @@ def plot_watertxt_parameter(watertxt_data, name, is_visible = True, save_path = 
     else:
         plt.close()
    
-def plot_watertxt_parameter_comparison(watertxt_data, name1, name2, is_visible = True, save_path = None):
+def plot_watertxt_parameter_comparison(watertxt_data, name1, name2, is_visible = False, save_path = None):
     """   
     Plot a comparison of two parameters contained in WATER.txt data file. Save 
     plots to a particular path.

@@ -61,13 +61,17 @@ Sample Global Climate Model deltas
 ----------------------------------
 .. image:: _static/canes-deltas.png
 
-Map of samples Global Climate Model deltas
-------------------------------------------
+Map of sample Global Climate Model tiles
+----------------------------------------
 .. image:: _static/canes-deltas-map.png
 
+Map of sample Global Climate Model tiles with sample basins - shows basin and tile intersections
+------------------------------------------------------------------------------------------------
+.. image:: _static/gcm-canes-sample.png
 
-
-
+Map of sample water use points (centroids) with sample basins - shows basin and centroid intersections; NOTE: **The map shows synthetic water use points and DO NOT show true location of actual water use locations**
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+.. image:: _static/wateruse-sample.png
 
 
 

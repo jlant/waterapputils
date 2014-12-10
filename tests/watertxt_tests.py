@@ -745,4 +745,39 @@ def test_write_timeseries_file3():
     # write file
     watertxt.write_timeseries_file(watertxt_data = data, name = "Discharge + Water Use", save_path = os.path.join(os.getcwd(), "tests"), filename = "_q-and-wateruse-timeseries.txt")  
 
+@with_setup(setup, teardown) 
+def test_write_timeseries_file_stationid():
+    """ Test write_timeseries_file_wisconsin functionality part 3 - Discharge + Water Use; water use is applied """
+
+    # create water use totals
+    wateruse_totals = {
+        'January': 2.0,
+        'February': 2.0,
+        'March': 2.0,
+        'April': 3.0,
+        'May': 3.0,
+        'June': 0.0,
+        'July': 4.0,
+        'August': 4.0,
+        'September': 4.0,
+        'October': 5.0,
+        'November': 5.0,
+        'December': 5.0
+    }  
+      
+    # create test data
+    data = fixture["sample_data_dict"]
     
+    # apply water use
+    data = watertxt.apply_wateruse(watertxt_data = data, wateruse_totals = wateruse_totals)     
+    
+    # write file
+    watertxt.write_timeseries_file_stationid(watertxt_data = data, name = "Discharge + Water Use", save_path = os.path.join(os.getcwd(), "tests"), filename = "", stationid = data["stationid"])  
+ 
+@with_setup(setup, teardown) 
+def test_write_drainagearea_file():
+
+    drainagearea = {'01413500': '163.229819866', '01420500': '242.401970189', '01414500': '25.109982983', '01435000': '66.6622693618'}
+    
+    # write file
+    watertxt.write_drainagearea_file(area_data = drainagearea, save_path = os.path.join(os.getcwd(), "tests"), filename = "drainagearea.csv")

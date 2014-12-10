@@ -507,7 +507,30 @@ def create_nan_array(shape, dtype = float):
     
     return nan_array
 
+def convert_area_values(area_dict, in_units = "m2", out_units = "mi2"):
 
+    for key, value in area_dict.iteritems():
+
+        if in_units == "m2" and out_units == "mi2":
+            area_dict[key] = value * (3.28084)**2 * (1/5280.)**2                # (1 m / 3.28084 ft)**2 * (1 mi / 5280 ft)**2
+
+        if in_units == "km2" and out_units == "mi2":
+            area_dict[key] = value * (1000.)**2 * (3.28084)**2 * (1/5280.)**2  # (1000 m / 1 km)**2 * (1 m / 3.28084 ft)**2 * (1 mi / 5280 ft)**2
+
+    return area_dict
+
+
+def print_input_output_info(input_dict, output_dict):
+
+    print("Input:")
+    for key, value in input_dict.iteritems():
+        print("    {} : {}\n".format(key, value))
+
+    print("Output:")
+    for key, value in output_dict.iteritems():
+        print("    {} : {}\n".format(key, value))
+
+    
 def _print_test_info(expected, actual):
     """   
     For testing purposes, assert that all expected values and actual values match. 

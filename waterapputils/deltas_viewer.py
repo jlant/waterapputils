@@ -39,14 +39,14 @@ def print_deltas_data(deltas_data):
     for key, value in deltas_data.iteritems():
         print("{}: {}".format(key, value))
             
-def plot_deltas_data(deltas_data, is_visible = True, save_path = None):
+def plot_deltas_data(deltas_data, is_visible = False, save_path = None):
     """   
     Plot each parameter contained in the nwis data. Save plots to a particular
     path.
     
     Parameters
     ----------
-    deltasdata_data : dictionary 
+    deltas_data : dictionary 
         A dictionary containing data found in deltas data file.
     is_visible : bool
         Boolean value to show plots         

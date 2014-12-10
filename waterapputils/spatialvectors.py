@@ -77,7 +77,6 @@ def get_shapefile_coords(shapefile):
     
     return coords
 
-
 def fill_shapefile_dict(shapefile):
     """   
     Get general shapefile information data source.
@@ -129,7 +128,7 @@ def fill_shapefile_dict(shapefile):
     return shapefile_dict
 
 
-def get_intersected_field_values(intersector, intersectee, intersectee_field, intersector_field = "FID"):
+def get_intersected_field_values(intersector, intersectee, intersectee_field, intersector_field):
     """   
     Get the intersectee field values of interest associated with a shapefile 
     that is intersected by another shapefile.  A dictionary is returned with key(s) 
@@ -177,9 +176,11 @@ def get_intersected_field_values(intersector, intersectee, intersectee_field, in
     assert intersectee_field in intersectee_data["fields"], \
            "Field does not exist in shapefile.\nField: {}\nShapefile: {}\n  fields: {}".format(intersectee_field, intersectee_data["name"], intersectee_data["fields"])
 
-    if intersector_field != "FID":
+    if intersector_field:
         assert intersector_field in intersector_data["fields"], \
                "Field does not exist in shapefile.\nField: {}\nShapefile: {}\n  fields: {}".format(intersector_field, intersector_data["name"], intersector_data["fields"])
+    else:
+        intersector_field = "FID"
 
     # get the shapefile layer    
     intersectee_layer = intersectee.GetLayer()
@@ -284,7 +285,7 @@ def read_field_values_file_in(filestream):
     return field_values_dict
         
 
-def write_field_values_file(filepath, filename, field_values_dict):
+def write_field_values_file(filepath, filename, field_values_dict, special_id = "000", field_id = "newhydroid"):
     """
     Write a file containing rows of basin ids that are not intersected by any water use basin centroids
 
@@ -299,9 +300,156 @@ def write_field_values_file(filepath, filename, field_values_dict):
     """
     fullpath = os.path.join(filepath, filename)
     with open(fullpath, "w") as f:
-        f.write("basinid,centroids\n")        
+        line_str = "basinid,{}\n".format(field_id)
+        f.write(line_str)        
         for key in field_values_dict.keys():
-            f.write(key + ",\n")
+            f.write("{},{}".format(key, special_id))
+
+def get_field_values(shapefile, id_field, query_field):
+    """
+    Get specific field values for a shapefile.
+
+    Parameters
+    ----------
+    shapefile : osgeo.ogr.DataSource object
+        A shapefile object.
+    id_field: string
+        String name of a field in shapefile whose values will be used as keys in the field values dictionary.
+    query_field: string
+        String name of a field in shapefile 
+
+    Returns
+    -------
+    field_values_dict : Dictionary
+        Dictionary containing values for a particular field in a shapefile
+    """
+
+    # make sure that the supplied fields are contained in the shapefile datasets
+    shapefile_data = fill_shapefile_dict(shapefile = shapefile)
+
+    if id_field:
+        assert id_field in shapefile_data["fields"], \
+        "ID Field does not exist in shapefile.\nField: {}\nShapefile: {}\n  fields: {}".format(id_field, shapefile_data["name"], shapefile_data["fields"])
+    else:
+        id_field = "FID"
+
+    assert query_field in shapefile_data["fields"], \
+        "Field does not exist in shapefile.\nField: {}\nShapefile: {}\n  fields: {}".format(query_field, shapefile_data["name"], shapefile_data["fields"])
+
+    shapefile_layer = shapefile.GetLayer()
+
+    field_values_dict = {}
+    for i in range(shapefile_layer.GetFeatureCount()):
+        shapefile_feature = shapefile_layer.GetFeature(i)
+
+        if id_field == "FID":
+            id_field_value = str(shapefile_feature.GetFID())
+        else:
+            id_field_value = str(shapefile_feature.GetField(id_field))
+
+        query_field_value = str(shapefile_feature.GetField(query_field))
+
+        if id_field_value and query_field_value:       
+            field_values_dict[id_field_value] = query_field_value
+        else:
+            print("Problem with id field value {} and query field value {} ".format(id_field_value, query_field_value))
+
+    return field_values_dict
+
+def get_shapefile_areas(shapefile, id_field = ""):
+    """   
+    Get the areas of each feature in a shapefile. 
+    Loops through each feature contained in a shapefile (e.g. each FID) and gets the area. 
+    Returns a dictionary containing keys that correspond to each feature, namely,
+    the features FID number with corresponding area values.
+    
+    Parameters
+    ----------
+    shapefile : osgeo.ogr.DataSource 
+        A shapefile object.        
+    id_field : string
+        A string id id_field to use as keys in return dictionary
+
+    Returns
+    -------
+    areas : dictionary
+        Dictionary containing feature id and areas
+
+    Notes
+    ----- 
+    Area units are in the linear units of the projected coordinate system
+    """   
+    
+    # get shapefile data
+    shapefile_data = fill_shapefile_dict(shapefile)
+
+    # make sure the id field is in the list of fields, if not, then set to "FID"
+    if id_field:
+        assert id_field in shapefile_data["fields"], \
+               "Field does not exist in shapefile.\nField: {}\nShapefile: {}\n  fields: {}".format(intersector_field, intersector_data["name"], intersector_data["fields"])
+    else:
+        id_field = "FID"
+
+    shapefile_layer = shapefile.GetLayer()
+    
+    areas = {}
+    for feature_num in range(shapefile_layer.GetFeatureCount()):
+        shapefile_feature = shapefile_layer.GetFeature(feature_num)
+        shapefile_geometry = shapefile_feature.GetGeometryRef()            
+        area = shapefile_geometry.GetArea()           
+
+        # assign the features FID as the key in coords with corresponding lon and lat values
+        if id_field == "FID":
+            id_field_value = str(shapefile_feature.GetFID())
+        else:
+            id_field_value = str(shapefile_feature.GetField(id_field))
+
+        areas[id_field_value] = area
+    
+    return areas
+
+def get_areas_dict(shapefile, id_field, query_field):
+    """
+    Wrapper for get_shapefile_areas().  If there is no query_field (e.g. area_field),
+    then calculate the area.  All WATER application shapefiles are in the Albers NAD83 projection,
+    so areas are in units of meters squared by default.  Convert from units of meters squared
+    to units of miles squared. 
+
+    Parameters
+    ----------
+    shapefile : osgeo.ogr.DataSource 
+        A shapefile object.        
+    id_field : string
+        A string id id_field to use as keys in return dictionary
+    query_field : string
+        A string field that exists in shapefile
+
+    Returns
+    -------
+    areas : dictionary
+        Dictionary containing feature id and areas
+
+    Notes
+    ----- 
+    Area units are in the linear units of the projected coordinate system. 
+    All WATER application shapefiles are in the Albers NAD83 projection. 
+    """
+    # get the areas for each region
+    if query_field:
+        areas = get_field_values(shapefile = shapefile, id_field = id_field, query_field = query_field)   
+    else:
+        if id_field:
+            areas = get_shapefile_areas(shapefile, id_field = id_field)
+
+            # convert from m**2 to mi**2; water application uses NAD83 projection with units of meters
+            areas = helpers.convert_area_values(areas, in_units = "m2", out_units = "mi2")
+        else:
+            areas = get_shapefile_areas(shapefile)
+
+            # convert from m**2 to mi**2; water application uses NAD83 projection with units of meters
+            areas = helpers.convert_area_values(areas, in_units = "m2", out_units = "mi2")  
+
+    return areas
 
 def _print_test_info(expected, actual):
     """   
@@ -386,6 +534,27 @@ def test_get_shapefile_coords():
     _print_test_info(expected, actual)
 
 
+def test_get_shapefile_areas():
+    """ Test get_shapefile_areas() """
+
+    print("--- Testing get_shapefile_areas() - projected coordinate system is Albers_Equal_Area_Conic_USGS_CONUS_NAD83 with units of meters ")  
+
+    expected = {}
+    expected = {'01413500': 422764983.7640325, '01420500': 627820731.9907457, '01414500': 65034817.5157996, '01435000': 172655175.67497352}
+
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basins_nad83.shp"))
+
+    # open the shapefiles
+    basin_shapefile = osgeo.ogr.Open(basin_file)    
+
+    actual = get_shapefile_areas(shapefile = basin_shapefile, field = "STAID")
+
+    basin_shapefile.Destroy()  
+
+    # print test results        
+    _print_test_info(expected, actual)
+    
+
 def test_get_intersected_field_values():
     """ Test get_intersected_field_values() """
 
@@ -458,7 +627,27 @@ def test_read_field_values_file_in():
     # print test results        
     _print_test_info(expected, actual)
 
-   
+def test_get_field_values():
+    """ Test read_field_values_file() """
+
+    print("--- Testing read_field_values_file() - read standard file - csv format ---")  
+
+    expected = {}
+    expected = {'01413500': '163.229819866', '01420500': '242.401970189', '01414500': '25.109982983', '01435000': '66.6622693618'}
+
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basins_wgs84.shp"))
+
+    # open the shapefiles
+    basin_shapefile = osgeo.ogr.Open(basin_file)    
+
+    actual = get_field_values(shapefile = basin_shapefile, id_field = "STAID", query_field = "da_sqmi")
+
+    basin_shapefile.Destroy()  
+
+    # print test results        
+    _print_test_info(expected, actual)
+
+
 def main():
     """ Test functionality geospatialvectors.py """
 
@@ -466,16 +655,20 @@ def main():
     print("RUNNING TESTS ...")
     print("")
 
-    test_fill_shapefile_dict()
+    # test_fill_shapefile_dict()
 
-    test_get_shapefile_coords()
+    # test_get_shapefile_coords()
 
-    test_get_intersected_field_values()
+    test_get_shapefile_areas()
 
-    test_validate_field_values()
+    # test_get_intersected_field_values()
 
-    test_read_field_values_file_in()
+    # test_validate_field_values()
+
+    # test_read_field_values_file_in()
     
+    # test_get_field_values()
+
 if __name__ == "__main__":
     main()    
     

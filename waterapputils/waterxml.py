@@ -475,6 +475,96 @@ def write_file(waterxml_tree, save_path, filename = "WATERSimulation.xml"):
     
     waterxml_tree.write(filepath) 
 
+
+def get_study_unit_areas(simulation_dict):
+    """   
+    Get study unit areas for simulation feature data contained in the 
+    simulation dictionary. 
+    
+    Parameters
+    ----------
+    simulation_dict : dictionary 
+        Dictionary containing keys that match particular children in the simulation element
+        
+    Returns
+    -------
+    area_means : list 
+        List of numpy arrays containing area values as floats
+
+    Notes
+    -----
+    Each Simulation Feature parameter has the following xml elements:
+    'SimulID'
+    'AttID'
+    'AttstdDev'
+    'AttCode'
+    'AttName'
+    'AttUnits'
+    'AttUnitsCode'
+    'AttDescription'
+    'AttMaxVal'
+    'AttMeanVal'
+    'AttMinVal'
+    """
+    area_means = []
+    for i in range(len(simulation_dict["SimulID"])):                            
+        area_mean = []
+        parameter = simulation_dict["SimulationFeatures"][i]                    
+        for j in range(len(parameter)):
+            name = parameter[j]["AttName"]                                                  
+            if name == "Study Unit Total Area":
+                mean = parameter[j]["AttMeanVal"]  
+
+                area_mean.append(mean)
+
+        area_mean = np.array(area_mean, dtype = float)
+
+        area_means.append(area_mean)            
+
+    return area_means
+
+def calc_total_study_unit_areas(area_means):
+    """
+    Calculate total study area from a dictionary containing a list
+    of region areas.
+    
+    Parameters
+    ----------
+    area_means : list 
+        List of numpy arrays containing area values as floats        
+    
+    Returns
+    -------
+    total_area : float
+        Float value of total area
+    """
+
+    total_area = np.sum(area_means)
+
+    return total_area
+
+def change_element_value(waterxml_tree, element, child, new_value):
+    """
+    Change an elements value.  For example, change the project name (ProjName)
+     
+    Parameters
+    ----------
+    waterxml_tree : ElementTree object 
+        Tree object of WATER \*.xml file 
+    element : string
+        String name of parameter
+    new_value : string
+        String of new value
+    
+    """
+    for elem in waterxml_tree.iter(tag = element):
+
+        # get element value
+        elem_value = elem.find(child)
+
+        # change element value
+        elem_value.text = new_value
+
 def _create_test_data():
     """ Create test data to use with tests """
     
@@ -912,6 +1002,50 @@ def test_write_file():
     print("")  
 
 
+def test_get_study_unit_areas():
+    """ Test get_topographic_wetness_index_data """
+
+    print("--- get_topographic_wetness_index_data() ---")     
+
+    expected = {"area_means": [np.array([100.])],
+    }  
+
+    xml_tree = _create_test_data()
+    
+    simulation = create_simulation_dict()
+
+    simulation = fill_simulation_dict(waterxml_tree = xml_tree, simulation_dict = simulation)
+
+    actual = {}
+    actual["area_means"] = get_study_unit_areas(simulation_dict = simulation)
+
+     # print results
+    _print_test_info(actual, expected)
+
+def test_change_element_value():
+    """ Test changing and elements value """
+
+    print("--- Testing change_element_value() ---")    
+
+    expected_project = {"ProjID": "1", "UserName": "jlant", "DateCreated": "2014-04-22T10:00:00.0000-00:00", "ProjName": "updated-my-project"}
+    
+    xml_tree = _create_test_data()
+    
+    project = create_project_dict() 
+    
+    project = fill_dict(waterxml_tree = xml_tree, data_dict = project, element = "Project", keys = project.keys())
+
+    change_element_value(waterxml_tree = xml_tree, element = "Project", child = "ProjName" , new_value = "-".join(["updated", project["ProjName"]]))
+
+    project_updated = create_project_dict()
+
+    actual_project = fill_dict(waterxml_tree = xml_tree, data_dict = project_updated, element = "Project", keys = project.keys())
+
+     # print results
+    _print_test_info(actual_project, expected_project) 
+
+
+
 def main():
     """ Test functionality waterxml.py """
 
@@ -938,6 +1072,10 @@ def main():
     test_apply_factors()
 
     test_write_file()
+
+    test_get_study_unit_total_area()
+
+    test_change_element_value()
     
 if __name__ == "__main__":
     main()

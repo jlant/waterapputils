@@ -474,76 +474,6 @@ def apply_wateruse(watertxt_data, wateruse_totals):
     return watertxt_data
 
 
-def _create_test_data(multiplicative_factor = 1, stationid = "012345"):
-    """ Create test data for tests """
-
-    dates = [datetime.datetime(2014, 04, 01, 0, 0), datetime.datetime(2014, 04, 02, 0, 0), datetime.datetime(2014, 04, 03, 0, 0)]
-    
-    discharge_data = np.array([2, 6, 10]) * multiplicative_factor
-    subsurface_data = np.array([50, 55, 45]) * multiplicative_factor
-    impervious_data = np.array([2, 8, 2]) * multiplicative_factor
-    infiltration_data = np.array([0, 1.5, 1.5]) * multiplicative_factor
-    initialabstracted_data = np.array([0.1, 0.2, 0.3]) * multiplicative_factor
-    overlandflow_data = np.array([3, 9, 3]) * multiplicative_factor
-    pet_data = np.array([5, 3, 13]) * multiplicative_factor
-    aet_data = np.array([5, 12, 13]) * multiplicative_factor
-    avgsoilrootzone_data = np.array([40, 50, 60]) * multiplicative_factor
-    avgsoilunsaturatedzone_data = np.array([4, 3, 2]) * multiplicative_factor
-    snowpack_data = np.array([150, 125, 25]) * multiplicative_factor
-    precipitation_data = np.array([0.5, 0.4, 0.3]) * multiplicative_factor
-    storagedeficit_data = np.array([300, 310, 350]) * multiplicative_factor
-    returnflow_data = np.array([-5.0, -4.5, -4.0]) * multiplicative_factor
-    
-    parameters = [{"name": "Discharge (cfs)", "index": 0, "data": discharge_data,
-                   "mean": np.mean(discharge_data), "max": np.max(discharge_data), "min": np.min(discharge_data)}, 
-                  
-                  {"name": "Subsurface Flow (mm/day)", "index": 1, "data": subsurface_data,
-                   "mean": np.mean(subsurface_data), "max": np.max(subsurface_data), "min": np.min(subsurface_data)},
-
-                  {"name": "Impervious Flow (mm/day)", "index": 2, "data": impervious_data,
-                   "mean": np.mean(impervious_data), "max": np.max(impervious_data), "min": np.min(impervious_data)},
-
-                  {"name": "Infiltration Excess (mm/day)", "index": 3, "data": infiltration_data,
-                   "mean": np.mean(infiltration_data), "max": np.max(infiltration_data), "min": np.min(infiltration_data)},
-
-                  {"name": "Initial Abstracted Flow (mm/day)", "index": 4, "data": initialabstracted_data,
-                   "mean": np.mean(initialabstracted_data), "max": np.max(initialabstracted_data), "min": np.min(initialabstracted_data)},
-
-                  {"name": "Overland Flow (mm/day)", "index": 5, "data": overlandflow_data,
-                   "mean": np.mean(overlandflow_data), "max": np.max(overlandflow_data), "min": np.min(overlandflow_data)},
-
-                  {"name": "PET (mm/day)", "index": 6, "data": pet_data,
-                   "mean": np.mean(pet_data), "max": np.max(pet_data), "min": np.min(pet_data)},
-
-                  {"name": "AET (mm/day)", "index": 7, "data": aet_data,
-                   "mean": np.mean(aet_data), "max": np.max(aet_data), "min": np.min(aet_data)},
-
-                  {"name": "Average Soil Root zone (mm)", "index": 8, "data": avgsoilrootzone_data,
-                   "mean": np.mean(avgsoilrootzone_data), "max": np.max(avgsoilrootzone_data), "min": np.min(avgsoilrootzone_data)},
-
-                  {"name": "Average Soil Unsaturated Zone (mm)", "index": 9, "data": avgsoilunsaturatedzone_data,
-                   "mean": np.mean(avgsoilunsaturatedzone_data), "max": np.max(avgsoilunsaturatedzone_data), "min": np.min(avgsoilunsaturatedzone_data)},
-
-                  {"name": "Snow Pack (mm)", "index": 10, "data": snowpack_data,
-                   "mean": np.mean(snowpack_data), "max": np.max(snowpack_data), "min": np.min(snowpack_data)},
-
-                  {"name": "Precipitation (mm/day)", "index": 11, "data": precipitation_data,
-                   "mean": np.mean(precipitation_data), "max": np.max(precipitation_data), "min": np.min(precipitation_data)},
-
-                  {"name": "Storage Deficit (mm/day)", "index": 12, "data": storagedeficit_data,
-                   "mean": np.mean(storagedeficit_data), "max": np.max(storagedeficit_data), "min": np.min(storagedeficit_data)},
-
-                  {"name": "Return Flow (mm/day)", "index": 13, "data": returnflow_data,
-                   "mean": np.mean(returnflow_data), "max": np.max(returnflow_data), "min": np.min(returnflow_data)},
-    ] 
-
-    column_names = ["Discharge (cfs)", "Subsurface Flow (mm/day)", "Impervious Flow (mm/day)", "Infiltration Excess (mm/day)", "Initial Abstracted Flow (mm/day)", "Overland Flow (mm/day)", "PET (mm/day)", "AET(mm/day)", "Average Soil Root zone (mm)", "Average Soil Unsaturated Zone (mm)", "Snow Pack (mm)", "Precipitation (mm/day)", "Storage Deficit (mm/day)", "Return Flow (mm/day)"]
-    data = {"user": "jlant", "date_created": "4/9/2014 15:30:00 PM", "stationid": stationid, 
-            "column_names": column_names,
-            "parameters": parameters, "dates": dates}
-
-    return data
-
 def write_file(watertxt_data, save_path, filename = "WATER.txt"):
     """   
     Write data contained in water data dictionary to an output file in the 
@@ -623,6 +553,136 @@ def write_timeseries_file(watertxt_data, name, save_path, filename = ""):
             date_str = watertxt_data["dates"][i].strftime("%m/%d/%Y")
             output_file.write("{}\t{}\n".format(date_str, parameter["data"][i]))            
             
+def write_timeseries_file_stationid(watertxt_data, name, save_path, filename, stationid = None):
+    """   
+    Write a csv timeseries file containing the stationid, date, and discharge (discharge + water use)
+    for a Wisconsin Water Science Center program.
+    
+    Parameters
+    ----------
+    watertxt_data : dictionary 
+        Dictionary holding data found in WATER output text file.
+    name : string
+        String name of parameter
+    save_path : string 
+        String path to save file.
+    filename : string
+        String name of output file. Default name-timeseries.txt
+    stationid : string
+        String name of a site (basin) number.
+    """ 
+    # get the parameter
+    parameter = get_parameter(watertxt_data, name = name)
+
+    assert parameter is not None, "Parameter name {} not found in watertxt_data".format(name)
+
+    if filename:           
+        filepath = os.path.join(save_path, filename)   
+    else:
+        filepath = os.path.join(save_path, stationid.lower().strip() + ".csv")   
+
+    with open(filepath, "w") as output_file:
+        output_file.write("{},{},{}\n".format("siteNo", "date", "discharge"))
+
+        for i in range(len(watertxt_data["dates"])):
+            date_str = watertxt_data["dates"][i].strftime("%Y-%m-%d")
+            output_file.write("{},{},{}\n".format(stationid, date_str, parameter["data"][i]))  
+
+def write_drainagearea_file(area_data, save_path, filename = "drainagearea.csv"):
+    """
+    Write a csv file containing the drainage area for each basin.  The basin id and corresponding
+    drainage area is contained in a the area_data dictionary.
+    
+    Parameters
+    ----------
+    area_data : dictionary 
+        Dictionary holding basin id and drainage area data
+    save_path : string 
+        String path to save file.
+    filename : string
+        String name of output file. Default name-timeseries.txt
+    """
+
+    filepath = os.path.join(save_path, filename)
+
+    with open(filepath, "a") as output_file:
+        output_file.write("{},{}\n".format("siteNo", "darea"))
+
+        for key, value in area_data.iteritems():
+            output_file.write("{},{}\n".format(key, value))
+
+
+def _create_test_data(multiplicative_factor = 1, stationid = "012345"):
+    """ Create test data for tests """
+
+    dates = [datetime.datetime(2014, 04, 01, 0, 0), datetime.datetime(2014, 04, 02, 0, 0), datetime.datetime(2014, 04, 03, 0, 0)]
+    
+    discharge_data = np.array([2, 6, 10]) * multiplicative_factor
+    subsurface_data = np.array([50, 55, 45]) * multiplicative_factor
+    impervious_data = np.array([2, 8, 2]) * multiplicative_factor
+    infiltration_data = np.array([0, 1.5, 1.5]) * multiplicative_factor
+    initialabstracted_data = np.array([0.1, 0.2, 0.3]) * multiplicative_factor
+    overlandflow_data = np.array([3, 9, 3]) * multiplicative_factor
+    pet_data = np.array([5, 3, 13]) * multiplicative_factor
+    aet_data = np.array([5, 12, 13]) * multiplicative_factor
+    avgsoilrootzone_data = np.array([40, 50, 60]) * multiplicative_factor
+    avgsoilunsaturatedzone_data = np.array([4, 3, 2]) * multiplicative_factor
+    snowpack_data = np.array([150, 125, 25]) * multiplicative_factor
+    precipitation_data = np.array([0.5, 0.4, 0.3]) * multiplicative_factor
+    storagedeficit_data = np.array([300, 310, 350]) * multiplicative_factor
+    returnflow_data = np.array([-5.0, -4.5, -4.0]) * multiplicative_factor
+    
+    parameters = [{"name": "Discharge (cfs)", "index": 0, "data": discharge_data,
+                   "mean": np.mean(discharge_data), "max": np.max(discharge_data), "min": np.min(discharge_data)}, 
+                  
+                  {"name": "Subsurface Flow (mm/day)", "index": 1, "data": subsurface_data,
+                   "mean": np.mean(subsurface_data), "max": np.max(subsurface_data), "min": np.min(subsurface_data)},
+
+                  {"name": "Impervious Flow (mm/day)", "index": 2, "data": impervious_data,
+                   "mean": np.mean(impervious_data), "max": np.max(impervious_data), "min": np.min(impervious_data)},
+
+                  {"name": "Infiltration Excess (mm/day)", "index": 3, "data": infiltration_data,
+                   "mean": np.mean(infiltration_data), "max": np.max(infiltration_data), "min": np.min(infiltration_data)},
+
+                  {"name": "Initial Abstracted Flow (mm/day)", "index": 4, "data": initialabstracted_data,
+                   "mean": np.mean(initialabstracted_data), "max": np.max(initialabstracted_data), "min": np.min(initialabstracted_data)},
+
+                  {"name": "Overland Flow (mm/day)", "index": 5, "data": overlandflow_data,
+                   "mean": np.mean(overlandflow_data), "max": np.max(overlandflow_data), "min": np.min(overlandflow_data)},
+
+                  {"name": "PET (mm/day)", "index": 6, "data": pet_data,
+                   "mean": np.mean(pet_data), "max": np.max(pet_data), "min": np.min(pet_data)},
+
+                  {"name": "AET (mm/day)", "index": 7, "data": aet_data,
+                   "mean": np.mean(aet_data), "max": np.max(aet_data), "min": np.min(aet_data)},
+
+                  {"name": "Average Soil Root zone (mm)", "index": 8, "data": avgsoilrootzone_data,
+                   "mean": np.mean(avgsoilrootzone_data), "max": np.max(avgsoilrootzone_data), "min": np.min(avgsoilrootzone_data)},
+
+                  {"name": "Average Soil Unsaturated Zone (mm)", "index": 9, "data": avgsoilunsaturatedzone_data,
+                   "mean": np.mean(avgsoilunsaturatedzone_data), "max": np.max(avgsoilunsaturatedzone_data), "min": np.min(avgsoilunsaturatedzone_data)},
+
+                  {"name": "Snow Pack (mm)", "index": 10, "data": snowpack_data,
+                   "mean": np.mean(snowpack_data), "max": np.max(snowpack_data), "min": np.min(snowpack_data)},
+
+                  {"name": "Precipitation (mm/day)", "index": 11, "data": precipitation_data,
+                   "mean": np.mean(precipitation_data), "max": np.max(precipitation_data), "min": np.min(precipitation_data)},
+
+                  {"name": "Storage Deficit (mm/day)", "index": 12, "data": storagedeficit_data,
+                   "mean": np.mean(storagedeficit_data), "max": np.max(storagedeficit_data), "min": np.min(storagedeficit_data)},
+
+                  {"name": "Return Flow (mm/day)", "index": 13, "data": returnflow_data,
+                   "mean": np.mean(returnflow_data), "max": np.max(returnflow_data), "min": np.min(returnflow_data)},
+    ] 
+
+    column_names = ["Discharge (cfs)", "Subsurface Flow (mm/day)", "Impervious Flow (mm/day)", "Infiltration Excess (mm/day)", "Initial Abstracted Flow (mm/day)", "Overland Flow (mm/day)", "PET (mm/day)", "AET(mm/day)", "Average Soil Root zone (mm)", "Average Soil Unsaturated Zone (mm)", "Snow Pack (mm)", "Precipitation (mm/day)", "Storage Deficit (mm/day)", "Return Flow (mm/day)"]
+    data = {"user": "jlant", "date_created": "4/9/2014 15:30:00 PM", "stationid": stationid, 
+            "column_names": column_names,
+            "parameters": parameters, "dates": dates}
+
+    return data
+
+
 def _print_test_info(actual, expected):
     """   
     For testing purposes, assert that all expected values and actual values match. 
@@ -643,6 +703,7 @@ def _print_test_info(actual, expected):
         print("*{}*".format(key))                     
         print("    actual:   {}".format(actual[key]))  
         print("    expected: {}\n".format(expected[key]))
+
     
 def main():
     """ Test functionality of watertxt """
@@ -650,6 +711,7 @@ def main():
     print("")
     print("RUNNING TESTS ...")
     print("")
+
         
 if __name__ == "__main__":
     main()

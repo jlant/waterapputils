@@ -204,7 +204,7 @@ def test_fill_shapefile_dict6():
 def test_fill_shapefile_dict7():
 
     # expected values to test with actual values
-    expected = {"extents": (-74.88702164959378, -74.44895756386826, 41.86688996255413, 42.329073891500975), 
+    expected = {"extents": (-74.88702164959378, -74.44895756386826, 41.86688996255413, 42.31789523609384), 
                 "name": "wateruse_centroids_sample_wgs84.shp", 
                 "fields": ["newhydroid", "HUC_12"], 
                 "shapefile_datatype": "<class 'osgeo.ogr.DataSource'>", 
@@ -276,10 +276,10 @@ def test_get_intersected_field_values1():
 
     # actual values    
     actual = {}
-    actual["canes_tiles"] = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = canes_shapefile, intersectee_field = "Tile")    
-    actual["gfdl_tiles"] = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = gfdl_shapefile, intersectee_field = "Tile")
-    actual["giss_tiles"] = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = giss_shapefile, intersectee_field = "Tile")
-    actual["ncar_tiles"] = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = ncar_shapefile, intersectee_field = "Tile")
+    actual["canes_tiles"] = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = canes_shapefile, intersectee_field = "Tile", intersector_field = "")    
+    actual["gfdl_tiles"] = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = gfdl_shapefile, intersectee_field = "Tile", intersector_field = "")
+    actual["giss_tiles"] = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = giss_shapefile, intersectee_field = "Tile", intersector_field = "")
+    actual["ncar_tiles"] = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = ncar_shapefile, intersectee_field = "Tile", intersector_field = "")
 
     for shapefile in [basin_shapefile, canes_shapefile, gfdl_shapefile, giss_shapefile, ncar_shapefile]:
         shapefile.Destroy()  
@@ -308,10 +308,10 @@ def test_get_intersected_field_values2():
 
     # actual values    
     actual = {}
-    actual["canes_tiles"] = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = canes_shapefile, intersectee_field = "Tile")    
-    actual["gfdl_tiles"] = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = gfdl_shapefile, intersectee_field = "Tile")
-    actual["giss_tiles"] = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = giss_shapefile, intersectee_field = "Tile")
-    actual["ncar_tiles"] = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = ncar_shapefile, intersectee_field = "Tile")
+    actual["canes_tiles"] = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = canes_shapefile, intersectee_field = "Tile", intersector_field = "")    
+    actual["gfdl_tiles"] = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = gfdl_shapefile, intersectee_field = "Tile", intersector_field = "")
+    actual["giss_tiles"] = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = giss_shapefile, intersectee_field = "Tile", intersector_field = "")
+    actual["ncar_tiles"] = spatialvectors.get_intersected_field_values(intersector = basin_shapefile, intersectee = ncar_shapefile, intersectee_field = "Tile", intersector_field = "")
 
     for shapefile in [basin_shapefile, canes_shapefile, gfdl_shapefile, giss_shapefile, ncar_shapefile]:
         shapefile.Destroy()  
@@ -391,3 +391,34 @@ def test_read_field_values_file_in():
     actual["data"] = spatialvectors.read_field_values_file_in(file_obj)
 
     np.testing.assert_equal(actual["data"], expected["data"]) 
+
+
+def test_get_field_values():
+
+    # expected values to test with actual values
+    expected = {}
+    expected = {'01413500': '163.229819866', '01420500': '242.401970189', '01414500': '25.109982983', '01435000': '66.6622693618'}
+
+    # open the shapefiles
+    basin_shapefile = osgeo.ogr.Open(fixture["water_basins_wgs84"])  
+
+    actual = spatialvectors.get_field_values(shapefile = basin_shapefile, id_field = "STAID", query_field = "da_sqmi")
+
+    basin_shapefile.Destroy()  
+
+    # print test results        
+    np.testing.assert_equal(actual, expected)  
+    
+def test_get_shapefile_areas():
+    expected = {}
+    expected = {'01413500': 422764983.7640325, '01420500': 627820731.9907457, '01414500': 65034817.5157996, '01435000': 172655175.67497352}
+
+    # open the shapefiles
+    basin_shapefile = osgeo.ogr.Open(fixture["water_basins_nad83"])    
+
+    actual = spatialvectors.get_shapefile_areas(shapefile = basin_shapefile, id_field = "STAID")
+
+    basin_shapefile.Destroy()  
+
+    # print test results        
+    np.testing.assert_equal(actual, expected)  

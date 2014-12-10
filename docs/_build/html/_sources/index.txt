@@ -98,6 +98,12 @@ Guides
 
    wateruse-guide.rst
 
+
+.. toctree::
+   :maxdepth: 2
+
+   gcmdeltas-guide.rst
+
    
 Documentation
 =============

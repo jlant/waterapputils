@@ -88,7 +88,7 @@ def plot_shapefiles_map(shapefiles, display_fields = [], colors = [], title = No
     Shapefiles should be in a Geographic Coordinate System (longitude and 
     latitude coordinates) such as World WGS84; Matplotlib"s basemap library 
     does the proper transformation to a projected coordinate system.  The projected
-    coordinate system used is Lambert Conformal Conic.
+    coordinate system used is Albers Equal Area.
     
     Parameters
     ----------
@@ -218,7 +218,8 @@ def _create_shapefile_test_data():
     fixture = {}
 
     # open the shapefiles
-    test_poly_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/test_poly_wgs84.shp")))  
+    test_poly_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/test_poly_wgs84.shp"))) 
+    test_poly_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/test_poly_nad83.shp"))) 
     water_basin_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basin_wgs84.shp")))      
     water_basins_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basins_wgs84.shp")))  
     water_basin_pourpoint_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basin_pourpoint_wgs84.shp")))      

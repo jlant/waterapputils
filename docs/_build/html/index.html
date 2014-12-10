@@ -137,6 +137,7 @@ simulation database files.</li>
 <li class="toctree-l2"><a class="reference internal" href="guide.html#processing-water-simulation-output-files-water-txt">Processing WATER simulation output files - WATER.txt</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide.html#processing-water-simulation-database-file-watersimulation-xml">Processing WATER simulation database file - WATERSimulation.xml</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide.html#applying-water-use-to-water-batch-runs">Applying water use to WATER batch runs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide.html#applying-climate-change-factors-to-water-batch-runs">Applying climate change factors to WATER batch runs</a></li>
 </ul>
 </li>
 </ul>
@@ -151,6 +152,14 @@ simulation database files.</li>
 </li>
 </ul>
 </div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gcmdeltas-guide.html">GCM Delta Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gcmdeltas-guide.html#gcm-delta-data-files">GCM Delta data files</a></li>
+</ul>
+</li>
+</ul>
+</div>
 </div>
 <div class="section" id="documentation">
 <h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h1>
@@ -158,17 +167,22 @@ simulation database files.</li>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="code.html">Code Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="code.html#module-waterapputils">waterapputils.py - &#8220;main controller&#8221;</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#module-user_settings">user_settings.py - user settings for waterapputils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#module-water_files_processing">water_files_processing.py - processes and implements watertxt and waterxml processing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="code.html#module-watertxt">watertxt.py - reads and processes WATER output simulation files (WATER.txt)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="code.html#module-watertxt_viewer">watertxt_viewer.py - plots WATER output simulation files (WATER.txt)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="code.html#module-waterxml">waterxml.py - reads and processes WATER database simulation files (WATERSimulation.xml)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="code.html#module-waterxml_viewer">waterxml_viewer.py - plots WATER database simulation files (WATERSimulation.xml)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="code.html#module-waterapputils_logging">waterapputils_logging.py - handles errors</a></li>
 <li class="toctree-l2"><a class="reference internal" href="code.html#module-wateruse">wateruse.py - reads, processes, and computes water use from water use data files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#module-wateruse_processing">wateruse_processing.py - processes and implements water use using settings in user_settings.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#module-specific_output_file_processing">specific_output_file_processing.py - creates specific output files for external programs OASIS and Ecoflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#module-gcm_delta_processing">gcm_delta_processing.py - processes and implements global climate modeling delta factors using settings in user_settings.py</a></li>
 <li class="toctree-l2"><a class="reference internal" href="code.html#module-deltas">deltas.py - reads and processes global climate model files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="code.html#module-deltas_viewer">deltas_viewer.py - plots global climate model files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="code.html#module-helpers">helpers.py - mix of helper functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="code.html#module-spatialvectors">spatialvectors.py - handles spatial data processing of shapefiles; performs spatial intersection between shapefiles</a></li>
 <li class="toctree-l2"><a class="reference internal" href="code.html#module-spatialdata_viewer">spatialdata_viewer.py - creates maps of shapefiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#module-helpers">helpers.py - mix of helper functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#module-waterapputils_logging">waterapputils_logging.py - handles errors</a></li>
 </ul>
 </li>
 </ul>
@@ -198,7 +212,9 @@ simulation database files.</li>
 <li class="toctree-l2"><a class="reference internal" href="gallery.html#comparison-of-storage-deficit-between-2-water-txt-files">Comparison of storage deficit between 2 WATER.txt files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gallery.html#comparison-of-temperature-between-2-watersimulation-xml-files">Comparison of temperature between 2 WATERSimulation.xml files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gallery.html#sample-global-climate-model-deltas">Sample Global Climate Model deltas</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gallery.html#map-of-samples-global-climate-model-deltas">Map of samples Global Climate Model deltas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#map-of-sample-global-climate-model-tiles">Map of sample Global Climate Model tiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#map-of-sample-global-climate-model-tiles-with-sample-basins-shows-basin-and-tile-intersections">Map of sample Global Climate Model tiles with sample basins - shows basin and tile intersections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#map-of-sample-water-use-points-centroids-with-sample-basins-shows-basin-and-centroid-intersections-note-the-map-shows-synthetic-water-use-points-and-do-not-show-true-location-of-actual-water-use-locations">Map of sample water use points (centroids) with sample basins - shows basin and centroid intersections; NOTE: <strong>The map shows synthetic water use points and DO NOT show true location of actual water use locations</strong></a></li>
 </ul>
 </li>
 </ul>
