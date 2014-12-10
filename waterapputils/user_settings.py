@@ -32,9 +32,17 @@ wateruse_files = [
 	"../data/wateruse-datafiles/010203-JFM-sample.txt", 
     "../data/wateruse-datafiles/040506-AMJ-sample.txt", 
     "../data/wateruse-datafiles/070809-JAS-sample.txt", 
-    "../data/wateruse-datafiles/101112-OND-sample.txt"
+    "../data/wateruse-datafiles/101112-OND-sample.txt",
 ] 
 wateruse_factor_file = "../data/wateruse-datafiles/wateruse-factors-sample.txt"
+
+# ------------------- Global Climate Model information ------------------ #
+gcm_delta_files = ["../data/deltas-gcm/Ppt.txt",
+                   "../data/deltas-gcm/Tmax.txt",
+]                
+
+gcm_delta_tile_shapefile = "../data/spatial-datafiles/gcm-tiles/CanES_nad83.shp"
+gcm_delta_tile_shapefile_id_field = "Tile"
 
 # ------------------- Output directory and file names ------------------- #
 info_directory_name = "waterapputils-info"
@@ -77,6 +85,10 @@ settings = {
     "wateruse_files": wateruse_files,
     "wateruse_factor_file": wateruse_factor_file,
 
+    "gcm_delta_files": gcm_delta_files,
+    "gcm_delta_tile_shapefile": gcm_delta_tile_shapefile,
+    "gcm_delta_tile_shapefile_id_field": gcm_delta_tile_shapefile_id_field,
+
     "info_directory_name": info_directory_name,
 
     "watertxt_directory_name": watertxt_directory_name,
@@ -115,11 +127,15 @@ sample_single_settings = {
     "wateruse_centroids_shapefile": "../data/spatial-datafiles/wateruse-centroids/wateruse_centroids_sample_nad83.shp",
     "wateruse_centroids_shapefile_id_field": "newhydroid",
     "wateruse_files": [
-    "../data/wateruse-datafiles/010203-JFM-sample.txt", 
-    "../data/wateruse-datafiles/040506-AMJ-sample.txt", 
-    "../data/wateruse-datafiles/070809-JAS-sample.txt", 
-    "../data/wateruse-datafiles/101112-OND-sample.txt"],
+        "../data/wateruse-datafiles/010203-JFM-sample.txt", 
+        "../data/wateruse-datafiles/040506-AMJ-sample.txt", 
+        "../data/wateruse-datafiles/070809-JAS-sample.txt", 
+        "../data/wateruse-datafiles/101112-OND-sample.txt"],
     "wateruse_factor_file": "../data/wateruse-datafiles/wateruse-factors-sample.txt",
+
+    "gcm_delta_files": ["../data/deltas-gcm/Ppt.txt", "../data/deltas-gcm/Tmax.txt"],
+    "gcm_delta_tile_shapefile": "../data/spatial-datafiles/gcm-tiles/CanES_nad83.shp",
+    "gcm_delta_tile_shapefile_id_field": "Tile",
 
     "info_directory_name": "waterapputils-info",
 
@@ -158,11 +174,16 @@ sample_batch_settings = {
     "wateruse_centroids_shapefile": "../data/spatial-datafiles/wateruse-centroids/wateruse_centroids_sample_nad83.shp",
     "wateruse_centroids_shapefile_id_field": "newhydroid",
     "wateruse_files": [
-    "../data/wateruse-datafiles/010203-JFM-sample.txt", 
-    "../data/wateruse-datafiles/040506-AMJ-sample.txt", 
-    "../data/wateruse-datafiles/070809-JAS-sample.txt", 
-    "../data/wateruse-datafiles/101112-OND-sample.txt"],
+        "../data/wateruse-datafiles/010203-JFM-sample.txt", 
+        "../data/wateruse-datafiles/040506-AMJ-sample.txt", 
+        "../data/wateruse-datafiles/070809-JAS-sample.txt", 
+        "../data/wateruse-datafiles/101112-OND-sample.txt"],
     "wateruse_factor_file": "../data/wateruse-datafiles/wateruse-factors-sample.txt",
+
+
+    "gcm_delta_files": ["../data/deltas-gcm/Ppt.txt", "../data/deltas-gcm/Tmax.txt"],
+    "gcm_delta_tile_shapefile": "../data/spatial-datafiles/gcm-tiles/CanES_nad83.shp",
+    "gcm_delta_tile_shapefile_id_field": "Tile",
 
     "info_directory_name": "waterapputils-info",
 

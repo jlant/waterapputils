@@ -112,8 +112,8 @@ def process_cmp(file_list, settings, print_data = True):
         waterxml_data2 = waterxml.read_file(water_file2)         
         waterxml_viewer.plot_waterxml_timeseries_comparison(waterxml_data1, waterxml_data2, save_path = output_dir)         
         if print_data: 
-            waterxml_viewer.print_watertxt_data(waterxml_data1)  
-            waterxml_viewer.print_watertxt_data(waterxml_data2)   
+            waterxml_viewer.print_waterxml_data(waterxml_data1)  
+            waterxml_viewer.print_waterxml_data(waterxml_data2)   
 
     else:
         print("Can not process files {} and {}. File extensions {} and {} both need to be .txt or .xml".format(filename1, filename2, ext1, ext2))

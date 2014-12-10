@@ -99,10 +99,43 @@ run_ecoflowdashp()
 
 }
 
+run_gcmdelta()
+{
+    # applying gcmdelta requires many inputs, and those inputs are specified in the user_settings.py file which can relative paths from the directory containing the python code
+    # this requires changing directories into the waterapputils directory in order to run the sample datasets
+
+    cd waterapputils/
+    echo "--- $0 is running gcm delta with sample datasets; single and batch ---"
+    echo
+    echo "single simulation"
+    python waterapputils.py -applygcmdelta -samplesingle
+    echo
+    echo "batch simulation"
+    python waterapputils.py -applygcmdelta -samplebatch
+    echo 
+}
+
+run_subgcmdelta()
+{
+    echo "--- $0 is running sub gcm delta with sample datasets ---"
+    echo
+    file=data/sample-water-simulations/sample-batch-simulation/waterapputils-info/wateruse_non_intersecting_tiles.txt
+    if [ -f $file ]; then 
+        echo "substitiuting tile id 12 for 000 in sub gcm delta factor file"
+        sed -i.bak 's/000/12/g' $file
+        
+        cd waterapputils/
+        python waterapputils.py -applysubgcmdelta -samplebatch
+    else
+       echo "ERROR - file does not exist - $file" >&2
+       exit 1 
+    fi
+}
+
 run_all()
 {
 
-    echo "--- $0 is running ALL sample datasets ---"
+    echo "--- $0 is running ALL sample datasets ... This may take a while ... Please wait ... ---"
     echo
     run_tests
     run_txt
@@ -112,6 +145,7 @@ run_all()
     run_ecoflowdaxml
     run_ecoflowdashp
     run_wateruse
+    run_gcmdelta
     echo
 }
 
@@ -156,6 +190,10 @@ while [ "$1" != "" ]; do
         -ecoflowdaxml )              run_ecoflowdaxml
                                      ;;
         -ecoflowdashp )              run_ecoflowdashp
+                                     ;;
+        -gcmdelta )                  run_gcmdelta
+                                     ;;
+        -subgcmdelta )               run_subgcmdelta
                                      ;;
         -all )                       run_all
                                      ;;

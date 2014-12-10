@@ -282,9 +282,9 @@ def plot_waterxml_timeseries_comparison(waterxml_tree1, waterxml_tree2, is_visib
             ax1.set_xlabel("Date")
             ax1.set_ylabel(ylabel)   
             
-            ax1.plot(dates1[i], values1[i], color = color_str1, label = ylabel + " xml-file-1", linewidth = 2) 
+            ax1.plot(dates1[i], values1[i], color = color_str1, label = ylabel + " " + project1["ProjName"], linewidth = 2) 
             ax1.hold(True)
-            ax1.plot(dates2[i], values2[i], color = color_str2, label = ylabel + " xml-file-2", linewidth = 2, alpha = 0.6)
+            ax1.plot(dates2[i], values2[i], color = color_str2, label = ylabel + " " + project2["ProjName"], linewidth = 2, alpha = 0.6)
             
             # increase y axis to have text and legend show up better
             curr_ylim = ax1.get_ylim()
@@ -344,7 +344,7 @@ def plot_waterxml_timeseries_comparison(waterxml_tree1, waterxml_tree2, is_visib
                 curr_fig.set_size_inches(12, 10)
                 
                 # split the parameter name to not include units because some units contain / character which Python interprets as an escape character
-                filename = "-".join(["xml1", "vs", "xml2", timeseries_str, region_type1, sim_id1])  + ".png" 
+                filename = "-".join([project1["ProjName"], "vs", project2["ProjName"], timeseries_str, region_type1, sim_id1])  + ".png" 
          
                 filepath = os.path.join(save_path, filename)
                 plt.savefig(filepath, dpi = 100)                                          

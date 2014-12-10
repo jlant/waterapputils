@@ -21,6 +21,7 @@ import logging
 # my modules
 import water_files_processing
 import wateruse_processing
+import gcm_delta_processing
 import specific_output_file_processing
 import user_settings
 
@@ -48,8 +49,8 @@ def main():
     group.add_argument("-applywateruse", "--applywateruse", action = "store_true", help = "Apply water use data to a WATER.txt file(s) for a WATER simulation.  Use user_settings.py to enter paths to data files.")
     group.add_argument("-applysubwateruse", "--applysubwateruse", action = "store_true", help = "Apply substitute water use data. Uses sub_wateruse_info_file_name variable in user_settings.py")
 
-    group.add_argument("-applydeltas", "--applydeltas", action = "store_true", help = "Apply global climate deltas to a WATERSimulation.xml file for a WATER simulations.  Use user_settings.py to enter paths to data files.")
-    group.add_argument("-applysubdeltas", "--applysubdeltas", action = "store_true", help = "Apply updated water deltas data. Uses sub_gcm_delta_info_file_name variable in user_settings.py ")
+    group.add_argument("-applygcmdeltas", "--applygcmdeltas", action = "store_true", help = "Apply global climate deltas to a WATERSimulation.xml file for a WATER simulations.  Use user_settings.py to enter paths to data files.")
+    group.add_argument("-applysubgcmdeltas", "--applysubgcmdeltas", action = "store_true", help = "Apply updated water deltas data. Uses sub_gcm_delta_info_file_name variable in user_settings.py ")
 
     group.add_argument("-oasis", "--oasis", nargs = "+", help = "List WATER text data file(s) that have Discharge + Water Use")
     group.add_argument("-ecoflowstationid", "--ecoflowstationid", nargs = "+", help = "List WATER text data file(s) that have Discharge + Water Use")
@@ -171,22 +172,6 @@ def main():
 
             sys.exit()
 
-        # applying gcm deltas
-        # elif args.applydeltas:
-
-        #     print("\nProcessing gcm deltas ... please wait\n")                                   
-        #     apply_deltas_to_xml_files(files_dict = files_dict, arguments = args)
-        #     sys.exit() 
-
-        # elif args.applysubdeltas:
-
-            
-        #     apply_subwaterdeltas_to_xml_files(files_dict = files_dict, arguments = args)
-
-        #     sys.exit()
-
-        # ---------------------------------------------------------------------
-
         # writing specific outputs; oasis and ecoflow files
         elif args.oasis:
 
@@ -241,6 +226,38 @@ def main():
             specific_output_file_processing.write_ecoflow_file_drainageareashp(file_list = args.ecoflowdashp, dir_name = user_settings.settings["ecoflow_directory_name"], 
                                                                                file_name = da_file_name, label_field = label_field, query_field = area_field,
             )
+
+            sys.exit()
+
+        # applying gcm deltas
+        elif args.applygcmdeltas:
+
+            print("\nProcessing gcm deltas ... please wait\n")  
+
+            if args.samplesingle:
+                settings = user_settings.sample_single_settings
+            elif args.samplebatch:
+                settings = user_settings.sample_batch_settings
+            else:
+                settings = user_settings.settings                       
+           
+            gcm_delta_processing.apply_gcm_deltas(settings = settings)
+
+            sys.exit()
+
+
+        elif args.applysubgcmdeltas:
+
+            print("\nProcessing sub gcm deltas ... please wait\n")  
+
+            if args.samplesingle:
+                settings = user_settings.sample_single_settings
+            elif args.samplebatch:
+                settings = user_settings.sample_batch_settings
+            else:
+                settings = user_settings.settings 
+
+            gcm_delta_processing.apply_sub_gcm_deltas(settings = settings)
 
             sys.exit()
 

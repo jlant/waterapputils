@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="waterapputils 1.0.0 documentation" href="index.html" />
-    <link rel="next" title="Code Documentation" href="code.html" />
+    <link rel="next" title="General Guide" href="guide.html" />
     <link rel="prev" title="Welcome to waterapputils’s documentation!" href="index.html" /> 
   </head>
   <body>
@@ -45,7 +45,7 @@
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
-        <a href="code.html">Code Documentation</a>&#160;&#160;»
+        <a href="guide.html">General Guide</a>&#160;&#160;»
         </p>
 
       </div>
@@ -161,16 +161,43 @@ simulation database files.</li>
 <td>open file dialog window to select 2 WATER simulation database files to compare; <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt></td>
 </tr>
 <tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-applydeltas</span></tt></td>
-<td>apply global climate change deltas to WATER simulation database file(s); <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt>; details specified in <tt class="docutils literal"><span class="pre">waterdelta_batch_variables.py</span></tt></td>
+<td>apply global climate change deltas to WATER simulation database file(s); <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt>; details specified in <tt class="docutils literal"><span class="pre">user_settings.py</span></tt></td>
 </tr>
 <tr class="row-even"><td><tt class="docutils literal"><span class="pre">-applysubdeltas</span></tt></td>
-<td>apply updated global climate change deltas from <tt class="docutils literal"><span class="pre">_non_intersecting_basin_tiles.txt</span></tt> to WATER simulation database file(s); <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt>; details specified in <tt class="docutils literal"><span class="pre">waterdelta_batch_variables.py</span></tt></td>
+<td>apply updated global climate change deltas from <tt class="docutils literal"><span class="pre">sub_gcm_delta_info_file_name</span></tt> variable in user_settings.py to WATER simulation database file(s); details specified in <tt class="docutils literal"><span class="pre">user_settings.py</span></tt></td>
 </tr>
 <tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-applywateruse</span></tt></td>
-<td>apply water use data to WATER simulation output file(s); <tt class="docutils literal"><span class="pre">WATER.txt</span></tt>; details specified in <tt class="docutils literal"><span class="pre">wateruse_batch_variables.py</span></tt></td>
+<td>apply water use data to WATER simulation output file(s); <tt class="docutils literal"><span class="pre">WATER.txt</span></tt>; details specified in <tt class="docutils literal"><span class="pre">user_settings.py</span></tt></td>
 </tr>
 <tr class="row-even"><td><tt class="docutils literal"><span class="pre">-applysubwateruse</span></tt></td>
-<td>apply water use data from <tt class="docutils literal"><span class="pre">_non_intersecting_basin_centroids.txt</span></tt> to WATER simulation output file(s); <tt class="docutils literal"><span class="pre">WATER.txt</span></tt>; details specified in <tt class="docutils literal"><span class="pre">wateruse_batch_variables.py</span></tt></td>
+<td>apply water use data from <tt class="docutils literal"><span class="pre">sub_wateruse_info_file_name</span></tt> variable in user_settings.py to WATER simulation output file(s); <tt class="docutils literal"><span class="pre">WATER.txt</span></tt>; details specified in <tt class="docutils literal"><span class="pre">user_settings.py</span></tt></td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-oasis</span></tt></td>
+<td>create output data file(s) for OASIS program; tab delimited file(s) of timeseries of discharge</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-ecoflowstationid</span></tt></td>
+<td>create output data file(s) for ecoflow program; comma separated file(s) of timeseries of discharge for a specific basin (station) id</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-ecoflowdaxml</span></tt></td>
+<td>create output data file(s) for ecoflow program; comma separated file(s) of basin (station) id and its respective drainage area in square miles calculated using data in the <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt></td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-ecoflowdashp</span></tt></td>
+<td>create output data file(s) for ecoflow program; comma separated file(s) of basin (station) id and its respective drainage area in square miles calculated from the shapefile(s)</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-outfilename</span></tt></td>
+<td>OPTIONAL : output filename to be used with <tt class="docutils literal"><span class="pre">-ecoflowdaxml</span></tt> or <tt class="docutils literal"><span class="pre">-ecoflowdashp</span></tt> commands in writing the drainage area comma separated file</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-labelfield</span></tt></td>
+<td>OPTIONAL : label field name (basin number / station id) to be used with <tt class="docutils literal"><span class="pre">-ecoflowdashp</span></tt> command in writing the drainage area comma separated file; Default label field is the FID in the basin(s) shapefile</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-areafield</span></tt></td>
+<td>OPTIONAL : area field name in a basin(s) shapefile to be used with <tt class="docutils literal"><span class="pre">-ecoflowdashp</span></tt> command in writing the drainage area comma separated file; Default action is to calculate area from the shapefile(s)</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-samplesingle</span></tt></td>
+<td>OPTIONAL : flag used with <tt class="docutils literal"><span class="pre">-applywateruse</span></tt>, <tt class="docutils literal"><span class="pre">-applysubwateruse</span></tt>, <tt class="docutils literal"><span class="pre">-applygcmdeltas</span></tt>, <tt class="docutils literal"><span class="pre">-applysubgcmdeltas</span></tt> to specify the use of the sample single simulation datasets</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-samplebatch</span></tt></td>
+<td>OPTIONAL : flag used with <tt class="docutils literal"><span class="pre">-applywateruse</span></tt>, <tt class="docutils literal"><span class="pre">-applysubwateruse</span></tt>, <tt class="docutils literal"><span class="pre">-applygcmdeltas</span></tt>, <tt class="docutils literal"><span class="pre">-applysubgcmdeltas</span></tt> to specify the use of the sample batch simulation datasets</td>
 </tr>
 </tbody>
 </table>
@@ -196,7 +223,7 @@ SETUP: deltatxt tests
 SETUP: waterxml tests
 ........TEARDOWN: waterxml tests
 --------------------------------------------------
-Ran 89 tests in 4.231s
+Ran 91 tests in 1.049s
 
 OK
 </pre></div>
@@ -204,42 +231,50 @@ OK
 </div>
 <div class="section" id="repository-project-layout">
 <h2>Repository/Project Layout<a class="headerlink" href="#repository-project-layout" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre>bin/                                # executables/scripts
-data/                               # sample data files to use with software and associated information
-    deltas-gcm/                     # statistically downscaled global climate model data
-    spatial-datafiles/              # spatial data; shapefile format
-    watertxt-datafiles/             # sample WATER.txt files
-    wateruse-batch-run/             # sample batch run output from WATER
-    wateruse-datafiles/             # sample water use files
-    waterxml-datafiles/             # sample WATERSimulation.xml files
-docs/                               # Sphinx code documentation
-tests/                              # tests
-    deltas_tests.py                 # tests for deltas module
-    helpers_tests.py                # tests for helper module
-    spatialvectors_test.py          # tests for spatialvectors module
-    watertxt_tests.py               # tests for watertxt module
-    wateruse_tests.py               # tests for wateruse module
-    waterxml_tests.py               # tests for waterxml module
-waterapputils/                      # directory containing code modules
-    deltas.py                       # handles processing of global climate model data
-    deltas_viewer.py                # handles view (plotting) of global climate model data
-    helpers.py                      # helper functions
-    spatialdata_viewer.py           # handles view (mapping) of spatial data; uses basemap library
-    spatialvectors.py               # handles spatial data
-    waterapputils.py                # main controller; calls respective module
-    waterapputils_logging.py        # handles error logging
-    waterdeltas_batch_variables.py  # user editable file for processing batch model simulations with climate model data
-    watertxt.py                     # handles processing of WATER.txt simulation output files
-    watertxt_viewer.py              # handles view (plotting) of WATER.txt simulation output files
-    wateruse.py                     # handles processing of water use data
-    wateruse_batch_variables.py     # user editable file for processing batch model simulations with water use data
-    waterxml.py                     # handles processing of WATERSimulation.xml simulation database files
-    waterxml_viewer.py              # handles view (plotting) of  WATERSimulation.xml simulation database files
-Makefile                            # makefile to help clean directories
-LICENSE.txt                         # USGS Software User Rights Notice
-README.md                           # README file
-requirements.txt                    # list of requirements/dependencies
-setup.py                            # code for building, distributing, and installing modules
+<div class="highlight-python"><div class="highlight"><pre>bin/                                      # executables/scripts
+data/                                     # sample data files to use with software and associated information
+  deltas-gcm/                             # statistically downscaled global climate model data
+      sample-water-simulations            # sample WATER application simulations and datasets
+          sample-batch-simulation         # sample WATER application batch run simulation
+          sample-datasets                 # sample WATER application simulation datasets
+          sample-single-simulation        # sample WATER applicaiton single run simulation
+      spatial-datafiles/                  # spatial data; shapefile format
+      watertxt-datafiles/                 # sample WATER.txt files
+      wateruse-batch-run/                 # sample batch run output from WATER
+      wateruse-datafiles/                 # sample water use files
+    waterxml-datafiles/                   # sample WATERSimulation.xml files
+docs/                                     # Sphinx code documentation
+  tests/                                  # tests
+      deltas_tests.py                     # tests for deltas module
+      helpers_tests.py                    # tests for helper module
+      spatialvectors_test.py              # tests for spatialvectors module
+      watertxt_tests.py                   # tests for watertxt module
+      wateruse_tests.py                   # tests for wateruse module
+      waterxml_tests.py                   # tests for waterxml module
+  waterapputils/                          # directory containing code modules
+      deltas.py                           # handles processing of global climate model data
+      deltas_viewer.py                    # handles view (plotting) of global climate model data
+      gcm_delta_processing.py             # handles the global climate model delta factors processing using settings from the user_settings.py file
+      helpers.py                          # helper functions
+      spatialdata_viewer.py               # handles view (mapping) of spatial data; uses basemap library
+      spatialvectors.py                   # handles spatial data
+      specific_output_file_processing.py  # handles specific output file processing for external OASIS and Ecoflow programs
+      user_settings.py                    # user settings to control and specify data inputs for water use and global climate model processing along with control of naming outputs
+      water_files_processing.py           # handles the WATER application output and database file processing using settings from the user_settings.py file
+      waterapputils.py                    # main controller; calls respective module
+      waterapputils_logging.py            # handles error logging
+      watertxt.py                         # handles processing of WATER.txt simulation output files
+      watertxt_viewer.py                  # handles view (plotting) of WATER.txt simulation output files
+      wateruse.py                         # handles processing of water use data
+      wateruse_processing.py              # handles the water use processing using settings from the user_settings.py file
+      waterxml.py                         # handles processing of WATERSimulation.xml simulation database files
+      waterxml_viewer.py                  # handles view (plotting) of  WATERSimulation.xml simulation database files
+  Makefile                                # makefile to help clean directories
+LICENSE.txt                               # USGS Software User Rights Notice
+README.md                                 # README file
+requirements.txt                          # list of requirements/dependencies
+setup.py                                  # code for building, distributing, and installing modules
+run_sample_datasets.bash                  # bash script used to run specific or all sample datasets
 </pre></div>
 </div>
 </div>
@@ -292,7 +327,7 @@ jlant@ugs.gov
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
-        <a href="code.html">Code Documentation</a>&#160;&#160;»
+        <a href="guide.html">General Guide</a>&#160;&#160;»
         </p>
 
       </div>

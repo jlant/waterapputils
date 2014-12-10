@@ -103,13 +103,31 @@ Command line arguments/options
 +-------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | ``-waterxmlcmpfd``      | open file dialog window to select 2 WATER simulation database files to compare; ``WATERSimulation.xml``                                                                                                       |
 +-------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-applydeltas``        | apply global climate change deltas to WATER simulation database file(s); ``WATERSimulation.xml``; details specified in ``waterdelta_batch_variables.py``                                                      |
+| ``-applydeltas``        | apply global climate change deltas to WATER simulation database file(s); ``WATERSimulation.xml``; details specified in ``user_settings.py``                                                                   |
 +-------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-applysubdeltas``     | apply updated global climate change deltas from ``_non_intersecting_basin_tiles.txt`` to WATER simulation database file(s); ``WATERSimulation.xml``; details specified in ``waterdelta_batch_variables.py``   |
+| ``-applysubdeltas``     | apply updated global climate change deltas from ``sub_gcm_delta_info_file_name`` variable in user_settings.py to WATER simulation database file(s); details specified in ``user_settings.py``                 |
 +-------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-applywateruse``      | apply water use data to WATER simulation output file(s); ``WATER.txt``; details specified in ``wateruse_batch_variables.py``                                                                                  |
+| ``-applywateruse``      | apply water use data to WATER simulation output file(s); ``WATER.txt``; details specified in ``user_settings.py``                                                                                             |
 +-------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-applysubwateruse``   | apply water use data from ``_non_intersecting_basin_centroids.txt`` to WATER simulation output file(s); ``WATER.txt``; details specified in ``wateruse_batch_variables.py``                                   |
+| ``-applysubwateruse``   | apply water use data from ``sub_wateruse_info_file_name`` variable in user_settings.py to WATER simulation output file(s); ``WATER.txt``; details specified in ``user_settings.py``                           |
++-------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|``-oasis``               | create output data file(s) for OASIS program; tab delimited file(s) of timeseries of discharge                                                                                                                |
++-------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|``-ecoflowstationid``    | create output data file(s) for ecoflow program; comma separated file(s) of timeseries of discharge for a specific basin (station) id                                                                          |
++-------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|``-ecoflowdaxml``        | create output data file(s) for ecoflow program; comma separated file(s) of basin (station) id and its respective drainage area in square miles calculated using data in the ``WATERSimulation.xml``           |
++-------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|``-ecoflowdashp``        | create output data file(s) for ecoflow program; comma separated file(s) of basin (station) id and its respective drainage area in square miles calculated from the shapefile(s)                               |
++-------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|``-outfilename``         | OPTIONAL : output filename to be used with ``-ecoflowdaxml`` or ``-ecoflowdashp`` commands in writing the drainage area comma separated file                                                                  | 
++-------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|``-labelfield``          | OPTIONAL : label field name (basin number / station id) to be used with ``-ecoflowdashp`` command in writing the drainage area comma separated file; Default label field is the FID in the basin(s) shapefile | 
++-------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|``-areafield``           | OPTIONAL : area field name in a basin(s) shapefile to be used with ``-ecoflowdashp`` command in writing the drainage area comma separated file; Default action is to calculate area from the shapefile(s)     |
++-------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|``-samplesingle``        | OPTIONAL : flag used with ``-applywateruse``, ``-applysubwateruse``, ``-applygcmdeltas``, ``-applysubgcmdeltas`` to specify the use of the sample single simulation datasets                                  |
++-------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|``-samplebatch``         | OPTIONAL : flag used with ``-applywateruse``, ``-applysubwateruse``, ``-applygcmdeltas``, ``-applysubgcmdeltas`` to specify the use of the sample batch simulation datasets                                   |
 +-------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 Testing
@@ -137,7 +155,7 @@ following:
     SETUP: waterxml tests
     ........TEARDOWN: waterxml tests
     --------------------------------------------------
-    Ran 89 tests in 4.231s
+    Ran 91 tests in 1.049s
 
     OK
 
@@ -146,43 +164,55 @@ Repository/Project Layout
 
 ::
 
-    bin/                                # executables/scripts
-    data/                               # sample data files to use with software and associated information
-        deltas-gcm/                     # statistically downscaled global climate model data
-        spatial-datafiles/              # spatial data; shapefile format
-        watertxt-datafiles/             # sample WATER.txt files
-        wateruse-batch-run/             # sample batch run output from WATER
-        wateruse-datafiles/             # sample water use files
-        waterxml-datafiles/             # sample WATERSimulation.xml files
-    docs/                               # Sphinx code documentation
-    tests/                              # tests
-        deltas_tests.py                 # tests for deltas module
-        helpers_tests.py                # tests for helper module
-        spatialvectors_test.py          # tests for spatialvectors module
-        watertxt_tests.py               # tests for watertxt module
-        wateruse_tests.py               # tests for wateruse module
-        waterxml_tests.py               # tests for waterxml module
-    waterapputils/                      # directory containing code modules
-        deltas.py                       # handles processing of global climate model data
-        deltas_viewer.py                # handles view (plotting) of global climate model data
-        helpers.py                      # helper functions
-        spatialdata_viewer.py           # handles view (mapping) of spatial data; uses basemap library
-        spatialvectors.py               # handles spatial data
-        waterapputils.py                # main controller; calls respective module
-        waterapputils_logging.py        # handles error logging
-        waterdeltas_batch_variables.py  # user editable file for processing batch model simulations with climate model data
-        watertxt.py                     # handles processing of WATER.txt simulation output files
-        watertxt_viewer.py              # handles view (plotting) of WATER.txt simulation output files
-        wateruse.py                     # handles processing of water use data
-        wateruse_batch_variables.py     # user editable file for processing batch model simulations with water use data
-        waterxml.py                     # handles processing of WATERSimulation.xml simulation database files
-        waterxml_viewer.py              # handles view (plotting) of  WATERSimulation.xml simulation database files
-    Makefile                            # makefile to help clean directories
-    LICENSE.txt                         # USGS Software User Rights Notice
-    README.md                           # README file
-    requirements.txt                    # list of requirements/dependencies 
-    setup.py                            # code for building, distributing, and installing modules
+    bin/                                      # executables/scripts
+    data/                                     # sample data files to use with software and associated information
+      deltas-gcm/                             # statistically downscaled global climate model data
+          sample-water-simulations            # sample WATER application simulations and datasets
+              sample-batch-simulation         # sample WATER application batch run simulation
+              sample-datasets                 # sample WATER application simulation datasets
+              sample-single-simulation        # sample WATER applicaiton single run simulation
+          spatial-datafiles/                  # spatial data; shapefile format
+          watertxt-datafiles/                 # sample WATER.txt files
+          wateruse-batch-run/                 # sample batch run output from WATER
+          wateruse-datafiles/                 # sample water use files
+        waterxml-datafiles/                   # sample WATERSimulation.xml files
+    docs/                                     # Sphinx code documentation
+      tests/                                  # tests
+          deltas_tests.py                     # tests for deltas module
+          helpers_tests.py                    # tests for helper module
+          spatialvectors_test.py              # tests for spatialvectors module
+          watertxt_tests.py                   # tests for watertxt module
+          wateruse_tests.py                   # tests for wateruse module
+          waterxml_tests.py                   # tests for waterxml module
+      waterapputils/                          # directory containing code modules
+          deltas.py                           # handles processing of global climate model data
+          deltas_viewer.py                    # handles view (plotting) of global climate model data
+          gcm_delta_processing.py             # handles the global climate model delta factors processing using settings from the user_settings.py file
+          helpers.py                          # helper functions
+          spatialdata_viewer.py               # handles view (mapping) of spatial data; uses basemap library
+          spatialvectors.py                   # handles spatial data
+          specific_output_file_processing.py  # handles specific output file processing for external OASIS and Ecoflow programs
+          user_settings.py                    # user settings to control and specify data inputs for water use and global climate model processing along with control of naming outputs
+          water_files_processing.py           # handles the WATER application output and database file processing using settings from the user_settings.py file
+          waterapputils.py                    # main controller; calls respective module
+          waterapputils_logging.py            # handles error logging
+          watertxt.py                         # handles processing of WATER.txt simulation output files
+          watertxt_viewer.py                  # handles view (plotting) of WATER.txt simulation output files
+          wateruse.py                         # handles processing of water use data
+          wateruse_processing.py              # handles the water use processing using settings from the user_settings.py file
+          waterxml.py                         # handles processing of WATERSimulation.xml simulation database files
+          waterxml_viewer.py                  # handles view (plotting) of  WATERSimulation.xml simulation database files
+      Makefile                                # makefile to help clean directories
+    LICENSE.txt                               # USGS Software User Rights Notice
+    README.md                                 # README file
+    requirements.txt                          # list of requirements/dependencies 
+    setup.py                                  # code for building, distributing, and installing modules
+    run_sample_datasets.bash                  # bash script used to run specific or all sample datasets
 
+
+
+
+    
 Requirements
 ------------
 

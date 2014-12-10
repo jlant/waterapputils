@@ -543,6 +543,28 @@ def calc_total_study_unit_areas(area_means):
 
     return total_area
 
+def change_element_value(waterxml_tree, element, child, new_value):
+    """
+    Change an elements value.  For example, change the project name (ProjName)
+     
+    Parameters
+    ----------
+    waterxml_tree : ElementTree object 
+        Tree object of WATER \*.xml file 
+    element : string
+        String name of parameter
+    new_value : string
+        String of new value
+    
+    """
+    for elem in waterxml_tree.iter(tag = element):
+
+        # get element value
+        elem_value = elem.find(child)
+
+        # change element value
+        elem_value.text = new_value
+
 def _create_test_data():
     """ Create test data to use with tests """
     
@@ -1000,6 +1022,30 @@ def test_get_study_unit_areas():
      # print results
     _print_test_info(actual, expected)
 
+def test_change_element_value():
+    """ Test changing and elements value """
+
+    print("--- Testing change_element_value() ---")    
+
+    expected_project = {"ProjID": "1", "UserName": "jlant", "DateCreated": "2014-04-22T10:00:00.0000-00:00", "ProjName": "updated-my-project"}
+    
+    xml_tree = _create_test_data()
+    
+    project = create_project_dict() 
+    
+    project = fill_dict(waterxml_tree = xml_tree, data_dict = project, element = "Project", keys = project.keys())
+
+    change_element_value(waterxml_tree = xml_tree, element = "Project", child = "ProjName" , new_value = "-".join(["updated", project["ProjName"]]))
+
+    project_updated = create_project_dict()
+
+    actual_project = fill_dict(waterxml_tree = xml_tree, data_dict = project_updated, element = "Project", keys = project.keys())
+
+     # print results
+    _print_test_info(actual_project, expected_project) 
+
+
+
 def main():
     """ Test functionality waterxml.py """
 
@@ -1028,6 +1074,8 @@ def main():
     test_write_file()
 
     test_get_study_unit_total_area()
+
+    test_change_element_value()
     
 if __name__ == "__main__":
     main()

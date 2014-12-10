@@ -285,7 +285,7 @@ def read_field_values_file_in(filestream):
     return field_values_dict
         
 
-def write_field_values_file(filepath, filename, field_values_dict, special_centroid_number = "000"):
+def write_field_values_file(filepath, filename, field_values_dict, special_id = "000", field_id = "newhydroid"):
     """
     Write a file containing rows of basin ids that are not intersected by any water use basin centroids
 
@@ -300,9 +300,10 @@ def write_field_values_file(filepath, filename, field_values_dict, special_centr
     """
     fullpath = os.path.join(filepath, filename)
     with open(fullpath, "w") as f:
-        f.write("basinid,newhydroid\n")        
+        line_str = "basinid,{}\n".format(field_id)
+        f.write(line_str)        
         for key in field_values_dict.keys():
-            f.write("{},{}".format(key, special_centroid_number))
+            f.write("{},{}".format(key, special_id))
 
 def get_field_values(shapefile, id_field, query_field):
     """

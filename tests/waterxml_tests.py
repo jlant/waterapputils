@@ -696,3 +696,22 @@ def test_get_study_unit_areas():
     actual["area_means"] = waterxml.get_study_unit_areas(simulation_dict = simulation)
     
     np.testing.assert_equal(actual["area_means"][0], expected["area_means"][0])
+
+
+def test_change_element_value():
+    """ Test changing and elements value """   
+
+    expected_project = {"ProjID": "1", "UserName": "jlant", "DateCreated": "2014-04-22T10:00:00.0000-00:00", "ProjName": "updated-my-project"}
+   
+    project = waterxml.create_project_dict() 
+    
+    project = waterxml.fill_dict(waterxml_tree = fixture["xml_tree1"], data_dict = project, element = "Project", keys = project.keys())
+
+    waterxml.change_element_value(waterxml_tree = fixture["xml_tree1"], element = "Project", child = "ProjName" , new_value = "-".join(["updated", project["ProjName"]]))
+
+    project_updated = waterxml.create_project_dict()
+
+    actual_project = waterxml.fill_dict(waterxml_tree = fixture["xml_tree1"], data_dict = project_updated, element = "Project", keys = project.keys())
+
+    # print results
+    np.testing.assert_equal(actual_project, expected_project) 
