@@ -79,10 +79,34 @@ Command line arguments/options
 |`-samplesingle`        | OPTIONAL : flag used with `-applywateruse`, `-applysubwateruse`, `-applygcmdeltas`, `-applysubgcmdeltas` to specify the use of the sample single simulation datasets |
 |`-samplebatch`         | OPTIONAL : flag used with `-applywateruse`, `-applysubwateruse`, `-applygcmdeltas`, `-applysubgcmdeltas` to specify the use of the sample batch simulation datasets |
 
+Running sample datasets with a shell script
+-------------------------------------------
+
+The shell script [run_sample_datasets.bash](run_sample_datasets.bash) is a shell script that can be used to run automated tests 
+and run many of the command line arguments using the [sample datasets](data/sample-water-simulations).  The following are the 
+command line arguments for the shell script [run_sample_datasets.bash](run_sample_datasets.bash):
+
+| Commands              | Description |                                                                              
+| --------              | ----------- |                                                                               
+|`-h`                   | show list of available commands |
+|`-txt`                 | run `-watertxt` and `-watertxtcmp` using the sample WATER simulation output TEXT files located [here](data/watertxt-datafiles) |
+|`-xml`                 | run `-waterxml` and `-waterxmlcmp` using the sample WATER simulation output XML files located [here](data/waterxml-datafiles) |
+|`-wateruse`            | run and apply [water use data](data/wateruse-datafiles) to sample WATER simulations; single and batch simulations located [here](data/sample-water-simulations) |
+|`-subwateruse`         | run and apply substitute water use data to sample WATER simulations; single and batch simulations located [here](data/sample-water-simulations) |
+|`-gcmdelta`            | run and apply [global climate model data](data/gcmdelta-datafiles) to sample WATER simulations; single and batch simulations located [here](data/sample-water-simulations) |
+|`-subgcmdelta`         | run and apply substitute water use data to sample WATER simulations; single and batch simulations located [here](data/sample-water-simulations) |
+|`-oasis`               | create an oasis formated water use output file using the sample water use applied WATER TEXT file located [here](data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt) |
+|`-ecoflowstationid`    | create an ecoflow formated water use output file using the sample water use applied WATER TEXT file located [here](data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt) |
+|`-ecoflowdaxml`        | create an ecoflow formated drainage area output file using the sample WATER XML file to calculate basin area located [here](data/sample-water-simulations/sample-datafiles/WATERSimulation-basin0.xml) |
+|`-ecoflowdashp`        | create an ecoflow formated drainage area output file using the sample basin shapefiles located [here](data/sample-water-simulations/sample-datafiles/basin0.shp) |
+|`-all`                 | run (mostly) all commands; `-tests`, `-txt`, `-xml`, `-wateruse`, `-gcmdelta`, `-oasis`, `-ecoflowstationid`, `-ecoflowdaxml`, `-ecoflowdashp` |
+|`-tests`               | run units tests use nosetests |
+
+
 Testing
 -------
 
-Tests for **waterapputils** were written using the [nose] library, and are contained in the *tests* directory. [nose] must be
+Automated tests for **waterapputils** were written using the [nose] library, and are contained in the *tests* directory. [nose] must be
 installed in order to run tests. Automated tests can be run using the `nosetests` command at the project level directory (not 
 within the *tests* directory, but the *waterapputils* directory containing the *tests* directory).  A successful test run 
 will look something like the following:

@@ -161,7 +161,7 @@ usage()
 {
 
 	echo "Usage:"
-	echo "    run_sample_datasets [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid] [ecoflowdaxml] [-ecoflowdashp] [-all] [tests]] | [-h]]"
+	echo "    run_sample_datasets [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid] [ecoflowdaxml] [-ecoflowdashp] [-gcmdelta] [-all] [tests]] | [-h]]"
 }
 
 # main program

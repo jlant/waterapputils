@@ -202,6 +202,34 @@ simulation database files.</li>
 </tbody>
 </table>
 </div>
+<div class="section" id="running-sample-datasets-with-a-shell-script">
+<h2>Running sample datasets with a shell script<a class="headerlink" href="#running-sample-datasets-with-a-shell-script" title="Permalink to this headline">¶</a></h2>
+<p>The shell script <a class="reference external" href="../../../run_sample_datasets.bash">run_sample_datasets.bash</a> is a shell script that can be used to run automated tests
+and run many of the command line arguments using the <a class="reference external" href="../../../data/sample-water-simulations">sample datasets</a>.  The following are the
+command line arguments for the shell script <a class="reference external" href="../../../run_sample_datasets.bash">run_sample_datasets.bash</a>:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="89%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Commands</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-h</span></tt></td>
+<td>show list of available commands</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-watertxt</span></tt></td>
+<td>list WATER simulation output file(s) to process; <tt class="docutils literal"><span class="pre">WATER.txt</span></tt></td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-txt</span></tt></td>
+<td>run <tt class="docutils literal"><span class="pre">-watertxt</span></tt> and <tt class="docutils literal"><span class="pre">-watertxtcmp</span></tt> using the sample WATER simulation output TEXT files located <a class="reference external" href="../../../data/watertxt-datafiles">here</a></td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="section" id="testing">
 <h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
 <p>Tests for <strong>waterapputils</strong> were written using the
