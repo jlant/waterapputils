@@ -104,8 +104,8 @@ def plot_shapefiles_map(shapefiles, display_fields = [], colors = [], title = No
         Boolean value to show plots         
     save_path : string 
         String path to save plot(s) 
-    """   
-    # get the map extents to map center the map appropriately around shapefile data; buffer the extents a bit as well
+    """  
+
     extent_coords, center_coords, standard_parallels = get_map_extents(shapefiles)    
     buff = 2   
 
@@ -219,7 +219,6 @@ def _create_shapefile_test_data():
 
     # open the shapefiles
     test_poly_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/test_poly_wgs84.shp"))) 
-    test_poly_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/test_poly_nad83.shp"))) 
     water_basin_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basin_wgs84.shp")))      
     water_basins_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basins_wgs84.shp")))  
     water_basin_pourpoint_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basin_pourpoint_wgs84.shp")))      
