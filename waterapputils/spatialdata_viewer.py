@@ -39,7 +39,7 @@ def print_shapefile_data(shapefile_dict):
     print("Fields:\n    {}\n".format(shapefile_dict["fields"]))
     print("Number of features:\n    {}\n".format(shapefile_dict["num_features"]))
 
-def get_map_extents(shapefiles):
+def get_map_extents(shapefiles, shp_idx = None):
     """   
     Get max and min extent coordinates from a list of shapefiles to use as the 
     extents on the map. Use the map extents to calculate the map center and the 
@@ -65,15 +65,21 @@ def get_map_extents(shapefiles):
     
     lons = []
     lats = []
-    for shapefile_data in shapefiles:
-        lons.append(shapefile_data["extents"][0:2])
-        lats.append(shapefile_data["extents"][2:])
+
+    if shp_idx:
+        lons.append(shapefiles[shp_idx]["extents"][0:2])
+        lats.append(shapefiles[shp_idx]["extents"][2:])
+
+    else:
+        for shapefile_data in shapefiles:
+            lons.append(shapefile_data["extents"][0:2])
+            lats.append(shapefile_data["extents"][2:])
     
     extent_coords["lon_min"] = np.min(lons)
     extent_coords["lon_max"] = np.max(lons)
     extent_coords["lat_min"] = np.min(lats)
     extent_coords["lat_max"] = np.max(lats)
-     
+
     center_coords["lon"] = np.mean([extent_coords["lon_min"], extent_coords["lon_max"]])
     center_coords["lat"] = np.mean([extent_coords["lat_min"], extent_coords["lat_max"]])
     
@@ -82,7 +88,7 @@ def get_map_extents(shapefiles):
         
     return extent_coords, center_coords, standard_parallels
 
-def plot_shapefiles_map(shapefiles, display_fields = [], colors = [], title = None, is_visible = True, save_path = None):
+def plot_shapefiles_map(shapefiles, display_fields = [], colors = [], title = None, is_visible = True, save_path = None, shp_idx = None):
     """   
     Generate a map showing all the shapefiles in the shapefile_list.  
     Shapefiles should be in a Geographic Coordinate System (longitude and 
@@ -106,8 +112,8 @@ def plot_shapefiles_map(shapefiles, display_fields = [], colors = [], title = No
         String path to save plot(s) 
     """  
 
-    extent_coords, center_coords, standard_parallels = get_map_extents(shapefiles)    
-    buff = 2   
+    extent_coords, center_coords, standard_parallels = get_map_extents(shapefiles, shp_idx = shp_idx)    
+    buff = 0.1   
 
     # create the figure
     plt.figure(figsize = (12,10))    
@@ -128,8 +134,8 @@ def plot_shapefiles_map(shapefiles, display_fields = [], colors = [], title = No
     bmap.drawstates()
     bmap.drawmapboundary(fill_color = "aqua")
     bmap.fillcontinents(color = "coral", lake_color = "aqua")
-    bmap.drawparallels(np.arange(-80., 81., 10.), labels = [1, 0, 0, 0])
-    bmap.drawmeridians(np.arange(-180., 181., 10.), labels = [0, 0, 0, 1])
+    bmap.drawparallels(np.arange(-80., 81., 1.), labels = [1, 0, 0, 0])
+    bmap.drawmeridians(np.arange(-180., 181., 1.), labels = [0, 0, 0, 1])
      
     # plot each shapefile on the basemap    
     legend_handles = []
@@ -152,7 +158,7 @@ def plot_shapefiles_map(shapefiles, display_fields = [], colors = [], title = No
         for shape_dict, shape in zip(bmap.shp_info, bmap.shp):                                          # zip the shapefile information and its shape as defined by basemap
 
             if shapefile_data["type"] == "POLYGON":
-                p1 = mpl.patches.Polygon(shape, facecolor = color, edgecolor = color,
+                p1 = mpl.patches.Polygon(shape, facecolor = color, edgecolor = "k",
                                          linewidth = 2, alpha = 0.7, label = shapefile_data["name"])            
                 plt.gca().add_patch(p1)
                 xx, yy = zip(*shape)

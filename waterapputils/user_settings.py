@@ -70,6 +70,29 @@ oasis_directory_name = "waterapputils-oasis"
 oasis_file_name = "oasis.txt"
 
 
+# ---------------------------- WATER shapefiles --------------------------- #
+shp_watersheds_field = "STAID"
+shp_watersheds_color = "g"
+
+shp_basinmask_field = ""
+shp_basinmask_color = "g"
+shp_pourpoint_field = ""
+shp_pourpoint_color = "r"
+
+shp_usgsgages_field = "gage"
+shp_usgsgages_color = "k"
+
+shp_counties_field = "COUNTY"
+shp_counties_color = "lightcoral"
+
+shp_climatebasins_field = "HydroID"
+shp_climatebasins_color = "orange"
+
+shp_streams_field = "NAME"
+shp_streams_color = "b"
+shp_reservoirs_field = "GNIS_NAME"
+shp_reservoirs_color = "lightblue"
+
 # ------------------ Containers for waterapputils.py----------------------- #
 settings = {
     "simulation_directory": simulation_directory,
@@ -112,6 +135,29 @@ settings = {
     
 	"oasis_directory_name": oasis_directory_name,
 	"oasis_file_name": oasis_file_name,
+
+    "shp_watersheds_field" : "STAID",
+    "shp_watersheds_color" : "g",
+
+    "shp_basinmask_field" : "",
+    "shp_basinmask_color" : "g",
+    "shp_pourpoint_field" : "",
+    "shp_pourpoint_color" : "r",
+
+    "shp_usgsgages_field" : "gage",
+    "shp_usgsgages_color" : "k",
+
+    "shp_counties_field" : "COUNTY",
+    "shp_counties_color" : "lightcoral",
+
+    "shp_climatebasins_field" : "HydroID",
+    "shp_climatebasins_color" : "orange",
+
+    "shp_streams_field" : "NAME",
+    "shp_streams_color" : "b",
+    "shp_reservoirs_field" : "GNIS_NAME",
+    "shp_reservoirs_color" : "lightblue",
+
 }
 
 sample_single_settings = {
@@ -160,6 +206,7 @@ sample_single_settings = {
     
     "oasis_directory_name": "waterapputils-oasis",
     "oasis_file_name": "oasis.txt",
+
 }
 
 sample_batch_settings = {
@@ -208,4 +255,5 @@ sample_batch_settings = {
     
     "oasis_directory_name": "waterapputils-oasis",
     "oasis_file_name": "oasis.txt",
+
 }
