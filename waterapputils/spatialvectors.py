@@ -550,8 +550,23 @@ def reproject_shapefile_to_wgs84(shapefile, out_shapefile_suffix = "_reproj_wgs8
 
 def reproject(shapefiles):
     """
-    Reproject a list of shapefiles to Geographic (WGS84) coordinates if shapefiles are projected 
-    and not already in Geographic coordinates.
+    Reproject a list of shapefiles to Geographic (WGS84) coordinates. 
+    If any shapefile in the list is already in Geographic coordinates,
+    then its path is added to the list returned.
+
+    Parameters
+    ----------
+    shapefiles : list
+        List of filled shapefile dictionaries
+
+    Returns
+    -------
+    shp_reproj_list : list
+        List of paths to reprojected shapefiles
+
+    See Also
+    --------
+    fill_shapefile_dict()
 
     """
     shp_reproj_list = []
@@ -561,9 +576,13 @@ def reproject(shapefiles):
         layer = shp.GetLayer()
         spatial_ref = layer.GetSpatialRef()
         if spatial_ref.IsProjected():   
-            shp_reproj_path = reproject_shapefile_to_wgs84(shapefile = shp)
-            shp_reproj_list.append(shp_reproj_path)
+            shp_path = reproject_shapefile_to_wgs84(shapefile = shp)
         
+        else:
+            shp_path = shapefile
+
+        shp_reproj_list.append(shp_path)
+
     return shp_reproj_list
 
 def _print_test_info(expected, actual):

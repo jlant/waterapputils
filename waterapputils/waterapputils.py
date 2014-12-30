@@ -57,7 +57,7 @@ def main():
     group.add_argument("-ecoflowdaxml", "--ecoflowdaxml", nargs = "+", help = "List WATER xml data file(s)")
     group.add_argument("-ecoflowdashp", "--ecoflowdashp", nargs = "+", help = "List shapefile(s)")
 
-    group.add_argument("-map", "--map", nargs = "+", help = "List shapefile(s)")
+    group.add_argument("-map", "--map", nargs = "+", help = "List shapefile(s) to plot on a map")
 
     parser.add_argument("-v", "--verbose", action = "store_true",  help = "Print general information about data file(s)")
     parser.add_argument("-outfilename", "--outfilename", nargs = 1,  help = "Write file name to write drainage area csv file.")  

@@ -22,46 +22,79 @@ import spatialvectors
 import spatialdata_viewer
 
 
-water_database_shapefiles = ["usgsgages", "cnty", "climbasins", "strm", "rsvr"]
-
-water_shapefiles = {
-	"Watersheds" : {"field": "STAID", 
-			        "color": "lightgreen",
-	},
-
-	"usgsgages" : {"field": "gage", 
-				   "color": "k",
-	},
-
-	"cnty" : {"field": "COUNTY", 
-			  "color": "lightcoral",
-	},
-
-}
-
-def create_map(files_list, settings):
+def get_shps_colors_fields(files_list, settings):
 	"""
+	Return shapefiles, projected to WGS84 (if needed) and 
+	lists of map display fields and colors corresponding to 
+	each shapefile.
 
+    Parameters
+    ----------
+    files_list : list
+    	List of shapefiles to create a map with
+    settings : dictionary
+        Dictionary of user settings
 	"""
 	# reproject all shapefiles
 	shp_reproj_list = spatialvectors.reproject(shapefiles = files_list)
 
-	# plot all shapefiles
-	if shp_reproj_list:
-	    shp_info_list = []
-	    display_fields = []
-	    colors = []
-	    for shapefile in shp_reproj_list:
-	        shp = osgeo.ogr.Open(shapefile)    
+	shp_info_list = []
+	display_fields = []
+	colors = []
+	colors_index = 0
+	for shapefile in shp_reproj_list:
+	    shp = osgeo.ogr.Open(shapefile)    
 
-	        shp_info = spatialvectors.fill_shapefile_dict(shapefile = shp)
-	        shp_info_list.append(shp_info)
+	    shp_info = spatialvectors.fill_shapefile_dict(shapefile = shp)
+	    shp_info_list.append(shp_info)
 
-	        for key, values in water_shapefiles.iteritems():
+	    for key, values in settings["water_shapefiles"].iteritems():
+	        if key in shp_info["name"].split("_")[0]:
+	        	display_fields.append(values["field"])
+	        	colors.append(values["color"])
 
-		        if key in shp_info["name"].split("_")[0]:
-		        	display_fields.append(values["field"])
-		        	colors.append(values["color"])
+	    if not colors:
+			display_fields.append("")
+			colors.append(settings["map_colors_list"][colors_index])
+			colors_index += 1
 
-	    spatialdata_viewer.plot_shapefiles_map(shapefiles = shp_info_list, display_fields = display_fields, colors = colors, title = "A map!", is_visible = True, save_path = None, shp_idx = None)
+	return shp_info_list, display_fields, colors
+
+def create_map(files_list, settings, title = "A map!", is_visible = False, save_path = os.getcwd(), save_name = "map.png", shp_name = None, map_buffer = 1.0):
+	"""
+	Create a map use matplotlib's basemap using a list of shapefiles.
+
+    Parameters
+    ----------
+    files_list : list
+    	List of shapefiles to create a map with
+    settings : dictionary
+        Dictionary of user settings
+	"""
+
+	shp_info_list, display_fields, colors = get_shps_colors_fields(files_list, settings)
+
+	spatialdata_viewer.plot_shapefiles_map(
+		shapefiles = shp_info_list, 
+		display_fields = display_fields, 
+		colors = colors, 
+		title = title, 
+		is_visible = is_visible, 
+		save_path = save_path, 
+		save_name = save_name, 
+		shp_name = shp_name, 
+		buff = map_buffer,
+	)
+
+	# spatialdata_viewer.plot_shapefiles_map(
+	# 	shapefiles = shp_info_list, 
+	# 	display_fields = display_fields, 
+	# 	colors = colors, 
+	# 	title = settings["map_title_zoomed"], 
+	# 	is_visible = False, 
+	# 	save_path = os.getcwd(), 
+	# 	save_name = "map.png", 
+	# 	shp_name = "Watersheds", 
+	# 	buff = settings["map_buffer_zoomed"],
+	# )
 

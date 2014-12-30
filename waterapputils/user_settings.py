@@ -70,28 +70,88 @@ oasis_directory_name = "waterapputils-oasis"
 oasis_file_name = "oasis.txt"
 
 
-# ---------------------------- WATER shapefiles --------------------------- #
-shp_watersheds_field = "STAID"
-shp_watersheds_color = "g"
+# -------------------- WATER shapefiles and Map Info -------------------- #
+map_buffer_overview = 1.0
+map_buffer_zoomed = 0.25
 
-shp_basinmask_field = ""
-shp_basinmask_color = "g"
-shp_pourpoint_field = ""
-shp_pourpoint_color = "r"
+map_name_overview = "map-overview.png"
+map_name_zoomed = "map-zoomed.png"
 
-shp_usgsgages_field = "gage"
-shp_usgsgages_color = "k"
+map_title_overview = "Overview map"
+map_title_zoomed = "Closer look map"
 
-shp_counties_field = "COUNTY"
-shp_counties_color = "lightcoral"
+map_colors_list = ["b", "r", "y", "r", "c", "y", "m", "orange", "aqua", "darksalmon", "gold", "k"]
 
-shp_climatebasins_field = "HydroID"
-shp_climatebasins_color = "orange"
+water_shapefiles = {
 
-shp_streams_field = "NAME"
-shp_streams_color = "b"
-shp_reservoirs_field = "GNIS_NAME"
-shp_reservoirs_color = "lightblue"
+    # outline of delaware river basin
+    "drbbasin" : {"field": "", 
+                  "color": "lightcoral",
+                  "path" : "../data/spatial-datafiles/basins/drbbasin_nad83.shp",
+    },
+
+    # WATER batch simulation basin(s) shapefile
+    "Watersheds" : {"field": "STAID", 
+                    "color": "green",
+                    "path": "",
+    },
+
+    # WATER single simulation basin shapefile
+    "basinMask" : {"field": "", 
+                   "color": "green",
+                   "path": "",
+    },
+
+    # WATER sample single simulation basin shapefile
+    "basin0" : {"field": "", 
+                "color": "green",
+                "path": "../data/sample-water-simulations/sample-datafiles/basin0.shp",
+    },
+
+    # Water use centroids
+    "wateruse" : {"field": "", 
+                  "color": "aqua",
+                  "path" : "../data/spatial-datafiles/wateruse-centroids/wateruse_centroids_nad83.shp"
+    },
+
+    # GCM tiles
+    "CanES" : {"field": "Tile", 
+               "color": "lightgreen",
+               "path": "../data/spatial-datafiles/gcm-tiles/CanES_nad83.shp",
+    },
+
+    "GFDL" : {"field": "Tile", 
+              "color": "lightgreen",
+              "path": "../data/spatial-datafiles/gcm-tiles/GFDL_nad83.shp",
+    },
+
+    "GISS" : {"field": "Tile", 
+              "color": "lightgreen",
+              "path": "../data/spatial-datafiles/gcm-tiles/GISS_nad83.shp",
+    },
+
+    "NCAR" : {"field": "Tile", 
+              "color": "lightgreen",
+              "path": "../data/spatial-datafiles/gcm-tiles/NCAR_nad83.shp",
+    },
+
+    # WATER database shapefiles 
+    "usgsgages" : {"field": "", 
+                   "color": "k",
+                   "path": "../data/spatial-datafiles/misc/usgsgages.shp",
+    },
+
+    "strm" : {"field": "", 
+              "color": "blue",
+              "path": "../data/spatial-datafiles/misc/strm.shp",
+    },
+
+    "rsvr" : {"field": "", 
+              "color": "royalblue",
+              "path": "../data/spatial-datafiles/misc/rsvr.shp",
+    },
+}
+
 
 # ------------------ Containers for waterapputils.py----------------------- #
 settings = {
@@ -136,27 +196,18 @@ settings = {
 	"oasis_directory_name": oasis_directory_name,
 	"oasis_file_name": oasis_file_name,
 
-    "shp_watersheds_field" : "STAID",
-    "shp_watersheds_color" : "g",
+    "water_shapefiles": water_shapefiles,
 
-    "shp_basinmask_field" : "",
-    "shp_basinmask_color" : "g",
-    "shp_pourpoint_field" : "",
-    "shp_pourpoint_color" : "r",
+    "map_buffer_overview": map_buffer_overview,
+    "map_buffer_zoomed": map_buffer_zoomed,
 
-    "shp_usgsgages_field" : "gage",
-    "shp_usgsgages_color" : "k",
+    "map_name_overview":map_name_overview,
+    "map_name_zoomed": map_name_zoomed,
 
-    "shp_counties_field" : "COUNTY",
-    "shp_counties_color" : "lightcoral",
+    "map_title_overview": map_title_overview,
+    "map_title_zoomed": map_title_zoomed,
 
-    "shp_climatebasins_field" : "HydroID",
-    "shp_climatebasins_color" : "orange",
-
-    "shp_streams_field" : "NAME",
-    "shp_streams_color" : "b",
-    "shp_reservoirs_field" : "GNIS_NAME",
-    "shp_reservoirs_color" : "lightblue",
+    "map_colors_list": map_colors_list,
 
 }
 
