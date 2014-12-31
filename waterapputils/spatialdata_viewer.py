@@ -203,7 +203,7 @@ def plot_shapefiles_map(shapefiles, display_fields = [], colors = [], title = No
 
         colors_index += 1    
         legend_handles.append(p1)    
-        legend_labels.append(shapefile_data["name"])
+        legend_labels.append(shapefile_data["name"].split("_")[0])
 
     ax = plt.gca()
     handles, labels = ax.get_legend_handles_labels()

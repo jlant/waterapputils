@@ -58,6 +58,7 @@ def main():
     group.add_argument("-ecoflowdashp", "--ecoflowdashp", nargs = "+", help = "List shapefile(s)")
 
     group.add_argument("-map", "--map", nargs = "+", help = "List shapefile(s) to plot on a map")
+    group.add_argument("-mapsim", "--mapsim", action = "store_true",  help = "Create map of a WATER simulation. Specify settings in user_settings.py")
 
     parser.add_argument("-v", "--verbose", action = "store_true",  help = "Print general information about data file(s)")
     parser.add_argument("-outfilename", "--outfilename", nargs = 1,  help = "Write file name to write drainage area csv file.")  
@@ -267,7 +268,24 @@ def main():
 
             print("\nCreating map ... please wait\n")
 
-            map_processing.create_map(files_list = args.map, settings = user_settings.settings)
+            map_processing.create_map(files_list = args.map, settings = user_settings.settings, title = "A map!", is_visible = True)
+
+            sys.exit()
+
+        elif args.mapsim:
+
+            print("\nCreating map ... please wait\n")
+
+            if args.samplesingle:
+                settings = user_settings.sample_single_settings
+            elif args.samplebatch:
+                settings = user_settings.sample_batch_settings
+            else:
+                settings = user_settings.settings 
+
+            map_processing.create_simulation_map(settings = settings)
+
+            sys.exit()
 
     except IOError as error:
         logging.exception("IO error: {0}".format(error.message))

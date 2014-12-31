@@ -20,6 +20,38 @@ import osgeo
 # my modules
 import spatialvectors
 import spatialdata_viewer
+import helpers
+
+def create_output_dir(settings):
+    """    
+    Create the output directories and files needed to processes wateruse.
+
+    Parameters
+    ----------
+    settings : dictionary
+        Dictionary of user settings
+
+    Returns
+    -------
+    map_dir : string
+        string path to map directory
+
+    Notes
+    -----
+    Uses settings set in user_settings.py 
+    """   
+    # create output directories   
+    map_dir = helpers.make_directory(path = settings["simulation_directory"], directory_name = settings["map_directory_name"])    
+    
+    # print input and output information
+    helpers.print_input_output_info( 
+        input_dict = {"simulation_directory": settings["simulation_directory"],
+                      "map_directory_name": settings["map_directory_name"],
+        },
+        output_dict = {" map_dir": map_dir}
+    )
+
+    return map_dir
 
 
 def get_shps_colors_fields(files_list, settings):
@@ -60,7 +92,8 @@ def get_shps_colors_fields(files_list, settings):
 
 	return shp_info_list, display_fields, colors
 
-def create_map(files_list, settings, title = "A map!", is_visible = False, save_path = os.getcwd(), save_name = "map.png", shp_name = None, map_buffer = 1.0):
+
+def create_map(files_list, settings, title = None, is_visible = False, save_path = None, save_name = "map.png", shp_name = None, map_buffer = 1.0):
 	"""
 	Create a map use matplotlib's basemap using a list of shapefiles.
 
@@ -70,6 +103,18 @@ def create_map(files_list, settings, title = "A map!", is_visible = False, save_
     	List of shapefiles to create a map with
     settings : dictionary
         Dictionary of user settings
+    title : string
+    	String title for map
+    is_visible : bool
+    	Boolean to show map
+    save_path : string
+    	String path to save map
+    save_name : string
+    	String name to save plot
+    shp_name : string
+    	String name of shapefile in the files_list to base the map extents from; if None, then maximum extents of all shapefiles in files_list are used
+    map_buffer : float
+    	Float value used to create a buffer around the map extents; units are in coordinate degrees
 	"""
 
 	shp_info_list, display_fields, colors = get_shps_colors_fields(files_list, settings)
@@ -86,15 +131,62 @@ def create_map(files_list, settings, title = "A map!", is_visible = False, save_
 		buff = map_buffer,
 	)
 
-	# spatialdata_viewer.plot_shapefiles_map(
-	# 	shapefiles = shp_info_list, 
-	# 	display_fields = display_fields, 
-	# 	colors = colors, 
-	# 	title = settings["map_title_zoomed"], 
-	# 	is_visible = False, 
-	# 	save_path = os.getcwd(), 
-	# 	save_name = "map.png", 
-	# 	shp_name = "Watersheds", 
-	# 	buff = settings["map_buffer_zoomed"],
-	# )
+
+def create_simulation_map(settings):
+	"""
+	Create an overview and zoomed in map for a WATER simulation using 
+	settings in user_settings.py.
+
+    Parameters
+    ----------
+    settings : dictionary
+        Dictionary of user settings
+	"""
+
+	map_dir = create_output_dir(settings)
+
+	files_list_overview = [
+		settings["water_shapefiles"]["drbbasin"]["path"],									# path to drb basin
+		os.path.join(settings["simulation_directory"], settings["basin_shapefile_name"]),	# path to basin shapefile for a simulation
+	]
+
+	files_list_zoomed = [
+		settings["water_shapefiles"]["drbbasin"]["path"],									# path to drb basin
+		os.path.join(settings["simulation_directory"], settings["basin_shapefile_name"]),	# path to basin shapefile for a simulation
+		settings["water_shapefiles"]["strm"]["path"],									    # path to streams shapefile
+		settings["water_shapefiles"]["rsvr"]["path"],									    # path to reservoir shapefile
+		settings["water_shapefiles"]["usgsgages"]["path"],								    # path to usgs gages shapefile
+	]
+
+	shp_info_list_overview, display_fields_overview, colors_overview = get_shps_colors_fields(files_list = files_list_overview, settings = settings)
+	shp_info_list_zoomed, display_fields_zoomed, colors_zoomed = get_shps_colors_fields(files_list = files_list_zoomed, settings = settings)
+	
+	# do not display the field for settings["basin_shapefile_name"] for the overview map
+	display_fields_overview[1] = ""
+
+	# plot overview map
+	spatialdata_viewer.plot_shapefiles_map(
+		shapefiles = shp_info_list_overview, 
+		display_fields = display_fields_overview, 
+		colors = colors_overview, 
+		title = settings["map_title_overview"], 
+		is_visible = False, 
+		save_path = map_dir, 
+		save_name = settings["map_name_overview"], 
+		shp_name = None, 
+		buff = settings["map_buffer_overview"],
+	)
+
+	# plot zoomed map
+	spatialdata_viewer.plot_shapefiles_map(
+		shapefiles = shp_info_list_zoomed, 
+		display_fields = display_fields_zoomed, 
+		colors = colors_zoomed, 
+		title = settings["map_title_zoomed"], 
+		is_visible = False, 
+		save_path = map_dir, 
+		save_name = settings["map_name_zoomed"], 
+		shp_name = os.path.splitext(settings["basin_shapefile_name"])[0], 
+		buff = settings["map_buffer_zoomed"],
+	)
 

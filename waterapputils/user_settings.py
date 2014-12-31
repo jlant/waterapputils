@@ -71,6 +71,8 @@ oasis_file_name = "oasis.txt"
 
 
 # -------------------- WATER shapefiles and Map Info -------------------- #
+map_directory_name = "waterapputils-maps"
+
 map_buffer_overview = 1.0
 map_buffer_zoomed = 0.25
 
@@ -209,6 +211,8 @@ settings = {
 
     "map_colors_list": map_colors_list,
 
+    "map_directory_name": map_directory_name,
+
 }
 
 sample_single_settings = {
@@ -258,6 +262,20 @@ sample_single_settings = {
     "oasis_directory_name": "waterapputils-oasis",
     "oasis_file_name": "oasis.txt",
 
+    "water_shapefiles": water_shapefiles,
+
+    "map_buffer_overview": map_buffer_overview,
+    "map_buffer_zoomed": map_buffer_zoomed,
+
+    "map_name_overview":map_name_overview,
+    "map_name_zoomed": map_name_zoomed,
+
+    "map_title_overview": map_title_overview,
+    "map_title_zoomed": map_title_zoomed,
+
+    "map_colors_list": map_colors_list,
+
+    "map_directory_name": map_directory_name,
 }
 
 sample_batch_settings = {
@@ -307,4 +325,18 @@ sample_batch_settings = {
     "oasis_directory_name": "waterapputils-oasis",
     "oasis_file_name": "oasis.txt",
 
+    "water_shapefiles": water_shapefiles,
+
+    "map_buffer_overview": map_buffer_overview,
+    "map_buffer_zoomed": map_buffer_zoomed,
+
+    "map_name_overview":map_name_overview,
+    "map_name_zoomed": map_name_zoomed,
+
+    "map_title_overview": map_title_overview,
+    "map_title_zoomed": map_title_zoomed,
+
+    "map_colors_list": map_colors_list,
+
+    "map_directory_name": map_directory_name,
 }
