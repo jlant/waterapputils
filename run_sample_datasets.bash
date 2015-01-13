@@ -109,10 +109,10 @@ run_gcmdelta()
     echo
     echo "single simulation"
     python waterapputils.py -applygcmdelta -samplesingle
-    echo
-    echo "batch simulation"
-    python waterapputils.py -applygcmdelta -samplebatch
-    echo 
+    # echo
+    # echo "batch simulation"
+    # python waterapputils.py -applygcmdelta -samplebatch
+    # echo 
 }
 
 run_subgcmdelta()
