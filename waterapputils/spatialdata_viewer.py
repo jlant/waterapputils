@@ -39,7 +39,7 @@ def print_shapefile_data(shapefile_dict):
     print("Fields:\n    {}\n".format(shapefile_dict["fields"]))
     print("Number of features:\n    {}\n".format(shapefile_dict["num_features"]))
 
-def get_map_extents(shapefiles):
+def get_map_extents(shapefiles, shp_name = None):
     """   
     Get max and min extent coordinates from a list of shapefiles to use as the 
     extents on the map. Use the map extents to calculate the map center and the 
@@ -49,7 +49,9 @@ def get_map_extents(shapefiles):
     ----------
     shapefiles : list 
         List of shapefile_data dictionaries 
-                              
+    shp_name : string
+        String name of shapefile to use for getting map extents 
+
     Returns
     -------
     extent_coords : dictionary 
@@ -65,15 +67,23 @@ def get_map_extents(shapefiles):
     
     lons = []
     lats = []
-    for shapefile_data in shapefiles:
-        lons.append(shapefile_data["extents"][0:2])
-        lats.append(shapefile_data["extents"][2:])
-    
+
+    if shp_name:
+        for shapefile_data in shapefiles:            
+            if shp_name in shapefile_data["name"].split("_")[0]:
+                lons.append(shapefile_data["extents"][0:2])
+                lats.append(shapefile_data["extents"][2:])
+        
+    else:
+        for shapefile_data in shapefiles:
+            lons.append(shapefile_data["extents"][0:2])
+            lats.append(shapefile_data["extents"][2:])
+
     extent_coords["lon_min"] = np.min(lons)
     extent_coords["lon_max"] = np.max(lons)
     extent_coords["lat_min"] = np.min(lats)
     extent_coords["lat_max"] = np.max(lats)
-     
+
     center_coords["lon"] = np.mean([extent_coords["lon_min"], extent_coords["lon_max"]])
     center_coords["lat"] = np.mean([extent_coords["lat_min"], extent_coords["lat_max"]])
     
@@ -82,7 +92,7 @@ def get_map_extents(shapefiles):
         
     return extent_coords, center_coords, standard_parallels
 
-def plot_shapefiles_map(shapefiles, display_fields = [], colors = [], title = None, is_visible = True, save_path = None):
+def plot_shapefiles_map(shapefiles, display_fields = [], colors = [], title = None, is_visible = False, save_path = None, save_name = "map.png", shp_name = None, buff = 1.0):
     """   
     Generate a map showing all the shapefiles in the shapefile_list.  
     Shapefiles should be in a Geographic Coordinate System (longitude and 
@@ -104,13 +114,16 @@ def plot_shapefiles_map(shapefiles, display_fields = [], colors = [], title = No
         Boolean value to show plots         
     save_path : string 
         String path to save plot(s) 
-    """   
-    # get the map extents to map center the map appropriately around shapefile data; buffer the extents a bit as well
-    extent_coords, center_coords, standard_parallels = get_map_extents(shapefiles)    
-    buff = 2   
+    shp_name : string
+        String name of shapefile to use for getting map extents 
+    buff : float
+        Float value in coordinate degrees to buffer the map with
+    """  
+
+    extent_coords, center_coords, standard_parallels = get_map_extents(shapefiles, shp_name = shp_name)    
 
     # create the figure
-    plt.figure(figsize = (12,10))    
+    plt.figure(figsize = (10,10))    
     plt.title(title)
     
     # create the basemap object with Albers Equal Area Conic Projection
@@ -128,17 +141,17 @@ def plot_shapefiles_map(shapefiles, display_fields = [], colors = [], title = No
     bmap.drawstates()
     bmap.drawmapboundary(fill_color = "aqua")
     bmap.fillcontinents(color = "coral", lake_color = "aqua")
-    bmap.drawparallels(np.arange(-80., 81., 10.), labels = [1, 0, 0, 0])
-    bmap.drawmeridians(np.arange(-180., 181., 10.), labels = [0, 0, 0, 1])
+    bmap.drawparallels(np.arange(-80., 81., 1.), labels = [1, 0, 0, 0], linewidth = 0.5)
+    bmap.drawmeridians(np.arange(-180., 181., 1.), labels = [0, 0, 0, 1], linewidth = 0.5)
      
     # plot each shapefile on the basemap    
     legend_handles = []
     legend_labels = []
     colors_index = 0
+    colors_list = ["b", "g", "y", "r", "c", "y", "m", "orange", "aqua", "darksalmon", "gold", "k"]
     for shapefile_data in shapefiles:
         
         # set up colors to use
-        colors_list = ["b", "g", "y", "r", "c", "y", "m", "orange", "aqua", "darksalmon", "gold", "k"]
         if colors:
             color = colors[colors_index]        
         elif colors_index > len(colors_list) - 1:
@@ -152,8 +165,8 @@ def plot_shapefiles_map(shapefiles, display_fields = [], colors = [], title = No
         for shape_dict, shape in zip(bmap.shp_info, bmap.shp):                                          # zip the shapefile information and its shape as defined by basemap
 
             if shapefile_data["type"] == "POLYGON":
-                p1 = mpl.patches.Polygon(shape, facecolor = color, edgecolor = color,
-                                         linewidth = 2, alpha = 0.7, label = shapefile_data["name"])            
+                p1 = mpl.patches.Polygon(shape, facecolor = color, edgecolor = "k",
+                                         linewidth = 1, alpha = 0.7, label = shapefile_data["name"])            
                 plt.gca().add_patch(p1)
                 xx, yy = zip(*shape)
                 txt_x = str(np.mean(xx))
@@ -161,13 +174,21 @@ def plot_shapefiles_map(shapefiles, display_fields = [], colors = [], title = No
                 
             elif shapefile_data["type"] == "POINT":
                 x, y = shape
-                p1 = bmap.plot(x, y, color = color, marker = "o", markersize = 12, label = shapefile_data["name"])
+
+                if "usgsgages" in shapefile_data["name"].split("_")[0]:
+                    p1 = bmap.plot(x, y, color = color, marker = "^", markersize = 10, label = shapefile_data["name"])
+                elif "wateruse" in shapefile_data["name"].split("_")[0]:
+                    p1 = bmap.plot(x, y, color = color, marker = "o", markersize = 5, label = shapefile_data["name"])
+                else:
+                    print("what!!")
+                    p1 = bmap.plot(x, y, color = color, marker = "o", markersize = 10, label = shapefile_data["name"])
+
                 txt_x = str(x)
                 txt_y = str(y)
                 
             else:
                 xx, yy = zip(*shape)
-                p1 = bmap.plot(xx, yy, linewidth = 2, color = color, label = shapefile_data["name"])
+                p1 = bmap.plot(xx, yy, linewidth = 1, color = color, label = shapefile_data["name"])
                 txt_x = str(np.mean(xx))
                 txt_y = str(np.mean(yy))
             
@@ -182,7 +203,7 @@ def plot_shapefiles_map(shapefiles, display_fields = [], colors = [], title = No
 
         colors_index += 1    
         legend_handles.append(p1)    
-        legend_labels.append(shapefile_data["name"])
+        legend_labels.append(shapefile_data["name"].split("_")[0])
 
     ax = plt.gca()
     handles, labels = ax.get_legend_handles_labels()
@@ -199,9 +220,8 @@ def plot_shapefiles_map(shapefiles, display_fields = [], colors = [], title = No
         # set the size of the figure to be saved
         curr_fig = plt.gcf()
         curr_fig.set_size_inches(12, 10)
-
-        filename = "-".join("Shapefile","Map")  + ".png"           
-        filepath = os.path.join(save_path, filename)
+         
+        filepath = os.path.join(save_path, save_name)
         plt.savefig(filepath, dpi = 100)                        
       
     # show plots
@@ -219,7 +239,6 @@ def _create_shapefile_test_data():
 
     # open the shapefiles
     test_poly_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/test_poly_wgs84.shp"))) 
-    test_poly_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/test_poly_nad83.shp"))) 
     water_basin_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basin_wgs84.shp")))      
     water_basins_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basins_wgs84.shp")))  
     water_basin_pourpoint_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basin_pourpoint_wgs84.shp")))      

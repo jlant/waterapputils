@@ -19,7 +19,7 @@ simulation_directory = "../data/sample-water-simulations/sample-batch-simulation
 is_batch_simulation = True
 basin_shapefile_name = "Watersheds.shp"
 basin_shapefile_id_field = "STAID"
-basin_shapefile_area_field = "da_sqmi"
+basin_shapefile_area_field = "da_sqmi"                  # if no area field, leave blank like this: "a"
 
 # default names from WATER application
 water_text_file_name = "WATER.txt"
@@ -70,6 +70,91 @@ oasis_directory_name = "waterapputils-oasis"
 oasis_file_name = "oasis.txt"
 
 
+# -------------------- WATER shapefiles and Map Info -------------------- #
+map_directory_name = "waterapputils-maps"
+
+map_buffer_overview = 1.0
+map_buffer_zoomed = 0.25
+
+map_name_overview = "map-overview.png"
+map_name_zoomed = "map-zoomed.png"
+
+map_title_overview = "Overview map"
+map_title_zoomed = "Closer look map"
+
+map_colors_list = ["b", "r", "y", "r", "c", "y", "m", "orange", "aqua", "darksalmon", "gold", "k"]
+
+water_shapefiles = {
+
+    # outline of delaware river basin
+    "drbbasin" : {"field": "", 
+                  "color": "lightcoral",
+                  "path" : "../data/spatial-datafiles/basins/drbbasin_nad83.shp",
+    },
+
+    # WATER batch simulation basin(s) shapefile
+    "Watersheds" : {"field": "STAID", 
+                    "color": "green",
+                    "path": "",
+    },
+
+    # WATER single simulation basin shapefile
+    "basinMask" : {"field": "", 
+                   "color": "green",
+                   "path": "",
+    },
+
+    # WATER sample single simulation basin shapefile
+    "basin0" : {"field": "", 
+                "color": "green",
+                "path": "../data/sample-water-simulations/sample-datafiles/basin0.shp",
+    },
+
+    # Water use centroids
+    "wateruse" : {"field": "", 
+                  "color": "aqua",
+                  "path" : "../data/spatial-datafiles/wateruse-centroids/wateruse_centroids_nad83.shp"
+    },
+
+    # GCM tiles
+    "CanES" : {"field": "Tile", 
+               "color": "lightgreen",
+               "path": "../data/spatial-datafiles/gcm-tiles/CanES_nad83.shp",
+    },
+
+    "GFDL" : {"field": "Tile", 
+              "color": "lightgreen",
+              "path": "../data/spatial-datafiles/gcm-tiles/GFDL_nad83.shp",
+    },
+
+    "GISS" : {"field": "Tile", 
+              "color": "lightgreen",
+              "path": "../data/spatial-datafiles/gcm-tiles/GISS_nad83.shp",
+    },
+
+    "NCAR" : {"field": "Tile", 
+              "color": "lightgreen",
+              "path": "../data/spatial-datafiles/gcm-tiles/NCAR_nad83.shp",
+    },
+
+    # WATER database shapefiles 
+    "usgsgages" : {"field": "", 
+                   "color": "k",
+                   "path": "../data/spatial-datafiles/misc/usgsgages.shp",
+    },
+
+    "strm" : {"field": "", 
+              "color": "blue",
+              "path": "../data/spatial-datafiles/misc/strm.shp",
+    },
+
+    "rsvr" : {"field": "", 
+              "color": "royalblue",
+              "path": "../data/spatial-datafiles/misc/rsvr.shp",
+    },
+}
+
+
 # ------------------ Containers for waterapputils.py----------------------- #
 settings = {
     "simulation_directory": simulation_directory,
@@ -112,6 +197,22 @@ settings = {
     
 	"oasis_directory_name": oasis_directory_name,
 	"oasis_file_name": oasis_file_name,
+
+    "water_shapefiles": water_shapefiles,
+
+    "map_buffer_overview": map_buffer_overview,
+    "map_buffer_zoomed": map_buffer_zoomed,
+
+    "map_name_overview":map_name_overview,
+    "map_name_zoomed": map_name_zoomed,
+
+    "map_title_overview": map_title_overview,
+    "map_title_zoomed": map_title_zoomed,
+
+    "map_colors_list": map_colors_list,
+
+    "map_directory_name": map_directory_name,
+
 }
 
 sample_single_settings = {
@@ -160,6 +261,21 @@ sample_single_settings = {
     
     "oasis_directory_name": "waterapputils-oasis",
     "oasis_file_name": "oasis.txt",
+
+    "water_shapefiles": water_shapefiles,
+
+    "map_buffer_overview": map_buffer_overview,
+    "map_buffer_zoomed": map_buffer_zoomed,
+
+    "map_name_overview":map_name_overview,
+    "map_name_zoomed": map_name_zoomed,
+
+    "map_title_overview": map_title_overview,
+    "map_title_zoomed": map_title_zoomed,
+
+    "map_colors_list": map_colors_list,
+
+    "map_directory_name": map_directory_name,
 }
 
 sample_batch_settings = {
@@ -208,4 +324,19 @@ sample_batch_settings = {
     
     "oasis_directory_name": "waterapputils-oasis",
     "oasis_file_name": "oasis.txt",
+
+    "water_shapefiles": water_shapefiles,
+
+    "map_buffer_overview": map_buffer_overview,
+    "map_buffer_zoomed": map_buffer_zoomed,
+
+    "map_name_overview":map_name_overview,
+    "map_name_zoomed": map_name_zoomed,
+
+    "map_title_overview": map_title_overview,
+    "map_title_zoomed": map_title_zoomed,
+
+    "map_colors_list": map_colors_list,
+
+    "map_directory_name": map_directory_name,
 }

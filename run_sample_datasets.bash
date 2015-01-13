@@ -132,6 +132,23 @@ run_subgcmdelta()
     fi
 }
 
+run_mapsim()
+{
+    # applying wateruse requires many inputs, and those inputs are specified in the user_settings.py file which can relative paths from the directory containing the python code
+    # this requires changing directories into the waterapputils directory in order to run the sample datasets
+
+    cd waterapputils/
+    echo "--- $0 is creating maps with sample datasets; single and batch ---"
+    echo
+    echo "single simulation"
+    python waterapputils.py -mapsim -samplesingle
+    echo
+    echo "batch simulation"
+    python waterapputils.py -mapsim -samplebatch
+    echo 
+}
+
+
 run_all()
 {
 
@@ -146,6 +163,7 @@ run_all()
     run_ecoflowdashp
     run_wateruse
     run_gcmdelta
+    run_mapsim
     echo
 }
 
@@ -157,11 +175,28 @@ run_tests()
     echo
 }
 
+makeclean()
+{
+
+    rm -f waterapputils/*.txt
+    rm -f waterapputils/*.xml
+    rm -f tests/*.txt
+    rm -r tests/test-dir
+    rm -f tests/*.csv
+    rm -r data/watertxt-datafiles/waterapputils*
+    rm -r data/waterxml-datafiles/waterapputils*
+    rm -r data/sample-water-simulations/sample-datafiles/waterapputils*
+    rm -r data/sample-water-simulations/sample-single-simulation/waterapputils*
+    rm -r data/sample-water-simulations/sample-batch-simulation/waterapputils*
+    rm -r data/sample-water-simulations/sample-batch-simulation/014*/waterapputils*
+
+}
+
 usage()
 {
 
 	echo "Usage:"
-	echo "    run_sample_datasets [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid] [ecoflowdaxml] [-ecoflowdashp] [-gcmdelta] [-all] [tests]] | [-h]]"
+	echo "    run_sample_datasets [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid] [ecoflowdaxml] [-ecoflowdashp] [-gcmdelta] [-mapsim] [-all] [tests]] | [-h]]"
 }
 
 # main program
@@ -199,6 +234,10 @@ while [ "$1" != "" ]; do
                                      ;;
         -tests )                     run_tests
                                      ;;
+        -mapsim )                    run_mapsim
+                                     ;;
+        -makeclean )                 makeclean
+                                     ;;                                     
         -h | --help )                usage
                                      exit
                                      ;;

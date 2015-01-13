@@ -230,7 +230,7 @@ def apply_sub_gcm_deltas(settings):
     """   
 
     # create output directories and files   
-    info_dir, gcm_delta_dir, info_file = create_output_dirs_files(settings, is_sub_wateruse = True)
+    info_dir, gcm_delta_dir, info_file = create_output_dirs_files(settings, is_sub_gcm_delta = True)
 
     # initialize error logging in info_dir
     waterapputils_logging.initialize_loggers(output_dir = info_dir) 

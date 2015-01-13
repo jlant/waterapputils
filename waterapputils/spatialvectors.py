@@ -14,6 +14,7 @@ __contact__   = __author__
 
 import os
 import osgeo.ogr
+import osgeo.osr
 from StringIO import StringIO
 import re
 import numpy as np
@@ -451,6 +452,139 @@ def get_areas_dict(shapefile, id_field, query_field):
 
     return areas
 
+
+def reproject_shapefile_to_wgs84(shapefile, out_shapefile_suffix = "_reproj_wgs84.shp"):
+    """
+    Reproject shapefile to WGS 84.  All WATER application shapefiles are in the Albers NAD83 projection.
+    Create a new shapefile with the new projection.
+
+    Parameters
+    ----------
+    shapefile : osgeo.ogr.DataSource 
+        A shapefile object.    
+    out_shapefile_suffix : string
+        String name to join to end of shapefile
+
+    Returns
+    -------
+    out_shapefile : string
+        String path to reprojected shapefile
+
+    Notes
+    -----
+    Good reference: http://spatialreference.org/
+    """
+    driver = osgeo.ogr.GetDriverByName('ESRI Shapefile')
+
+    # get some standard information about the shapefile
+    shp_file_dict = fill_shapefile_dict(shapefile)
+
+    # get spatial reference from layer
+    in_layer = shapefile.GetLayer()
+    in_spatial_ref = in_layer.GetSpatialRef()
+
+    # create output spatial reference - WGS 84
+    out_spatial_ref = osgeo.osr.SpatialReference()
+    out_spatial_ref.ImportFromEPSG(4326)                # EPSG 4326 = WGS 84
+
+    # create the CoordinateTransformation
+    coord_trans = osgeo.osr.CoordinateTransformation(in_spatial_ref, out_spatial_ref)
+
+    # create the output layer
+    out_shapefile_name = shp_file_dict["name"].split(".shp")[0] + out_shapefile_suffix
+    out_shapefile = os.path.join(shp_file_dict["path"], out_shapefile_name)
+
+    if os.path.exists(out_shapefile):
+        driver.DeleteDataSource(out_shapefile)
+
+    if shp_file_dict["type"] == "POLYGON":
+        geom_type = osgeo.ogr.wkbMultiPolygon
+    elif shp_file_dict["type"] == "POINT":
+        geom_type = osgeo.ogr.wkbPoint
+    else:
+        geom_type = osgeo.ogr.wkbMultiLineString
+
+    out_dataset = driver.CreateDataSource(out_shapefile)
+    out_layer = out_dataset.CreateLayer(out_shapefile_name.split(".shp")[0], geom_type = geom_type)
+
+    # add fields from input shp to output shp
+    in_layer_def = in_layer.GetLayerDefn()
+    for i in range(0, in_layer_def.GetFieldCount()):
+        field_def = in_layer_def.GetFieldDefn(i)
+        out_layer.CreateField(field_def)
+
+    # get the output layer's feature definition
+    out_layer_def = out_layer.GetLayerDefn()
+
+    # add geometry to output shp
+    in_feature = in_layer.GetNextFeature()
+    while in_feature:
+        geom = in_feature.GetGeometryRef()          # input shp geometry
+        geom.Transform(coord_trans)                 # reproject geometry
+
+        out_feature = osgeo.ogr.Feature(out_layer_def)    # create a new feature
+        out_feature.SetGeometry(geom)               # set the geometry and attribute
+        for i in range(0, out_layer_def.GetFieldCount()):
+            out_feature.SetField(out_layer_def.GetFieldDefn(i).GetNameRef(), in_feature.GetField(i))
+
+        out_layer.CreateFeature(out_feature)        # add the feature to the shapefile
+
+        # destroy features and get the next input feature
+        out_feature.Destroy()
+        in_feature.Destroy()
+        in_feature = in_layer.GetNextFeature()
+
+    # close the shapefiles
+    shapefile.Destroy()
+    out_dataset.Destroy()
+
+    # create the ESRI.prj file
+    prj_filename = out_shapefile.split(".shp")[0] + ".prj"
+    out_spatial_ref.MorphToESRI()
+    prj_file = open(prj_filename, 'w')
+    prj_file.write(out_spatial_ref.ExportToWkt())
+    prj_file.close()
+
+    return out_shapefile
+
+
+def reproject(shapefiles):
+    """
+    Reproject a list of shapefiles to Geographic (WGS84) coordinates. 
+    If any shapefile in the list is already in Geographic coordinates,
+    then its path is added to the list returned.
+
+    Parameters
+    ----------
+    shapefiles : list
+        List of filled shapefile dictionaries
+
+    Returns
+    -------
+    shp_reproj_list : list
+        List of paths to reprojected shapefiles
+
+    See Also
+    --------
+    fill_shapefile_dict()
+
+    """
+    shp_reproj_list = []
+    for shapefile in shapefiles:
+        shp = osgeo.ogr.Open(shapefile) 
+
+        layer = shp.GetLayer()
+        spatial_ref = layer.GetSpatialRef()
+        if spatial_ref.IsProjected():   
+            shp_path = reproject_shapefile_to_wgs84(shapefile = shp)
+        
+        else:
+            shp_path = shapefile
+
+        shp_reproj_list.append(shp_path)
+
+    return shp_reproj_list
+
 def _print_test_info(expected, actual):
     """   
     For testing purposes, assert that all expected values and actual values match. 
@@ -648,6 +782,25 @@ def test_get_field_values():
     _print_test_info(expected, actual)
 
 
+def test_reproject_shapefile_to_wgs84():
+    """ Test reproject_shapefile_to_wgs84() """
+
+    print("--- Testing reproject_shapefile_to_wgs84() ---")  
+    print("")
+    expected = {}
+    expected["full_path"] = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basin_nad83_reproj_wgs84.shp"))
+
+    # open the shapefile
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basin_nad83.shp"))
+    basin_shapefile = osgeo.ogr.Open(basin_file)    
+
+    actual = {}
+    actual["full_path"] = reproject_shapefile_to_wgs84(shapefile = basin_shapefile)
+
+    # print test results        
+    _print_test_info(expected, actual)
+    
+
 def main():
     """ Test functionality geospatialvectors.py """
 
@@ -659,7 +812,7 @@ def main():
 
     # test_get_shapefile_coords()
 
-    test_get_shapefile_areas()
+    # test_get_shapefile_areas()
 
     # test_get_intersected_field_values()
 
@@ -668,6 +821,8 @@ def main():
     # test_read_field_values_file_in()
     
     # test_get_field_values()
+
+    test_reproject_shapefile_to_wgs84()
 
 if __name__ == "__main__":
     main()    
