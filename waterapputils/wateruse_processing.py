@@ -25,6 +25,7 @@ import spatialvectors
 import wateruse
 import waterapputils_logging
 import water_files_processing
+import map_processing
 
 def create_output_dirs_files(settings, is_sub_wateruse = False):
     """    
@@ -209,6 +210,9 @@ def apply_wateruse(settings):
 
     # write the drainage area csv file for ecoflow program
     watertxt.write_drainagearea_file(area_data = areas, save_path = ecoflow_dir, filename = settings["ecoflow_drainage_area_file_name"])
+
+    # create map of study area
+    map_processing.create_simulation_map(settings = settings)
 
     # remove error logger
     waterapputils_logging.remove_loggers()

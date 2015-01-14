@@ -26,7 +26,7 @@ import deltas
 import deltas_viewer
 import waterapputils_logging
 import water_files_processing
-
+import map_processing
 
 def create_output_dirs_files(settings, is_sub_gcm_delta = False):
     """    
@@ -208,6 +208,9 @@ def apply_gcm_deltas(settings):
 
         # apply gcm deltas    
         process_intersecting_tiles(sub_intersecting_tiles, settings, gcm_delta_dir)        
+
+    # create map of study area
+    map_processing.create_simulation_map(settings = settings)
 
     # remove error logger
     waterapputils_logging.remove_loggers()
