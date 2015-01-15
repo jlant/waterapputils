@@ -19,7 +19,7 @@ simulation_directory = "../data/sample-water-simulations/sample-batch-simulation
 is_batch_simulation = True
 basin_shapefile_name = "Watersheds.shp"
 basin_shapefile_id_field = "STAID"
-basin_shapefile_area_field = "da_sqmi"                  # if no area field, leave blank like this: "a"
+basin_shapefile_area_field = "da_sqmi"                  # if no area field, leave blank like this: ""
 
 # default names from WATER application
 water_text_file_name = "WATER.txt"
