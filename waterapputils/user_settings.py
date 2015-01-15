@@ -39,6 +39,7 @@ wateruse_factor_file = "../data/wateruse-datafiles/wateruse-factors-sample.txt"
 # ------------------- Global Climate Model information ------------------ #
 gcm_delta_files = ["../data/deltas-gcm/Ppt.txt",
                    "../data/deltas-gcm/Tmax.txt",
+                   "../data/deltas-gcm/PET.txt",
 ]                
 
 gcm_delta_tile_shapefile = "../data/spatial-datafiles/gcm-tiles/CanES_nad83.shp"
@@ -61,6 +62,7 @@ gcm_delta_directory_name = "waterapputils-gcmdelta"
 gcm_delta_info_file_name = "gcm_delta_info.txt"
 gcm_delta_non_intersecting_file_name = "gcm_delta_non_intersecting_tiles.txt"
 sub_gcm_delta_info_file_name = "sub_gcm_delta_info.txt"
+pet_timeseries_file_name = "pet-timeseries.txt"
 
 ecoflow_directory_name = "waterapputils-ecoflow"
 ecoflow_file_name = ""
@@ -190,6 +192,7 @@ settings = {
     "gcm_delta_info_file_name": gcm_delta_info_file_name,
     "gcm_delta_non_intersecting_file_name": gcm_delta_non_intersecting_file_name,
     "sub_gcm_delta_info_file_name": sub_gcm_delta_info_file_name,
+    "pet_timeseries_file_name": pet_timeseries_file_name,
 
 	"ecoflow_directory_name": ecoflow_directory_name,
     "ecoflow_file_name": ecoflow_file_name,
@@ -234,7 +237,7 @@ sample_single_settings = {
         "../data/wateruse-datafiles/101112-OND-sample.txt"],
     "wateruse_factor_file": "../data/wateruse-datafiles/wateruse-factors-sample.txt",
 
-    "gcm_delta_files": ["../data/deltas-gcm/Ppt.txt", "../data/deltas-gcm/Tmax.txt"],
+    "gcm_delta_files": ["../data/deltas-gcm/Ppt.txt", "../data/deltas-gcm/Tmax.txt", "../data/deltas-gcm/PET.txt"],
     "gcm_delta_tile_shapefile": "../data/spatial-datafiles/gcm-tiles/CanES_nad83.shp",
     "gcm_delta_tile_shapefile_id_field": "Tile",
 
@@ -254,6 +257,7 @@ sample_single_settings = {
     "gcm_delta_info_file_name": "gcm_delta_info.txt",
     "gcm_delta_non_intersecting_file_name": "gcm_delta_non_intersecting_tiles.txt",
     "sub_gcm_delta_info_file_name": "sub_gcm_delta_info.txt",
+    "pet_timeseries_file_name": "pet-timeseries.txt",
 
     "ecoflow_directory_name": "waterapputils-ecoflow",
     "ecoflow_file_name": "",
@@ -297,7 +301,7 @@ sample_batch_settings = {
     "wateruse_factor_file": "../data/wateruse-datafiles/wateruse-factors-sample.txt",
 
 
-    "gcm_delta_files": ["../data/deltas-gcm/Ppt.txt", "../data/deltas-gcm/Tmax.txt"],
+    "gcm_delta_files": ["../data/deltas-gcm/Ppt.txt", "../data/deltas-gcm/Tmax.txt", "../data/deltas-gcm/PET.txt",],
     "gcm_delta_tile_shapefile": "../data/spatial-datafiles/gcm-tiles/CanES_nad83.shp",
     "gcm_delta_tile_shapefile_id_field": "Tile",
 
@@ -317,6 +321,7 @@ sample_batch_settings = {
     "gcm_delta_info_file_name": "gcm_delta_info.txt",
     "gcm_delta_non_intersecting_file_name": "gcm_delta_non_intersecting_tiles.txt",
     "sub_gcm_delta_info_file_name": "sub_gcm_delta_info.txt",
+    "pet_timeseries_file_name": "pet-timeseries.txt",
 
     "ecoflow_directory_name": "waterapputils-ecoflow",
     "ecoflow_file_name": "",

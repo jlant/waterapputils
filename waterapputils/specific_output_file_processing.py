@@ -61,7 +61,7 @@ def write_ecoflow_file_stationid(file_list, dir_name, file_name):
 
         watertxt_data = watertxt.read_file(f)      
 
-        # write timeseries of dishcarge + water use for ecoflow program
+        # write timeseries of discharge + water use for ecoflow program
         watertxt.write_timeseries_file_stationid(watertxt_data, name = "Discharge + Water Use", save_path = ecoflow_dir, filename = file_name, stationid = watertxt_data["stationid"])
                 
         waterapputils_logging.remove_loggers()
