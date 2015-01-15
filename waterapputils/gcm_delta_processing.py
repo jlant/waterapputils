@@ -20,6 +20,7 @@ import logging
 
 # my modules
 import helpers
+import watertxt
 import waterxml
 import spatialvectors
 import deltas
@@ -110,11 +111,13 @@ def process_intersecting_tiles(intersecting_tiles, settings, gcm_delta_dir):
         else:
             path = settings["simulation_directory"]
 
-        # find the WATERSimulation.xml file 
+        # find the WATERSimulation.xml and WATER.txt files
         waterxml_file = helpers.find_file(name = settings["water_database_file_name"], path = path)
+        watertxt_file = helpers.find_file(name = settings["water_text_file_name"], path = path)
 
         # get file info
         waterxml_dir, waterxml_filename = helpers.get_file_info(waterxml_file)       
+        watertxt_dir, watertxt_filename = helpers.get_file_info(watertxt_file)   
 
         # create an output directory
         output_dir = helpers.make_directory(path = waterxml_dir, directory_name = settings["gcm_delta_directory_name"])
@@ -123,7 +126,8 @@ def process_intersecting_tiles(intersecting_tiles, settings, gcm_delta_dir):
         waterapputils_logging.initialize_loggers(output_dir = output_dir)
 
         # read the xml file
-        waterxml_tree = waterxml.read_file(waterxml_file)            
+        waterxml_tree = waterxml.read_file(waterxml_file) 
+        watertxt_data = watertxt.read_file(watertxt_file)            
 
         # apply gcm delta
         for key, value in deltas_avg_dict.iteritems():
@@ -132,6 +136,9 @@ def process_intersecting_tiles(intersecting_tiles, settings, gcm_delta_dir):
 
             elif key == "Tmax":
                 waterxml.apply_factors(waterxml_tree = waterxml_tree, element = "ClimaticTemperatureSeries", factors = deltas_avg_dict[key])
+
+            elif key == "PET":
+                watertxt.apply_factors(watertxt_data, name = "PET", factors = deltas_avg_dict[key], is_additive = False)
 
         # update the project name in the updated xml
         project = waterxml.create_project_dict() 
@@ -142,6 +149,9 @@ def process_intersecting_tiles(intersecting_tiles, settings, gcm_delta_dir):
         waterxml_with_gcm_delta_file = "-".join([settings["gcm_delta_prepend_name"], waterxml_filename])   
 
         waterxml.write_file(waterxml_tree = waterxml_tree, save_path = output_dir, filename = waterxml_with_gcm_delta_file)              
+
+        # write the pet timeseries file
+        watertxt.write_timeseries_file(watertxt_data, name = "PET", save_path = output_dir, filename = settings["pet_timeseries_file_name"])
 
         # plot 
         updated_waterxml_file = os.path.join(output_dir, waterxml_with_gcm_delta_file)
