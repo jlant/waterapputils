@@ -106,9 +106,9 @@ run_gcmdelta()
 
     cd waterapputils/
     echo "--- $0 is running gcm delta with sample datasets; single and batch ---"
-    # echo
-    # echo "single simulation"
-    # python waterapputils.py -applygcmdelta -samplesingle
+    echo
+    echo "single simulation"
+    python waterapputils.py -applygcmdelta -samplesingle
     echo
     echo "batch simulation"
     python waterapputils.py -applygcmdelta -samplebatch
