@@ -15,26 +15,41 @@ Note: If copying and pasting paths on Windows machines:
 # ------------------- WATER simulation information ---------------------- #
 
 # simulation information
-simulation_directory = "../data/sample-water-simulations/sample-batch-simulation"
+# simulation_directory = "../data/sample-water-simulations/sample-batch-simulation"
+# is_batch_simulation = True
+# basin_shapefile_name = "Watersheds.shp"
+# basin_shapefile_id_field = "STAID"
+# basin_shapefile_area_field = "da_sqmi"                  # if no area field, leave blank like this: ""
+# -------
+simulation_directory = r"C:\Users\jlant\jeremiah\temp\test-waterapp\somebasins"
 is_batch_simulation = True
 basin_shapefile_name = "Watersheds.shp"
-basin_shapefile_id_field = "STAID"
-basin_shapefile_area_field = "da_sqmi"                  # if no area field, leave blank like this: ""
+basin_shapefile_id_field = "waterid"
+basin_shapefile_area_field = "DA_SQMI"                  # if no area field, leave blank like this: ""
 
 # default names from WATER application
 water_text_file_name = "WATER.txt"
 water_database_file_name = "WATERSimulation.xml"
 
 # ------------------- Water use information ----------------------------- #
-wateruse_centroids_shapefile = "../data/spatial-datafiles/wateruse-centroids/wateruse_centroids_sample_nad83.shp"
+# wateruse_centroids_shapefile = "../data/spatial-datafiles/wateruse-centroids/wateruse_centroids_sample_nad83.shp"
+wateruse_centroids_shapefile = "../data/spatial-datafiles/wateruse-centroids/wateruse_centroids_nad83.shp"
 wateruse_centroids_shapefile_id_field = "newhydroid"
+# wateruse_files = [
+# 	"../data/wateruse-datafiles/010203-JFM-sample.txt", 
+#     "../data/wateruse-datafiles/040506-AMJ-sample.txt", 
+#     "../data/wateruse-datafiles/070809-JAS-sample.txt", 
+#     "../data/wateruse-datafiles/101112-OND-sample.txt",
+# ]
+# wateruse_factor_file = "../data/wateruse-datafiles/wateruse-factors-sample.txt"
+
 wateruse_files = [
-	"../data/wateruse-datafiles/010203-JFM-sample.txt", 
-    "../data/wateruse-datafiles/040506-AMJ-sample.txt", 
-    "../data/wateruse-datafiles/070809-JAS-sample.txt", 
-    "../data/wateruse-datafiles/101112-OND-sample.txt",
+    r"C:\Users\jlant\jeremiah\temp\test-wateruse\S1_JFM_WU_2014sep12_000.txt", 
+    r"C:\Users\jlant\jeremiah\temp\test-wateruse\S2_AMJ_WU_2014sep12_000.txt", 
+    r"C:\Users\jlant\jeremiah\temp\test-wateruse\S3_JAS_WU_2014sep12_000.txt", 
+    r"C:\Users\jlant\jeremiah\temp\test-wateruse\S4_OND_WU_2014sep12_000.txt",
 ] 
-wateruse_factor_file = "../data/wateruse-datafiles/wateruse-factors-sample.txt"
+wateruse_factor_file = r"C:\Users\jlant\jeremiah\temp\test-wateruse\wateruse_factors.txt"
 
 # ------------------- Global Climate Model information ------------------ #
 gcm_delta_files = ["../data/deltas-gcm/Ppt.txt",
@@ -95,7 +110,7 @@ water_shapefiles = {
     },
 
     # WATER batch simulation basin(s) shapefile
-    "Watersheds" : {"field": "STAID", 
+    "Watersheds" : {"field": basin_shapefile_id_field, 
                     "color": "green",
                     "path": "",
     },

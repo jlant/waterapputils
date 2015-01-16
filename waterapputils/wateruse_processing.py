@@ -98,7 +98,10 @@ def process_intersecting_centroids(intersecting_centroids, settings, ecoflow_dir
     """      
     # create a file for the output  
     for featureid, centroids in intersecting_centroids.iteritems():
-
+        print("---")
+        print(featureid)
+        print(centroids)
+        print("---")
         # get sum of the water use data
         if settings["wateruse_factor_file"]:
             total_wateruse_dict = wateruse.get_all_total_wateruse(wateruse_files = settings["wateruse_files"], id_list = centroids, wateruse_factor_file = settings["wateruse_factor_file"], in_cfs = True)
