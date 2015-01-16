@@ -269,17 +269,16 @@ def read_field_values_file_in(filestream):
         String path to file
 
     """    
-    datafile = filestream.readlines()  
+    header = "basinid"
 
-    pattern = "[0-9].+"
-    
+    datafile = filestream.readlines() 
+
     field_values_dict = {}
     for line in datafile:
-        line = line.strip()
-        
-        match = re.search(pattern, line)        
-        if match:
-            line_list = match.group(0).split(",")
+        line = line.strip()                        
+        if line and header.strip() not in line:
+            line = line.strip()
+            line_list = line.split(",")
             items = [item.strip() for item in line_list[1:]]
             field_values_dict[line_list[0]] = items
 
@@ -304,7 +303,7 @@ def write_field_values_file(filepath, filename, field_values_dict, special_id = 
         line_str = "basinid,{}\n".format(field_id)
         f.write(line_str)        
         for key in field_values_dict.keys():
-            f.write("{},{}".format(key, special_id))
+            f.write("{},{}\n".format(key, special_id))
 
 def get_field_values(shapefile, id_field, query_field):
     """
@@ -743,16 +742,18 @@ def test_read_field_values_file_in():
     fixture = {}
     fixture["data_file"] = \
     """
-    basin, centroids
+    basinid, centroids
     0123456, 45, 50, 55, 60 
     7890123, 65, 70, 75, 80 
+    drb123,000
+
     """
     
     file_obj = StringIO(fixture["data_file"])
 
     # expected values to test with actual values
     expected = {} 
-    expected["data"] = {"0123456": ["45", "50", "55", "60"], "7890123": ["65", "70", "75", "80"]}
+    expected["data"] = {"0123456": ["45", "50", "55", "60"], "7890123": ["65", "70", "75", "80"], "drb123": ["000"]}
     
     # actual values    
     actual = {}
@@ -818,11 +819,11 @@ def main():
 
     # test_validate_field_values()
 
-    # test_read_field_values_file_in()
+    test_read_field_values_file_in()
     
     # test_get_field_values()
 
-    test_reproject_shapefile_to_wgs84()
+    # test_reproject_shapefile_to_wgs84()
 
 if __name__ == "__main__":
     main()    

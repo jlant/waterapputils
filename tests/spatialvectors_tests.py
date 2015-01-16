@@ -45,9 +45,10 @@ def setup():
 
     fixture["csv_non_intersecting_data_file"] = \
     """
-    basin, centroids
+    basinid, centroids
     0123456, 45, 50, 55, 60 
-    7890123, 65, 70, 75, 80 
+    7890123, 65, 70, 75, 80
+    drb123, 000 
     """
 
 def teardown():
@@ -381,7 +382,7 @@ def test_read_field_values_file_in():
 
     # expected values to test with actual values
     expected = {} 
-    expected["data"] = {"0123456": ["45", "50", "55", "60"], "7890123": ["65", "70", "75", "80"]}
+    expected["data"] = {"0123456": ["45", "50", "55", "60"], "7890123": ["65", "70", "75", "80"], "drb123": ["000"]}
 
     # convert string to a file object
     file_obj = StringIO(fixture["csv_non_intersecting_data_file"])
