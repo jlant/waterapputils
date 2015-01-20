@@ -19,11 +19,11 @@ import Tkinter, tkFileDialog
 import logging
 
 # my modules
-import water_files_processing
-import wateruse_processing
-import gcm_delta_processing
-import specific_output_file_processing
-import map_processing
+from modules import water_files_processing
+from modules import wateruse_processing
+from modules import gcm_delta_processing
+from modules import specific_output_file_processing
+from modules import map_processing
 import user_settings
 
 def main():  

@@ -4,7 +4,7 @@ import numpy as np
 from StringIO import StringIO
 
 # my module
-from waterapputils import wateruse
+from waterapputils.modules import wateruse
 
 # define the global fixture to hold the data that goes into the functions you test
 fixture = {}
