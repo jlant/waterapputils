@@ -143,10 +143,10 @@ def process_intersecting_tiles(intersecting_tiles, settings, gcm_delta_dir):
         # update the project name in the updated xml
         project = waterxml.create_project_dict() 
         project = waterxml.fill_dict(waterxml_tree = waterxml_tree, data_dict = project, element = "Project", keys = project.keys())
-        waterxml.change_element_value(waterxml_tree = waterxml_tree, element = "Project", child = "ProjName" , new_value = "-".join([settings["gcm_delta_prepend_name"], project["ProjName"]]))
+        waterxml.change_element_value(waterxml_tree = waterxml_tree, element = "Project", child = "ProjName" , new_value = settings["gcm_delta_prepend_name"] + project["ProjName"])
 
         # write updated xml
-        waterxml_with_gcm_delta_file = "-".join([settings["gcm_delta_prepend_name"], waterxml_filename])   
+        waterxml_with_gcm_delta_file = settings["gcm_delta_prepend_name"] + waterxml_filename
 
         waterxml.write_file(waterxml_tree = waterxml_tree, save_path = output_dir, filename = waterxml_with_gcm_delta_file)              
 

@@ -14,14 +14,7 @@ Note: If copying and pasting paths on Windows machines:
 
 # ------------------- WATER simulation information ---------------------- #
 
-# simulation information
-# simulation_directory = "../data/sample-water-simulations/sample-batch-simulation"
-# is_batch_simulation = True
-# basin_shapefile_name = "Watersheds.shp"
-# basin_shapefile_id_field = "STAID"
-# basin_shapefile_area_field = "da_sqmi"                  # if no area field, leave blank like this: ""
-# -------
-simulation_directory = r"C:\Users\jlant\jeremiah\temp\test-waterapp\somebasins"
+simulation_directory = r"C:\Users\jlant\jeremiah\temp\test-waterapputils\sample-batch-run\g01_20141117"
 is_batch_simulation = True
 basin_shapefile_name = "Watersheds.shp"
 basin_shapefile_id_field = "waterid"
@@ -32,16 +25,8 @@ water_text_file_name = "WATER.txt"
 water_database_file_name = "WATERSimulation.xml"
 
 # ------------------- Water use information ----------------------------- #
-# wateruse_centroids_shapefile = "../data/spatial-datafiles/wateruse-centroids/wateruse_centroids_sample_nad83.shp"
 wateruse_centroids_shapefile = "../data/spatial-datafiles/wateruse-centroids/wateruse_centroids_nad83.shp"
 wateruse_centroids_shapefile_id_field = "newhydroid"
-# wateruse_files = [
-# 	"../data/wateruse-datafiles/010203-JFM-sample.txt", 
-#     "../data/wateruse-datafiles/040506-AMJ-sample.txt", 
-#     "../data/wateruse-datafiles/070809-JAS-sample.txt", 
-#     "../data/wateruse-datafiles/101112-OND-sample.txt",
-# ]
-# wateruse_factor_file = "../data/wateruse-datafiles/wateruse-factors-sample.txt"
 
 wateruse_files = [
     r"C:\Users\jlant\jeremiah\temp\test-wateruse\S1_JFM_WU_2014sep12_000.txt", 
@@ -66,13 +51,13 @@ info_directory_name = "waterapputils-info"
 watertxt_directory_name = "waterapputils-watertxt"
 waterxml_directory_name = "waterapputils-waterxml"
 
-wateruse_prepend_name = "WATERUSE"
+wateruse_prepend_name = "WATERUSE-"
 wateruse_directory_name = "waterapputils-wateruse"
 wateruse_info_file_name = "wateruse_info.txt"
 wateruse_non_intersecting_file_name = "wateruse_non_intersecting_centroids.txt"
 sub_wateruse_info_file_name = "sub_wateruse_info.txt"
 
-gcm_delta_prepend_name = "GCMDELTA"
+gcm_delta_prepend_name = ""
 gcm_delta_directory_name = "waterapputils-gcmdelta"
 gcm_delta_info_file_name = "gcm_delta_info.txt"
 gcm_delta_non_intersecting_file_name = "gcm_delta_non_intersecting_tiles.txt"
@@ -325,13 +310,13 @@ sample_batch_settings = {
     "watertxt_directory_name": "waterapputils-watertxt",
     "waterxml_directory_name": "waterapputils-waterxml",
 
-    "wateruse_prepend_name": "WATERUSE",
+    "wateruse_prepend_name": "WATERUSE-",
     "wateruse_directory_name": "waterapputils-wateruse",
     "wateruse_info_file_name": "wateruse_info.txt",
     "wateruse_non_intersecting_file_name": "wateruse_non_intersecting_centroids.txt",
     "sub_wateruse_info_file_name": "sub_wateruse_info.txt",
     
-    "gcm_delta_prepend_name": "GCMDELTA",
+    "gcm_delta_prepend_name": "GCMDELTA-",
     "gcm_delta_directory_name": "waterapputils-gcmdelta",
     "gcm_delta_info_file_name": "gcm_delta_info.txt",
     "gcm_delta_non_intersecting_file_name": "gcm_delta_non_intersecting_tiles.txt",
