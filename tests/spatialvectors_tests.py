@@ -4,7 +4,7 @@ import osgeo.ogr
 from StringIO import StringIO
 
 # my module
-from waterapputils import spatialvectors
+from waterapputils.modules import spatialvectors
 
 # define the global fixture to hold the data that goes into the functions you test
 fixture = {}

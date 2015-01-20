@@ -4,7 +4,7 @@ import numpy as np
 import datetime
 
 # my module
-from waterapputils import helpers
+from waterapputils.modules import helpers
 
 # define the global fixture to hold the data that goes into the functions you test
 fixture = {}

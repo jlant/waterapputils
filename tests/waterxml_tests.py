@@ -5,7 +5,7 @@ import datetime
 from StringIO import StringIO
 
 # my module
-from waterapputils import waterxml
+from waterapputils.modules import waterxml
 
 # define the global fixture to hold the data that goes into the functions you test
 fixture = {}
