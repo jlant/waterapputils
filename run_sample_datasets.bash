@@ -26,7 +26,7 @@ run_xml()
 
 run_wateruse()
 {
-    # applying wateruse requires many inputs, and those inputs are specified in the user_settings.py file which can relative paths from the directory containing the python code
+    # applying wateruse requires many inputs, and those inputs are specified in the user_settings.py file which contain relative paths from the directory containing the python code
     # this requires changing directories into the waterapputils directory in order to run the sample datasets
 
     cd waterapputils/
@@ -37,6 +37,9 @@ run_wateruse()
     echo
     echo "batch simulation"
     python waterapputils.py -applywateruse -samplebatch
+    echo
+    echo "user supplied batch simulation"
+    python waterapputils.py -applywateruse -simdir ../data/sample-water-simulations/sample-batch-simulation/
     echo 
 }
 
