@@ -1,6 +1,9 @@
 #!/bin/bash
 
-# Bash script containing options to run sample data sets
+# Description: Bash script to run sample data sets and tests
+#
+# Usage: run_sample_datasets.bash [option]
+#        run_sample_datasets.bash [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid] [ecoflowdaxml] [-ecoflowdashp] [-gcmdelta] [-mapsim] [-all] [tests]] | [-h]]
 
 run_txt()
 {
@@ -137,7 +140,7 @@ run_subgcmdelta()
 
 run_mapsim()
 {
-    # applying wateruse requires many inputs, and those inputs are specified in the user_settings.py file which can relative paths from the directory containing the python code
+    # applying wateruse requires many inputs, and those inputs are specified in the user_settings.py file which contain relative paths from the directory containing the python code
     # this requires changing directories into the waterapputils directory in order to run the sample datasets
 
     cd waterapputils/
@@ -199,7 +202,7 @@ usage()
 {
 
 	echo "Usage:"
-	echo "    run_sample_datasets [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid] [ecoflowdaxml] [-ecoflowdashp] [-gcmdelta] [-mapsim] [-all] [tests]] | [-h]]"
+	echo "    run_sample_datasets.bash [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid] [ecoflowdaxml] [-ecoflowdashp] [-gcmdelta] [-mapsim] [-all] [tests]] | [-h]]"
 }
 
 # main program
