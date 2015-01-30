@@ -1,6 +1,9 @@
 #!/bin/bash
 
-# Bash script containing options to run sample data sets
+# Description: Bash script to run sample data sets and tests
+#
+# Usage: run_sample_datasets.sh [option]
+#        run_sample_datasets.sh [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid] [ecoflowdaxml] [-ecoflowdashp] [-gcmdelta] [-mapsim] [-all] [tests]] | [-h]]
 
 run_txt()
 {
@@ -26,18 +29,21 @@ run_xml()
 
 run_wateruse()
 {
-    # applying wateruse requires many inputs, and those inputs are specified in the user_settings.py file which can relative paths from the directory containing the python code
+    # applying wateruse requires many inputs, and those inputs are specified in the user_settings.py file which contain relative paths from the directory containing the python code
     # this requires changing directories into the waterapputils directory in order to run the sample datasets
 
     cd waterapputils/
     echo "--- $0 is running water use with sample datasets; single and batch ---"
     echo
-    echo "single simulation"
-    python waterapputils.py -applywateruse -samplesingle
-    echo
+    # echo "single simulation"
+    # python waterapputils.py -applywateruse -samplesingle
+    # echo
     echo "batch simulation"
     python waterapputils.py -applywateruse -samplebatch
-    echo 
+    echo
+    # echo "user supplied batch simulation"
+    # python waterapputils.py -applywateruse -simdir ../data/sample-water-simulations/sample-batch-simulation/
+    # echo 
 }
 
 run_subwateruse()
@@ -73,6 +79,7 @@ run_ecoflowstationid()
     echo
     python waterapputils/waterapputils.py -ecoflowstationid data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt
     echo     
+    python waterapputils/waterapputils.py -ecoflowstationid data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt -parameter Discharge -outfilename basin0-orig-discharge.csv
 }
 
 run_ecoflowdaxml()
@@ -81,8 +88,7 @@ run_ecoflowdaxml()
     echo "--- $0 is running ecoflow drainage area using xml file ---"
     echo
     python waterapputils/waterapputils.py -ecoflowdaxml data/sample-water-simulations/sample-datafiles/WATERSimulation-basin0.xml -outfilename drainagearea-from-xml.csv
-    echo     
-
+    echo
 }
 
 run_ecoflowdashp()
@@ -134,7 +140,7 @@ run_subgcmdelta()
 
 run_mapsim()
 {
-    # applying wateruse requires many inputs, and those inputs are specified in the user_settings.py file which can relative paths from the directory containing the python code
+    # applying wateruse requires many inputs, and those inputs are specified in the user_settings.py file which contain relative paths from the directory containing the python code
     # this requires changing directories into the waterapputils directory in order to run the sample datasets
 
     cd waterapputils/
@@ -196,7 +202,7 @@ usage()
 {
 
 	echo "Usage:"
-	echo "    run_sample_datasets [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid] [ecoflowdaxml] [-ecoflowdashp] [-gcmdelta] [-mapsim] [-all] [tests]] | [-h]]"
+	echo "    run_sample_datasets.sh [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid] [ecoflowdaxml] [-ecoflowdashp] [-gcmdelta] [-mapsim] [-all] [tests]] | [-h]]"
 }
 
 # main program

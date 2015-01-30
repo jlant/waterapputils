@@ -68,6 +68,7 @@ pet_timeseries_file_name = "pet-timeseries.txt"
 ecoflow_directory_name = "waterapputils-ecoflow"
 ecoflow_file_name = ""
 ecoflow_drainage_area_file_name = "drainagearea.csv"
+ecoflow_parameter_name = "Discharge + Water Use"
 
 oasis_directory_name = "waterapputils-oasis"
 oasis_file_name = "oasis.txt"
@@ -198,6 +199,7 @@ settings = {
 	"ecoflow_directory_name": ecoflow_directory_name,
     "ecoflow_file_name": ecoflow_file_name,
 	"ecoflow_drainage_area_file_name": ecoflow_drainage_area_file_name,
+    "ecoflow_parameter_name": ecoflow_parameter_name,
     
 	"oasis_directory_name": oasis_directory_name,
 	"oasis_file_name": oasis_file_name,
@@ -263,6 +265,7 @@ sample_single_settings = {
     "ecoflow_directory_name": "waterapputils-ecoflow",
     "ecoflow_file_name": "",
     "ecoflow_drainage_area_file_name": "drainagearea.csv",
+    "ecoflow_parameter_name": "Discharge + Water Use",
     
     "oasis_directory_name": "waterapputils-oasis",
     "oasis_file_name": "oasis.txt",
@@ -327,7 +330,8 @@ sample_batch_settings = {
     "ecoflow_directory_name": "waterapputils-ecoflow",
     "ecoflow_file_name": "",
     "ecoflow_drainage_area_file_name": "drainagearea.csv",
-    
+    "ecoflow_parameter_name": "Discharge + Water Use",
+
     "oasis_directory_name": "waterapputils-oasis",
     "oasis_file_name": "oasis.txt",
 

@@ -62,10 +62,12 @@ def main():
 
     parser.add_argument("-v", "--verbose", action = "store_true",  help = "Print general information about data file(s)")
     parser.add_argument("-outfilename", "--outfilename", nargs = 1,  help = "Write file name to write drainage area csv file.")  
+    parser.add_argument("-parameter", "--parameter", nargs = 1,  help = "Write a paramter name contained in a WATER.txt file to get for the ecoflow timeseries file.") 
     parser.add_argument("-labelfield", "--labelfield", nargs = 1,  help = "Write field name in shapefile to use in labeling drainagearea.csv")    
     parser.add_argument("-areafield", "--areafield", nargs = 1,  help = "Write area field name in shapefile to use in drainagearea.csv")
     parser.add_argument("-samplesingle", "--samplesingle", action = "store_true",  help = "Flag to use sample single batch settings user_settings.py") 
     parser.add_argument("-samplebatch", "--samplebatch", action = "store_true",  help = "Flag to use sample batch batch settings user_settings.py") 
+    parser.add_argument("-simdir", "--simdir", nargs = 1,  help = "Flag to use a user supplied path to simulation directory instead of using simulation directory set in user_settings.py") 
 
     args = parser.parse_args()  
 
@@ -153,6 +155,9 @@ def main():
                 settings = user_settings.sample_single_settings
             elif args.samplebatch:
                 settings = user_settings.sample_batch_settings
+            elif args.simdir:
+                settings = user_settings.settings
+                settings["simulation_directory"] = args.simdir[0]
             else:
                 settings = user_settings.settings                       
 
@@ -168,6 +173,9 @@ def main():
                 settings = user_settings.sample_single_settings
             elif args.samplebatch:
                 settings = user_settings.sample_batch_settings
+            elif args.simdir:
+                settings = user_settings.settings
+                settings["simulation_directory"] = args.simdir[0]
             else:
                 settings = user_settings.settings 
 
@@ -193,8 +201,13 @@ def main():
                 ecoflow_file_name = args.outfilename[0]
             else:
                 ecoflow_file_name = user_settings.settings["ecoflow_file_name"]
+
+            if args.parameter:
+                parameter = args.parameter[0]
+            else:
+                parameter = user_settings.settings["ecoflow_parameter_name"]
            
-            specific_output_file_processing.write_ecoflow_file_stationid(file_list = args.ecoflowstationid, dir_name = user_settings.settings["ecoflow_directory_name"], file_name = ecoflow_file_name)        
+            specific_output_file_processing.write_ecoflow_file_stationid(file_list = args.ecoflowstationid, dir_name = user_settings.settings["ecoflow_directory_name"], file_name = ecoflow_file_name, parameter_name = parameter)        
             
             sys.exit()
 
@@ -241,6 +254,9 @@ def main():
                 settings = user_settings.sample_single_settings
             elif args.samplebatch:
                 settings = user_settings.sample_batch_settings
+            elif args.simdir:
+                settings = user_settings.settings
+                settings["simulation_directory"] = args.simdir[0]
             else:
                 settings = user_settings.settings                       
            
@@ -257,6 +273,9 @@ def main():
                 settings = user_settings.sample_single_settings
             elif args.samplebatch:
                 settings = user_settings.sample_batch_settings
+            elif args.simdir:
+                settings = user_settings.settings
+                settings["simulation_directory"] = args.simdir[0]
             else:
                 settings = user_settings.settings 
 
