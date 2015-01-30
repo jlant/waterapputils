@@ -144,10 +144,10 @@ def process_intersecting_centroids(intersecting_centroids, settings, ecoflow_dir
         water_files_processing.process_water_files(file_list = [updated_watertxt_file], settings = settings, print_data = True)
 
         # write timeseries of discharge + water use for OASIS
-        watertxt.write_timeseries_file(watertxt_data = watertxt_data, name = "Discharge + Water Use", save_path = oasis_dir, filename = "-".join([watertxt_data["stationid"], settings["oasis_file_name"]]))
+        watertxt.write_timeseries_file(watertxt_data = watertxt_data, name = settings["ecoflow_parameter_name"], save_path = oasis_dir, filename = "-".join([watertxt_data["stationid"], settings["oasis_file_name"]]))
 
         # write timeseries of dishcarge + water use for ecoflow program
-        watertxt.write_timeseries_file_stationid(watertxt_data, name = "Discharge + Water Use", save_path = ecoflow_dir, filename = "", stationid = watertxt_data["stationid"])
+        watertxt.write_timeseries_file_stationid(watertxt_data, name = settings["ecoflow_parameter_name"], save_path = ecoflow_dir, filename = "", stationid = watertxt_data["stationid"])
 
 
 def apply_wateruse(settings):

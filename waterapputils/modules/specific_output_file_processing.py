@@ -47,7 +47,21 @@ def write_oasis_file(file_list, dir_name, file_name):
                 
         waterapputils_logging.remove_loggers()
 
-def write_ecoflow_file_stationid(file_list, dir_name, file_name):
+def write_ecoflow_file_stationid(file_list, dir_name, file_name, parameter_name = "Discharge + Water Use"):
+    """    
+    Write a csv file containing a timeseries for a particular parameter contained in a WATER.txt file
+
+    Parameters
+    ----------
+    file_list : list
+        List of WATER.txt files to process
+    dir_name : string
+        String name for output directory
+    file_name : string
+        String name for output file
+    parameter_name : string
+        String name for a parameter contained in a WATER.txt file
+    """   
 
     for f in file_list:
                
@@ -62,7 +76,7 @@ def write_ecoflow_file_stationid(file_list, dir_name, file_name):
         watertxt_data = watertxt.read_file(f)      
 
         # write timeseries of discharge + water use for ecoflow program
-        watertxt.write_timeseries_file_stationid(watertxt_data, name = "Discharge + Water Use", save_path = ecoflow_dir, filename = file_name, stationid = watertxt_data["stationid"])
+        watertxt.write_timeseries_file_stationid(watertxt_data, name = parameter_name, save_path = ecoflow_dir, filename = file_name, stationid = watertxt_data["stationid"])
                 
         waterapputils_logging.remove_loggers()
 
@@ -73,13 +87,11 @@ def write_ecoflow_file_drainageareaxml(file_list, dir_name, file_name):
     Parameters
     ----------
     file_list : list
-        List of files to process; files are shapefiles
-    settings : dictionary
-        Dictionary of user settings
-
-    Notes
-    -----
-    Uses settings set in user_settings.py  
+        List of WATERSimulation.xml files to process
+    dir_name : string
+        String name for output directory
+    file_name : string
+        String name for output file
     """   
     area_data = {}
     for f in file_list:
