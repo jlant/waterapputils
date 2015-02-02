@@ -55,13 +55,14 @@
   <p><a class="reference external" href="http://www.usgs.gov/"><img alt="alt text" src="_images/usgs-logo.png" /></a></p>
 <div class="section" id="waterapputils">
 <h1>waterapputils<a class="headerlink" href="#waterapputils" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
 <div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
 <p><strong>waterapputils</strong> is a tool used for analyzing, processing, and updating
 model simulations from the <a class="reference external" href="http://ky.water.usgs.gov/">U.S. Geological Survey Indiana and Kentucky
 Water Science Centers (INKY)</a> WATER
 application. <strong>waterapputils</strong> is written in
-<a class="reference external" href="https://www.python.org/">Python</a>, and adds new functionality,
+<a class="reference external" href="https://www%20.python.org/">Python</a>, and adds new functionality,
 outside the WATER application, by allowing users to apply various future
 climate projections using a change-factor (delta) approach with data
 from the Coupled Model Intercomparison Project
@@ -96,13 +97,13 @@ Physiographic Terranes. Soil Science Society of America Journal
 <li>Processes WATER simulation output files (<tt class="docutils literal"><span class="pre">txt</span></tt> format).</li>
 <li>Processes WATER simulation database files that store information
 about a particular model simulation (<tt class="docutils literal"><span class="pre">xml</span></tt> format).</li>
-<li>Applies various statistically downscaled global climate models
+<li>Applies various statistically downscaled <strong>global climate models</strong>
 ([GCMs]) to model simulations for a particular watershed basin or set
 of watershed basins based on the spatial intersection of the
 watershed(s) of interest with the global climate change scenario
 coverage of interest.</li>
-<li>Applies water use data to model simulations for a particular for a
-particular watershed basin or set of watershed basins based on the
+<li>Applies <strong>water use</strong> data to model simulations for a particular for
+a particular watershed basin or set of watershed basins based on the
 spatial intersection of the watershed(s) of interest with the water
 use coverage.</li>
 <li>Generates plots of all parameters found in WATER output files
@@ -113,15 +114,27 @@ database files (<tt class="docutils literal"><span class="pre">xml</span></tt> f
 simulation output files.</li>
 <li>Generates comparison and difference plots between two WATER
 simulation database files.</li>
+<li>Generates maps of study area for a particular model simulation using
+<a class="reference external" href="http://matplotlib.org/basemap/">basemap</a></li>
 <li>Logs errors and tracebacks.</li>
 </ul>
 </div>
+<hr class="docutils" />
 <div class="section" id="version">
 <h2>Version<a class="headerlink" href="#version" title="Permalink to this headline">¶</a></h2>
 <p>1.0.0</p>
 </div>
-<div class="section" id="command-line-arguments-options">
-<h2>Command line arguments/options<a class="headerlink" href="#command-line-arguments-options" title="Permalink to this headline">¶</a></h2>
+<hr class="docutils" />
+<div class="section" id="command-line-interface-to-waterapputils">
+<h2>Command line interface to <strong>waterapputils</strong><a class="headerlink" href="#command-line-interface-to-waterapputils" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="usage">
+<h3>Usage:<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h3>
+<div class="code sh highlight-python"><div class="highlight"><pre>$ python waterapputils.py [option]
+</pre></div>
+</div>
+</div>
+<div class="section" id="command-line-arguments-for-waterapputils">
+<h3>Command line arguments for <strong>waterapputils</strong>:<a class="headerlink" href="#command-line-arguments-for-waterapputils" title="Permalink to this headline">¶</a></h3>
 <table border="1" class="docutils">
 <colgroup>
 <col width="11%" />
@@ -160,11 +173,11 @@ simulation database files.</li>
 <tr class="row-even"><td><tt class="docutils literal"><span class="pre">-waterxmlcmpfd</span></tt></td>
 <td>open file dialog window to select 2 WATER simulation database files to compare; <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt></td>
 </tr>
-<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-applydeltas</span></tt></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-applygcmdeltas</span></tt></td>
 <td>apply global climate change deltas to WATER simulation database file(s); <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt>; details specified in <tt class="docutils literal"><span class="pre">user_settings.py</span></tt></td>
 </tr>
-<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-applysubdeltas</span></tt></td>
-<td>apply updated global climate change deltas from <tt class="docutils literal"><span class="pre">sub_gcm_delta_info_file_name</span></tt> variable in user_settings.py to WATER simulation database file(s); details specified in <tt class="docutils literal"><span class="pre">user_settings.py</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-applysubgcmdeltas</span></tt></td>
+<td>apply updated global climate change deltas from <tt class="docutils literal"><span class="pre">sub_gcm_delta_info_file_name</span></tt> variable in user_settings.py to WATER simulation database file(s); <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt>; details specified in <tt class="docutils literal"><span class="pre">user_settings.py</span></tt></td>
 </tr>
 <tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-applywateruse</span></tt></td>
 <td>apply water use data to WATER simulation output file(s); <tt class="docutils literal"><span class="pre">WATER.txt</span></tt>; details specified in <tt class="docutils literal"><span class="pre">user_settings.py</span></tt></td>
@@ -199,18 +212,64 @@ simulation database files.</li>
 <tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-samplebatch</span></tt></td>
 <td>OPTIONAL : flag used with <tt class="docutils literal"><span class="pre">-applywateruse</span></tt>, <tt class="docutils literal"><span class="pre">-applysubwateruse</span></tt>, <tt class="docutils literal"><span class="pre">-applygcmdeltas</span></tt>, <tt class="docutils literal"><span class="pre">-applysubgcmdeltas</span></tt> to specify the use of the sample batch simulation datasets</td>
 </tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-simdir</span></tt></td>
+<td>OPTIONAL : flag used with <tt class="docutils literal"><span class="pre">-applywateruse</span></tt>, <tt class="docutils literal"><span class="pre">-applysubwateruse</span></tt>, <tt class="docutils literal"><span class="pre">-applygcmdeltas</span></tt>, <tt class="docutils literal"><span class="pre">-applysubgcmdeltas</span></tt> to specify a path to a specific WATER simulation instead of specifying it in <tt class="docutils literal"><span class="pre">user_settings.py</span></tt></td>
+</tr>
 </tbody>
 </table>
 </div>
-<div class="section" id="running-sample-datasets-with-a-shell-script">
-<h2>Running sample datasets with a shell script<a class="headerlink" href="#running-sample-datasets-with-a-shell-script" title="Permalink to this headline">¶</a></h2>
-<p>The shell script <a class="reference external" href="../../../run_sample_datasets.bash">run_sample_datasets.bash</a> is a shell script that can be used to run automated tests
-and run many of the command line arguments using the <a class="reference external" href="../../../data/sample-water-simulations">sample datasets</a>.  The following are the
-command line arguments for the shell script <a class="reference external" href="../../../run_sample_datasets.bash">run_sample_datasets.bash</a>:</p>
+<div class="section" id="example-processing-a-water-txt-file">
+<h3>Example - processing a WATER.txt file<a class="headerlink" href="#example-processing-a-water-txt-file" title="Permalink to this headline">¶</a></h3>
+<div class="code sh highlight-python"><div class="highlight"><pre>$ python waterapputils.py -watertxt &lt;path-to-WATER.txt-file&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-running-water-use-using-the-settings-in-user-settings-py">
+<h3>Example - Running water use using the settings in user_settings.py<a class="headerlink" href="#example-running-water-use-using-the-settings-in-user-settings-py" title="Permalink to this headline">¶</a></h3>
+<div class="code sh highlight-python"><div class="highlight"><pre>$ python waterapputils.py -applywateruse
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-running-water-use-by-supplying-a-path-to-a-simulations-directory-instead-of-specifying-the-simulations-directory-in-user-settings-py">
+<h3>Example - Running water use by supplying a path to a simulations directory instead of specifying the simulations directory in user_settings.py<a class="headerlink" href="#example-running-water-use-by-supplying-a-path-to-a-simulations-directory-instead-of-specifying-the-simulations-directory-in-user-settings-py" title="Permalink to this headline">¶</a></h3>
+<div class="code sh highlight-python"><div class="highlight"><pre>$ python waterapputils.py -applywateruse -simdir &lt;path-to-simulations-directory&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="editing-settings-in-user-settings-py">
+<h2>Editing settings in <a class="reference external" href="waterapputils/user_settings.py">user_settings.py</a><a class="headerlink" href="#editing-settings-in-user-settings-py" title="Permalink to this headline">¶</a></h2>
+<p>All the setting for running <strong>waterapputils</strong> are contained in
+<a class="reference external" href="waterapputils/user_settings.py">user_settings.py</a> file. A user can
+edit the settings by editing the Python string variables. Most variables
+are <em>path</em> variables to required data files and basin shapefile
+attribute variables. A user will typically only edit the section called
+<em>WATER simulation information</em>. This section contains information about
+a WATER simulation. A WATER simulation can be either a <em>single</em>
+simulation or a <em>batch</em> simulation. Each simulation type has a few
+different outputs along with a different directory structure.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="run-sample-datasets-with-run-sample-datasets-sh">
+<h2>Run sample datasets with <a class="reference external" href="run_sample_datasets.sh">run_sample_datasets.sh</a><a class="headerlink" href="#run-sample-datasets-with-run-sample-datasets-sh" title="Permalink to this headline">¶</a></h2>
+<p>The shell script <a class="reference external" href="run_sample_datasets.sh">run_sample_datasets.sh</a>
+is a shell script that can be used to run automated tests and run many
+of the command line arguments using the <a class="reference external" href="data/sample-water-simulations">sample
+datasets</a>.</p>
+<div class="section" id="id1">
+<h3>Usage:<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="code sh highlight-python"><div class="highlight"><pre>$ run_sample_datasets.sh [option]
+$ run_sample_datasets.sh [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid] [ecoflowdaxml] [-ecoflowdashp] [-gcmdelta] [-mapsim] [-all] [-tests] -makeclean] | [-h]]
+</pre></div>
+</div>
+</div>
+<div class="section" id="command-line-arguments-for-the-shell-script-run-sample-datasets-sh">
+<h3>Command line arguments for the shell script <a class="reference external" href="run_sample_datasets.sh">run_sample_datasets.sh</a>:<a class="headerlink" href="#command-line-arguments-for-the-shell-script-run-sample-datasets-sh" title="Permalink to this headline">¶</a></h3>
 <table border="1" class="docutils">
 <colgroup>
-<col width="11%" />
-<col width="89%" />
+<col width="12%" />
+<col width="88%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Commands</th>
@@ -221,51 +280,122 @@ command line arguments for the shell script <a class="reference external" href="
 <tr class="row-even"><td><tt class="docutils literal"><span class="pre">-h</span></tt></td>
 <td>show list of available commands</td>
 </tr>
-<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-watertxt</span></tt></td>
-<td>list WATER simulation output file(s) to process; <tt class="docutils literal"><span class="pre">WATER.txt</span></tt></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-txt</span></tt></td>
+<td>run <tt class="docutils literal"><span class="pre">-watertxt</span></tt> and <tt class="docutils literal"><span class="pre">-watertxtcmp</span></tt> using the <a class="reference external" href="data/watertxt-datafiles">sample WATER simulation output TEXT files</a></td>
 </tr>
-<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-txt</span></tt></td>
-<td>run <tt class="docutils literal"><span class="pre">-watertxt</span></tt> and <tt class="docutils literal"><span class="pre">-watertxtcmp</span></tt> using the sample WATER simulation output TEXT files located <a class="reference external" href="../../../data/watertxt-datafiles">here</a></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-xml</span></tt></td>
+<td>run <tt class="docutils literal"><span class="pre">-waterxml</span></tt> and <tt class="docutils literal"><span class="pre">-waterxmlcmp</span></tt> using the <a class="reference external" href="data/waterxml-datafiles">sample WATER simulation output XML files</a></td>
 </tr>
-<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-xml</span></tt></td>
-<td>run <tt class="docutils literal"><span class="pre">-waterxml</span></tt> and <tt class="docutils literal"><span class="pre">-waterxmlcmp</span></tt> using the sample WATER simulation output XML files located <a class="reference external" href="../../../data/waterxml-datafiles">here</a></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-wateruse</span></tt></td>
+<td>run and apply <a class="reference external" href="data/wateruse-datafiles">water use data</a> to sample WATER simulations; <a class="reference external" href="data/sample-water-simulations">single and batch simulations</a></td>
 </tr>
-<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-wateruse</span></tt></td>
-<td>run and apply <a class="reference external" href="../../../data/wateruse-datafiles">water use data</a> to sample WATER simulations; single and batch simulations located <a class="reference external" href="../../../data/sample-water-simulations">here</a></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-subwateruse</span></tt></td>
+<td>run and apply substitute water use data to sample WATER simulations; <a class="reference external" href="data/sample-water-simulations">single and batch simulations</a></td>
 </tr>
-<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-subwateruse</span></tt></td>
-<td>run and apply substitute water use data to sample WATER simulations; single and batch simulations located <a class="reference external" href="../../../data/sample-water-simulations">here</a></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-gcmdelta</span></tt></td>
+<td>run and apply <a class="reference external" href="data/gcmdelta-datafiles">global climate model data</a> to sample WATER simulations; <a class="reference external" href="data/sample-water-simulations">single and batch simulations</a></td>
 </tr>
-<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-gcmdelta</span></tt></td>
-<td>run and apply <a class="reference external" href="../../../data/gcmdelta-datafiles">global climate model data</a> to sample WATER simulations; single and batch simulations located <a class="reference external" href="../../../data/sample-water-simulations">here</a></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-subgcmdelta</span></tt></td>
+<td>run and apply substitute water use data to sample WATER simulations; <a class="reference external" href="data/sample-water-simulations">single and batch simulations</a></td>
 </tr>
-<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-subgcmdelta</span></tt></td>
-<td>run and apply substitute water use data to sample WATER simulations; single and batch simulations located <a class="reference external" href="../../../data/sample-water-simulations">here</a></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-oasis</span></tt></td>
+<td>create an oasis formated water use output file using the <a class="reference external" href="data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt">sample water use applied WATER TEXT file</a></td>
 </tr>
-<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-oasis</span></tt></td>
-<td>create an oasis formated water use output file using the sample water use applied WATER TEXT file located <a class="reference external" href="../../../data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt">here</a></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-ecoflowstationid</span></tt></td>
+<td>create an ecoflow formated water use output file using the <a class="reference external" href="data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt">sample water use applied WATER TEXT file</a></td>
 </tr>
-<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-ecoflowstationid</span></tt></td>
-<td>create an ecoflow formated water use output file using the sample water use applied WATER TEXT file located <a class="reference external" href="../../../data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt">here</a></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-ecoflowdaxml</span></tt></td>
+<td>create an ecoflow formated drainage area output file using the <a class="reference external" href="data/sample-water-simulations/sample-datafiles/WATERSimulation-basin0.xml">sample WATER XML file</a> to calculate basin area</td>
 </tr>
-<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-ecoflowdaxml</span></tt></td>
-<td>create an ecoflow formated drainage area output file using the sample WATER XML file to calculate basin area located <a class="reference external" href="../../../data/sample-water-simulations/sample-datafiles">here</a></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-ecoflowdashp</span></tt></td>
+<td>create an ecoflow formated drainage area output file using the <a class="reference external" href="data/sample-water-simulations/sample-datafiles/basin0.shp">sample basin shapefiles</a></td>
 </tr>
-<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-ecoflowdashp</span></tt></td>
-<td>create an ecoflow formated drainage area output file using the sample basin shapefiles located <a class="reference external" href="../../../data/sample-water-simulations">here</a></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-mapsim</span></tt></td>
+<td>create maps for <a class="reference external" href="data/sample-water-simulations">single and batch simulations</a></td>
 </tr>
 <tr class="row-even"><td><tt class="docutils literal"><span class="pre">-all</span></tt></td>
-<td>run (mostly) all commands; <tt class="docutils literal"><span class="pre">-tests</span></tt>, <tt class="docutils literal"><span class="pre">-txt</span></tt>, <tt class="docutils literal"><span class="pre">-xml</span></tt>, <tt class="docutils literal"><span class="pre">-wateruse</span></tt>, <tt class="docutils literal"><span class="pre">-gcmdelta</span></tt>, <tt class="docutils literal"><span class="pre">-oasis</span></tt>, <tt class="docutils literal"><span class="pre">-ecoflowstationid</span></tt>, <tt class="docutils literal"><span class="pre">-ecoflowdaxml</span></tt>, <tt class="docutils literal"><span class="pre">-ecoflowdashp</span></tt></td>
+<td>run (mostly) all commands; <tt class="docutils literal"><span class="pre">-tests</span></tt>, <tt class="docutils literal"><span class="pre">-txt</span></tt>, <tt class="docutils literal"><span class="pre">-xml</span></tt>, <tt class="docutils literal"><span class="pre">-wateruse</span></tt>, <tt class="docutils literal"><span class="pre">-gcmdelta</span></tt>, <tt class="docutils literal"><span class="pre">-oasis</span></tt>, <tt class="docutils literal"><span class="pre">-ecoflowstationid</span></tt>, <tt class="docutils literal"><span class="pre">-ecoflowdaxml</span></tt>, <tt class="docutils literal"><span class="pre">-ecoflowdashp</span></tt>, <tt class="docutils literal"><span class="pre">mapsim</span></tt></td>
 </tr>
 <tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-tests</span></tt></td>
 <td>run units tests use nosetests</td>
 </tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-makeclean</span></tt></td>
+<td>cleans/removes all output of running sample dataset in in the <a class="reference external" href="data/sample-water-simulations">sample-water-simulations directory</a></td>
+</tr>
 </tbody>
 </table>
 </div>
+<div class="section" id="example-apply-water-use-to-single-and-batch-simulations">
+<h3>Example - apply water use to <a class="reference external" href="data/sample-water-simulations">single and batch simulations</a>:<a class="headerlink" href="#example-apply-water-use-to-single-and-batch-simulations" title="Permalink to this headline">¶</a></h3>
+<div class="code sh highlight-python"><div class="highlight"><pre>$ run_sample_datasets.sh -wateruse
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="applying-water-use-and-gcm-deltas-to-many-water-simulations-at-one-time-using-run-simulations-sh">
+<h2>Applying water use and gcm deltas to many WATER simulations at one time using <a class="reference external" href="run_simulations.sh">run_simulations.sh</a><a class="headerlink" href="#applying-water-use-and-gcm-deltas-to-many-water-simulations-at-one-time-using-run-simulations-sh" title="Permalink to this headline">¶</a></h2>
+<p>The shell script <a class="reference external" href="run_simulations.sh">run_simulations.sh</a> is a shell
+script that can be used to automate the processing of many WATER
+simulations. <a class="reference external" href="run_simulations.sh">run_simulations.sh</a> can be used to
+apply water use and global climate change scenarios to multiple WATER
+simulations that are contained in the same directory. A user will
+provide a valid option along with the <strong>path to the directory containing
+all the WATER simulations</strong> that need to be processed. This directory
+should contain all the same type of WATER simulations <em>single</em> or
+<em>batch</em>, but not both. A user should make sure that the proper settings
+for processing a <em>single</em> or <em>batch</em> simulation are set in the
+<em>user_settings.py</em> file. Note that the <em>simulation_directory</em> variable
+will be ignored when using this script, but all the other settings will
+be used accordingly.</p>
+<div class="section" id="id2">
+<h3>Usage:<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="code sh highlight-python"><div class="highlight"><pre>$ run_simulations.sh [option] &lt;path-to-simulations-directory&gt;
+$ run_simulations.sh [[[-applywateruse] [-applysubwateruse] [-applygcmdelta] [-applysubgcmdelta]] &lt;path-to-simulations-directory&gt; | [-h]]
+</pre></div>
+</div>
+</div>
+<div class="section" id="command-line-arguments-for-the-shell-script-run-simulations-sh">
+<h3>Command line arguments for the shell script <a class="reference external" href="run_simulations.sh">run_simulations.sh</a>:<a class="headerlink" href="#command-line-arguments-for-the-shell-script-run-simulations-sh" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="87%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Commands</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-h</span></tt></td>
+<td>show list of available commands</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-applywateruse</span></tt></td>
+<td>run and apply <a class="reference external" href="data/wateruse-datafiles">water use data</a> to sample WATER simulations; <a class="reference external" href="data/sample-water-simulations">single and batch simulations</a></td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-applysubwateruse</span></tt></td>
+<td>run and apply substitute water use data to sample WATER simulations; <a class="reference external" href="data/sample-water-simulations">single and batch simulations</a></td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-applygcmdelta</span></tt></td>
+<td>run and apply <a class="reference external" href="data/gcmdelta-datafiles">global climate model data</a> to sample WATER simulations; <a class="reference external" href="data/sample-water-simulations">single and batch simulations</a></td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-applysubgcmdelta</span></tt></td>
+<td>run and apply substitute water use data to sample WATER simulations; <a class="reference external" href="data/sample-water-simulations">single and batch simulations</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="example-apply-water-use-to-many-water-simulations">
+<h3>Example - apply water use to many WATER simulations :<a class="headerlink" href="#example-apply-water-use-to-many-water-simulations" title="Permalink to this headline">¶</a></h3>
+<div class="code sh highlight-python"><div class="highlight"><pre>$ run_simulations.sh -applywateruse &lt;path-to-simulations-directory&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
 <div class="section" id="testing">
 <h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
-<p>Tests for <strong>waterapputils</strong> were written using the
+<p>Automated tests for <strong>waterapputils</strong> were written using the
 <a class="reference external" href="https://nose.readthedocs.org/en/latest/">nose</a> library, and are
 contained in the <em>tests</em> directory.
 <a class="reference external" href="https://nose.readthedocs.org/en/latest/">nose</a> must be installed in
@@ -274,7 +404,7 @@ command at the project level directory (not within the <em>tests</em>
 directory, but the <em>waterapputils</em> directory containing the <em>tests</em>
 directory). A successful test run will look something like the
 following:</p>
-<div class="code bash highlight-python"><div class="highlight"><pre>$ pwd
+<div class="code sh highlight-python"><div class="highlight"><pre>$ pwd
 /path/to/waterapputils
 
 $ nosetests
@@ -290,55 +420,66 @@ OK
 </pre></div>
 </div>
 </div>
+<hr class="docutils" />
 <div class="section" id="repository-project-layout">
 <h2>Repository/Project Layout<a class="headerlink" href="#repository-project-layout" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre>bin/                                      # executables/scripts
-data/                                     # sample data files to use with software and associated information
-  deltas-gcm/                             # statistically downscaled global climate model data
-      sample-water-simulations            # sample WATER application simulations and datasets
-          sample-batch-simulation         # sample WATER application batch run simulation
-          sample-datasets                 # sample WATER application simulation datasets
-          sample-single-simulation        # sample WATER applicaiton single run simulation
-      spatial-datafiles/                  # spatial data; shapefile format
-      watertxt-datafiles/                 # sample WATER.txt files
-      wateruse-batch-run/                 # sample batch run output from WATER
-      wateruse-datafiles/                 # sample water use files
-    waterxml-datafiles/                   # sample WATERSimulation.xml files
-docs/                                     # Sphinx code documentation
-  tests/                                  # tests
-      deltas_tests.py                     # tests for deltas module
-      helpers_tests.py                    # tests for helper module
-      spatialvectors_test.py              # tests for spatialvectors module
-      watertxt_tests.py                   # tests for watertxt module
-      wateruse_tests.py                   # tests for wateruse module
-      waterxml_tests.py                   # tests for waterxml module
-  waterapputils/                          # directory containing code modules
-      deltas.py                           # handles processing of global climate model data
-      deltas_viewer.py                    # handles view (plotting) of global climate model data
-      gcm_delta_processing.py             # handles the global climate model delta factors processing using settings from the user_settings.py file
-      helpers.py                          # helper functions
-      spatialdata_viewer.py               # handles view (mapping) of spatial data; uses basemap library
-      spatialvectors.py                   # handles spatial data
-      specific_output_file_processing.py  # handles specific output file processing for external OASIS and Ecoflow programs
-      user_settings.py                    # user settings to control and specify data inputs for water use and global climate model processing along with control of naming outputs
-      water_files_processing.py           # handles the WATER application output and database file processing using settings from the user_settings.py file
-      waterapputils.py                    # main controller; calls respective module
-      waterapputils_logging.py            # handles error logging
-      watertxt.py                         # handles processing of WATER.txt simulation output files
-      watertxt_viewer.py                  # handles view (plotting) of WATER.txt simulation output files
-      wateruse.py                         # handles processing of water use data
-      wateruse_processing.py              # handles the water use processing using settings from the user_settings.py file
-      waterxml.py                         # handles processing of WATERSimulation.xml simulation database files
-      waterxml_viewer.py                  # handles view (plotting) of  WATERSimulation.xml simulation database files
-  Makefile                                # makefile to help clean directories
-LICENSE.txt                               # USGS Software User Rights Notice
-README.md                                 # README file
-requirements.txt                          # list of requirements/dependencies
-setup.py                                  # code for building, distributing, and installing modules
-run_sample_datasets.bash                  # bash script used to run specific or all sample datasets
+<div class="highlight-python"><div class="highlight"><pre>bin/                                    # executables/scripts
+data/                                   # sample data files to use with software and associated information
+    deltas-gcm/                         # statistically downscaled global climate model data
+    sample-water-simulations            # sample WATER application simulations and datasets
+        sample-batch-simulation         # sample WATER application batch run simulation
+        sample-datasets                 # sample WATER application simulation datasets
+        sample-single-simulation        # sample WATER applicaiton single run simulation
+    spatial-datafiles/                  # spatial data; shapefile format
+    watertxt-datafiles/                 # sample WATER.txt files
+    wateruse-batch-run/                 # sample batch run output from WATER
+    wateruse-datafiles/                 # sample water use files
+    waterxml-datafiles/                 # sample WATERSimulation.xml files
+docs/                                   # Sphinx code documentation
+tests/                                  # tests
+    deltas_tests.py                     # tests for deltas module
+    helpers_tests.py                    # tests for helper module
+    spatialvectors_test.py              # tests for spatialvectors module
+    watertxt_tests.py                   # tests for watertxt module
+    wateruse_tests.py                   # tests for wateruse module
+    waterxml_tests.py                   # tests for waterxml module
+waterapputils/                          # directory containing code modules
+    deltas.py                           # handles processing of global climate model data
+    deltas_viewer.py                    # handles view (plotting) of global climate model data
+    gcm_delta_processing.py             # handles the global climate model delta factors processing using settings from the user_settings.py file
+    helpers.py                          # helper functions
+    spatialdata_viewer.py               # handles view (mapping) of spatial data; uses basemap library
+    spatialvectors.py                   # handles spatial data
+    specific_output_file_processing.py  # handles specific output file processing for external OASIS and Ecoflow programs
+    user_settings.py                    # user settings to control and specify data inputs for water use and global climate model processing along with control of naming outputs
+    water_files_processing.py           # handles the WATER application output and database file processing using settings from the user_settings.py file
+    waterapputils.py                    # main controller; calls respective module
+    waterapputils_logging.py            # handles error logging
+    watertxt.py                         # handles processing of WATER.txt simulation output files
+    watertxt_viewer.py                  # handles view (plotting) of WATER.txt simulation output files
+    wateruse.py                         # handles processing of water use data
+    wateruse_processing.py              # handles the water use processing using settings from the user_settings.py file
+    waterxml.py                         # handles processing of WATERSimulation.xml simulation database files
+    waterxml_viewer.py                  # handles view (plotting) of  WATERSimulation.xml simulation database files
+Makefile                                # makefile to help clean directories
+LICENSE.txt                             # USGS Software User Rights Notice
+README.md                               # README file
+requirements.txt                        # list of requirements/dependencies
+setup.py                                # code for building, distributing, and installing modules
+run_sample_datasets.sh                  # bash script used to run specific or all sample datasets
+run_simulations.sh                      # bash script used to apply water use and/or climate change factors to multiple WATER simulations
 </pre></div>
 </div>
 </div>
+<hr class="docutils" />
+<div class="section" id="documentation-overview-guides-tutorials-code">
+<h2>Documentation - overview, guides/tutorials, code<a class="headerlink" href="#documentation-overview-guides-tutorials-code" title="Permalink to this headline">¶</a></h2>
+<p>HTML documentation was made using <a class="reference external" href="http://sphinx-doc.org/">Sphinx</a>.
+At this time the documentation can be viewed locally with a browser. The
+main html page, <em>index.html</em>, is located in the
+*waterapputils/docs/_build/html/* directory.</p>
+</div>
+<hr class="docutils" />
 <div class="section" id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre>python == 2.7.6
@@ -348,6 +489,7 @@ nose == 1.3.0
 </pre></div>
 </div>
 </div>
+<hr class="docutils" />
 <div class="section" id="disclaimer-and-notice">
 <h2>Disclaimer and Notice<a class="headerlink" href="#disclaimer-and-notice" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre>Please refer to the USGS Software User Rights Notice (LICENSE.txt or http://water.usgs.gov/software/help/notice/)
@@ -365,6 +507,7 @@ distribution constitute any such warranty, and no responsibility is assumed by t
 </pre></div>
 </div>
 </div>
+<hr class="docutils" />
 <div class="section" id="author">
 <h2>Author<a class="headerlink" href="#author" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre>Jeremiah Lant
@@ -373,7 +516,7 @@ U.S. Geological Survey
 Kentucky Water Science Center
 Louisville, Kentucky 40299
 (502) 493-1949
-jlant@ugs.gov
+jlant@usgs.gov
 </pre></div>
 </div>
 </div>
