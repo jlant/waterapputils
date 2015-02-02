@@ -13,7 +13,6 @@ Note: If copying and pasting paths on Windows machines:
 """
 
 # ------------------- WATER simulation information ---------------------- #
-
 simulation_directory = "../data/sample-water-simulations/sample-batch-simulation"
 is_batch_simulation = True
 basin_shapefile_name = "Watersheds.shp"

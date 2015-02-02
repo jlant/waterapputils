@@ -3,7 +3,7 @@
 # Description: Bash script to run sample data sets and tests
 #
 # Usage: run_sample_datasets.sh [option]
-#        run_sample_datasets.sh [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid] [ecoflowdaxml] [-ecoflowdashp] [-gcmdelta] [-mapsim] [-all] [tests]] | [-h]]
+#        run_sample_datasets.sh [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid] [ecoflowdaxml] [-ecoflowdashp] [-gcmdelta] [-mapsim] [-all] [-tests] [-makeclean]] | [-h]]
 
 run_txt()
 {
@@ -35,15 +35,15 @@ run_wateruse()
     cd waterapputils/
     echo "--- $0 is running water use with sample datasets; single and batch ---"
     echo
-    # echo "single simulation"
-    # python waterapputils.py -applywateruse -samplesingle
-    # echo
+    echo "single simulation"
+    python waterapputils.py -applywateruse -samplesingle
+    echo
     echo "batch simulation"
     python waterapputils.py -applywateruse -samplebatch
     echo
-    # echo "user supplied batch simulation"
-    # python waterapputils.py -applywateruse -simdir ../data/sample-water-simulations/sample-batch-simulation/
-    # echo 
+    echo "user supplied batch simulation"
+    python waterapputils.py -applywateruse -simdir ../data/sample-water-simulations/sample-batch-simulation/
+    echo 
 }
 
 run_subwateruse()
@@ -154,6 +154,11 @@ run_mapsim()
     echo 
 }
 
+run_sims()
+{
+    echo "$0 is running multiple (batch) simulations with run_simulations.sh"
+    bash run_simulations.sh -applywateruse ../data/sample-water-simulations/sample-batch-simulations
+}
 
 run_all()
 {
@@ -170,6 +175,7 @@ run_all()
     run_wateruse
     run_gcmdelta
     run_mapsim
+    run_sims
     echo
 }
 
@@ -195,14 +201,15 @@ makeclean()
     rm -r data/sample-water-simulations/sample-single-simulation/waterapputils*
     rm -r data/sample-water-simulations/sample-batch-simulation/waterapputils*
     rm -r data/sample-water-simulations/sample-batch-simulation/014*/waterapputils*
-
+    rm -r data/sample-water-simulations/sample-batch-simulations/simulation*/waterapputils*
+    rm -r data/sample-water-simulations/sample-batch-simulations/simulation*/014*/waterapputils*
 }
 
 usage()
 {
 
 	echo "Usage:"
-	echo "    run_sample_datasets.sh [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid] [ecoflowdaxml] [-ecoflowdashp] [-gcmdelta] [-mapsim] [-all] [tests]] | [-h]]"
+	echo "    run_sample_datasets.sh [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid] [ecoflowdaxml] [-ecoflowdashp] [-gcmdelta] [-mapsim] [-all] [-tests] [-makclean]] | [-h]]"
 }
 
 # main program
@@ -241,6 +248,8 @@ while [ "$1" != "" ]; do
         -tests )                     run_tests
                                      ;;
         -mapsim )                    run_mapsim
+                                     ;;
+        -runsims )                   run_sims
                                      ;;
         -makeclean )                 makeclean
                                      ;;                                     

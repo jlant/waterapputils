@@ -62,12 +62,12 @@ def main():
 
     parser.add_argument("-v", "--verbose", action = "store_true",  help = "Print general information about data file(s)")
     parser.add_argument("-outfilename", "--outfilename", nargs = 1,  help = "Write file name to write drainage area csv file.")  
-    parser.add_argument("-parameter", "--parameter", nargs = 1,  help = "Write a paramter name contained in a WATER.txt file to get for the ecoflow timeseries file.") 
+    parser.add_argument("-parameter", "--parameter", nargs = 1,  help = "Write a paramter name contained in a WATER.txt file to use as the parameter output in the ecoflow timeseries file. Use only with -ecoflowstationid option.") 
     parser.add_argument("-labelfield", "--labelfield", nargs = 1,  help = "Write field name in shapefile to use in labeling drainagearea.csv")    
     parser.add_argument("-areafield", "--areafield", nargs = 1,  help = "Write area field name in shapefile to use in drainagearea.csv")
     parser.add_argument("-samplesingle", "--samplesingle", action = "store_true",  help = "Flag to use sample single batch settings user_settings.py") 
     parser.add_argument("-samplebatch", "--samplebatch", action = "store_true",  help = "Flag to use sample batch batch settings user_settings.py") 
-    parser.add_argument("-simdir", "--simdir", nargs = 1,  help = "Flag to use a user supplied path to simulation directory instead of using simulation directory set in user_settings.py") 
+    parser.add_argument("-simdir", "--simdir", nargs = 1,  help = "Flag to use a user supplied path to a simulation directory instead of using simulation directory set in user_settings.py") 
 
     args = parser.parse_args()  
 

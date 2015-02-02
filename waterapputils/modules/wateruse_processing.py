@@ -152,7 +152,7 @@ def process_intersecting_centroids(intersecting_centroids, settings, ecoflow_dir
 
 def apply_wateruse(settings):
     """    
-    Apply water use data to a WATER \*.txt file(s). 
+    Apply water use data to WATER.txt file(s). 
 
     Parameters
     ----------

@@ -86,7 +86,7 @@ and run many of the command line arguments using the [sample datasets](data/samp
 
 ```sh
 $ run_sample_datasets.sh [option]
-$ run_sample_datasets.sh [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid] [ecoflowdaxml] [-ecoflowdashp] [-gcmdelta] [-mapsim] [-all] [-tests]] | [-h]]
+$ run_sample_datasets.sh [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid] [ecoflowdaxml] [-ecoflowdashp] [-gcmdelta] [-mapsim] [-all] [-tests] -makeclean] | [-h]]
 ```
 
 The following are the command line arguments for the shell script [run_sample_datasets.sh](run_sample_datasets.sh):
@@ -107,6 +107,7 @@ The following are the command line arguments for the shell script [run_sample_da
 |`-mapsim`              | create maps for [single and batch simulations](data/sample-water-simulations) | 
 |`-all`                 | run (mostly) all commands; `-tests`, `-txt`, `-xml`, `-wateruse`, `-gcmdelta`, `-oasis`, `-ecoflowstationid`, `-ecoflowdaxml`, `-ecoflowdashp`, `mapsim` |
 |`-tests`               | run units tests use nosetests |
+|`-makeclean`           | cleans/removes all output of running sample dataset in in the [sample-water-simulations directory](data/sample-water-simulations) |
 
 ### Example:
 
@@ -123,8 +124,8 @@ water use and global climate change scenarios to multiple WATER simulations that
 ### Usage:
 
 ```sh
-$ run_simulations.sh [option] path-to-simulations-directory
-$ run_simulations.sh [[[-applywateruse] [-applysubwateruse] [-applygcmdelta] [-applysubgcmdelta]] path-to-simulations-directory | [-h]]
+$ run_simulations.sh [option] <path-to-simulations-directory>
+$ run_simulations.sh [[[-applywateruse] [-applysubwateruse] [-applygcmdelta] [-applysubgcmdelta]] <path-to-simulations-directory> | [-h]]
 ```
 
 | Commands              | Description |                                                                              
