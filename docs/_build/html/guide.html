@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>General Guide &mdash; waterapputils 1.0.0 documentation</title>
+    <title>General Guide and Tutorial &mdash; waterapputils 1.0.0 documentation</title>
     
     <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -36,7 +36,7 @@
 
       <div class="header"><h1 class="heading"><a href="index.html">
           <span>waterapputils 1.0.0 documentation</span></a></h1>
-        <h2 class="heading"><span>General Guide</span></h2>
+        <h2 class="heading"><span>General Guide and Tutorial</span></h2>
       </div>
       <div class="topnav">
       
@@ -52,8 +52,8 @@
       <div class="content">
         
         
-  <div class="section" id="general-guide">
-<h1>General Guide<a class="headerlink" href="#general-guide" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="general-guide-and-tutorial">
+<h1>General Guide and Tutorial<a class="headerlink" href="#general-guide-and-tutorial" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="processing-water-simulation-output-files-water-txt">
 <h2>Processing WATER simulation output files - WATER.txt<a class="headerlink" href="#processing-water-simulation-output-files-water-txt" title="Permalink to this headline">¶</a></h2>
 <p>Process WATER simulation output text files (<tt class="docutils literal"><span class="pre">WATER.txt</span></tt>).</p>
@@ -128,116 +128,178 @@ in the same directory as the <tt class="docutils literal"><span class="pre">WATE
 then compares and processes the <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt> files in the
 same manner as using the <tt class="docutils literal"><span class="pre">-waterxmlcmp</span></tt> flag.</p>
 </div>
-<div class="section" id="applying-water-use-to-water-batch-runs">
-<h2>Applying water use to WATER batch runs<a class="headerlink" href="#applying-water-use-to-water-batch-runs" title="Permalink to this headline">¶</a></h2>
-<p>Apply water use to WATER simulation batch runs.</p>
+<div class="section" id="applying-water-use-to-water-simulations">
+<h2>Applying water use to WATER simulations<a class="headerlink" href="#applying-water-use-to-water-simulations" title="Permalink to this headline">¶</a></h2>
+<p>Apply water use to a WATER simulation using the settings in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file.</p>
 <div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -applywateruse
 </pre></div>
 </div>
-<p>Applies water use data to a WATER simulation batch run. A WATER
-simulation batch run has the following directory structure:</p>
-<div class="highlight-python"><div class="highlight"><pre>WATER-batch-run/
-    &lt;basinid&gt;/        # directory containing data for a specific basin id in the batch run
-        amask         # ArcMap raster of agriculture area
-        basinmask     # ArcMap raster of basin area
-        fmask         # ArcMap raster of forest area
-        WATER.txt     # WATER simulation output file
-        WATERAnnual.txt        # WATER simulation annual output file
-        WATERMonth.txt         # WATER simulation monthly output file
-        WATERSimulation.txt    # WATER simulation database file
-    &lt;basinid&gt;/        # directory containing data for a specific basin id in the batch run
-    ...
-    Water.txt         # ?
-    Watersheds.shp    # shapefile and all its associated data files (.dbf, .prj, .sbn, .sbx, .shp.xml, .shx)                         # containing all the basins used in the batch run
-</pre></div>
-</div>
-<p>At this time, in order to apply water use to a WATER simulation batch
-run, information regarding the location of a series of files and
-directories must be entered in a file called
-<tt class="docutils literal"><span class="pre">_user_batch_variables_file_wateruse.py</span></tt> located in the
-<tt class="docutils literal"><span class="pre">waterapputils/waterapputils/</span></tt> directory
-The following variables are to be assigned in a
-<tt class="docutils literal"><span class="pre">_user_batch_variables_file_wateruse.py</span></tt> file:</p>
+<p>Applies water use to a WATER simulation.  Details of the WATER simulation,
+<em>single</em> or <em>batch</em> simulation, are contained in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file.
+Additional output files are created for other software programs, namely,
+OASIS and ecoflow programs.</p>
+<p>To apply water use to a WATER simulation, information regarding
+the location of a series of files and directories must be entered
+in a file called <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> located in the</p>
+<blockquote>
+<div><tt class="docutils literal"><span class="pre">waterapputils/waterapputils/</span></tt> directory.</div></blockquote>
+<p>The following main variables associated with applying water use that
+are contained in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file:</p>
 <div class="highlight-python"><div class="highlight"><pre>Variables                       Meaning
 ---------                       -------
 
-waterbatch_directory        -   path to a WATER batch run directory
-basin_shapefile             -   path to the basin shapefile used in the WATER batch run
-basin_field                 -   unique field in the basin shapefile used in the WATER batch run that names the batch run directories; e.g. STAID
-subwateruse_file            -   path to substitute water use file; used when basins in the basin shapefile do not intersect with water use centroids
-wateruse_files              -   list of paths to water use files to use
-wateruse_factor_file        -   path to the water use factor file
-basin_centroids_shapefile   -   path to the water use centroids shapefile
+simulation_directory                    -   path to a WATER simulation directory
+is_batch_simulation                     -   boolean True or False
+basin_shapefile_name                    -   name of the basin(s) shapefile created by the WATER simulation; batch simulation = &quot;Watersheds.shp&quot;; single simulation = &quot;basinMask.shp&quot;
+basin_shapefile_id_field                -   unique field in the basin(s) shapefile used in the WATER simulation; e.g. batch simulation = &quot;STAID&quot; or batch simulation = &quot;waterid&quot;; single simulation = &quot;&quot;
+basin_shapefile_area_field              -   field in the basin(s) shapefile that contains basin area used to create a file containing basin areas (e.g. drainagearea.csv)
+wateruse_centroids_shapefile            -   path to the water use centroids shapefile; used when finding which water use points lie within a basin
+wateruse_centroids_shapefile_id_field   -   field in the water use centroids shapefile used to link to the water use text files specified in the ``wateruse_files`` variable
+wateruse_files                          -   list of paths to water use files
+wateruse_factor_file                    -   path to the water use factor file
 </pre></div>
 </div>
-<p>The following is an example <tt class="docutils literal"><span class="pre">_user_batch_variables_file_wateruse.py</span></tt> file:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">waterbatch_directory</span> <span class="o">=</span> <span class="s">&quot;../data/water-batch-run-datafiles/sample-batch-run-output/&quot;</span>
-<span class="n">basin_shapefile</span> <span class="o">=</span> <span class="n">waterbatch_directory</span> <span class="o">+</span> <span class="s">&quot;Watersheds.shp&quot;</span>
-<span class="n">basin_field</span> <span class="o">=</span> <span class="s">&quot;STAID&quot;</span>
-<span class="n">subwateruse_file</span> <span class="o">=</span> <span class="n">waterbatch_directory</span> <span class="o">+</span> <span class="s">&quot;/_waterapputils_non_intersecting_basin_centroids.txt&quot;</span>
-<span class="n">wateruse_files</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;../data/wateruse-datafiles/010203-JFM-sample.txt&quot;</span><span class="p">,</span>
-                  <span class="s">&quot;../data/wateruse-datafiles/040506-AMJ-sample.txt&quot;</span><span class="p">,</span>
-                  <span class="s">&quot;../data/wateruse-datafiles/070809-JAS-sample.txt&quot;</span><span class="p">,</span>
-                  <span class="s">&quot;../data/wateruse-datafiles/101112-OND-sample.txt&quot;</span><span class="p">]</span>
-<span class="n">wateruse_factor_file</span> <span class="o">=</span>  <span class="s">&quot;../data/wateruse-datafiles/wateruse-factors-sample.txt&quot;</span>
-<span class="n">basin_centroids_shapefile</span> <span class="o">=</span> <span class="s">&quot;../data/spatial-datafiles/wateruse-centroids/wateruse_centroids_sample_nad83.shp&quot;</span>
+<p>Instead of specifying the path to a WATER simulation in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file,
+users can supply the path directly on the command line using the following command:
+c</p>
+<div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -applywateruse -simdir &lt;path-to-water-simulation-directory&gt;
 </pre></div>
 </div>
-<p>The information in the <tt class="docutils literal"><span class="pre">_user_batch_variables_file_wateruse.py</span></tt> file is used to
-apply water use to each respective basin in the batch run.</p>
-<p>The intersection between each respective basin in the batch run and the
-points that specify the rough approximate location of water use data are
-found. The water use point(s) that intersect a respective basin are
-totaled and applied to the original WATER simulation output file
-<tt class="docutils literal"><span class="pre">WATER.txt</span></tt>.</p>
-<p>Results of applying water use to each basin in a batch run are contained
-within each respective basin directory in the <tt class="docutils literal"><span class="pre">waterbatch_directory</span></tt>.
-The following is the directory structure after processing a batch run:</p>
+<p>The above command applies water use to a WATER simulation using a simulation directory path specified on the
+command line instead of using the <tt class="docutils literal"><span class="pre">simulation_directory</span></tt> variable in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file.</p>
+<p>The following is an example of part of the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file for a <em>batch</em> simulation
+using the sample datasets contained in the data directory:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># ------------------- WATER simulation information ---------------------- #</span>
+<span class="n">simulation_directory</span> <span class="o">=</span> <span class="s">&quot;../data/sample-water-simulations/sample-batch-simulation&quot;</span>
+<span class="n">is_batch_simulation</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">basin_shapefile_name</span> <span class="o">=</span> <span class="s">&quot;Watersheds.shp&quot;</span>
+<span class="n">basin_shapefile_id_field</span> <span class="o">=</span> <span class="s">&quot;STAID&quot;</span>
+<span class="n">basin_shapefile_area_field</span> <span class="o">=</span> <span class="s">&quot;da_sqmi&quot;</span>                  <span class="c"># if no area field, leave blank like this: &quot;&quot;</span>
+
+<span class="c"># ------------------- Water use information ----------------------------- #</span>
+<span class="n">wateruse_centroids_shapefile</span> <span class="o">=</span> <span class="s">&quot;../data/spatial-datafiles/wateruse-centroids/wateruse_centroids_sample_nad83.shp&quot;</span>
+<span class="n">wateruse_centroids_shapefile_id_field</span> <span class="o">=</span> <span class="s">&quot;newhydroid&quot;</span>
+
+<span class="n">wateruse_files</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s">&quot;../data/wateruse-datafiles/010203-JFM-sample.txt&quot;</span><span class="p">,</span>
+        <span class="s">&quot;../data/wateruse-datafiles/040506-AMJ-sample.txt&quot;</span><span class="p">,</span>
+        <span class="s">&quot;../data/wateruse-datafiles/070809-JAS-sample.txt&quot;</span><span class="p">,</span>
+        <span class="s">&quot;../data/wateruse-datafiles/101112-OND-sample.txt&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">wateruse_factor_file</span> <span class="o">=</span> <span class="s">&quot;../data/wateruse-datafiles/wateruse-factors-sample.txt&quot;</span>
+</pre></div>
+</div>
+<p>The following is an example of part of the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file for a <em>single</em> simulation using the sample datasets:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># ------------------- WATER simulation information ---------------------- #</span>
+<span class="n">simulation_directory</span> <span class="o">=</span> <span class="s">&quot;../data/sample-water-simulations/sample-single-simulation&quot;</span>
+<span class="n">is_batch_simulation</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">basin_shapefile_name</span> <span class="o">=</span> <span class="s">&quot;basinMask.shp&quot;</span>
+<span class="n">basin_shapefile_id_field</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+<span class="n">basin_shapefile_area_field</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>                  <span class="c"># if no area field, leave blank like this: &quot;&quot;</span>
+
+<span class="c"># ------------------- Water use information ----------------------------- #</span>
+<span class="n">wateruse_centroids_shapefile</span> <span class="o">=</span> <span class="s">&quot;../data/spatial-datafiles/wateruse-centroids/wateruse_centroids_sample_nad83.shp&quot;</span>
+<span class="n">wateruse_centroids_shapefile_id_field</span> <span class="o">=</span> <span class="s">&quot;newhydroid&quot;</span>
+
+<span class="n">wateruse_files</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s">&quot;../data/wateruse-datafiles/010203-JFM-sample.txt&quot;</span><span class="p">,</span>
+        <span class="s">&quot;../data/wateruse-datafiles/040506-AMJ-sample.txt&quot;</span><span class="p">,</span>
+        <span class="s">&quot;../data/wateruse-datafiles/070809-JAS-sample.txt&quot;</span><span class="p">,</span>
+        <span class="s">&quot;../data/wateruse-datafiles/101112-OND-sample.txt&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">wateruse_factor_file</span> <span class="o">=</span> <span class="s">&quot;../data/wateruse-datafiles/wateruse-factors-sample.txt&quot;</span>
+</pre></div>
+</div>
+<p>The information in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file is used to
+apply water use to each respective basin in the respective simulation. The only exception
+here is when a user specifies the path to a WATER simulation on the command line which will
+overwrite the <tt class="docutils literal"><span class="pre">simulation_directory</span></tt> variable in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file.</p>
+<p>The water use point(s), <tt class="docutils literal"><span class="pre">wateruse_centroids_shapefile</span></tt>,
+that are contained within a respective basin, <tt class="docutils literal"><span class="pre">basin_shapefile_name</span></tt>,
+are found from performing a spatial intersection.  The water use points found
+to be contained with a respective basin are mapped to the water use data files
+(<tt class="docutils literal"><span class="pre">wateruse_files</span></tt> variable in <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file) and used to calculate
+monthly water use totals.</p>
+<p>The following is an example WATER <em>batch</em> simulation <strong>before</strong> applying water use:</p>
+<div class="highlight-python"><div class="highlight"><pre>WATER-batch-run/
+    &lt;basinid&gt;/                  # directory containing data for a specific basin id in the batch simulation
+        amask                   # ArcMap raster of agriculture area
+        basinmask               # ArcMap raster of basin area
+        fmask                   # ArcMap raster of forest area
+        WATER.txt               # WATER simulation output file
+        WATERAnnual.txt         # WATER simulation annual output file
+        WATERMonth.txt          # WATER simulation monthly output file
+        WATERSimulation.txt     # WATER simulation database file
+    &lt;basinid&gt;/                  # directory containing data for a specific basin id in the batch run
+    ...
+    Water.txt                   # WATER output file with computed discharge and all other output parameters
+    Watersheds.shp              # shapefile and all its associated data files (.dbf, .prj, .sbn, .sbx, .shp.xml, .shx)
+</pre></div>
+</div>
+<p>The following is the directory structure <strong>after</strong> applying water use to a <em>batch</em> simulation:</p>
 <div class="highlight-python"><div class="highlight"><pre>water-batch-dir/
-    waterapputils-batchrun-info/                    # information about applying water use to the batch run
-        waterapputils_error.log                     # warnings or errors in processing batch run
-        wateruse_batchrun_info.txt                  # information regarding intersected centroids and respective water use values per basin
+    waterapputils-info/                             # information about applying water use to the simulation
+        waterapputils_error.log                     # warnings or errors in processing simulation (created only if errors occur)
+        wateruse_info.txt                           # information regarding intersected centroids and respective water use values per basin
         wateruse_non_intersecting_centroids.txt     # csv file to be filled by user concerning basins that do not intersect any water use centroid
     basin-1/
-        WATER.txt-with-wateruse.txt                 # file formatted the same as a typical WATER.txt file, but includes columns of Discharge + Water Use and Water Use
-        waterapputils-wateruse/                     # directory holding plots of all parameters in WATER.txt-with-wateruse.txt file
+        WATERUSE-WATER.txt                          # file formatted the same as a typical WATER.txt file, but includes columns of Discharge + Water Use and Water Use
+        waterapputils-wateruse/                     # directory holding plots of all parameters in WATERUSE-WATER.txt file
             *.png
     basin-2/
-        WATER.txt-with-wateruse.txt                 # file formatted the same as a typical WATER.txt file, but includes columns of Discharge + Water Use and Water Use
-        waterapputils-wateruse/                     # directory holding plots of all parameters in WATER.txt-with-wateruse.txt file
+        WATERUSE-WATER.txt                          # file formatted the same as a typical WATER.txt file, but includes columns of Discharge + Water Use and Water Use
+        waterapputils-wateruse/                     # directory holding plots of all parameters in WATERUSE-WATER.txt file
             *.png
 </pre></div>
 </div>
-<p>The <tt class="docutils literal"><span class="pre">waterapputils-wateruse/</span></tt> directory contains plots of all the
+<p>Results of applying water use to each basin in a WATER simulations are contained
+within each respective basin directory in the <tt class="docutils literal"><span class="pre">waterapputils-wateruse</span></tt> directory.
+The <tt class="docutils literal"><span class="pre">waterapputils-wateruse/</span></tt> directory contains plots of all the
 parameters in the <tt class="docutils literal"><span class="pre">WATER.txt</span></tt> file.</p>
 <p>Each respective basin directory (basin-1) contains an updated WATER simulation
-output file (<tt class="docutils literal"><span class="pre">WATER.txt-with-wateruse.txt</span></tt>) containing additional
+output file (<tt class="docutils literal"><span class="pre">WATERUSE-WATER.txt</span></tt>) containing additional
 columns of water use (cfs) and discharge + water use (cfs). In addition,
 the updated WATER simulation file is processed and plots of each
 parameter in the updated WATER simulation file are created and contained
 in the <a href="#id1"><span class="problematic" id="id2">``</span></a>waterapputils-wateruse/ `` directory.</p>
-<p>Detailed information regarding applying water use to a batch run are
-contained in a directory called <tt class="docutils literal"><span class="pre">waterapputils-batchrun-info</span></tt> which is
-created in the <tt class="docutils literal"><span class="pre">waterbatch_directory</span></tt> specified in the
-<tt class="docutils literal"><span class="pre">_user_batch_variables_file_wateruse.py</span></tt> file. The <tt class="docutils literal"><span class="pre">waterapputils_batch_info</span></tt> will
-contain a summary file of the water use data applied and which water use
-points were used (<tt class="docutils literal"><span class="pre">wateruse_batchrun_info.txt</span></tt>). If there are basins
-that do not intersect any water use points, then a file logging those
-the non-intersection water use points (<tt class="docutils literal"><span class="pre">waterapputils_error.log</span></tt>) is
-created, along with a comma-separated file
-(<tt class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></tt>) listing the specific
-basins that do not intersect any water use points. To apply water use
-point(s) to basins that originally do not intersect any water use
-points, a user can edit the <tt class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></tt>
-file and specify water use point(s) to be applied. To apply the
-information specified in the <tt class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></tt>
-to the batch run, the following command is used:</p>
+<p>Detailed information regarding applying water use to a WATER simulation are
+contained in the <tt class="docutils literal"><span class="pre">waterapputils-info</span></tt> directory.
+The <tt class="docutils literal"><span class="pre">waterapputils-info</span></tt> directory contains a file,
+called <tt class="docutils literal"><span class="pre">wateruse_info.txt</span></tt>, that contains details of which water use
+points are contained with which basin with the corresponding (monthly) water use totals
+applied to the the original discharge from the original WATER simulation.</p>
+<p>Water use points that are not contained within any basin in a respective
+WATER simulation are logged to a file called <tt class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></tt>
+(Note: this file name can be edited using the <tt class="docutils literal"><span class="pre">wateruse_non_intersecting_file_name</span></tt> variable
+in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file). The <tt class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></tt> is a
+comma-separated file that lists on each row the basin name (id) that does not contain any
+water use points along with a <em>special</em> water use id of <strong>000</strong> meaning <strong>0 water use</strong> was
+applied.  Users can edit this file by specifying the water use points to be applied to each
+respective basin.</p>
+<p>The following is an example of the <tt class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></tt> file
+where <strong>0 water use</strong> was applied to a specific basin:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">basinid</span><span class="p">,</span><span class="n">newhydroid</span>
+<span class="mo">01414500</span><span class="p">,</span><span class="mo">000</span>
+</pre></div>
+</div>
+<p>To apply water use points (e.g. 100,101,102) to basinid 01414500, then a user would update the
+<tt class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></tt> file to the following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">basinid</span><span class="p">,</span><span class="n">newhydroid</span>
+<span class="mo">01414500</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">101</span><span class="p">,</span><span class="mi">102</span>
+</pre></div>
+</div>
+<p>After updating the <tt class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></tt> file, a user can apply the <em>substitute</em> water use
+points by applying the following command:</p>
 <div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -applysubwateruse
 </pre></div>
 </div>
-<p>The above command uses the <tt class="docutils literal"><span class="pre">subwateruse_file</span></tt> variable in the
-<tt class="docutils literal"><span class="pre">_user_batch_variables_file_wateruse.py</span></tt> file which specifies the location of the
-<tt class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></tt> file.</p>
+<p>The above command uses the <tt class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></tt> file
+to apply water use to those basins that originally did not have any water use applied.
+A new file, called <tt class="docutils literal"><span class="pre">sub_wateruse_info.txt</span></tt>, is created in the <tt class="docutils literal"><span class="pre">waterapputils-info</span></tt> directory
+that logs the information regarding the substitute water use applied.  The special output files for
+the OASIS and ecoflow programs are updated after applying substitute water use.</p>
 </div>
 <div class="section" id="applying-climate-change-factors-to-water-batch-runs">
 <h2>Applying climate change factors to WATER batch runs<a class="headerlink" href="#applying-climate-change-factors-to-water-batch-runs" title="Permalink to this headline">¶</a></h2>
@@ -246,90 +308,156 @@ to the batch run, the following command is used:</p>
 </pre></div>
 </div>
 <p>Applies GCM deltas (factors) to a WATER simulation batch run.  Specifically, it
-applies change factors to the WATER simulation database file <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt></p>
-<p>At this time, in order to apply GCM deltas to a WATER simulation batch
-run, information regarding the location of a series of files and
-directories must be entered in a file called
-<tt class="docutils literal"><span class="pre">_user_batch_variables_file_gcmdeltas.py</span></tt> located in the
-<tt class="docutils literal"><span class="pre">waterapputils/waterapputils/</span></tt> directory
-The following variables are to be assigned in a
-<tt class="docutils literal"><span class="pre">_user_batch_variables_file_gcmdeltas.py</span></tt> file:</p>
+applies climate change factors (precipiation and temperature) to the WATER simulation
+database file <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt>. In addition to updating the <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt> file,
+a timeseries file of potential evapotranspiration (<tt class="docutils literal"><span class="pre">PET</span></tt>) values with the applied climate change
+factors is created.  Details about the WATER simulation, <em>single</em> or <em>batch</em> simulation, are contained in the
+<tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file.</p>
+<p>To apply climate change factors to a WATER simulation, information regarding
+the location of a series of files and directories must be entered
+in a file called <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> located in the
+<tt class="docutils literal"><span class="pre">waterapputils/waterapputils/</span></tt> directory.
+The following main variables associated with applying climate change factors that
+are contained in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file:</p>
 <div class="highlight-python"><div class="highlight"><pre>Variables                       Meaning
 ---------                       -------
 
-waterbatch_directory        -   path to a WATER batch run directory
-basin_shapefile             -   path to the basin shapefile used in the WATER batch run
-basin_field                 -   unique field in the basin shapefile used in the WATER batch run that names the batch run directories; e.g. STAID
-subwaterdeltas_file         -   path to substitute GCM delta file; used when basins in the basin shapefile do not intersect with GCM tile(s)
-delta_files                 -   list of paths to delta files to use
-delta_shapefile             -   path to the GCM delta shapefile
+simulation_directory                    -   path to a WATER simulation directory
+is_batch_simulation                     -   boolean True or False
+basin_shapefile_name                    -   name of the basin(s) shapefile created by the WATER simulation; batch simulation = &quot;Watersheds.shp&quot;; single simulation = &quot;basinMask.shp&quot;
+gcm_delta_files                         -   list of the GCM delta factor files to be used; PET = Potential Evapotranspiration, Ppt = Precipitation, Temp = Temperature
 </pre></div>
 </div>
-<p>The following is an example <tt class="docutils literal"><span class="pre">_user_batch_variables_file_gcmdeltas.py</span></tt> file:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">waterbatch_directory</span> <span class="o">=</span> <span class="s">&quot;../data/water-batch-run-datafiles/sample-batch-run-output/&quot;</span>
-<span class="n">basin_shapefile</span> <span class="o">=</span> <span class="n">waterbatch_directory</span> <span class="o">+</span> <span class="s">&quot;Watersheds.shp&quot;</span>
-<span class="n">basin_field</span> <span class="o">=</span> <span class="s">&quot;STAID&quot;</span>
-<span class="n">subwaterdeltas_file</span> <span class="o">=</span> <span class="n">waterbatch_directory</span> <span class="o">+</span> <span class="s">&quot;waterapputils-batchrun-info/gcmdelta_non_intersecting_centroids.txt&quot;</span>
-<span class="n">delta_files</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;../data/deltas-gcm/Ppt.txt&quot;</span><span class="p">,</span>
-               <span class="s">&quot;../data/deltas-gcm/Tmax.txt&quot;</span><span class="p">]</span>
-<span class="n">delta_shapefile</span> <span class="o">=</span> <span class="s">&quot;../data/spatial-datafiles/gcm-tiles/CanES_nad83.shp&quot;</span>
+<p>Instead of specifying the path to a WATER simulation in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file,
+users can supply the path directly on the command line using the following command:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -applygcmdeltas -simdir &lt;path-to-water-simulation-directory&gt;
 </pre></div>
 </div>
-<p>The information in the <tt class="docutils literal"><span class="pre">_user_batch_variables_file_gcmdeltas.py</span></tt> file is used to
-apply GCM deltas to each respective basin in the batch run.</p>
-<p>The intersection between each respective basin in the batch run and the
-GCM tiles specify which deltas are applied. The tiles that
-intersect a basin have there respective monthly GCM deltas averaged and
-the averaged monthly GCM delta values are applied to the original WATER
-simulation database file <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt>.</p>
-<p>Results of applying GCM deltas to each basin in a batch run are contained
-within each respective basin directory in the <tt class="docutils literal"><span class="pre">waterbatch_directory</span></tt>.
-The following is the directory structure after processing a batch run:</p>
+<p>The above command applies climate change factors to a WATER simulation using a simulation directory path specified on the
+command line instead of using the <tt class="docutils literal"><span class="pre">simulation_directory</span></tt> variable in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file.</p>
+<p>The following is an example of part of the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file for a <em>batch</em> simulation
+using the sample datasets contained in the data directory:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># ------------------- WATER simulation information ---------------------- #</span>
+<span class="n">simulation_directory</span> <span class="o">=</span> <span class="s">&quot;../data/sample-water-simulations/sample-batch-simulation&quot;</span>
+<span class="n">is_batch_simulation</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">basin_shapefile_name</span> <span class="o">=</span> <span class="s">&quot;Watersheds.shp&quot;</span>
+<span class="n">basin_shapefile_id_field</span> <span class="o">=</span> <span class="s">&quot;STAID&quot;</span>
+<span class="n">basin_shapefile_area_field</span> <span class="o">=</span> <span class="s">&quot;da_sqmi&quot;</span>                  <span class="c"># if no area field, leave blank like this: &quot;&quot;</span>
+
+<span class="c"># ------------------- Global Climate Model information ------------------ #</span>
+<span class="n">gcm_delta_files</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;../data/deltas-gcm/Ppt.txt&quot;</span><span class="p">,</span>
+                   <span class="s">&quot;../data/deltas-gcm/Tmax.txt&quot;</span><span class="p">,</span>
+                   <span class="s">&quot;../data/deltas-gcm/PET.txt&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">gcm_delta_tile_shapefile</span> <span class="o">=</span> <span class="s">&quot;../data/spatial-datafiles/gcm-tiles/CanES_nad83.shp&quot;</span>
+<span class="n">gcm_delta_tile_shapefile_id_field</span> <span class="o">=</span> <span class="s">&quot;Tile&quot;</span>
+</pre></div>
+</div>
+<p>The following is an example of part of the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file for a <em>single</em> simulation using the sample datasets:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># ------------------- WATER simulation information ---------------------- #</span>
+<span class="n">simulation_directory</span> <span class="o">=</span> <span class="s">&quot;../data/sample-water-simulations/sample-single-simulation&quot;</span>
+<span class="n">is_batch_simulation</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">basin_shapefile_name</span> <span class="o">=</span> <span class="s">&quot;basinMask.shp&quot;</span>
+<span class="n">basin_shapefile_id_field</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+<span class="n">basin_shapefile_area_field</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>                  <span class="c"># if no area field, leave blank like this: &quot;&quot;</span>
+
+<span class="c"># ------------------- Global Climate Model information ------------------ #</span>
+<span class="n">gcm_delta_files</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;../data/deltas-gcm/Ppt.txt&quot;</span><span class="p">,</span>
+                   <span class="s">&quot;../data/deltas-gcm/Tmax.txt&quot;</span><span class="p">,</span>
+                   <span class="s">&quot;../data/deltas-gcm/PET.txt&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">gcm_delta_tile_shapefile</span> <span class="o">=</span> <span class="s">&quot;../data/spatial-datafiles/gcm-tiles/CanES_nad83.shp&quot;</span>
+<span class="n">gcm_delta_tile_shapefile_id_field</span> <span class="o">=</span> <span class="s">&quot;Tile&quot;</span>
+</pre></div>
+</div>
+<p>The information in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file is used to
+apply climate change to each respective basin in the respective simulation. The only exception
+here is when a user specifies the path to a WATER simulation on the command line which will
+overwrite the <tt class="docutils literal"><span class="pre">simulation_directory</span></tt> variable in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file.</p>
+<p>The global climate change tiles shapefile(<tt class="docutils literal"><span class="pre">gcm_delta_tile_shapefile</span></tt> variable in <tt class="docutils literal"><span class="pre">user_settings.py</span></tt>)
+is used in performing a spatial intersection between the tiles and the respective WATER simulation
+basin(s).  The tiles found to be intersected with a respective basin are mapped to the global climate change
+data files (<tt class="docutils literal"><span class="pre">gcm_delta_files</span></tt> variable in <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file) and used to calculate
+monthly climate change factors.</p>
+<p>The following is an example WATER <em>batch</em> simulation <strong>before</strong> applying climate change factors:</p>
+<div class="highlight-python"><div class="highlight"><pre>WATER-batch-run/
+    &lt;basinid&gt;/                  # directory containing data for a specific basin id in the batch simulation
+        amask                   # ArcMap raster of agriculture area
+        basinmask               # ArcMap raster of basin area
+        fmask                   # ArcMap raster of forest area
+        WATER.txt               # WATER simulation output file
+        WATERAnnual.txt         # WATER simulation annual output file
+        WATERMonth.txt          # WATER simulation monthly output file
+        WATERSimulation.txt     # WATER simulation database file
+    &lt;basinid&gt;/                  # directory containing data for a specific basin id in the batch run
+    ...
+    Water.txt                   # WATER output file with computed discharge and all other output parameters
+    Watersheds.shp              # shapefile and all its associated data files (.dbf, .prj, .sbn, .sbx, .shp.xml, .shx)
+</pre></div>
+</div>
+<p>The following is the directory structure <strong>after</strong> applying climate change factors to a <em>batch</em> simulation:</p>
 <div class="highlight-python"><div class="highlight"><pre>water-batch-dir/
-    waterapputils-batchrun-info/                            # information about applying water use to the batch run
-        waterapputils_error.log                             # warnings or errors in processing batch run
-        gcmdeltas_batchrun_info.txt-with-wateruse           # information regarding intersected centroids and respective water use values per basin
-        gcmdeltas_non_intersecting_centroids.txt            # csv file to be filled by user concerning basins that do not intersect any water use centroid
+    waterapputils-info/                             # information about applying climate change factors to a simulation
+        waterapputils_error.log                     # warnings or errors in processing simulation (created only if errors occur)
+        gcmdelta_info.txt                           # information regarding intersected tiles and respective climate change factor values per basin
+        gcmdelta_non_intersecting_centroids.txt     # csv file to be filled by user concerning basins that do not intersect any global climate change tiles
     basin-1/
-        WATERSimulation-updated-&lt;basin_field&gt;-&lt;basinid&gt;.xml # file formatted the same as a typical WATERSimulation.xml file, but has updated/altered climate parameters (precipitation and temperature)
-        waterapputils-waterxml/                             # directory holding plots of all climate parameters in WATERSimulation-updated-&lt;basin_field&gt;-&lt;basinid&gt;.xml file
+        GCMDELTA-WATERSimulation.xml                # file formatted the same as a typical WATERSimulation.xml file, but includes climate factored precipitation and temperature data
+        pet-timeseries.txt                         # potential evapotranspiration timeseries file with climate change factors applied; ``pet_timeseries_file_name`` file in ``user_settings.py``
+        waterapputils-gcmdelta/                     # directory holding plots of all relevant parameters in the GCMDELTA-WATERSimulation.xml file
             *.png
     basin-2/
-        WATER.txt-with-wateruse.txt                         # file formatted the same as a typical WATERSimulation.xml file, but has updated/altered climate parameters (precipitation and temperature)
-        waterapputils-wateruse/                             # directory holding plots of all parameters in WATERSimulation-updated-&lt;basin_field&gt;-&lt;basinid&gt;.xml file
+        GCMDELTA-WATERSimulation.xml                # file formatted the same as a typical WATERSimulation.xml file, but includes climate factored precipitation and temperature data
+        pet-timeseries.txt                         # potential evapotranspiration timeseries file with climate change factors applied; ``pet_timeseries_file_name`` file in ``user_settings.py``
+        waterapputils-gcmdelta/                     # directory holding plots of all relevant parameters in the GCMDELTA-WATERSimulation.xml file
             *.png
 </pre></div>
 </div>
-<p>The <tt class="docutils literal"><span class="pre">waterapputils-waterxml/</span></tt> directory contains plots of all the
-climate parameters in the <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt> file.</p>
+<p>Results of applying climate change factors to each basin in a WATER simulations are contained
+within each respective basin directory in the <tt class="docutils literal"><span class="pre">waterapputils-gcmdelta</span></tt> directory.
+The <tt class="docutils literal"><span class="pre">waterapputils-gcmdelta/</span></tt> directory contains plots of all the relevant
+parameters in the WATERSimulation.xml file.</p>
 <p>Each respective basin directory (basin-1) contains an updated WATER simulation
-database file (<tt class="docutils literal"><span class="pre">WATERSimulation-updated-&lt;basin_field&gt;-&lt;basinid&gt;.xml</span></tt>) containing
-updated climate parameters. In addition,
-the updated <tt class="docutils literal"><span class="pre">WATERSimulation-updated-&lt;basin_field&gt;-&lt;basinid&gt;.xml</span></tt> is processed and comparison plots
-between the original <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt> file and the updated <tt class="docutils literal"><span class="pre">WATERSimulation-updated-&lt;basin_field&gt;-&lt;basinid&gt;.xml</span></tt>
-are created and contained in the <a href="#id3"><span class="problematic" id="id4">``</span></a>waterapputils-waterxml/ `` directory.</p>
-<p>Detailed information regarding applying GCM deltas to a batch run are
-contained in a directory called <tt class="docutils literal"><span class="pre">waterapputils-batchrun-info</span></tt> which is
-created in the <tt class="docutils literal"><span class="pre">waterbatch_directory</span></tt> specified in the
-<tt class="docutils literal"><span class="pre">_user_batch_variables_file_gcmdeltas.py</span></tt> file. The <tt class="docutils literal"><span class="pre">waterapputils_batch_info</span></tt> will
-contain a summary file of the GCM deltas applied and which GCM
-tiles were used. If there are basins
-that do not intersect any water use points, then a file logging those
-the non-intersecting GCM tiles (<tt class="docutils literal"><span class="pre">waterapputils_error.log</span></tt>) is
-created, along with a comma-separated file
-(<tt class="docutils literal"><span class="pre">gcmdeltas_non_intersecting_tiles.txt</span></tt>) listing the specific
-basins that do not intersect any GCM tiles. To apply GCM deltas
-to basins that originally do not intersect any GCM tile, a user
-can edit the <tt class="docutils literal"><span class="pre">gcmdeltas_non_intersecting_tiles.txt</span></tt>
-file and specify GCM delta tiles to be applied. To apply the
-information specified in the <tt class="docutils literal"><span class="pre">gcmdeltas_non_intersecting_tiles.txt</span></tt>
-to the batch run, the following command is used:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -applysubdeltas
+database file (<tt class="docutils literal"><span class="pre">GCMDELTA-WATERSimulation.xml</span></tt>) containing climate factored precipitation
+and temperature data. In addition, the updated WATER database file is processed and plots of each
+parameter in the updated GCMDELTA-WATERSimulation.xml file are created and contained
+in the <a href="#id3"><span class="problematic" id="id4">``</span></a>waterapputils-gcmdelta/ `` directory.</p>
+<p>Detailed information regarding applying climate change factors to a WATER simulation are
+contained in the <tt class="docutils literal"><span class="pre">waterapputils-info</span></tt> directory. The <tt class="docutils literal"><span class="pre">waterapputils-info</span></tt> directory contains a file,
+called <tt class="docutils literal"><span class="pre">gcmdelta_info.txt</span></tt>, that contains details of which climate change tiles
+are intersected by each basin with the corresponding (monthly) climate change factors
+applied to the the original precipitation and temperature from the original WATERSimulation.xml file.</p>
+<p>Although unlikely, any global climate change tiles that are not intersected by a basin in a respective
+WATER simulation are logged to a file called <tt class="docutils literal"><span class="pre">gcmdelta_non_intersecting_tiles.txt</span></tt>
+(Note: this file name can be edited using the <tt class="docutils literal"><span class="pre">gcmdelta_non_intersecting_file_name</span></tt> variable
+in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file). The <tt class="docutils literal"><span class="pre">gcmdelta_non_intersecting_centroids.txt</span></tt> is a
+comma-separated file that lists on each row the basin name (id) that does not intersect any
+global climate change tiles along with a <em>special</em> tile id of <strong>000</strong> meaning no climate change factors
+were applied.  Users can edit this file by specifying the tile ids to be applied to each
+respective basin.</p>
+<p>The following is an example of the <tt class="docutils literal"><span class="pre">gcmdelta_non_intersecting_tiles.txt</span></tt> file
+where no climate change factors were applied to a specific basin:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">basinid</span><span class="p">,</span><span class="n">Tile</span>
+<span class="mo">01414500</span><span class="p">,</span><span class="mo">000</span>
 </pre></div>
 </div>
-<p>The above command uses the <tt class="docutils literal"><span class="pre">subwateruse_file</span></tt> variable in the
-<tt class="docutils literal"><span class="pre">_user_batch_variables_file_gcmdeltas.py</span></tt> file which specifies the location of the
-<tt class="docutils literal"><span class="pre">gcmdeltas_non_intersecting_tiles.txt</span></tt> file.</p>
+<p>To apply climate factor tiles (e.g. 10,11,12) to basinid 01414500, then a user would update the
+<tt class="docutils literal"><span class="pre">gcmdelta_non_intersecting_tiles.txt</span></tt> file to the following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">basinid</span><span class="p">,</span><span class="n">Tile</span>
+<span class="mo">01414500</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span>
+</pre></div>
+</div>
+<p>After updating the <tt class="docutils literal"><span class="pre">gcmdelta_non_intersecting_tiles.txt</span></tt> file, a user can apply the <em>substitute</em>
+climate change tiles by applying the following command:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -applysubgcmdeltas
+</pre></div>
+</div>
+<p>The above command uses the <tt class="docutils literal"><span class="pre">gcmdelta_non_intersecting_tiles.txt</span></tt> file
+to apply climate change factors to those basins that originally did not have any factors applied.
+A new file, called <tt class="docutils literal"><span class="pre">sub_gcmdelta_info.txt</span></tt>, is created in the <tt class="docutils literal"><span class="pre">waterapputils-info</span></tt> directory
+that logs the information regarding the substitute factors applied.</p>
 </div>
 </div>
 

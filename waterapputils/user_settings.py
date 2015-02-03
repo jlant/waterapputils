@@ -19,10 +19,6 @@ basin_shapefile_name = "Watersheds.shp"
 basin_shapefile_id_field = "STAID"
 basin_shapefile_area_field = "da_sqmi"                  # if no area field, leave blank like this: ""
 
-# default names from WATER application
-water_text_file_name = "WATER.txt"
-water_database_file_name = "WATERSimulation.xml"
-
 # ------------------- Water use information ----------------------------- #
 wateruse_centroids_shapefile = "../data/spatial-datafiles/wateruse-centroids/wateruse_centroids_sample_nad83.shp"
 wateruse_centroids_shapefile_id_field = "newhydroid"
@@ -46,6 +42,9 @@ gcm_delta_tile_shapefile = "../data/spatial-datafiles/gcm-tiles/CanES_nad83.shp"
 gcm_delta_tile_shapefile_id_field = "Tile"
 
 # ------------------- Output directory and file names ------------------- #
+water_text_file_name = "WATER.txt"
+water_database_file_name = "WATERSimulation.xml"
+
 info_directory_name = "waterapputils-info"
 
 watertxt_directory_name = "waterapputils-watertxt"
