@@ -242,23 +242,24 @@ OK
         wateruse_tests.py                   # tests for wateruse module
         waterxml_tests.py                   # tests for waterxml module
     waterapputils/				            # directory containing code modules
-        deltas.py                           # handles processing of global climate model data
-        deltas_viewer.py                    # handles view (plotting) of global climate model data
-        gcm_delta_processing.py             # handles the global climate model delta factors processing using settings from the user_settings.py file
-        helpers.py                          # helper functions
-        spatialdata_viewer.py               # handles view (mapping) of spatial data; uses basemap library
-        spatialvectors.py                   # handles spatial data
-        specific_output_file_processing.py  # handles specific output file processing for external OASIS and Ecoflow programs
-        user_settings.py                    # user settings to control and specify data inputs for water use and global climate model processing along with control of naming outputs
-        water_files_processing.py           # handles the WATER application output and database file processing using settings from the user_settings.py file
         waterapputils.py                    # main controller; calls respective module
-        waterapputils_logging.py            # handles error logging
-        watertxt.py                         # handles processing of WATER.txt simulation output files
-        watertxt_viewer.py                  # handles view (plotting) of WATER.txt simulation output files
-        wateruse.py                         # handles processing of water use data
-        wateruse_processing.py              # handles the water use processing using settings from the user_settings.py file
-        waterxml.py                         # handles processing of WATERSimulation.xml simulation database files
-        waterxml_viewer.py                  # handles view (plotting) of  WATERSimulation.xml simulation database files
+        user_settings.py                    # user settings to control and specify data inputs for water use and global climate model processing along with control of naming outputs
+        modules/
+            deltas.py                           # handles processing of global climate model data
+            deltas_viewer.py                    # handles view (plotting) of global climate model data
+            gcm_delta_processing.py             # handles the global climate model delta factors processing using settings from the user_settings.py file
+            helpers.py                          # helper functions
+            spatialdata_viewer.py               # handles view (mapping) of spatial data; uses basemap library
+            spatialvectors.py                   # handles spatial data
+            specific_output_file_processing.py  # handles specific output file processing for external OASIS and Ecoflow programs
+            water_files_processing.py           # handles the WATER application output and database file processing using settings from the user_settings.py file
+            waterapputils_logging.py            # handles error logging
+            watertxt.py                         # handles processing of WATER.txt simulation output files
+            watertxt_viewer.py                  # handles view (plotting) of WATER.txt simulation output files
+            wateruse.py                         # handles processing of water use data
+            wateruse_processing.py              # handles the water use processing using settings from the user_settings.py file
+            waterxml.py                         # handles processing of WATERSimulation.xml simulation database files
+            waterxml_viewer.py                  # handles view (plotting) of  WATERSimulation.xml simulation database files
     Makefile					            # makefile to help clean directories
 	LICENSE.txt				                # USGS Software User Rights Notice
 	README.md					            # README file

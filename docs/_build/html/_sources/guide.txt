@@ -125,7 +125,7 @@ OASIS and ecoflow programs.
 To apply water use to a WATER simulation, information regarding
 the location of a series of files and directories must be entered
 in a file called ``user_settings.py`` located in the 
- ``waterapputils/waterapputils/`` directory.
+``waterapputils/waterapputils/`` directory.
 The following main variables associated with applying water use that
 are contained in the ``user_settings.py`` file:
 
@@ -143,7 +143,6 @@ are contained in the ``user_settings.py`` file:
     wateruse_centroids_shapefile_id_field   -   field in the water use centroids shapefile used to link to the water use text files specified in the ``wateruse_files`` variable
     wateruse_files                          -   list of paths to water use files 
     wateruse_factor_file                    -   path to the water use factor file
-
 
 Instead of specifying the path to a WATER simulation in the ``user_settings.py`` file,
 users can supply the path directly on the command line using the following command:
