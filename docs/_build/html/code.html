@@ -1966,7 +1966,7 @@ contained in the info directory with a name specified in the user_settings.py fi
 <dl class="function">
 <dt id="wateruse_processing.apply_wateruse">
 <tt class="descclassname">wateruse_processing.</tt><tt class="descname">apply_wateruse</tt><big>(</big><em>settings</em><big>)</big><a class="headerlink" href="#wateruse_processing.apply_wateruse" title="Permalink to this definition">¶</a></dt>
-<dd><p>Apply water use data to a WATER *.txt file(s).</p>
+<dd><p>Apply water use data to WATER.txt file(s).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -2120,18 +2120,50 @@ to <em>basin_shapefile_id_field</em> in user_settings.py</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>file_list</strong> : list</p>
 <blockquote>
-<div><p>List of files to process; files are shapefiles</p>
+<div><p>List of WATERSimulation.xml files to process</p>
 </div></blockquote>
-<p><strong>settings</strong> : dictionary</p>
+<p><strong>dir_name</strong> : string</p>
+<blockquote>
+<div><p>String name for output directory</p>
+</div></blockquote>
+<p><strong>file_name</strong> : string</p>
 <blockquote class="last">
-<div><p>Dictionary of user settings</p>
+<div><p>String name for output file</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Notes</p>
-<p>Uses settings set in user_settings.py</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="specific_output_file_processing.write_ecoflow_file_stationid">
+<tt class="descclassname">specific_output_file_processing.</tt><tt class="descname">write_ecoflow_file_stationid</tt><big>(</big><em>file_list</em>, <em>dir_name</em>, <em>file_name</em>, <em>parameter_name='Discharge + Water Use'</em><big>)</big><a class="headerlink" href="#specific_output_file_processing.write_ecoflow_file_stationid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a csv file containing a timeseries for a particular parameter contained in a WATER.txt file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>file_list</strong> : list</p>
+<blockquote>
+<div><p>List of WATER.txt files to process</p>
+</div></blockquote>
+<p><strong>dir_name</strong> : string</p>
+<blockquote>
+<div><p>String name for output directory</p>
+</div></blockquote>
+<p><strong>file_name</strong> : string</p>
+<blockquote>
+<div><p>String name for output file</p>
+</div></blockquote>
+<p><strong>parameter_name</strong> : string</p>
+<blockquote class="last">
+<div><p>String name for a parameter contained in a WATER.txt file</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -2874,6 +2906,67 @@ the features FID number with corresponding longitude and latitude values.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="spatialvectors.reproject">
+<tt class="descclassname">spatialvectors.</tt><tt class="descname">reproject</tt><big>(</big><em>shapefiles</em><big>)</big><a class="headerlink" href="#spatialvectors.reproject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reproject a list of shapefiles to Geographic (WGS84) coordinates. 
+If any shapefile in the list is already in Geographic coordinates,
+then its path is added to the list returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>shapefiles</strong> : list</p>
+<blockquote>
+<div><p>List of filled shapefile dictionaries</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>shp_reproj_list</strong> : list</p>
+<blockquote class="last">
+<div><p>List of paths to reprojected shapefiles</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#spatialvectors.fill_shapefile_dict" title="spatialvectors.fill_shapefile_dict"><tt class="xref py py-obj docutils literal"><span class="pre">fill_shapefile_dict</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="spatialvectors.reproject_shapefile_to_wgs84">
+<tt class="descclassname">spatialvectors.</tt><tt class="descname">reproject_shapefile_to_wgs84</tt><big>(</big><em>shapefile</em>, <em>out_shapefile_suffix='_reproj_wgs84.shp'</em><big>)</big><a class="headerlink" href="#spatialvectors.reproject_shapefile_to_wgs84" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reproject shapefile to WGS 84.  All WATER application shapefiles are in the Albers NAD83 projection.
+Create a new shapefile with the new projection.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>shapefile</strong> : osgeo.ogr.DataSource</p>
+<blockquote>
+<div><p>A shapefile object.</p>
+</div></blockquote>
+<p><strong>out_shapefile_suffix</strong> : string</p>
+<blockquote>
+<div><p>String name to join to end of shapefile</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out_shapefile</strong> : string</p>
+<blockquote class="last">
+<div><p>String path to reprojected shapefile</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Good reference: <a class="reference external" href="http://spatialreference.org/">http://spatialreference.org/</a></p>
+</dd></dl>
+
+<dl class="function">
 <dt id="spatialvectors.test_get_field_values">
 <tt class="descclassname">spatialvectors.</tt><tt class="descname">test_get_field_values</tt><big>(</big><big>)</big><a class="headerlink" href="#spatialvectors.test_get_field_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test read_field_values_file()</p>
@@ -2895,6 +2988,12 @@ the features FID number with corresponding longitude and latitude values.</p>
 <dt id="spatialvectors.test_read_field_values_file_in">
 <tt class="descclassname">spatialvectors.</tt><tt class="descname">test_read_field_values_file_in</tt><big>(</big><big>)</big><a class="headerlink" href="#spatialvectors.test_read_field_values_file_in" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test read_field_values_file()</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="spatialvectors.test_reproject_shapefile_to_wgs84">
+<tt class="descclassname">spatialvectors.</tt><tt class="descname">test_reproject_shapefile_to_wgs84</tt><big>(</big><big>)</big><a class="headerlink" href="#spatialvectors.test_reproject_shapefile_to_wgs84" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test reproject_shapefile_to_wgs84()</p>
 </dd></dl>
 
 <dl class="function">
@@ -2976,7 +3075,7 @@ values that have None.</p>
 </table>
 <dl class="function">
 <dt id="spatialdata_viewer.get_map_extents">
-<tt class="descclassname">spatialdata_viewer.</tt><tt class="descname">get_map_extents</tt><big>(</big><em>shapefiles</em><big>)</big><a class="headerlink" href="#spatialdata_viewer.get_map_extents" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">spatialdata_viewer.</tt><tt class="descname">get_map_extents</tt><big>(</big><em>shapefiles</em>, <em>shp_name=None</em><big>)</big><a class="headerlink" href="#spatialdata_viewer.get_map_extents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get max and min extent coordinates from a list of shapefiles to use as the 
 extents on the map. Use the map extents to calculate the map center and the 
 standard parallels.</p>
@@ -2987,6 +3086,10 @@ standard parallels.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>shapefiles</strong> : list</p>
 <blockquote>
 <div><p>List of shapefile_data dictionaries</p>
+</div></blockquote>
+<p><strong>shp_name</strong> : string</p>
+<blockquote>
+<div><p>String name of shapefile to use for getting map extents</p>
 </div></blockquote>
 </td>
 </tr>
@@ -3016,7 +3119,7 @@ standard parallels.</p>
 
 <dl class="function">
 <dt id="spatialdata_viewer.plot_shapefiles_map">
-<tt class="descclassname">spatialdata_viewer.</tt><tt class="descname">plot_shapefiles_map</tt><big>(</big><em>shapefiles</em>, <em>display_fields=</em>, <span class="optional">[</span><span class="optional">]</span><em>colors=</em>, <span class="optional">[</span><span class="optional">]</span><em>title=None</em>, <em>is_visible=True</em>, <em>save_path=None</em><big>)</big><a class="headerlink" href="#spatialdata_viewer.plot_shapefiles_map" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">spatialdata_viewer.</tt><tt class="descname">plot_shapefiles_map</tt><big>(</big><em>shapefiles</em>, <em>display_fields=</em>, <span class="optional">[</span><span class="optional">]</span><em>colors=</em>, <span class="optional">[</span><span class="optional">]</span><em>title=None</em>, <em>is_visible=False</em>, <em>save_path=None</em>, <em>save_name='map.png'</em>, <em>shp_name=None</em>, <em>buff=1.0</em><big>)</big><a class="headerlink" href="#spatialdata_viewer.plot_shapefiles_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a map showing all the shapefiles in the shapefile_list.  
 Shapefiles should be in a Geographic Coordinate System (longitude and 
 latitude coordinates) such as World WGS84; Matplotlib&#8221;s basemap library 
@@ -3047,8 +3150,16 @@ coordinate system used is Albers Equal Area.</p>
 <div><p>Boolean value to show plots</p>
 </div></blockquote>
 <p><strong>save_path</strong> : string</p>
-<blockquote class="last">
+<blockquote>
 <div><p>String path to save plot(s)</p>
+</div></blockquote>
+<p><strong>shp_name</strong> : string</p>
+<blockquote>
+<div><p>String name of shapefile to use for getting map extents</p>
+</div></blockquote>
+<p><strong>buff</strong> : float</p>
+<blockquote class="last">
+<div><p>Float value in coordinate degrees to buffer the map with</p>
 </div></blockquote>
 </td>
 </tr>

@@ -2,8 +2,8 @@
 
 # Description: Bash script to automate the process of running/processing many WATER simulations
 #
-# Usage: run_simulations.sh [option]
-#        run_simulations.sh [[[-applywateruse] [-applysubwateruse] [-applygcmdelta] [-applysubgcmdelta]] | [-h]]
+# Usage: run_simulations.sh [option] <path-to-simulations-directory>
+#        run_simulations.sh [[[-applywateruse] [-applysubwateruse] [-applygcmdelta] [-applysubgcmdelta]] <path-to-simulations-directory> | [-h]]
 
 run()
 {
@@ -26,7 +26,7 @@ usage()
 	echo "Usage:"
 	echo "    run_simulations.sh [option] path-to-simulations-directory"
 	echo ""
-	echo "    run_simulations.sh [[[-applywateruse] [-applysubwateruse] [-applygcmdelta] [-applysubgcmdelta]] path-to-simulations-directory | [-h]]"
+	echo "    run_simulations.sh [[[-applywateruse] [-applysubwateruse] [-applygcmdelta] [-applysubgcmdelta]] <path-to-simulations-directory> | [-h]]"
 }
 
 # main program

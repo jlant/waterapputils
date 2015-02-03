@@ -28,11 +28,11 @@ Some sample highlights of **waterapputils** include:
 
 * Processes WATER simulation database files that store information about a particular model simulation (`xml` format).
 
-* Applies various statistically downscaled global climate models ([GCMs]) to model simulations for a particular watershed 
+* Applies various statistically downscaled **global climate models** ([GCMs]) to model simulations for a particular watershed 
 basin or set of watershed basins based on the spatial intersection of the watershed(s) of interest with the global climate 
 change scenario coverage of interest.
 
-* Applies water use data to model simulations for a particular for a particular watershed basin or set of watershed basins 
+* Applies **water use** data to model simulations for a particular for a particular watershed basin or set of watershed basins 
 based on the spatial intersection of the watershed(s) of interest with the water use coverage.
 
 * Generates plots of all parameters found in WATER output files (`txt` format) with simple statistics.
@@ -43,13 +43,27 @@ based on the spatial intersection of the watershed(s) of interest with the water
 
 * Generates comparison and difference plots between two WATER simulation database files.
 
+* Generates maps of study area for a particular model simulation using [basemap](http://matplotlib.org/basemap/)
+
 * Logs errors and tracebacks.
+
+***
 
 ## Version
 
 1.0.0
 
-## Command line arguments/options
+***
+
+## Command line interface to **waterapputils**
+
+### Usage:
+
+```sh
+$ python waterapputils.py [option]
+```
+
+### Command line arguments for **waterapputils**:
 
 | Commands              | Description |                                                                              
 | --------              | ----------- |                                                                               
@@ -77,7 +91,37 @@ based on the spatial intersection of the watershed(s) of interest with the water
 |`-samplebatch`         | OPTIONAL : flag used with `-applywateruse`, `-applysubwateruse`, `-applygcmdeltas`, `-applysubgcmdeltas` to specify the use of the sample batch simulation datasets |
 |`-simdir`              | OPTIONAL : flag used with `-applywateruse`, `-applysubwateruse`, `-applygcmdeltas`, `-applysubgcmdeltas` to specify a path to a specific WATER simulation instead of specifying it in `user_settings.py` |
 
-## [run_sample_datasets.sh](run_sample_datasets.sh) - Run sample datasets 
+
+### Example - processing a WATER.txt file
+
+```sh
+$ python waterapputils.py -watertxt <path-to-WATER.txt-file>
+```
+
+### Example - Running water use using the settings in user_settings.py
+
+```sh
+$ python waterapputils.py -applywateruse
+```
+
+### Example - Running water use by supplying a path to a simulations directory instead of specifying the simulations directory in user_settings.py
+
+```sh
+$ python waterapputils.py -applywateruse -simdir <path-to-simulations-directory>
+```
+
+***
+
+## Editing settings in [user_settings.py](waterapputils/user_settings.py)
+
+All the setting for running **waterapputils** are contained in [user_settings.py](waterapputils/user_settings.py) file. A user can edit the settings 
+by editing the Python string variables.  Most variables are *path* variables to required data files and basin shapefile attribute variables. 
+A user will typically only edit the section called *WATER simulation information*.  This section contains information about a WATER simulation. 
+A WATER simulation can be either a *single* simulation or a *batch* simulation.  Each simulation type has a few different outputs along with a different directory structure.
+
+***
+
+## Run sample datasets with [run_sample_datasets.sh](run_sample_datasets.sh)
 
 The shell script [run_sample_datasets.sh](run_sample_datasets.sh) is a shell script that can be used to run automated tests 
 and run many of the command line arguments using the [sample datasets](data/sample-water-simulations).  
@@ -86,10 +130,10 @@ and run many of the command line arguments using the [sample datasets](data/samp
 
 ```sh
 $ run_sample_datasets.sh [option]
-$ run_sample_datasets.sh [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid] [ecoflowdaxml] [-ecoflowdashp] [-gcmdelta] [-mapsim] [-all] [-tests]] | [-h]]
+$ run_sample_datasets.sh [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid] [ecoflowdaxml] [-ecoflowdashp] [-gcmdelta] [-mapsim] [-all] [-tests] -makeclean] | [-h]]
 ```
 
-The following are the command line arguments for the shell script [run_sample_datasets.sh](run_sample_datasets.sh):
+### Command line arguments for the shell script [run_sample_datasets.sh](run_sample_datasets.sh):
 
 | Commands              | Description |                                                                              
 | --------              | ----------- |                                                                               
@@ -107,25 +151,32 @@ The following are the command line arguments for the shell script [run_sample_da
 |`-mapsim`              | create maps for [single and batch simulations](data/sample-water-simulations) | 
 |`-all`                 | run (mostly) all commands; `-tests`, `-txt`, `-xml`, `-wateruse`, `-gcmdelta`, `-oasis`, `-ecoflowstationid`, `-ecoflowdaxml`, `-ecoflowdashp`, `mapsim` |
 |`-tests`               | run units tests use nosetests |
+|`-makeclean`           | cleans/removes all output of running sample dataset in in the [sample-water-simulations directory](data/sample-water-simulations) |
 
-### Example:
+### Example - apply water use to [single and batch simulations](data/sample-water-simulations):
 
 ```sh
 $ run_sample_datasets.sh -wateruse
 ```
 
-## [run_simulations.sh](run_simulations.sh) - Apply water use and gcm deltas to multiple WATER simulations
+## Applying water use and gcm deltas to many WATER simulations at one time using [run_simulations.sh](run_simulations.sh)
 
 The shell script [run_simulations.sh](run_simulations.sh) is a shell script that can be used to automate
 the processing of many WATER simulations. [run_simulations.sh](run_simulations.sh) can be used to apply 
 water use and global climate change scenarios to multiple WATER simulations that are contained in the same directory.
+A user will provide a valid option along with the **path to the directory containing all the WATER simulations**
+that need to be processed.  This directory should contain all the same type of WATER simulations *single* or *batch*, but not both.
+A user should make sure that the proper settings for processing a *single* or *batch* simulation are set in the *user_settings.py* file.
+Note that the *simulation_directory* variable will be ignored when using this script, but all the other settings will be used accordingly.
 
 ### Usage:
 
 ```sh
-$ run_simulations.sh [option] path-to-simulations-directory
-$ run_simulations.sh [[[-applywateruse] [-applysubwateruse] [-applygcmdelta] [-applysubgcmdelta]] path-to-simulations-directory | [-h]]
+$ run_simulations.sh [option] <path-to-simulations-directory>
+$ run_simulations.sh [[[-applywateruse] [-applysubwateruse] [-applygcmdelta] [-applysubgcmdelta]] <path-to-simulations-directory> | [-h]]
 ```
+
+### Command line arguments for the shell script [run_simulations.sh](run_simulations.sh):
 
 | Commands              | Description |                                                                              
 | --------              | ----------- |                                                                               
@@ -135,11 +186,13 @@ $ run_simulations.sh [[[-applywateruse] [-applysubwateruse] [-applygcmdelta] [-a
 |`-applygcmdelta`       | run and apply [global climate model data](data/gcmdelta-datafiles) to sample WATER simulations; [single and batch simulations](data/sample-water-simulations) |
 |`-applysubgcmdelta`    | run and apply substitute water use data to sample WATER simulations; [single and batch simulations](data/sample-water-simulations) |
 
-### Example:
+### Example - apply water use to many WATER simulations :
 
 ```sh
-$ run_simulations.sh -applywateruse path-to-simulations-directory
+$ run_simulations.sh -applywateruse <path-to-simulations-directory>
 ```
+
+*** 
 
 ## Testing
 
@@ -163,6 +216,8 @@ Ran 91 tests in 1.049s
 
 OK
 ```
+
+***
 
 ## Repository/Project Layout
 
@@ -212,17 +267,24 @@ OK
     run_sample_datasets.sh                  # bash script used to run specific or all sample datasets
     run_simulations.sh                      # bash script used to apply water use and/or climate change factors to multiple WATER simulations
 
-## Code Documentation
+***
 
-Code documentation was made using [Sphinx] and is located [here](docs/_build/html/index.html).
-    
+## Documentation - overview, guides/tutorials, code
+
+HTML documentation was made using [Sphinx].  At this time the documentation can be viewed locally with a browser.
+The main html page, *index.html*, is located in the *waterapputils/docs/_build/html/* directory.
+   
+***
+
 ## Requirements
 
 	python == 2.7.6
 	numpy == 1.8.0
 	matplotlib == 1.3.1
 	nose == 1.3.0
-    
+
+*** 
+
 ## Disclaimer and Notice
 
 
@@ -238,6 +300,8 @@ Code documentation was made using [Sphinx] and is located [here](docs/_build/htm
 	Although this program has been used by the USGS, no warranty, expressed or implied, is made by the USGS or the United
 	States Government as to the accuracy and functioning of the program and related program material nor shall the fact of
 	distribution constitute any such warranty, and no responsibility is assumed by the USGS in connection therewith.
+
+*** 
 
 ## Author
 
