@@ -87,7 +87,7 @@ class MatplotlibWidget(QtGui.QWidget):
     def plot_watertxt_parameter(self, watertxt_data, name): 
         """ Plot a parameter from a WATER.txt file """
 
-        self.clearplot()
+        self.clear_plot()
 
         self.watertxt_data = watertxt_data
         self.parameter = watertxt.get_parameter(watertxt_data, name = name)     
@@ -176,7 +176,7 @@ class MatplotlibWidget(QtGui.QWidget):
             # self.axes1.set_xlim(self.dates[0], self.dates[-1])
             # self.axes1.set_ylim(self.parameter["min"], self.parameter["max"])
 
-    def clearplot(self):
+    def clear_plot(self):
         """ Clear the plot axes """ 
         self.axes1.clear()
         self.axes1.grid(True)

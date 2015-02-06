@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'user_interface.ui'
 #
-# Created: Wed Feb 04 17:29:18 2015
+# Created: Fri Feb 06 16:42:20 2015
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -32,6 +32,11 @@ class Ui_MainWindow(object):
         self.verticalLayout_2 = QtGui.QVBoxLayout(self.centralwidget)
         self.verticalLayout_2.setObjectName(_fromUtf8("verticalLayout_2"))
         self.tabWidget = QtGui.QTabWidget(self.centralwidget)
+        self.tabWidget.setAutoFillBackground(True)
+        self.tabWidget.setStyleSheet(_fromUtf8(""))
+        self.tabWidget.setTabShape(QtGui.QTabWidget.Rounded)
+        self.tabWidget.setTabsClosable(False)
+        self.tabWidget.setMovable(True)
         self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
         self.tab_watertxt = QtGui.QWidget()
         self.tab_watertxt.setObjectName(_fromUtf8("tab_watertxt"))
@@ -47,6 +52,7 @@ class Ui_MainWindow(object):
         self.push_button_open_file.setObjectName(_fromUtf8("push_button_open_file"))
         self.horizontalLayout_2.addWidget(self.push_button_open_file)
         self.line_edit_open_file = QtGui.QLineEdit(self.frame)
+        self.line_edit_open_file.setReadOnly(True)
         self.line_edit_open_file.setObjectName(_fromUtf8("line_edit_open_file"))
         self.horizontalLayout_2.addWidget(self.line_edit_open_file)
         self.verticalLayout_3.addWidget(self.frame)
@@ -67,12 +73,21 @@ class Ui_MainWindow(object):
         self.horizontalLayout = QtGui.QHBoxLayout(self.frame_3)
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
         self.list_widget = QtGui.QListWidget(self.frame_3)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.list_widget.sizePolicy().hasHeightForWidth())
+        self.list_widget.setSizePolicy(sizePolicy)
+        self.list_widget.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.list_widget.setObjectName(_fromUtf8("list_widget"))
         self.horizontalLayout.addWidget(self.list_widget)
         self.table_widget = QtGui.QTableWidget(self.frame_3)
+        self.table_widget.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
         self.table_widget.setObjectName(_fromUtf8("table_widget"))
         self.table_widget.setColumnCount(0)
         self.table_widget.setRowCount(0)
+        self.table_widget.horizontalHeader().setCascadingSectionResizes(False)
+        self.table_widget.horizontalHeader().setDefaultSectionSize(160)
         self.horizontalLayout.addWidget(self.table_widget)
         self.verticalLayout_3.addWidget(self.frame_3)
         self.tabWidget.addTab(self.tab_watertxt, _fromUtf8(""))
@@ -113,6 +128,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
         self.push_button_open_file.setText(_translate("MainWindow", "Open file", None))
+        self.line_edit_open_file.setPlaceholderText(_translate("MainWindow", "Path to WATER.txt output text file", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_watertxt), _translate("MainWindow", "Process WATER output text file", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Tab 2", None))
         self.menuExit.setTitle(_translate("MainWindow", "Exit", None))
