@@ -127,6 +127,7 @@ class MatplotlibWidget(QtGui.QWidget):
             verticalalignment = "top", horizontalalignment = "left", bbox = patch_properties)    
 
         self.canvas.draw()
+
    
     def on_select(self, xmin, xmax):
         """ A select handler for SpanSelector that updates axes 2 with the new x and y limits selected by user """
@@ -173,10 +174,17 @@ class MatplotlibWidget(QtGui.QWidget):
         elif radio_button_label == "Span Off":
             self.span_selector.visible = False
             self.plot_watertxt_parameter(watertxt_data = self.watertxt_data, name = self.parameter["name"])
-            # self.axes1.set_xlim(self.dates[0], self.dates[-1])
-            # self.axes1.set_ylim(self.parameter["min"], self.parameter["max"])
 
     def clear_plot(self):
         """ Clear the plot axes """ 
+
         self.axes1.clear()
+        self.canvas.draw()
         self.axes1.grid(True)
+
+    # def clear_plot2(self):
+    #     """ Clear the plot axes """ 
+
+    #     self.axes1.clear()
+    #     self.canvas.draw()
+

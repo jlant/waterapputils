@@ -59,13 +59,10 @@ class MainWindow(QtGui.QMainWindow):
 		if self.watertxt_data["column_names"] == None:
 			self.popup_error(self, 'Invalid File! Please open a valid file.')
 			self.clear_widgets()
-		else:
-			print "OK"
 
 	def clear_widgets(self):
 		""" Clear all the widgets """
 		self.ui.list_widget.clear()
-		self.ui.line_edit_open_file.clear()
 		self.ui.table_widget.clear()
 		self.ui.matplotlib_widget.clear_plot()			# fixme, not working
 		self.ui.matplotlib_widget.setEnabled(False)
