@@ -22,16 +22,17 @@ class MainWindow(QtGui.QMainWindow):
 		self.ui = Ui_MainWindow()
 		self.ui.setupUi(self) # method in *_ui.py file of the Ui_MainWindow class
 
-		# connections
+		# connections for tab titled Process WATER output text file 
 		self.ui.actionExit.triggered.connect(self.close)
 		self.ui.actionAbout.triggered.connect(self.about)
 		self.ui.tab_watertxt_push_button_open_file.clicked.connect(self.process_watertxt_file)
-		self.ui.tab_watertxt_list_widget.itemSelectionChanged.connect(self.plot_list_item)
+		self.ui.tab_watertxt_list_widget.itemSelectionChanged.connect(self.plot_tab_watertxt_list_item)
 
+		# connections for tab titled Compare 2 WATER output text files
 		self.ui.tab_watertxtcmp_push_button_open_file1.clicked.connect(self.select_watertxt_file_cmp)
 		self.ui.tab_watertxtcmp_push_button_open_file2.clicked.connect(self.select_watertxt_file_cmp)
 		self.ui.tab_watertxtcmp_push_button_compare.clicked.connect(self.compare_watertxt_files)
-		self.ui.tab_watertxtcmp_list_widget.itemSelectionChanged.connect(self.plot_list_item)
+		# self.ui.tab_watertxtcmp_list_widget.itemSelectionChanged.connect(self.plot_tab_watertxtcmp_list_item)
 
 		# disble the plot area until a file is opened 
 		self.ui.tab_watertxt_matplotlib_widget.setEnabled(False)
@@ -40,31 +41,18 @@ class MainWindow(QtGui.QMainWindow):
 		# disable compare button until both line edit boxes have text
 		self.ui.tab_watertxtcmp_push_button_compare.setEnabled(False)
 
-	def about(self):
-		""" Show an message box about the gui."""
-		
-		msg = \
-		"""
-		The waterapputils gui can be used to process and interact with output
-		and database files from the WATER application.  More help and information
-		can be found at https://github.com/jlant-usgs/waterapputils
-		"""
-
-		QtGui.QMessageBox.about(self, "About the waterapputils gui", msg.strip())
-
 	#-------------------------------- Tab: Process WATER output text file ------------------------------------
 
 	def process_watertxt_file(self):
 		""" Open a file dialog to select, read, display column names, and plot a WATER.txt file."""
 		try:
-			sender_object_name = get_sender_name()
 			filepath = self.select_watertxt_file()
 			if filepath:
 				self.tab_watertxt_data = self.read_watertxt_file(filepath)
-				self.add_to_list_widget(column_names = self.tab_watertxt_data["column_names"], sender_object_name)
-				self.add_to_table_widget()
-				self.ui.tab_watertxt_matplotlib_widget.setEnabled(True)
-				self.plot_watertxt_file(parameter_name = self.tab_watertxt_data["column_names"][0])
+				self.add_to_tab_watertxt_list_widget()
+				self.add_to_tab_watertxt_table_widget()
+				self.setup_tab_watertxt_matplotlib_widget()
+				self.plot_on_tab_watertxt_matplotlib_widget(parameter_name = self.tab_watertxt_data["column_names"][0])		# plot the first parameter in column names
 
 		except IOError as error:
 			print("Error: {}".format(error.message))
@@ -78,16 +66,15 @@ class MainWindow(QtGui.QMainWindow):
 
 		return filepath
 
-	def add_to_list_widget(self, column_names, sender_object_name):
-		""" Add column_names to list widget """
+	def add_to_tab_watertxt_list_widget(self):
+		""" Add column names from self.tab_watertxt_data to list widget on the watertxt tab """
 
-		if sender_object_name == "tab_watertxt_push_button_open_file":
-			self.ui.tab_watertxt_list_widget.addItems(column_names)
+		self.ui.tab_watertxt_list_widget.addItems(self.tab_watertxt_data["column_names"])
 
-	def add_to_table_widget(self):
-		""" Add data to table widget """
+	def add_to_tab_watertxt_table_widget(self):
+		""" Add data from self.tab_watertxt_data to table widget on the watertxt tab """
 
-		data = self.format_table_data(watertxt_data = self.tab_watertxt_data)
+		data = self.format_data_for_table(watertxt_data = self.tab_watertxt_data)
 
 		self.ui.tab_watertxt_table_widget.setRowCount(len(data))
 		self.ui.tab_watertxt_table_widget.setColumnCount(len(data[0]))
@@ -97,22 +84,71 @@ class MainWindow(QtGui.QMainWindow):
 			for col in range(len(data[row])):
 				self.ui.tab_watertxt_table_widget.setItem(row, col, QtGui.QTableWidgetItem(data[row][col]))
 
-	def plot_watertxt_file(self, parameter_name):
-		""" Plot a WATER.txt file """ 
+	def setup_tab_watertxt_matplotlib_widget(self):
+		""" Setup the matplotlib widget """
+
+		self.ui.tab_watertxt_matplotlib_widget.setup_watertxt_plot()
+
+	def plot_on_tab_watertxt_matplotlib_widget(self, parameter_name):
+		""" Plot data from self.tab_watertxt_data to matplotlibe widget on the watertxt tab """
+
+		self.ui.tab_watertxt_matplotlib_widget.setEnabled(True)
 		self.ui.tab_watertxt_matplotlib_widget.plot_watertxt_parameter(watertxt_data = self.tab_watertxt_data, name = parameter_name)
 
-	def plot_list_item(self):
+	def plot_tab_watertxt_list_item(self):
 		""" Plot the item selected in the list widget """
 		
 		item_type = str(self.ui.tab_watertxt_list_widget.currentItem().text())
-		self.plot_watertxt_file(parameter_name = item_type)
+		self.plot_on_tab_watertxt_matplotlib_widget(parameter_name = item_type)
 
-	def format_table_data(self, watertxt_data):
+
+	#-------------------------------- Tab: Compare 2 WATER output text files ------------------------------------
+
+	def select_watertxt_file_cmp(self):
+		""" Open a QtDialog to select a WATER.txt file and show the file in the line edit widget """
+
+		filepath = QtGui.QFileDialog.getOpenFileName(self, caption = "Please select a WATER.txt file", directory = "../data/watertxt-datafiles/", filter = "Text files (*.txt);; All files (*.*)")
+
+		sender = self.sender()
+		sender_object_name = sender.objectName()
+
+		if sender_object_name == "tab_watertxtcmp_push_button_open_file1":
+			self.ui.tab_watertxtcmp_line_edit_open_file1.setText(filepath)
+
+		elif sender_object_name == "tab_watertxtcmp_push_button_open_file2":
+			self.ui.tab_watertxtcmp_line_edit_open_file2.setText(filepath)
+
+		# enable compare button if both line edit boxes have text
+		if self.ui.tab_watertxtcmp_line_edit_open_file1.text() and self.ui.tab_watertxtcmp_line_edit_open_file2.text():
+			self.ui.tab_watertxtcmp_push_button_compare.setEnabled(True)
+
+	def compare_watertxt_files(self):
+		""" Compare two WATER.txt files """ 
+		try:
+			
+			filepath1 = self.ui.tab_watertxtcmp_line_edit_open_file1.text()
+			filepath2 = self.ui.tab_watertxtcmp_line_edit_open_file2.text()
+
+			self.tab_watertxtcmp_data1 = self.read_watertxt_file(filepath = filepath1)
+			self.tab_watertxtcmp_data1 = self.read_watertxt_file(filepath = filepath2)
+
+
+			self.add_to_tab_watertxt_list_widget()
+			self.add_to_tab_watertxt_table_widget()
+			self.setup_tab_watertxt_matplotlib_widget()
+			self.plot_on_tab_watertxt_matplotlib_widget(parameter_name = self.tab_watertxt_data["column_names"][0])		# plot the first parameter in column names
+
+		except IOError as error:
+			print("Error: {}".format(error.message))
+
+	#-------------------------------- Tab Independent Methods ------------------------------------
+
+	def format_data_for_table(self, watertxt_data):
 		""" Format the watertxt data into a list of lists with string elements for the table """
 
 		# get the dates and all the values
-		dates = self.tab_watertxt_data["dates"]
-		values_all = watertxt.get_all_values(watertxt_data = self.tab_watertxt_data)
+		dates = watertxt_data["dates"]
+		values_all = watertxt.get_all_values(watertxt_data = watertxt_data)
 
 		nrows = len(dates)
 		ncols = len(values_all)
@@ -139,69 +175,42 @@ class MainWindow(QtGui.QMainWindow):
 
 		return data_all
 
-	#-------------------------------- Tab: Compare 2 WATER output text files ------------------------------------
 
-	def compare_watertxt_files(self):
-		""" Compare two WATER output text files """
+	def about(self):
+		""" Show an message box about the gui."""
+		
+		msg = \
+		"""
+		The waterapputils gui can be used to process and interact with output <br /> 
+		and database files from the WATER application. In addition, water use can <br />
+		be applied to WATER output text files and global climate change factors can <br />
+		be applied to WATER database xml files.  More help and information <br />
+		can be found at <a href="https://github.com/jlant-usgs/waterapputils/">waterapputils</a>. 
+		"""
 
+		QtGui.QMessageBox.about(self, "About the waterapputils gui", msg.strip())
 
-	def select_watertxt_file_cmp(self):
-		""" Open a QtDialog to select a WATER.txt file and show the file in the line edit widget """
-
-		filepath = QtGui.QFileDialog.getOpenFileName(self, caption = "Please select a WATER.txt file", directory = "../data/watertxt-datafiles/", filter = "Text files (*.txt);; All files (*.*)")
-
-		sender = self.sender()
-		sender_object_name = sender.objectName()
-
-		if sender_object_name == "tab_watertxtcmp_push_button_open_file1":
-			self.ui.tab_watertxtcmp_line_edit_open_file1.setText(filepath)
-
-		elif sender_object_name == "tab_watertxtcmp_push_button_open_file2":
-			self.ui.tab_watertxtcmp_line_edit_open_file2.setText(filepath)
-
-		# enable compare button if both line edit boxes have text
-		if self.ui.tab_watertxtcmp_line_edit_open_file1.text() and self.ui.tab_watertxtcmp_line_edit_open_file2.text():
-			self.ui.tab_watertxtcmp_push_button_compare.setEnabled(True)
-
-	def compare_watertxt_files(self):
-		""" Compare two WATER.txt files """ 
-
-		print("Compare!")
-		self.read_watertxt_file()
-		# self.add_to_list_widget()
-		# self.add_to_table_widget()
-		# self.ui.tab_watertxt_matplotlib_widget.setEnabled(True)
-		# self.plot_watertxt_file(parameter_name = self.tab_watertxt_data["column_names"][0])
-
-	#-------------------------------- Independent methods ------------------------------------
-	def get_sender_name(self):
-		""" Get the current name of the sender object """
-
-		sender = self.sender()
-		sender_object_name = sender.objectName()
-
-		return sender_object_name
 
 	def read_watertxt_file(self, filepath):
 		""" Read a WATER.txt file """
 
 		watertxt_data = watertxt.read_file(filepath = filepath)
-		
-		if self.validate_watertxt_data(watertxt_data = watertxt_data)
+		isvalid = self.validate_watertxt_data(watertxt_data = watertxt_data)
 
-		else:
+		if isvalid:
 			return watertxt_data
 
 	def validate_watertxt_data(self, watertxt_data):
 		""" Check and make sure that watertxt_data is valid """ 
 
-		sender_object_name = get_sender_name()
+		sender = self.sender()
+		sender_object_name = sender.objectName()
 
 		if watertxt_data["parameters"] == [] or watertxt_data["column_names"] == None:
 			isvalid = False
 			error_msg = "Invalid File! Please choose a valid file."
 			self.popup_error(self, error_msg)
-			self.clear_widgets(sender_object_name = sender_object_name)
+			self.clear_widgets(sender_name = sender_object_name)
 			raise IOError(error_msg)
 
 		else:
@@ -209,22 +218,37 @@ class MainWindow(QtGui.QMainWindow):
 
 		return isvalid
 
-	def clear_widgets(self, sender_object_name):
-		""" Clear all the widgets """
-
-		if sender_object_name == "tab_watertxt_push_button_open_file":
-
-			# clear widget on tab_watertxt
-			self.ui.tab_watertxt_list_widget.clear()
-			self.ui.tab_watertxt_table_widget.clear()
-			self.ui.tab_watertxt_matplotlib_widget.clear_plot()			
-			self.ui.tab_watertxt_matplotlib_widget.setEnabled(False)
-
 	def popup_error(self, parent, msg):
 		""" Display an error message box """
 
 		title = "ERROR"
 		QtGui.QMessageBox.critical(parent, title, msg, QtGui.QMessageBox.Close)
+
+	def clear_widgets(self, sender_name):
+		""" Clear the appropriate widgets """
+
+		if sender_name == "tab_watertxt_push_button_open_file":
+			self.clear_tab_watertxt_widgets()
+
+		elif sender_name == "tab_watertxtcmp_push_button_compare":
+			clear_tab_watertxtxmp_widgets()
+
+	def clear_tab_watertxt_widgets(self):
+		""" Clear widgets on watertxt tab """
+
+		self.ui.tab_watertxt_list_widget.clear()
+		self.ui.tab_watertxt_table_widget.clear()
+		self.ui.tab_watertxt_matplotlib_widget.clear_watertxt_plot()			
+		self.ui.tab_watertxt_matplotlib_widget.setEnabled(False)
+
+	def clear_tab_watertxtxmp_widgets(self):
+		""" Clear widgets on watertxtcmp tab """
+
+		self.ui.tab_watertxtcmp_list_widget.clear()
+		self.ui.tab_watertxtcmp_table_widget.clear()
+		self.ui.tab_watertxtcmp_matplotlib_widget.clear_watertxtcmp_plot()			
+		self.ui.tab_watertxtcmp_matplotlib_widget.setEnabled(False)
+
 
 def main():
 	""" Run application """

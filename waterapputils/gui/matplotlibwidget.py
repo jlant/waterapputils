@@ -44,9 +44,10 @@ class MatplotlibWidget(QtGui.QWidget):
         self.watertxt_data = None
         self.parameter = None
         self.color_str = None
-        self.axes1_text = None
+        self.axes_text = None
+        self.axes_radio = None
 
-        # create figure
+         # create figure
         self.figure = Figure()
 
         # create canvas and set some of its properties
@@ -58,21 +59,11 @@ class MatplotlibWidget(QtGui.QWidget):
         self.canvas.setFocus()
 
         # set up axes and its properties
-        self.axes1 = self.figure.add_subplot(111) 
-        self.axes1.grid(True)
+        self.axes = self.figure.add_subplot(111) 
+        self.axes.grid(True)
 
-        # create widgets  
+        # create toolbar  
         self.matplotlib_toolbar = NavigationToolbar(self.canvas, parent) # the matplotlib toolbar object
-
-        # create radio buttons
-        self.axes_radio = self.figure.add_axes([0.01, 0.02, 0.10, 0.15])        # [left, bottom, width, height] = fractions of figure width and height
-        self.figure.subplots_adjust(bottom=0.2)
-        self.radio_buttons = RadioButtons(ax = self.axes_radio, labels = ("Span On", "Span Off"), active = 1, activecolor= "r")
-        self.radio_buttons.on_clicked(self.toggle_selector)
-
-        # create SpanSelector; invisble at first unless activated with toggle selector        
-        self.span_selector = SpanSelector(self.axes1, self.on_select, 'horizontal', useblit = True, rectprops = dict(alpha=0.5, facecolor='red'))
-        self.span_selector.visible = False
 
         # create the layout
         self.layout = QtGui.QVBoxLayout()
@@ -84,10 +75,29 @@ class MatplotlibWidget(QtGui.QWidget):
         # set the layout
         self.setLayout(self.layout)
 
+    def setup_watertxt_plot(self):
+        """ Setup the watertxt plot """
+
+        self.clear_watertxt_plot()
+
+        # set up axes and its properties
+        self.axes = self.figure.add_subplot(111) 
+        self.axes.grid(True)
+
+        # create radio buttons
+        self.axes_radio = self.figure.add_axes([0.01, 0.02, 0.10, 0.15])        # [left, bottom, width, height] = fractions of figure width and height
+        self.figure.subplots_adjust(bottom=0.2)
+        self.radio_buttons = RadioButtons(ax = self.axes_radio, labels = ("Span On", "Span Off"), active = 1, activecolor= "r")
+        self.radio_buttons.on_clicked(self.toggle_selector)
+
+        # create SpanSelector; invisble at first unless activated with toggle selector        
+        self.span_selector = SpanSelector(self.axes, self.on_select_axes, 'horizontal', useblit = True, rectprops = dict(alpha=0.5, facecolor='red'))
+        self.span_selector.visible = False
+
     def plot_watertxt_parameter(self, watertxt_data, name): 
         """ Plot a parameter from a WATER.txt file """
 
-        self.clear_plot()
+        self.reset_watertxt_plot()
 
         self.watertxt_data = watertxt_data
         self.parameter = watertxt.get_parameter(watertxt_data, name = name)     
@@ -95,27 +105,26 @@ class MatplotlibWidget(QtGui.QWidget):
         assert self.parameter is not None, "Parameter name {} is not in watertxt_data".format(name)
 
         self.dates = watertxt_data["dates"]
-        self.axes1.set_title("Parameter: {}".format(self.parameter["name"]))
-        self.axes1.set_xlabel("Date")
+        self.axes.set_title("Parameter: {}".format(self.parameter["name"]))
+        self.axes.set_xlabel("Date")
         ylabel = "\n".join(wrap(self.parameter["name"], 60))
-        self.axes1.set_ylabel(ylabel)
+        self.axes.set_ylabel(ylabel)
 
         # get proper color that corresponds to parameter name
         self.color_str = COLORS[name.split('(')[0].strip()]
 
         # plot parameter    
-        self.axes1.plot(self.dates, self.parameter["data"], color = self.color_str, label = self.parameter["name"], linewidth = 2)   
+        self.axes.plot(self.dates, self.parameter["data"], color = self.color_str, label = self.parameter["name"], linewidth = 2)   
 
-        # rotate and align the tick labels so they look better
+        # # rotate and align the tick labels so they look better
         self.figure.autofmt_xdate()
 
-        # use a more precise date string for the x axis locations in the
-        # toolbar
-        self.axes1.fmt_xdata = mdates.DateFormatter("%Y-%m-%d")
+        # use a more precise date string for the x axis locations in the toolbar and rotate labels
+        self.axes.fmt_xdata = mdates.DateFormatter("%Y-%m-%d")
 
         # legend; make it transparent    
-        handles, labels = self.axes1.get_legend_handles_labels()
-        legend = self.axes1.legend(handles, labels, fancybox = True)
+        handles, labels = self.axes.get_legend_handles_labels()
+        legend = self.axes.legend(handles, labels, fancybox = True)
         legend.get_frame().set_alpha(0.5)
         legend.draggable(state=True)
 
@@ -123,14 +132,13 @@ class MatplotlibWidget(QtGui.QWidget):
         text = "mean = %.2f\nmax = %.2f\nmin = %.2f" % (self.parameter["mean"], self.parameter["max"], self.parameter["min"])
         patch_properties = {"boxstyle": "round", "facecolor": "wheat", "alpha": 0.5}
                        
-        self.axes1_text = self.axes1.text(0.05, 0.95, text, transform = self.axes1.transAxes, fontsize = 14, 
+        self.axes_text = self.axes.text(0.05, 0.95, text, transform = self.axes.transAxes, fontsize = 14, 
             verticalalignment = "top", horizontalalignment = "left", bbox = patch_properties)    
 
         self.canvas.draw()
 
-   
-    def on_select(self, xmin, xmax):
-        """ A select handler for SpanSelector that updates axes 2 with the new x and y limits selected by user """
+    def on_select_helper(self, xmin, xmax):
+        """ Helper for on_select methods """
 
         # convert matplotlib float dates to a datetime format
         date_min = mdates.num2date(xmin)
@@ -153,13 +161,20 @@ class MatplotlibWidget(QtGui.QWidget):
         selected_value_max = np.nanmax(selected_values)
         selected_value_min = np.nanmin(selected_values)
 
+        return selected_dates, selected_values, selected_values_mean, selected_value_max, selected_value_min
+
+    def on_select_axes(self, xmin, xmax):
+        """ A select handler for SpanSelector that updates axes 2 with the new x and y limits selected by user """
+
+        selected_dates, selected_values, selected_values_mean, selected_value_max, selected_value_min = self.on_select_helper(xmin, xmax)
+
         # plot the selected values and update plots limits and text
-        self.axes1.plot(selected_dates, selected_values, self.color_str)
-        self.axes1.set_xlim(selected_dates[0], selected_dates[-1])
-        self.axes1.set_ylim(selected_values.min(), selected_values.max())
+        self.axes.plot(selected_dates, selected_values, self.color_str)
+        self.axes.set_xlim(selected_dates[0], selected_dates[-1])
+        self.axes.set_ylim(selected_values.min(), selected_values.max())
 
         text = 'mean = %.2f\nmax = %.2f\nmin = %.2f' % (selected_values_mean, selected_value_max, selected_value_min)           
-        self.axes1_text.set_text(text)
+        self.axes_text.set_text(text)
 
         # draw the updated plot
         self.canvas.draw() 
@@ -175,16 +190,15 @@ class MatplotlibWidget(QtGui.QWidget):
             self.span_selector.visible = False
             self.plot_watertxt_parameter(watertxt_data = self.watertxt_data, name = self.parameter["name"])
 
-    def clear_plot(self):
+    def clear_watertxt_plot(self):
         """ Clear the plot axes """ 
 
-        self.axes1.clear()
+        self.figure.clear()
         self.canvas.draw()
-        self.axes1.grid(True)
 
-    # def clear_plot2(self):
-    #     """ Clear the plot axes """ 
+    def reset_watertxt_plot(self):
+        """ Clear the plot axes """ 
 
-    #     self.axes1.clear()
-    #     self.canvas.draw()
-
+        self.axes.clear()
+        self.canvas.draw()
+        self.axes.grid(True)
