@@ -121,6 +121,7 @@ class MainWindow(QtGui.QMainWindow):
 		# enable compare button if both line edit boxes have text
 		if self.ui.tab_watertxtcmp_line_edit_open_file1.text() and self.ui.tab_watertxtcmp_line_edit_open_file2.text():
 			self.ui.tab_watertxtcmp_push_button_compare.setEnabled(True)
+		
 
 	def compare_watertxt_files(self):
 		""" Compare two WATER.txt files """ 
@@ -133,10 +134,10 @@ class MainWindow(QtGui.QMainWindow):
 			self.tab_watertxtcmp_data1 = self.read_watertxt_file(filepath = filepath2)
 
 
-			self.add_to_tab_watertxt_list_widget()
-			self.add_to_tab_watertxt_table_widget()
-			self.setup_tab_watertxt_matplotlib_widget()
-			self.plot_on_tab_watertxt_matplotlib_widget(parameter_name = self.tab_watertxt_data["column_names"][0])		# plot the first parameter in column names
+			# self.add_to_tab_watertxt_list_widget()
+			# self.add_to_tab_watertxt_table_widget()
+			# self.setup_tab_watertxt_matplotlib_widget()
+			# self.plot_on_tab_watertxt_matplotlib_widget(parameter_name = self.tab_watertxt_data["column_names"][0])		# plot the first parameter in column names
 
 		except IOError as error:
 			print("Error: {}".format(error.message))
@@ -185,7 +186,7 @@ class MainWindow(QtGui.QMainWindow):
 		and database files from the WATER application. In addition, water use can <br />
 		be applied to WATER output text files and global climate change factors can <br />
 		be applied to WATER database xml files.  More help and information <br />
-		can be found at <a href="https://github.com/jlant-usgs/waterapputils/">waterapputils</a>. 
+		can be found at the <a href="https://github.com/jlant-usgs/waterapputils/">GitHub site for waterapputils</a>. 
 		"""
 
 		QtGui.QMessageBox.about(self, "About the waterapputils gui", msg.strip())
@@ -195,12 +196,12 @@ class MainWindow(QtGui.QMainWindow):
 		""" Read a WATER.txt file """
 
 		watertxt_data = watertxt.read_file(filepath = filepath)
-		isvalid = self.validate_watertxt_data(watertxt_data = watertxt_data)
+		isvalid = self.validate_watertxt_data(watertxt_data = watertxt_data, filepath = filepath)
 
 		if isvalid:
 			return watertxt_data
 
-	def validate_watertxt_data(self, watertxt_data):
+	def validate_watertxt_data(self, watertxt_data, filepath):
 		""" Check and make sure that watertxt_data is valid """ 
 
 		sender = self.sender()
@@ -208,7 +209,7 @@ class MainWindow(QtGui.QMainWindow):
 
 		if watertxt_data["parameters"] == [] or watertxt_data["column_names"] == None:
 			isvalid = False
-			error_msg = "Invalid File! Please choose a valid file."
+			error_msg = "Invalid file! <br />{}<br />Please choose a valid WATER output text file.".format(filepath)
 			self.popup_error(self, error_msg)
 			self.clear_widgets(sender_name = sender_object_name)
 			raise IOError(error_msg)
@@ -231,7 +232,7 @@ class MainWindow(QtGui.QMainWindow):
 			self.clear_tab_watertxt_widgets()
 
 		elif sender_name == "tab_watertxtcmp_push_button_compare":
-			clear_tab_watertxtxmp_widgets()
+			self.clear_tab_watertxtxmp_widgets()
 
 	def clear_tab_watertxt_widgets(self):
 		""" Clear widgets on watertxt tab """
@@ -246,8 +247,9 @@ class MainWindow(QtGui.QMainWindow):
 
 		self.ui.tab_watertxtcmp_list_widget.clear()
 		self.ui.tab_watertxtcmp_table_widget.clear()
-		self.ui.tab_watertxtcmp_matplotlib_widget.clear_watertxtcmp_plot()			
+		# self.ui.tab_watertxtcmp_matplotlib_widget.clear_watertxtcmp_plot()			
 		self.ui.tab_watertxtcmp_matplotlib_widget.setEnabled(False)
+		self.ui.tab_watertxtcmp_push_button_compare.setEnabled(False)
 
 
 def main():
