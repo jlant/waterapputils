@@ -130,15 +130,15 @@ class MainWindow(QtGui.QMainWindow):
 			filepath1 = self.ui.tab_watertxtcmp_line_edit_open_file1.text()
 			filepath2 = self.ui.tab_watertxtcmp_line_edit_open_file2.text()
 
+		    filedir1, filename1 = helpers.get_file_info(filepath1)
+		    filedir2, filename2 = helpers.get_file_info(filepath2)
+
 			self.tab_watertxtcmp_data1 = self.read_watertxt_file(filepath = filepath1)
 			self.tab_watertxtcmp_data2 = self.read_watertxt_file(filepath = filepath2)
-
 			self.validate_watertxt_data_for_comparison(self.tab_watertxtcmp_data1, self.tab_watertxtcmp_data2, filepath1, filepath2)
+			self.add_to_tab_watertxtcmp_list_widget()
 
-			# self.add_to_tab_watertxtcmp_list_widget()
-
-			# self.add_to_tab_watertxt_list_widget()
-			# self.add_to_tab_watertxt_table_widget()
+			self.add_to_tab_watertxtcmp_table_widget()
 			# self.setup_tab_watertxt_matplotlib_widget()
 			# self.plot_on_tab_watertxt_matplotlib_widget(parameter_name = self.tab_watertxt_data["column_names"][0])		# plot the first parameter in column names
 
@@ -152,7 +152,21 @@ class MainWindow(QtGui.QMainWindow):
 	def add_to_tab_watertxtcmp_list_widget(self):
 		""" Add column names from self.tab_watertxt_data to list widget on the watertxt tab """
 
-		self.ui.tab_watertxtxmp_list_widget.addItems(self.tab_watertxtxmp_data1["column_names"])
+		self.ui.tab_watertxtcmp_list_widget.addItems(self.tab_watertxtcmp_data1["column_names"])
+
+	def add_to_tab_watertxtcmp_table_widget(self):
+		""" Add first WATER output text file to table widget """
+
+		data = self.format_data_for_table(watertxt_data = self.tab_watertxtcmp_data1)
+
+		self.ui.tab_watertxtcmp_table_widget.setRowCount(len(data))
+		self.ui.tab_watertxtcmp_table_widget.setColumnCount(len(data[0]))
+		self.ui.tab_watertxtcmp_table_widget.setHorizontalHeaderLabels(["Date"] + self.tab_watertxtcmp_data1["column_names"])
+
+		for row in range(len(data)):
+			for col in range(len(data[row])):
+				self.ui.tab_watertxtcmp_table_widget.setItem(row, col, QtGui.QTableWidgetItem(data[row][col]))
+
 
 	#-------------------------------- Tab Independent Methods ------------------------------------
 
@@ -237,8 +251,6 @@ class MainWindow(QtGui.QMainWindow):
 		sender = self.sender()
 		sender_object_name = sender.objectName()
 
-		# self.tab_watertxtcmp_data1["column_names"] = ["discharge", "stage"]
-
 		# check column names
 		if not self.tab_watertxtcmp_data1["column_names"] == self.tab_watertxtcmp_data2["column_names"]:
 			isvalid = False
@@ -261,15 +273,13 @@ class MainWindow(QtGui.QMainWindow):
 			self.clear_widgets(sender_name = sender_object_name)
 			raise IOError(error_msg)
 
-		self.tab_watertxtcmp_data2["dates"] = ["discharge", "stage"]
-
 		dates1_start_date = self.tab_watertxtcmp_data1["dates"][0]
 		dates2_start_date = self.tab_watertxtcmp_data2["dates"][0]
 
 		dates1_end_date = self.tab_watertxtcmp_data1["dates"][-1]
 		dates2_end_date = self.tab_watertxtcmp_data2["dates"][-1]
 
-		if not self.tab_watertxtcmp_data1["dates"] == self.tab_watertxtcmp_data2["dates"]:
+		if not set(self.tab_watertxtcmp_data1["dates"]) == set(self.tab_watertxtcmp_data2["dates"]):
 			isvalid = False
 			error_msg = \
 			"""
@@ -291,6 +301,7 @@ class MainWindow(QtGui.QMainWindow):
 			self.popup_error(self, error_msg)
 			self.clear_widgets(sender_name = sender_object_name)
 			raise IOError(error_msg)
+
 		else:
 			isvalid = True
 

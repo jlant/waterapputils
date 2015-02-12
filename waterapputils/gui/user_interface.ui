@@ -27,7 +27,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="tabsClosable">
        <bool>false</bool>
@@ -238,7 +238,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QTableWidget" name="tab_watertxtcmp_table_widget"/>
+            <widget class="QTableWidget" name="tab_watertxtcmp_table_widget">
+             <attribute name="horizontalHeaderDefaultSectionSize">
+              <number>160</number>
+             </attribute>
+            </widget>
            </item>
           </layout>
          </widget>
