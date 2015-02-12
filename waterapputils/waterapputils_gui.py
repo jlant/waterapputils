@@ -131,8 +131,11 @@ class MainWindow(QtGui.QMainWindow):
 			filepath2 = self.ui.tab_watertxtcmp_line_edit_open_file2.text()
 
 			self.tab_watertxtcmp_data1 = self.read_watertxt_file(filepath = filepath1)
-			self.tab_watertxtcmp_data1 = self.read_watertxt_file(filepath = filepath2)
+			self.tab_watertxtcmp_data2 = self.read_watertxt_file(filepath = filepath2)
 
+			self.validate_watertxt_data_for_comparison(self.tab_watertxtcmp_data1, self.tab_watertxtcmp_data2, filepath1, filepath2)
+
+			# self.add_to_tab_watertxtcmp_list_widget()
 
 			# self.add_to_tab_watertxt_list_widget()
 			# self.add_to_tab_watertxt_table_widget()
@@ -141,6 +144,15 @@ class MainWindow(QtGui.QMainWindow):
 
 		except IOError as error:
 			print("Error: {}".format(error.message))
+
+		except AssertionError as error:
+			print("Error: {}".format(error.message))
+
+
+	def add_to_tab_watertxtcmp_list_widget(self):
+		""" Add column names from self.tab_watertxt_data to list widget on the watertxt tab """
+
+		self.ui.tab_watertxtxmp_list_widget.addItems(self.tab_watertxtxmp_data1["column_names"])
 
 	#-------------------------------- Tab Independent Methods ------------------------------------
 
@@ -214,6 +226,71 @@ class MainWindow(QtGui.QMainWindow):
 			self.clear_widgets(sender_name = sender_object_name)
 			raise IOError(error_msg)
 
+		else:
+			isvalid = True
+
+		return isvalid
+
+	def validate_watertxt_data_for_comparison(self, watertxt_data1, watertxt_data2, filepath1, filepath2):
+		""" Check and make sure that both watertxt_data dictionaries can be compared """ 
+
+		sender = self.sender()
+		sender_object_name = sender.objectName()
+
+		# self.tab_watertxtcmp_data1["column_names"] = ["discharge", "stage"]
+
+		# check column names
+		if not self.tab_watertxtcmp_data1["column_names"] == self.tab_watertxtcmp_data2["column_names"]:
+			isvalid = False
+			error_msg = \
+			"""
+			Column names do not match between files! <br />
+			<br />
+			{}:<br />
+			<br />
+			{}<br />
+			<br />
+			{}:<br />
+			<br />
+			{}<br />
+			<br />
+			Please choose valid WATER output text files.		
+			""".format(filepath1, self.tab_watertxtcmp_data1["column_names"], filepath2, self.tab_watertxtcmp_data2["column_names"])
+
+			self.popup_error(self, error_msg)
+			self.clear_widgets(sender_name = sender_object_name)
+			raise IOError(error_msg)
+
+		self.tab_watertxtcmp_data2["dates"] = ["discharge", "stage"]
+
+		dates1_start_date = self.tab_watertxtcmp_data1["dates"][0]
+		dates2_start_date = self.tab_watertxtcmp_data2["dates"][0]
+
+		dates1_end_date = self.tab_watertxtcmp_data1["dates"][-1]
+		dates2_end_date = self.tab_watertxtcmp_data2["dates"][-1]
+
+		if not self.tab_watertxtcmp_data1["dates"] == self.tab_watertxtcmp_data2["dates"]:
+			isvalid = False
+			error_msg = \
+			"""
+			Dates do not match between files! <br />
+			<br />
+			{}:<br />
+			<br />
+			Start date: {}<br />
+			End date: {}<br />
+			<br />
+			{}:<br />
+			<br />
+			Start date: {}<br />
+			End date: {}<br />
+			<br />
+			Please choose valid WATER output text files.		
+			""".format(filepath1, dates1_start_date, dates1_end_date, filepath2, dates2_start_date, dates2_end_date)
+
+			self.popup_error(self, error_msg)
+			self.clear_widgets(sender_name = sender_object_name)
+			raise IOError(error_msg)
 		else:
 			isvalid = True
 
