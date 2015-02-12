@@ -2,7 +2,7 @@ import sys
 from PyQt4 import QtGui, QtCore
 from gui.user_interface import Ui_MainWindow
 from modules import watertxt
-# from gui.table_class import Table
+from modules import helpers
 
 # my modules
 class MainWindow(QtGui.QMainWindow):
@@ -130,15 +130,15 @@ class MainWindow(QtGui.QMainWindow):
 			filepath1 = self.ui.tab_watertxtcmp_line_edit_open_file1.text()
 			filepath2 = self.ui.tab_watertxtcmp_line_edit_open_file2.text()
 
-		    filedir1, filename1 = helpers.get_file_info(filepath1)
-		    filedir2, filename2 = helpers.get_file_info(filepath2)
+			filedir1, filename1 = helpers.get_file_info(str(filepath1))
+			filedir2, filename2 = helpers.get_file_info(str(filepath2))
 
 			self.tab_watertxtcmp_data1 = self.read_watertxt_file(filepath = filepath1)
 			self.tab_watertxtcmp_data2 = self.read_watertxt_file(filepath = filepath2)
 			self.validate_watertxt_data_for_comparison(self.tab_watertxtcmp_data1, self.tab_watertxtcmp_data2, filepath1, filepath2)
 			self.add_to_tab_watertxtcmp_list_widget()
 
-			self.add_to_tab_watertxtcmp_table_widget()
+			self.add_to_tab_watertxtcmp_table_widgets()
 			# self.setup_tab_watertxt_matplotlib_widget()
 			# self.plot_on_tab_watertxt_matplotlib_widget(parameter_name = self.tab_watertxt_data["column_names"][0])		# plot the first parameter in column names
 
@@ -154,19 +154,27 @@ class MainWindow(QtGui.QMainWindow):
 
 		self.ui.tab_watertxtcmp_list_widget.addItems(self.tab_watertxtcmp_data1["column_names"])
 
-	def add_to_tab_watertxtcmp_table_widget(self):
+	def add_to_tab_watertxtcmp_table_widgets(self):
 		""" Add first WATER output text file to table widget """
 
-		data = self.format_data_for_table(watertxt_data = self.tab_watertxtcmp_data1)
+		data1 = self.format_data_for_table(watertxt_data = self.tab_watertxtcmp_data1)
+		data2 = self.format_data_for_table(watertxt_data = self.tab_watertxtcmp_data2)
 
-		self.ui.tab_watertxtcmp_table_widget.setRowCount(len(data))
-		self.ui.tab_watertxtcmp_table_widget.setColumnCount(len(data[0]))
-		self.ui.tab_watertxtcmp_table_widget.setHorizontalHeaderLabels(["Date"] + self.tab_watertxtcmp_data1["column_names"])
+		self.ui.tab_watertxtcmp_table_widget1.setRowCount(len(data1))
+		self.ui.tab_watertxtcmp_table_widget1.setColumnCount(len(data1[0]))
+		self.ui.tab_watertxtcmp_table_widget1.setHorizontalHeaderLabels(["Date"] + self.tab_watertxtcmp_data1["column_names"])
 
-		for row in range(len(data)):
-			for col in range(len(data[row])):
-				self.ui.tab_watertxtcmp_table_widget.setItem(row, col, QtGui.QTableWidgetItem(data[row][col]))
+		self.ui.tab_watertxtcmp_table_widget2.setRowCount(len(data2))
+		self.ui.tab_watertxtcmp_table_widget2.setColumnCount(len(data2[0]))
+		self.ui.tab_watertxtcmp_table_widget2.setHorizontalHeaderLabels(["Date"] + self.tab_watertxtcmp_data2["column_names"])
 
+		for row in range(len(data1)):
+			for col in range(len(data1[row])):
+				self.ui.tab_watertxtcmp_table_widget1.setItem(row, col, QtGui.QTableWidgetItem(data1[row][col]))
+
+		for row in range(len(data2)):
+			for col in range(len(data2[row])):
+				self.ui.tab_watertxtcmp_table_widget2.setItem(row, col, QtGui.QTableWidgetItem(data2[row][col]))
 
 	#-------------------------------- Tab Independent Methods ------------------------------------
 
@@ -191,7 +199,8 @@ class MainWindow(QtGui.QMainWindow):
 		for i in range(nrows):
 			row = []
 			for j in range(ncols):
-				row.append("{:.2f}".format((values_all[j][i])))
+				data_str = "{:.2f}".format((values_all[j][i]))		# convert value to a formatted string of 2 decimals
+				row.append(data_str)							
 			data_fmt.append(row)
 
 		# merge dates and data values into a single list
@@ -334,7 +343,8 @@ class MainWindow(QtGui.QMainWindow):
 		""" Clear widgets on watertxtcmp tab """
 
 		self.ui.tab_watertxtcmp_list_widget.clear()
-		self.ui.tab_watertxtcmp_table_widget.clear()
+		self.ui.tab_watertxtcmp_table_widget1.clear()
+		self.ui.tab_watertxtcmp_table_widget2.clear()
 		# self.ui.tab_watertxtcmp_matplotlib_widget.clear_watertxtcmp_plot()			
 		self.ui.tab_watertxtcmp_matplotlib_widget.setEnabled(False)
 		self.ui.tab_watertxtcmp_push_button_compare.setEnabled(False)

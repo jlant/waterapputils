@@ -114,6 +114,9 @@
              <property name="editTriggers">
               <set>QAbstractItemView::NoEditTriggers</set>
              </property>
+             <property name="sortingEnabled">
+              <bool>false</bool>
+             </property>
              <attribute name="horizontalHeaderCascadingSectionResizes">
               <bool>false</bool>
              </attribute>
@@ -238,11 +241,28 @@
             </widget>
            </item>
            <item>
-            <widget class="QTableWidget" name="tab_watertxtcmp_table_widget">
-             <attribute name="horizontalHeaderDefaultSectionSize">
-              <number>160</number>
-             </attribute>
-            </widget>
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+             <item>
+              <widget class="QTableWidget" name="tab_watertxtcmp_table_widget1">
+               <property name="editTriggers">
+                <set>QAbstractItemView::NoEditTriggers</set>
+               </property>
+               <attribute name="horizontalHeaderDefaultSectionSize">
+                <number>160</number>
+               </attribute>
+              </widget>
+             </item>
+             <item>
+              <widget class="QTableWidget" name="tab_watertxtcmp_table_widget2">
+               <property name="editTriggers">
+                <set>QAbstractItemView::NoEditTriggers</set>
+               </property>
+               <attribute name="horizontalHeaderDefaultSectionSize">
+                <number>160</number>
+               </attribute>
+              </widget>
+             </item>
+            </layout>
            </item>
           </layout>
          </widget>

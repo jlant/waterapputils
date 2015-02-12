@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'user_interface.ui'
 #
-# Created: Thu Feb 12 12:09:02 2015
+# Created: Thu Feb 12 12:52:16 2015
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -150,12 +150,23 @@ class Ui_MainWindow(object):
         self.tab_watertxtcmp_list_widget.setSizePolicy(sizePolicy)
         self.tab_watertxtcmp_list_widget.setObjectName(_fromUtf8("tab_watertxtcmp_list_widget"))
         self.horizontalLayout_4.addWidget(self.tab_watertxtcmp_list_widget)
-        self.tab_watertxtcmp_table_widget = QtGui.QTableWidget(self.frame_6)
-        self.tab_watertxtcmp_table_widget.setObjectName(_fromUtf8("tab_watertxtcmp_table_widget"))
-        self.tab_watertxtcmp_table_widget.setColumnCount(0)
-        self.tab_watertxtcmp_table_widget.setRowCount(0)
-        self.tab_watertxtcmp_table_widget.horizontalHeader().setDefaultSectionSize(160)
-        self.horizontalLayout_4.addWidget(self.tab_watertxtcmp_table_widget)
+        self.verticalLayout_4 = QtGui.QVBoxLayout()
+        self.verticalLayout_4.setObjectName(_fromUtf8("verticalLayout_4"))
+        self.tab_watertxtcmp_table_widget1 = QtGui.QTableWidget(self.frame_6)
+        self.tab_watertxtcmp_table_widget1.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
+        self.tab_watertxtcmp_table_widget1.setObjectName(_fromUtf8("tab_watertxtcmp_table_widget1"))
+        self.tab_watertxtcmp_table_widget1.setColumnCount(0)
+        self.tab_watertxtcmp_table_widget1.setRowCount(0)
+        self.tab_watertxtcmp_table_widget1.horizontalHeader().setDefaultSectionSize(160)
+        self.verticalLayout_4.addWidget(self.tab_watertxtcmp_table_widget1)
+        self.tab_watertxtcmp_table_widget2 = QtGui.QTableWidget(self.frame_6)
+        self.tab_watertxtcmp_table_widget2.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
+        self.tab_watertxtcmp_table_widget2.setObjectName(_fromUtf8("tab_watertxtcmp_table_widget2"))
+        self.tab_watertxtcmp_table_widget2.setColumnCount(0)
+        self.tab_watertxtcmp_table_widget2.setRowCount(0)
+        self.tab_watertxtcmp_table_widget2.horizontalHeader().setDefaultSectionSize(160)
+        self.verticalLayout_4.addWidget(self.tab_watertxtcmp_table_widget2)
+        self.horizontalLayout_4.addLayout(self.verticalLayout_4)
         self.verticalLayout_5.addWidget(self.frame_6)
         self.tabWidget.addTab(self.tab_watertxtcmp, _fromUtf8(""))
         self.verticalLayout_2.addWidget(self.tabWidget)
@@ -188,6 +199,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
         self.tab_watertxt_push_button_open_file.setText(_translate("MainWindow", "Open File", None))
         self.tab_watertxt_line_edit_open_file.setPlaceholderText(_translate("MainWindow", "Path to WATER.txt output text file", None))
+        self.tab_watertxt_table_widget.setSortingEnabled(False)
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_watertxt), _translate("MainWindow", "Process WATER output text file", None))
         self.tab_watertxtcmp_push_button_open_file1.setText(_translate("MainWindow", "Open File", None))
         self.tab_watertxtcmp_push_button_open_file2.setText(_translate("MainWindow", "Open File", None))
