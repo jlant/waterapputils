@@ -49,8 +49,10 @@ class MainWindow(QtGui.QMainWindow):
 			filepath = self.select_watertxt_file()
 			if filepath:
 				self.tab_watertxt_data = self.read_watertxt_file(filepath)
-				self.add_to_tab_watertxt_list_widget()
-				self.add_to_tab_watertxt_table_widget()
+
+				self.add_to_list_widgets(widget_names = ["tab_watertxt_list_widget"], items = self.tab_watertxt_data["column_names"])
+				self.add_to_table_widgets(widget_names = ["tab_watertxt_table_widget"], data_list = [self.tab_watertxt_data])
+
 				self.setup_tab_watertxt_matplotlib_widget()
 				self.plot_on_tab_watertxt_matplotlib_widget(parameter_name = self.tab_watertxt_data["column_names"][0])		# plot the first parameter in column names
 
@@ -65,24 +67,6 @@ class MainWindow(QtGui.QMainWindow):
 			self.ui.tab_watertxt_line_edit_open_file.setText(filepath)
 
 		return filepath
-
-	def add_to_tab_watertxt_list_widget(self):
-		""" Add column names from self.tab_watertxt_data to list widget on the watertxt tab """
-
-		self.ui.tab_watertxt_list_widget.addItems(self.tab_watertxt_data["column_names"])
-
-	def add_to_tab_watertxt_table_widget(self):
-		""" Add data from self.tab_watertxt_data to table widget on the watertxt tab """
-
-		data = self.format_data_for_table(watertxt_data = self.tab_watertxt_data)
-
-		self.ui.tab_watertxt_table_widget.setRowCount(len(data))
-		self.ui.tab_watertxt_table_widget.setColumnCount(len(data[0]))
-		self.ui.tab_watertxt_table_widget.setHorizontalHeaderLabels(["Date"] + self.tab_watertxt_data["column_names"])
-
-		for row in range(len(data)):
-			for col in range(len(data[row])):
-				self.ui.tab_watertxt_table_widget.setItem(row, col, QtGui.QTableWidgetItem(data[row][col]))
 
 	def setup_tab_watertxt_matplotlib_widget(self):
 		""" Setup the matplotlib widget """
@@ -135,10 +119,15 @@ class MainWindow(QtGui.QMainWindow):
 
 			self.tab_watertxtcmp_data1 = self.read_watertxt_file(filepath = filepath1)
 			self.tab_watertxtcmp_data2 = self.read_watertxt_file(filepath = filepath2)
-			self.validate_watertxt_data_for_comparison(self.tab_watertxtcmp_data1, self.tab_watertxtcmp_data2, filepath1, filepath2)
-			self.add_to_tab_watertxtcmp_list_widget()
 
-			self.add_to_tab_watertxtcmp_table_widgets()
+			# self.validate_watertxt_data_for_comparison(self.tab_watertxtcmp_data1, self.tab_watertxtcmp_data2, filepath1, filepath2)
+			self.validate_watertxt_data_for_comparison(data_list = [self.tab_watertxtcmp_data1, self.tab_watertxtcmp_data2], filepaths = [filepath1, filepath2])
+
+			self.add_to_list_widgets(widget_names = ["tab_watertxtcmp_list_widget"], items = self.tab_watertxtcmp_data1["column_names"])
+			self.add_to_table_widgets(widget_names = ["tab_watertxtcmp_table_widget1", "tab_watertxtcmp_table_widget2"], data_list = [self.tab_watertxtcmp_data1, self.tab_watertxtcmp_data2])
+
+
+			# TODO - implement plots
 			# self.setup_tab_watertxt_matplotlib_widget()
 			# self.plot_on_tab_watertxt_matplotlib_widget(parameter_name = self.tab_watertxt_data["column_names"][0])		# plot the first parameter in column names
 
@@ -149,34 +138,42 @@ class MainWindow(QtGui.QMainWindow):
 			print("Error: {}".format(error.message))
 
 
-	def add_to_tab_watertxtcmp_list_widget(self):
-		""" Add column names from self.tab_watertxt_data to list widget on the watertxt tab """
+	#-------------------------------- Tab Independent Methods ------------------------------------
 
-		self.ui.tab_watertxtcmp_list_widget.addItems(self.tab_watertxtcmp_data1["column_names"])
+	def read_watertxt_file(self, filepath):
+		""" Read a WATER.txt file """
 
-	def add_to_tab_watertxtcmp_table_widgets(self):
+		watertxt_data = watertxt.read_file(filepath = filepath)
+		self.validate_watertxt_data(watertxt_data = watertxt_data, filepath = filepath)
+
+		return watertxt_data
+
+	def add_to_table_widgets(self, widget_names, data_list):
 		""" Add first WATER output text file to table widget """
 
-		data1 = self.format_data_for_table(watertxt_data = self.tab_watertxtcmp_data1)
-		data2 = self.format_data_for_table(watertxt_data = self.tab_watertxtcmp_data2)
+		for i in range(len(widget_names)):
+			# get the table object by finding the child object of the main QWidget
+			table_widget = self.findChild(QtGui.QWidget, widget_names[i])								
+			data_values = self.format_data_for_table(watertxt_data = data_list[i])
 
-		self.ui.tab_watertxtcmp_table_widget1.setRowCount(len(data1))
-		self.ui.tab_watertxtcmp_table_widget1.setColumnCount(len(data1[0]))
-		self.ui.tab_watertxtcmp_table_widget1.setHorizontalHeaderLabels(["Date"] + self.tab_watertxtcmp_data1["column_names"])
+			nrows = len(data_values)
+			ncols = len(data_values[0])
 
-		self.ui.tab_watertxtcmp_table_widget2.setRowCount(len(data2))
-		self.ui.tab_watertxtcmp_table_widget2.setColumnCount(len(data2[0]))
-		self.ui.tab_watertxtcmp_table_widget2.setHorizontalHeaderLabels(["Date"] + self.tab_watertxtcmp_data2["column_names"])
+			table_widget.setRowCount(nrows)
+			table_widget.setColumnCount(ncols)
+			table_widget.setHorizontalHeaderLabels(["Date"] + data_list[i]["column_names"])
 
-		for row in range(len(data1)):
-			for col in range(len(data1[row])):
-				self.ui.tab_watertxtcmp_table_widget1.setItem(row, col, QtGui.QTableWidgetItem(data1[row][col]))
+			for row in range(nrows):
+				for col in range(ncols):
+					table_widget.setItem(row, col, QtGui.QTableWidgetItem(data_values[row][col]))
 
-		for row in range(len(data2)):
-			for col in range(len(data2[row])):
-				self.ui.tab_watertxtcmp_table_widget2.setItem(row, col, QtGui.QTableWidgetItem(data2[row][col]))
+	def add_to_list_widgets(self, widget_names, items):
+		""" Add first WATER output text file to table widget """
 
-	#-------------------------------- Tab Independent Methods ------------------------------------
+		for i in range(len(widget_names)):
+			# get the table object by finding the child object of the main QWidget
+			list_widget = self.findChild(QtGui.QWidget, widget_names[i])								
+			list_widget.addItems(items)
 
 	def format_data_for_table(self, watertxt_data):
 		""" Format the watertxt data into a list of lists with string elements for the table """
@@ -212,109 +209,87 @@ class MainWindow(QtGui.QMainWindow):
 		return data_all
 
 
-	def about(self):
-		""" Show an message box about the gui."""
-		
-		msg = \
-		"""
-		The waterapputils gui can be used to process and interact with output <br /> 
-		and database files from the WATER application. In addition, water use can <br />
-		be applied to WATER output text files and global climate change factors can <br />
-		be applied to WATER database xml files.  More help and information <br />
-		can be found at the <a href="https://github.com/jlant-usgs/waterapputils/">GitHub site for waterapputils</a>. 
-		"""
-
-		QtGui.QMessageBox.about(self, "About the waterapputils gui", msg.strip())
-
-
-	def read_watertxt_file(self, filepath):
-		""" Read a WATER.txt file """
-
-		watertxt_data = watertxt.read_file(filepath = filepath)
-		isvalid = self.validate_watertxt_data(watertxt_data = watertxt_data, filepath = filepath)
-
-		if isvalid:
-			return watertxt_data
-
 	def validate_watertxt_data(self, watertxt_data, filepath):
 		""" Check and make sure that watertxt_data is valid """ 
 
-		sender = self.sender()
-		sender_object_name = sender.objectName()
+		error_msg = "Invalid file! <br />{}<br />Please choose a valid WATER output text file.".format(filepath)
 
 		if watertxt_data["parameters"] == [] or watertxt_data["column_names"] == None:
-			isvalid = False
-			error_msg = "Invalid file! <br />{}<br />Please choose a valid WATER output text file.".format(filepath)
-			self.popup_error(self, error_msg)
-			self.clear_widgets(sender_name = sender_object_name)
-			raise IOError(error_msg)
+			self.raise_error_clear_widgets(parent = self, msg = error_msg)
 
-		else:
-			isvalid = True
+	def validate_column_names(self, parent, column_names, filepaths):
+		""" Validate the equality between column_names """
 
-		return isvalid
+		error_msg = \
+		"""
+		Column names do not match between files! <br />
+		<br />
+		{}:<br />
+		<br />
+		{}<br />
+		<br />
+		{}:<br />
+		<br />
+		{}<br />
+		<br />
+		Please choose valid WATER output text files.		
+		""".format(filepaths[0], column_names[0], filepaths[1], column_names[1])
 
-	def validate_watertxt_data_for_comparison(self, watertxt_data1, watertxt_data2, filepath1, filepath2):
+		# check column names
+		if not column_names[0] == column_names[1]:
+			self.raise_error_clear_widgets(parent = self, msg = error_msg)
+
+	def validate_dates(self, parent, dates, filepaths):
+		""" Validate the equality between column_names """
+
+		# check dates
+		start_dates = [dates[0][0], dates[1][0]]
+		end_dates = [dates[1][-1], dates[1][-1]]
+
+		error_msg = \
+		"""
+		Dates do not match between files! <br />
+		<br />
+		{}:<br />
+		<br />
+		Start date: {}<br />
+		End date: {}<br />
+		<br />
+		{}:<br />
+		<br />
+		Start date: {}<br />
+		End date: {}<br />
+		<br />
+		Please choose valid WATER output text files.		
+		""".format(filepaths[0], start_dates[0], end_dates[0], filepaths[1], start_dates[1], end_dates[1])
+
+		# check column names
+		if not set(dates[0]) == set(dates[1]):
+			self.raise_error_clear_widgets(parent = self, msg = error_msg)			
+
+	def validate_watertxt_data_for_comparison(self, data_list, filepaths):
 		""" Check and make sure that both watertxt_data dictionaries can be compared """ 
+
+		column_names = [data_list[0]["column_names"], data_list[1]["column_names"]]
+		dates = [data_list[0]["dates"], data_list[1]["dates"]]
+
+		# check column names
+		self.validate_column_names(parent = self, column_names = column_names, filepaths = filepaths)
+
+		# check dates
+		self.validate_dates(parent = self, dates = dates, filepaths = filepaths)
+
+
+	def raise_error_clear_widgets(self, parent, msg):
+		""" Raise the error """
+
+		self.popup_error(parent, msg)
 
 		sender = self.sender()
 		sender_object_name = sender.objectName()
+		self.clear_widgets(sender_name = sender_object_name)
 
-		# check column names
-		if not self.tab_watertxtcmp_data1["column_names"] == self.tab_watertxtcmp_data2["column_names"]:
-			isvalid = False
-			error_msg = \
-			"""
-			Column names do not match between files! <br />
-			<br />
-			{}:<br />
-			<br />
-			{}<br />
-			<br />
-			{}:<br />
-			<br />
-			{}<br />
-			<br />
-			Please choose valid WATER output text files.		
-			""".format(filepath1, self.tab_watertxtcmp_data1["column_names"], filepath2, self.tab_watertxtcmp_data2["column_names"])
-
-			self.popup_error(self, error_msg)
-			self.clear_widgets(sender_name = sender_object_name)
-			raise IOError(error_msg)
-
-		dates1_start_date = self.tab_watertxtcmp_data1["dates"][0]
-		dates2_start_date = self.tab_watertxtcmp_data2["dates"][0]
-
-		dates1_end_date = self.tab_watertxtcmp_data1["dates"][-1]
-		dates2_end_date = self.tab_watertxtcmp_data2["dates"][-1]
-
-		if not set(self.tab_watertxtcmp_data1["dates"]) == set(self.tab_watertxtcmp_data2["dates"]):
-			isvalid = False
-			error_msg = \
-			"""
-			Dates do not match between files! <br />
-			<br />
-			{}:<br />
-			<br />
-			Start date: {}<br />
-			End date: {}<br />
-			<br />
-			{}:<br />
-			<br />
-			Start date: {}<br />
-			End date: {}<br />
-			<br />
-			Please choose valid WATER output text files.		
-			""".format(filepath1, dates1_start_date, dates1_end_date, filepath2, dates2_start_date, dates2_end_date)
-
-			self.popup_error(self, error_msg)
-			self.clear_widgets(sender_name = sender_object_name)
-			raise IOError(error_msg)
-
-		else:
-			isvalid = True
-
-		return isvalid
+		raise IOError(msg)
 
 	def popup_error(self, parent, msg):
 		""" Display an error message box """
@@ -349,6 +324,19 @@ class MainWindow(QtGui.QMainWindow):
 		self.ui.tab_watertxtcmp_matplotlib_widget.setEnabled(False)
 		self.ui.tab_watertxtcmp_push_button_compare.setEnabled(False)
 
+	def about(self):
+		""" Show an message box about the gui."""
+		
+		msg = \
+		"""
+		The waterapputils gui can be used to process and interact with output <br /> 
+		and database files from the WATER application. In addition, water use can <br />
+		be applied to WATER output text files and global climate change factors can <br />
+		be applied to WATER database xml files.  More help and information <br />
+		can be found at the <a href="https://github.com/jlant-usgs/waterapputils/">GitHub site for waterapputils</a>. 
+		"""
+
+		QtGui.QMessageBox.about(self, "About the waterapputils gui", msg.strip())
 
 def main():
 	""" Run application """
