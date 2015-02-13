@@ -15,39 +15,40 @@ import datetime
 
 from modules import watertxt
 
-# Global colors dictionary
-COLORS = {"Discharge": "b",
-          "Subsurface Flow": "g",
-          "Impervious Flow": "SteelBlue",
-          "Infiltration Excess": "SeaGreen",
-          "Initial Abstracted Flow": "MediumBlue",
-          "Overland Flow": "RoyalBlue",
-          "PET": "orange",
-          "AET": "DarkOrange",
-          "Average Soil Root zone": "Gray",
-          "Average Soil Unsaturated Zone": "DarkGray",
-          "Snow Pack": "PowderBlue",
-          "Precipitation": "SkyBlue",
-          "Storage Deficit": "Brown",
-          "Return Flow": "Aqua",
-          "Water Use": "DarkCyan",
-          "Discharge + Water Use": "DarkBlue"
-}
-
 class MatplotlibWidget(QtGui.QWidget):
     """ This subclass of QtWidget will manage the widget drawing; name matches the class in the *_ui.py file"""    
-    
+ 
+    # Global colors dictionary
+    colors_dict = {
+        "Discharge": "b",
+        "Subsurface Flow": "g",
+        "Impervious Flow": "SteelBlue",
+        "Infiltration Excess": "SeaGreen",
+        "Initial Abstracted Flow": "MediumBlue",
+        "Overland Flow": "RoyalBlue",
+        "PET": "orange",
+        "AET": "DarkOrange",
+        "Average Soil Root zone": "Gray",
+        "Average Soil Unsaturated Zone": "DarkGray",
+        "Snow Pack": "PowderBlue",
+        "Precipitation": "SkyBlue",
+        "Storage Deficit": "Brown",
+        "Return Flow": "Aqua",
+        "Water Use": "DarkCyan",
+        "Discharge + Water Use": "DarkBlue"
+    }
+
     def __init__(self, parent = None):
         super(MatplotlibWidget, self).__init__(parent)
 
-        # create initial values for watertxt data
+        # create object scope variables for watertxt data plot; used by radio buttons and span selector
         self.watertxt_data = None
         self.parameter = None
         self.color_str = None
         self.axes_text = None
         self.axes_radio = None
-
-         # create figure
+               
+        # create figure
         self.figure = Figure()
 
         # create canvas and set some of its properties
@@ -59,8 +60,8 @@ class MatplotlibWidget(QtGui.QWidget):
         self.canvas.setFocus()
 
         # set up axes and its properties
-        self.axes = self.figure.add_subplot(111) 
-        self.axes.grid(True)
+        self.ax = self.figure.add_subplot(111) 
+        self.ax.grid(True)
 
         # create toolbar  
         self.matplotlib_toolbar = NavigationToolbar(self.canvas, parent) # the matplotlib toolbar object
@@ -74,6 +75,8 @@ class MatplotlibWidget(QtGui.QWidget):
 
         # set the layout
         self.setLayout(self.layout)
+
+    #-------------------------------- WATER.txt Parameter Plot ------------------------------------ 
 
     def setup_watertxt_plot(self):
         """ Setup the watertxt plot """
@@ -99,28 +102,22 @@ class MatplotlibWidget(QtGui.QWidget):
 
         self.reset_watertxt_plot()
 
+        self.dates = watertxt_data["dates"]
         self.watertxt_data = watertxt_data
         self.parameter = watertxt.get_parameter(watertxt_data, name = name)     
 
         assert self.parameter is not None, "Parameter name {} is not in watertxt_data".format(name)
 
-        self.dates = watertxt_data["dates"]
         self.axes.set_title("Parameter: {}".format(self.parameter["name"]))
         self.axes.set_xlabel("Date")
         ylabel = "\n".join(wrap(self.parameter["name"], 60))
         self.axes.set_ylabel(ylabel)
 
         # get proper color that corresponds to parameter name
-        self.color_str = COLORS[name.split('(')[0].strip()]
+        self.color_str = self.colors_dict[name.split('(')[0].strip()]
 
         # plot parameter    
         self.axes.plot(self.dates, self.parameter["data"], color = self.color_str, label = self.parameter["name"], linewidth = 2)   
-
-        # # rotate and align the tick labels so they look better
-        self.figure.autofmt_xdate()
-
-        # use a more precise date string for the x axis locations in the toolbar and rotate labels
-        self.axes.fmt_xdata = mdates.DateFormatter("%Y-%m-%d")
 
         # legend; make it transparent    
         handles, labels = self.axes.get_legend_handles_labels()
@@ -129,12 +126,22 @@ class MatplotlibWidget(QtGui.QWidget):
         legend.draggable(state=True)
 
         # show text of mean, max, min values on graph; use matplotlib.patch.Patch properies and bbox
-        text = "mean = %.2f\nmax = %.2f\nmin = %.2f" % (self.parameter["mean"], self.parameter["max"], self.parameter["min"])
+        text = "mean = {:.2f}\nmax = {:.2f}\nmin = {:.2f}".format(self.parameter["mean"], self.parameter["max"], self.parameter["min"])
+
         patch_properties = {"boxstyle": "round", "facecolor": "wheat", "alpha": 0.5}
                        
         self.axes_text = self.axes.text(0.05, 0.95, text, transform = self.axes.transAxes, fontsize = 14, 
-            verticalalignment = "top", horizontalalignment = "left", bbox = patch_properties)    
+                                        verticalalignment = "top", horizontalalignment = "left", bbox = patch_properties)    
 
+        # use a more precise date string for the x axis locations in the toolbar and rotate labels
+        self.axes.fmt_xdata = mdates.DateFormatter("%Y-%m-%d")
+
+        # rotate and align the tick labels so they look better; note that self.figure.autofmt_xdate() does not work because of the radio button axes 
+        for label in self.axes.get_xticklabels():
+            label.set_ha("right")
+            label.set_rotation(30)
+
+        # draw the plot
         self.canvas.draw()
 
     def on_select_helper(self, xmin, xmax):
@@ -164,7 +171,7 @@ class MatplotlibWidget(QtGui.QWidget):
         return selected_dates, selected_values, selected_values_mean, selected_value_max, selected_value_min
 
     def on_select_axes(self, xmin, xmax):
-        """ A select handler for SpanSelector that updates axes 2 with the new x and y limits selected by user """
+        """ A select handler for SpanSelector that updates axes with the new x and y limits selected by user """
 
         selected_dates, selected_values, selected_values_mean, selected_value_max, selected_value_min = self.on_select_helper(xmin, xmax)
 
@@ -202,3 +209,90 @@ class MatplotlibWidget(QtGui.QWidget):
         self.axes.clear()
         self.canvas.draw()
         self.axes.grid(True)
+
+    #-------------------------------- WATER.txt Parameter Comparison Plot ------------------------------------        
+
+    def setup_watertxtcmp_plot(self):
+        """ Setup the watertxt plot """
+
+        self.clear_watertxtcmp_plot()
+
+        # set up axes and its properties
+        self.axes1 = self.figure.add_subplot(211)
+        self.axes2 = self.figure.add_subplot(212, sharex = self.axes1)
+
+        self.axes1.grid(True)
+        self.axes2.grid(True)
+
+    def plot_watertxtcmp_parameter(self, watertxt_data1, watertxt_data2, filename1, filename2, name): 
+        """ Plot a parameter from a WATER.txt file """
+
+        self.reset_watertxtcmp_plot()
+
+        dates = watertxt_data1["dates"]
+
+        parameter1 = watertxt.get_parameter(watertxt_data = watertxt_data1, name = name)     
+        parameter2 = watertxt.get_parameter(watertxt_data = watertxt_data2, name = name)  
+
+        assert parameter1 is not None, "Parameter name {} is not in watertxt_data".format(name)
+        assert parameter2 is not None, "Parameter name {} is not in watertxt_data".format(name)
+
+        # calculate the difference
+        diff = parameter2["data"] - parameter1["data"]
+
+        # plot parameters on axes1  
+        self.axes1.plot(dates, parameter1["data"], color = "b", label = filename1 + ": " + parameter1["name"], linewidth = 2)   
+        self.axes1.hold(True)
+        self.axes1.plot(dates, parameter2["data"], color = "r", label = filename2 + ": " + parameter2["name"], linewidth = 2)   
+
+        # plot the difference on axes2
+        self.axes2.plot(dates, diff, color = "k", linewidth = 2)
+
+        # add title, labels, legend
+        self.axes1.set_title(parameter1["name"])
+
+        self.axes2.set_xlabel("Date")
+        self.axes2.set_ylabel("Difference")
+ 
+        handles1, labels1 = self.axes1.get_legend_handles_labels()
+        legend1 = self.axes1.legend(handles1, labels1, fancybox = True)
+        legend1.get_frame().set_alpha(0.5)
+        legend1.draggable(state=True)
+
+        # show text of mean, max, min values on graph; use matplotlib.patch.Patch properies and bbox
+        text1 = "mean = {:.2f}\nmax = {:.2f}\nmin = {:.2f}".format(parameter1["mean"], parameter1["max"], parameter1["min"])
+        text2 = "mean = {:.2f}\nmax = {:.2f}\nmin = {:.2f}".format(parameter2["mean"], parameter2["max"], parameter2["min"])
+
+        text_diff = "mean = {:.2f}\nmax = {:.2f}\nmin = {:.2f}".format(nanmean(diff), np.max(diff), np.min(diff))
+
+        patch_properties1 = {"boxstyle": "round", "facecolor": "b", "alpha": 0.5}
+        patch_properties2 = {"boxstyle": "round", "facecolor": "r", "alpha": 0.5}
+        patch_properties_diff = {"boxstyle": "round", "facecolor": "wheat", "alpha": 0.5}
+                       
+        self.axes1.text(0.02, 0.95, text1, transform = self.axes1.transAxes, fontsize = 12, verticalalignment = "top", horizontalalignment = "left", bbox = patch_properties1)
+        self.axes1.text(0.02, 0.45, text2, transform = self.axes1.transAxes, fontsize = 12, verticalalignment = "top", horizontalalignment = "left", bbox = patch_properties2)
+        self.axes2.text(0.02, 0.95, text_diff, transform = self.axes2.transAxes, fontsize = 12, verticalalignment = "top", horizontalalignment = "left", bbox = patch_properties_diff)
+
+        # use a more precise date string for the x axis locations in the toolbar and rotate labels
+        self.axes2.fmt_xdata = mdates.DateFormatter("%Y-%m-%d")
+
+        # rotate and align the tick labels so they look better
+        self.figure.autofmt_xdate()
+
+        # draw the plot
+        self.canvas.draw()
+
+    def clear_watertxtcmp_plot(self):
+        """ Clear the plot axes """ 
+
+        self.figure.clear()
+        self.canvas.draw()
+
+    def reset_watertxtcmp_plot(self):
+        """ Clear the plot axes """ 
+
+        self.axes1.clear()
+        self.axes2.clear()
+        self.canvas.draw()
+        self.axes1.grid(True)
+        self.axes2.grid(True)

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'user_interface.ui'
 #
-# Created: Thu Feb 12 17:11:33 2015
+# Created: Fri Feb 13 09:32:22 2015
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -192,20 +192,31 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
+        self.tab_watertxt_push_button_open_file.setToolTip(_translate("MainWindow", "<html><head/><body><p>Open a WATER.txt output text file</p></body></html>", None))
         self.tab_watertxt_push_button_open_file.setText(_translate("MainWindow", "Open File", None))
         self.tab_watertxt_line_edit_open_file.setPlaceholderText(_translate("MainWindow", "Path to WATER.txt output text file", None))
+        self.tab_watertxt_matplotlib_widget.setToolTip(_translate("MainWindow", "Plot of a parameter for selected WATER.txt output text file", None))
+        self.tab_watertxt_list_widget.setToolTip(_translate("MainWindow", "List of column names for selected WATER.txt output text file", None))
+        self.tab_watertxt_table_widget.setToolTip(_translate("MainWindow", "Table of values for selected WATER.txt output text file", None))
         self.tab_watertxt_table_widget.setSortingEnabled(False)
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_watertxt), _translate("MainWindow", "Process WATER output text file", None))
+        self.tab_watertxtcmp_push_button_open_file1.setToolTip(_translate("MainWindow", "Open a WATER.txt output text file", None))
         self.tab_watertxtcmp_push_button_open_file1.setText(_translate("MainWindow", "Open File", None))
+        self.tab_watertxtcmp_push_button_open_file2.setToolTip(_translate("MainWindow", "Open a WATER.txt output text file", None))
         self.tab_watertxtcmp_push_button_open_file2.setText(_translate("MainWindow", "Open File", None))
         self.tab_watertxtcmp_line_edit_open_file2.setPlaceholderText(_translate("MainWindow", "Path to WATER.txt output text file", None))
         self.tab_watertxtcmp_line_edit_open_file1.setPlaceholderText(_translate("MainWindow", "Path to WATER.txt output text file", None))
+        self.tab_watertxtcmp_push_button_compare.setToolTip(_translate("MainWindow", "Compare selected WATER.txt output text files ", None))
         self.tab_watertxtcmp_push_button_compare.setText(_translate("MainWindow", "Compare", None))
+        self.tab_watertxtcmp_matplotlib_widget.setToolTip(_translate("MainWindow", "Comparison plot of a parameter for selected WATER.txt output text file", None))
+        self.tab_watertxtcmp_list_widget.setToolTip(_translate("MainWindow", "List of column names for selected WATER.txt output text files", None))
+        self.tab_watertxtcmp_table_widget1.setToolTip(_translate("MainWindow", "Table of values for first selected WATER.txt output text file", None))
+        self.tab_watertxtcmp_table_widget2.setToolTip(_translate("MainWindow", "Table of values for second selected WATER.txt output text file", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_watertxtcmp), _translate("MainWindow", "Compare 2 WATER output text files", None))
         self.menuExit.setTitle(_translate("MainWindow", "Exit", None))
         self.menuHelp.setTitle(_translate("MainWindow", "Help", None))
