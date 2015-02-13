@@ -58,7 +58,6 @@ class MainWindow(QtGui.QMainWindow):
 		try:
 			self.filepath = self.select_watertxt_file()
 			if self.filepath:
-				# self.clear_tab_watertxt_widgets()
 
 				self.filedir, self.filename = helpers.get_file_info(str(self.filepath))
 
