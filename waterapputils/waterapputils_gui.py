@@ -13,12 +13,13 @@ class MainWindow(QtGui.QMainWindow):
 		super(MainWindow, self).__init__(parent)
 		self.setWindowTitle("WATERAPPUTILS GUI")
 
-		# initialize variables
+		# water text file tab
 		self.tab_watertxt_data = None
 		self.filepath = None
 		self.filename = None
 		self.filedir = None
 
+		# water text file comparison tab
 		self.tab_watertxtcmp_data1 = None
 		self.tab_watertxtcmp_data2 = None
 		self.filepath1 = None
@@ -27,6 +28,17 @@ class MainWindow(QtGui.QMainWindow):
 		self.filepath2 = None
 		self.filename2 = None
 		self.filedir2 = None
+
+		# water use tab
+		self.tab_wateruse_single_sim_dir = None
+		self.tab_wateruse_multi_sim_dir = None
+		self.tab_wateruse_basin_shp_file = None
+		self.tab_wateruse_basin_shp_id_field = None
+		self.tab_wateruse_basin_shp_area_field = None
+		self.tab_wateruse_wateruse_data_files = None
+		self.tab_wateruse_wateruse_factor_file = None
+		self.tab_wateruse_centroids_shp_file = None
+		self.tab_wateruse_centroids_shp_id_field = None
 
 		# set up the ui
 		self.ui = Ui_MainWindow()
@@ -43,6 +55,13 @@ class MainWindow(QtGui.QMainWindow):
 		self.ui.tab_watertxtcmp_push_button_open_file2.clicked.connect(self.select_watertxt_file_cmp)
 		self.ui.tab_watertxtcmp_push_button_compare.clicked.connect(self.compare_watertxt_files)
 		self.ui.tab_watertxtcmp_list_widget.itemSelectionChanged.connect(self.plot_tab_watertxtcmp_list_item)
+
+		# connections for tab titled Apply water use to WATER simulation(s)
+		self.ui.tab_wateruse_push_button_open_sim.clicked.connect(self.select_water_sim)
+		# self.ui.tab_wateruse_push_button_wateruse_files.clicked.connect(self.select_wateruse_files)
+		# self.ui.tab_wateruse_push_button_wateruse_factor_file.clicked.connect(self.select_wateruse_factor_file)
+		# self.ui.tab_wateruse_push_button_wateruse_shp.clicked.connect(self.select_wateruse_shp_file)
+		# self.ui.tab_wateruse_push_button_apply_wateruse.clicked.connect(self.apply_wateruse)
 
 		# disble the plot area until a file is opened 
 		self.ui.tab_watertxt_matplotlib_widget.setEnabled(False)
@@ -174,6 +193,34 @@ class MainWindow(QtGui.QMainWindow):
 		
 		item_type = str(self.ui.tab_watertxtcmp_list_widget.currentItem().text())
 		self.plot_on_tab_watertxtcmp_matplotlib_widget(data_list = [self.tab_watertxtcmp_data1, self.tab_watertxtcmp_data2], filenames = [self.filename1, self.filename2], parameter_name = item_type)
+
+	#-------------------------------- Tab: Apply water use to WATER simulation(s) ------------------------------------
+
+		# self.ui.tab_wateruse_push_button_open_sim(self.select_water_sim)
+		# self.ui.tab_wateruse_push_button_wateruse_files(self.select_wateruse_files)
+		# self.ui.tab_wateruse_push_button_wateruse_factor_file(self.select_wateruse_factor_file)
+		# self.ui.tab_wateruse_push_button_wateruse_shp(self.select_wateruse_shp_file)
+		# self.ui.tab_wateruse_push_button_apply_wateruse(self.apply_wateruse)
+
+	def select_water_sim(self):
+		""" Open a QtDialog to select a WATER simulation directory and show the file in the line edit widget """
+
+		dirpath = QtGui.QFileDialog.getExistingDirectory(self, caption = "Please select a WATER simulation directory", directory = "../data/sample-water-simulations/")
+
+		print(dirpath)
+
+		sender = self.sender()
+		sender_object_name = sender.objectName()
+
+		if sender_object_name == "tab_wateruse_push_button_open_sim":
+			self.ui.tab_wateruse_line_edit_open_sim.setText(dirpath)
+
+		# elif sender_object_name == "tab_watertxtcmp_push_button_open_file2":
+		# 	self.ui.tab_watertxtcmp_line_edit_open_file2.setText(filepath)
+
+		# # enable compare button if both line edit boxes have text
+		# if self.ui.tab_watertxtcmp_line_edit_open_file1.text() and self.ui.tab_watertxtcmp_line_edit_open_file2.text():
+		# 	self.ui.tab_watertxtcmp_push_button_compare.setEnabled(True)
 
 	#-------------------------------- Tab Independent Methods ------------------------------------
 

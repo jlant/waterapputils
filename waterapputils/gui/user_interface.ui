@@ -343,95 +343,44 @@
                <widget class="QGroupBox" name="groupBox_9">
                 <property name="font">
                  <font>
-                  <weight>75</weight>
-                  <bold>true</bold>
+                  <weight>50</weight>
+                  <bold>false</bold>
                  </font>
                 </property>
                 <property name="title">
                  <string>Choose simulation(s)</string>
                 </property>
                 <layout class="QGridLayout" name="gridLayout_3">
-                 <item row="0" column="0" colspan="2">
-                  <layout class="QGridLayout" name="gridLayout_2">
-                   <item row="0" column="0">
-                    <widget class="QPushButton" name="tab_wateruse_push_button_open_sim">
-                     <property name="font">
-                      <font>
-                       <weight>50</weight>
-                       <bold>false</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Open Directory</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="0">
-                    <widget class="QPushButton" name="tab_wateruse_push_button_open_sims">
-                     <property name="font">
-                      <font>
-                       <weight>50</weight>
-                       <bold>false</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Open Directory</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="3">
-                    <widget class="QLabel" name="label_7">
-                     <property name="font">
-                      <font>
-                       <weight>50</weight>
-                       <bold>false</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>1 simulation</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="1">
-                    <widget class="QLineEdit" name="lineEdit_9">
-                     <property name="font">
-                      <font>
-                       <weight>50</weight>
-                       <bold>false</bold>
-                      </font>
-                     </property>
-                     <property name="placeholderText">
-                      <string>Directory of many WATER simulations</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="1">
-                    <widget class="QLineEdit" name="lineEdit">
-                     <property name="font">
-                      <font>
-                       <weight>50</weight>
-                       <bold>false</bold>
-                      </font>
-                     </property>
-                     <property name="placeholderText">
-                      <string>Directory of a WATER simulation</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="3">
-                    <widget class="QLabel" name="label_8">
-                     <property name="font">
-                      <font>
-                       <weight>50</weight>
-                       <bold>false</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>1+ simulations</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
+                 <item row="0" column="0">
+                  <widget class="QRadioButton" name="radioButton">
+                   <property name="text">
+                    <string>One simulation</string>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QPushButton" name="tab_wateruse_push_button_open_sim">
+                   <property name="text">
+                    <string>Open directory</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QRadioButton" name="radioButton_3">
+                   <property name="text">
+                    <string>Multiple simulations</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QLineEdit" name="tab_wateruse_line_edit_open_sim">
+                   <property name="placeholderText">
+                    <string>WATER simulation directory</string>
+                   </property>
+                  </widget>
                  </item>
                 </layout>
                </widget>
@@ -525,9 +474,6 @@
                  <string>Water use information</string>
                 </property>
                 <layout class="QGridLayout" name="gridLayout_5">
-                 <item row="1" column="2">
-                  <layout class="QGridLayout" name="gridLayout_4"/>
-                 </item>
                  <item row="2" column="1" colspan="2">
                   <widget class="QLineEdit" name="tab_wateruse_line_edit_wateruse_factor_file">
                    <property name="placeholderText">
