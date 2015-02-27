@@ -1,8 +1,12 @@
 import sys
 from PyQt4 import QtGui, QtCore
+import osgeo.ogr
+import osgeo.osr
 from gui.user_interface import Ui_MainWindow
 from modules import watertxt
 from modules import helpers
+from modules import spatialvectors
+import user_settings
 
 # my modules
 class MainWindow(QtGui.QMainWindow):
@@ -40,6 +44,17 @@ class MainWindow(QtGui.QMainWindow):
 		self.tab_wateruse_centroids_shp_file = None
 		self.tab_wateruse_centroids_shp_id_field = None
 
+		self.basin_shp_path = None
+		self.basin_shp_dir = None
+		self.basin_shp_file = None
+		self.is_batch_simulation = None
+
+		self.wateruse_files = None
+		self.wateruse_shp_path = None
+		self.wateruse_shp_dir = None
+		self.wateruse_shp_filename = None
+
+
 		# set up the ui
 		self.ui = Ui_MainWindow()
 		self.ui.setupUi(self) # method in *_ui.py file of the Ui_MainWindow class
@@ -58,10 +73,14 @@ class MainWindow(QtGui.QMainWindow):
 
 		# connections for tab titled Apply water use to WATER simulation(s)
 		self.ui.tab_wateruse_push_button_open_sim.clicked.connect(self.select_water_sim)
-		# self.ui.tab_wateruse_push_button_wateruse_files.clicked.connect(self.select_wateruse_files)
-		# self.ui.tab_wateruse_push_button_wateruse_factor_file.clicked.connect(self.select_wateruse_factor_file)
-		# self.ui.tab_wateruse_push_button_wateruse_shp.clicked.connect(self.select_wateruse_shp_file)
+		self.ui.tab_wateruse_push_button_wateruse_files.clicked.connect(self.select_wateruse_files)
+		self.ui.tab_wateruse_push_button_wateruse_factor_file.clicked.connect(self.select_wateruse_factor_file)
+		self.ui.tab_wateruse_push_button_wateruse_shp.clicked.connect(self.select_wateruse_shp_file)
 		# self.ui.tab_wateruse_push_button_apply_wateruse.clicked.connect(self.apply_wateruse)
+
+		self.ui.tab_wateruse_combo_box_shp_id_field.activated['QString'].connect(self.handleActivated)
+		self.ui.tab_wateruse_combo_box_shp_area_field.currentIndexChanged['QString'].connect(self.handleChanged)
+
 
 		# disble the plot area until a file is opened 
 		self.ui.tab_watertxt_matplotlib_widget.setEnabled(False)
@@ -196,31 +215,89 @@ class MainWindow(QtGui.QMainWindow):
 
 	#-------------------------------- Tab: Apply water use to WATER simulation(s) ------------------------------------
 
-		# self.ui.tab_wateruse_push_button_open_sim(self.select_water_sim)
-		# self.ui.tab_wateruse_push_button_wateruse_files(self.select_wateruse_files)
-		# self.ui.tab_wateruse_push_button_wateruse_factor_file(self.select_wateruse_factor_file)
-		# self.ui.tab_wateruse_push_button_wateruse_shp(self.select_wateruse_shp_file)
+
 		# self.ui.tab_wateruse_push_button_apply_wateruse(self.apply_wateruse)
 
+	def select_wateruse_shp_file(self):
+		""" Open a QtDialog to select water use factor file and show the files in the line edit widget"""
+
+		filepath = QtGui.QFileDialog.getOpenFileName(self, caption = "Please select a water use shapefile", directory = "../data/spatial-datafiles/wateruse-centroids", filter = "Shapefile (*.shp)")	
+
+		if filepath:
+			self.ui.tab_wateruse_line_edit_wateruse_shp.setText(filepath)
+			self.wateruse_shp_path = str(filepath)
+			self.wateruse_shp_dir, self.wateruse_shp_filename = helpers.get_file_info(self.wateruse_shp_path) 
+
+			# get fields
+			wateruse_shapefile = osgeo.ogr.Open(self.wateruse_shp_path)  
+			wateruse_shapefile_dict = spatialvectors.fill_shapefile_dict(shapefile = wateruse_shapefile)
+
+			fields_str = " ".join(wateruse_shapefile_dict["fields"])
+			self.ui.tab_wateruse_combo_box_wateruse_shp_id_field.addItems(fields_str.split())
+
+	def select_wateruse_factor_file(self):
+		""" Open a QtDialog to select water use factor file and show the files in the line edit widget"""
+
+		filepath = QtGui.QFileDialog.getOpenFileName(self, caption = "Please select a water use factor file", directory = "../data/wateruse-datafiles/", filter = "Text files (*.txt);; All files (*.*)")	
+
+		if filepath:
+			self.ui.tab_wateruse_line_edit_wateruse_factor_file.setText(filepath)		
+
+	def select_wateruse_files(self):
+		""" Open a QtDialog to select water use files and show the files in the list widget """
+
+		wateruse_files_qtstr_list = QtGui.QFileDialog.getOpenFileNames(self, caption = "Please select 4 seasonal water use files", directory = "../data/wateruse-datafiles", filter = "Text files (*.txt);; All files (*.*)")
+		wateruse_files_str = str(wateruse_files_qtstr_list.join(","))
+		self.wateruse_files = wateruse_files_str.split(",")		# convert QtStringList to a Python list
+	
+		if len(wateruse_files) != 4:
+			error_msg = "Need 4 seasonal water use files! <br />Number of files selected: {}.<br />{}<br />Please select 4 seasonal water use files.".format(len(wateruse_files), wateruse_files)
+			self.popup_error(parent = self, msg = error_msg)
+		else:
+			self.add_to_list_widgets(widget_names = ["tab_wateruse_list_widget_wateruse_files"], items = wateruse_files)
+
+	def handleActivated(self, text):
+		print('handleActivated: %s' % text)
+
+	def handleChanged(self, text):
+		print('handleChanged: %s' % text)
+
+	def populate_sim_info(self, sim_dirpath):
+		""" Populate the widgets in simulation info group box"""
+
+		tmp_shp_file = None
+
+		if self.ui.tab_wateruse_radio_button_batch.isChecked():
+			self.is_batch_simulation = True
+			tmp_shp_file = "Watersheds.shp"
+
+		elif self.ui.tab_wateruse_radio_button_single.isChecked():
+			self.is_batch_simulation = False
+			tmp_shp_file = "basinMask.shp"
+
+		# find the basin shapefile before populating widgets
+		if tmp_shp_file:
+			self.basin_shp_path = helpers.find_file(name = tmp_shp_file, path = sim_dirpath)
+			self.basin_shp_dir, self.basin_shp_filename = helpers.get_file_info(self.basin_shp_path) 
+			self.ui.tab_wateruse_line_edit_basin_shp.setText(self.basin_shp_filename)
+
+			# get fields
+			basin_shapefile = osgeo.ogr.Open(self.basin_shp_path)  
+			basin_shapefile_dict = spatialvectors.fill_shapefile_dict(shapefile = basin_shapefile)
+
+			fields_str = " ".join(basin_shapefile_dict["fields"])
+			self.ui.tab_wateruse_combo_box_shp_id_field.addItems(fields_str.split())
+			self.ui.tab_wateruse_combo_box_shp_area_field.addItems(fields_str.split())
+
+
 	def select_water_sim(self):
-		""" Open a QtDialog to select a WATER simulation directory and show the file in the line edit widget """
+		""" Open a QtDialog to select a WATER simulation directory and show the directory in the line edit widget """
 
 		dirpath = QtGui.QFileDialog.getExistingDirectory(self, caption = "Please select a WATER simulation directory", directory = "../data/sample-water-simulations/")
 
-		print(dirpath)
-
-		sender = self.sender()
-		sender_object_name = sender.objectName()
-
-		if sender_object_name == "tab_wateruse_push_button_open_sim":
+		if dirpath:
 			self.ui.tab_wateruse_line_edit_open_sim.setText(dirpath)
-
-		# elif sender_object_name == "tab_watertxtcmp_push_button_open_file2":
-		# 	self.ui.tab_watertxtcmp_line_edit_open_file2.setText(filepath)
-
-		# # enable compare button if both line edit boxes have text
-		# if self.ui.tab_watertxtcmp_line_edit_open_file1.text() and self.ui.tab_watertxtcmp_line_edit_open_file2.text():
-		# 	self.ui.tab_watertxtcmp_push_button_compare.setEnabled(True)
+			self.populate_sim_info(sim_dirpath = str(dirpath))
 
 	#-------------------------------- Tab Independent Methods ------------------------------------
 

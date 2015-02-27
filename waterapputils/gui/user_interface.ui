@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="unifiedTitleAndToolBarOnMac">
+   <bool>false</bool>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
@@ -340,46 +343,85 @@
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_10">
               <item>
-               <widget class="QGroupBox" name="groupBox_9">
+               <widget class="QFrame" name="frame_9">
                 <property name="font">
                  <font>
                   <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
-                <property name="title">
-                 <string>Choose simulation(s)</string>
-                </property>
                 <layout class="QGridLayout" name="gridLayout_3">
-                 <item row="0" column="0">
-                  <widget class="QRadioButton" name="radioButton">
-                   <property name="text">
-                    <string>One simulation</string>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <item row="0" column="0" rowspan="2">
+                  <widget class="QGroupBox" name="tab_wateruse_group_box_num_sims">
+                   <property name="styleSheet">
+                    <string notr="true"/>
                    </property>
-                   <property name="checked">
-                    <bool>true</bool>
+                   <property name="title">
+                    <string>Number of simulation(s)</string>
                    </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_9">
+                    <item>
+                     <widget class="QRadioButton" name="tab_wateruse_radio_button_one_sim">
+                      <property name="text">
+                       <string>One simulation</string>
+                      </property>
+                      <property name="checked">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="tab_wateruse_radio_button_multi_sims">
+                      <property name="text">
+                       <string>Multiple simulations</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
                   </widget>
                  </item>
-                 <item row="2" column="0">
-                  <widget class="QPushButton" name="tab_wateruse_push_button_open_sim">
-                   <property name="text">
-                    <string>Open directory</string>
+                 <item row="0" column="2" rowspan="2">
+                  <widget class="QGroupBox" name="tab_wateruse_group_box_type_sims">
+                   <property name="font">
+                    <font>
+                     <weight>50</weight>
+                     <bold>false</bold>
+                    </font>
                    </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="0">
-                  <widget class="QRadioButton" name="radioButton_3">
-                   <property name="text">
-                    <string>Multiple simulations</string>
+                   <property name="styleSheet">
+                    <string notr="true"/>
                    </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="1">
-                  <widget class="QLineEdit" name="tab_wateruse_line_edit_open_sim">
-                   <property name="placeholderText">
-                    <string>WATER simulation directory</string>
+                   <property name="title">
+                    <string>Type of simulation(s)</string>
                    </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_13">
+                    <property name="rightMargin">
+                     <number>9</number>
+                    </property>
+                    <item>
+                     <widget class="QRadioButton" name="tab_wateruse_radio_button_batch">
+                      <property name="text">
+                       <string>Batch</string>
+                      </property>
+                      <property name="checked">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="tab_wateruse_radio_button_single">
+                      <property name="text">
+                       <string>Single</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
                   </widget>
                  </item>
                 </layout>
@@ -394,30 +436,13 @@
                  </sizepolicy>
                 </property>
                 <property name="title">
-                 <string>Simulation information</string>
+                 <string>Simulation Information</string>
                 </property>
                 <layout class="QFormLayout" name="formLayout_2">
                  <property name="fieldGrowthPolicy">
                   <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
                  </property>
-                 <item row="0" column="0">
-                  <widget class="QRadioButton" name="tab_wateruse_sim_info_radio_button">
-                   <property name="text">
-                    <string>Batch</string>
-                   </property>
-                   <property name="checked">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="0">
-                  <widget class="QRadioButton" name="radioButton_2">
-                   <property name="text">
-                    <string>Single</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="0">
+                 <item row="3" column="0">
                   <widget class="QLabel" name="label_3">
                    <property name="inputMethodHints">
                     <set>Qt::ImhNone</set>
@@ -427,43 +452,46 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="3" column="0">
+                 <item row="3" column="1">
+                  <widget class="QLineEdit" name="tab_wateruse_line_edit_basin_shp">
+                   <property name="placeholderText">
+                    <string>Watersheds.shp or basinMask.shp</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="0">
                   <widget class="QLabel" name="label_4">
                    <property name="text">
                     <string>Basin shapefile id field</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="3" column="1">
-                  <widget class="QLineEdit" name="tab_wateruse_sim_info_basin_shp_id_field">
-                   <property name="text">
-                    <string/>
-                   </property>
-                   <property name="placeholderText">
-                    <string>STAID</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="4" column="0">
+                 <item row="5" column="0">
                   <widget class="QLabel" name="label_5">
                    <property name="text">
                     <string>Basin shapefile area field</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="4" column="1">
-                  <widget class="QLineEdit" name="tab_wateruse_sim_info_basin_shp_area_field">
-                   <property name="placeholderText">
-                    <string>da_sqmi</string>
+                 <item row="2" column="0">
+                  <widget class="QPushButton" name="tab_wateruse_push_button_open_sim">
+                   <property name="text">
+                    <string>Open directory</string>
                    </property>
                   </widget>
                  </item>
                  <item row="2" column="1">
-                  <widget class="QLineEdit" name="tab_wateruse_sim_info_basin_shp_name">
+                  <widget class="QLineEdit" name="tab_wateruse_line_edit_open_sim">
                    <property name="placeholderText">
-                    <string>Watersheds.shp</string>
+                    <string>WATER simulation directory</string>
                    </property>
                   </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <widget class="QComboBox" name="tab_wateruse_combo_box_shp_id_field"/>
+                 </item>
+                 <item row="5" column="1">
+                  <widget class="QComboBox" name="tab_wateruse_combo_box_shp_area_field"/>
                  </item>
                 </layout>
                </widget>
@@ -474,82 +502,66 @@
                  <string>Water use information</string>
                 </property>
                 <layout class="QGridLayout" name="gridLayout_5">
-                 <item row="2" column="1" colspan="2">
+                 <item row="3" column="1" colspan="2">
                   <widget class="QLineEdit" name="tab_wateruse_line_edit_wateruse_factor_file">
                    <property name="placeholderText">
                     <string>Water use factor file</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="0" column="0" rowspan="2">
-                  <widget class="QPushButton" name="tab_wateruse_push_button_wateruse_files">
-                   <property name="text">
-                    <string>Open files</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="0" rowspan="2">
+                 <item row="3" column="0" rowspan="2">
                   <widget class="QPushButton" name="tab_wateruse_push_button_wateruse_factor_file">
                    <property name="text">
                     <string>Open file</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="4" column="1" colspan="2">
+                 <item row="5" column="1" colspan="2">
                   <widget class="QLineEdit" name="tab_wateruse_line_edit_wateruse_shp">
                    <property name="placeholderText">
                     <string>Water use shapefile</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="4" column="0" rowspan="2">
+                 <item row="5" column="0" rowspan="2">
                   <widget class="QPushButton" name="tab_wateruse_push_button_wateruse_shp">
                    <property name="text">
                     <string>Open file</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="6" column="0">
+                 <item row="7" column="0">
                   <widget class="QLabel" name="label_6">
                    <property name="text">
                     <string>Water use shapefile id field</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="6" column="1" colspan="2">
-                  <widget class="QLineEdit" name="tab_wateruse_line_edit_wateruse_id_field">
-                   <property name="placeholderText">
-                    <string>newhydroid</string>
+                 <item row="0" column="1">
+                  <widget class="QListWidget" name="tab_wateruse_list_widget_wateruse_files">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>100</height>
+                    </size>
                    </property>
                   </widget>
                  </item>
-                 <item row="0" column="1" rowspan="2" colspan="2">
-                  <widget class="QLineEdit" name="tab_wateruse_line_edit_wateruse_files">
-                   <property name="placeholderText">
-                    <string>Water use data files</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="3">
-                  <widget class="QLabel" name="label">
+                 <item row="0" column="0">
+                  <widget class="QPushButton" name="tab_wateruse_push_button_wateruse_files">
                    <property name="text">
-                    <string>data files</string>
+                    <string>Open files</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="2" column="3">
-                  <widget class="QLabel" name="label_2">
-                   <property name="text">
-                    <string>factor file</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="4" column="3">
-                  <widget class="QLabel" name="label_9">
-                   <property name="text">
-                    <string>shapefile</string>
-                   </property>
-                  </widget>
+                 <item row="7" column="1">
+                  <widget class="QComboBox" name="tab_wateruse_combo_box_wateruse_shp_id_field"/>
                  </item>
                 </layout>
                </widget>
