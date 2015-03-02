@@ -576,9 +576,31 @@
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_11">
                  <item>
+                  <widget class="QPushButton" name="tab_wateruse_push_button_check_inputs">
+                   <property name="text">
+                    <string>Check Inputs</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
                   <widget class="QPushButton" name="tab_wateruse_push_button_apply_wateruse">
                    <property name="text">
                     <string>Apply Water Use</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QTextEdit" name="tab_wateruse_text_edit">
+                   <property name="font">
+                    <font>
+                     <family>MS Shell Dlg 2</family>
+                     <pointsize>10</pointsize>
+                     <weight>50</weight>
+                     <bold>false</bold>
+                    </font>
+                   </property>
+                   <property name="readOnly">
+                    <bool>true</bool>
                    </property>
                   </widget>
                  </item>

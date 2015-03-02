@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'user_interface.ui'
 #
-# Created: Fri Feb 27 15:14:51 2015
+# Created: Mon Mar 02 14:50:37 2015
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -314,9 +314,22 @@ class Ui_MainWindow(object):
         self.frame_12.setObjectName(_fromUtf8("frame_12"))
         self.verticalLayout_11 = QtGui.QVBoxLayout(self.frame_12)
         self.verticalLayout_11.setObjectName(_fromUtf8("verticalLayout_11"))
+        self.tab_wateruse_push_button_check_inputs = QtGui.QPushButton(self.frame_12)
+        self.tab_wateruse_push_button_check_inputs.setObjectName(_fromUtf8("tab_wateruse_push_button_check_inputs"))
+        self.verticalLayout_11.addWidget(self.tab_wateruse_push_button_check_inputs)
         self.tab_wateruse_push_button_apply_wateruse = QtGui.QPushButton(self.frame_12)
         self.tab_wateruse_push_button_apply_wateruse.setObjectName(_fromUtf8("tab_wateruse_push_button_apply_wateruse"))
         self.verticalLayout_11.addWidget(self.tab_wateruse_push_button_apply_wateruse)
+        self.tab_wateruse_text_edit = QtGui.QTextEdit(self.frame_12)
+        font = QtGui.QFont()
+        font.setFamily(_fromUtf8("MS Shell Dlg 2"))
+        font.setPointSize(10)
+        font.setBold(False)
+        font.setWeight(50)
+        self.tab_wateruse_text_edit.setFont(font)
+        self.tab_wateruse_text_edit.setReadOnly(True)
+        self.tab_wateruse_text_edit.setObjectName(_fromUtf8("tab_wateruse_text_edit"))
+        self.verticalLayout_11.addWidget(self.tab_wateruse_text_edit)
         self.verticalLayout_10.addWidget(self.frame_12)
         spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
         self.verticalLayout_10.addItem(spacerItem)
@@ -402,6 +415,7 @@ class Ui_MainWindow(object):
         self.tab_wateruse_push_button_wateruse_shp.setText(_translate("MainWindow", "Open file", None))
         self.label_6.setText(_translate("MainWindow", "Water use shapefile id field", None))
         self.tab_wateruse_push_button_wateruse_files.setText(_translate("MainWindow", "Open files", None))
+        self.tab_wateruse_push_button_check_inputs.setText(_translate("MainWindow", "Check Inputs", None))
         self.tab_wateruse_push_button_apply_wateruse.setText(_translate("MainWindow", "Apply Water Use", None))
         self.tab_applywateruse.setTabText(self.tab_applywateruse.indexOf(self.tab_applywateruse1), _translate("MainWindow", "Apply water use to WATER simulation(s)", None))
         self.menuExit.setTitle(_translate("MainWindow", "Exit", None))
