@@ -11,21 +11,25 @@ import user_settings
 
 # thread class
 class WorkThread(QtCore.QThread):
-	""" """
-	def __init__(self, settings):
-		QtCore.QThread.__init__(self, parent)
+	""" Thread to process water use """
+
+	def __init__(self, parent = None, settings = None):
+		super(WorkThread, self).__init__(parent)
 
 		self.settings = settings
 
-	def run(self):
+	def __del__(self):
+		""" Make sure thread stops processing before it gets destroyed"""
+		self.wait()
 
-		print("hello from work thread")
+	def run(self):
+		""" Override the run method on QThread"""
 
 		# apply wateruse
 		wateruse_processing.apply_wateruse(settings = self.settings)
 
-		# emit signal
-		self.emit(QtCore.SIGNAL("update(QString)"), "from work thread ")
+		# emit custom signal
+		self.emit(QtCore.SIGNAL("thread_done()"))
 
 		return
 
@@ -74,6 +78,9 @@ class MainWindow(QtGui.QMainWindow):
 		self.tab_wateruse_centroids_shp_id_field = None
 		self.tab_wateruse_centroids_shp_dict = None
 
+		# initialize thread
+		self.work_thread = WorkThread(parent = self)
+
 		# set up the ui
 		self.ui = Ui_MainWindow()
 		self.ui.setupUi(self) # method in *_ui.py file of the Ui_MainWindow class
@@ -98,6 +105,10 @@ class MainWindow(QtGui.QMainWindow):
 		self.ui.tab_wateruse_push_button_apply_wateruse.clicked.connect(self.apply_wateruse)
 		self.ui.tab_wateruse_push_button_check_inputs.clicked.connect(self.check_wateruse_inputs)
 
+		# connect to thread
+		# self.connect(self.work_thread, QtCore.SIGNAL("thread_done()"), self.thread_done, QtCore.Qt.DirectConnection)
+		self.connect(self.work_thread, QtCore.SIGNAL("thread_done()"), self.thread_done)
+
 		# disble the plot area until a file is opened 
 		self.ui.tab_watertxt_matplotlib_widget.setEnabled(False)
 		self.ui.tab_watertxtcmp_matplotlib_widget.setEnabled(False)
@@ -108,6 +119,9 @@ class MainWindow(QtGui.QMainWindow):
 		# disable apply wateruse button until all proper input exists
 		self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(False)
 
+	def thread_done(self):
+		""" Display message box when thread is done """
+		QtGui.QMessageBox.information(self, "Thread done!", "Thread is done!")
 
 	#-------------------------------- Tab: Process WATER output text file ------------------------------------
 	def process_watertxt_file(self):
@@ -305,8 +319,7 @@ class MainWindow(QtGui.QMainWindow):
 
 		# apply wateruse
 		# wateruse_processing.apply_wateruse(settings = settings)
-		self.work_thread = WorkThread(self, settings)
-		self.connect(self.work_thread, QtCore.SIGNAL("update(QString)"), self.add)
+		self.work_thread.settings = settings	# give thread the latest settings
 		self.work_thread.start()
 
 		# reset button
