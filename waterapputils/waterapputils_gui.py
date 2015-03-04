@@ -29,7 +29,7 @@ class WorkThread(QtCore.QThread):
 		wateruse_processing.apply_wateruse(settings = self.settings)
 
 		# emit custom signal
-		self.emit(QtCore.SIGNAL("thread_done()"))
+		self.emit(QtCore.SIGNAL("thread_done(QString)"), "Confirmation that the thread is finished.")
 
 		return
 
@@ -107,7 +107,7 @@ class MainWindow(QtGui.QMainWindow):
 
 		# connect to thread
 		# self.connect(self.work_thread, QtCore.SIGNAL("thread_done()"), self.thread_done, QtCore.Qt.DirectConnection)
-		self.connect(self.work_thread, QtCore.SIGNAL("thread_done()"), self.thread_done)
+		self.connect(self.work_thread, QtCore.SIGNAL("thread_done(QString)"), self.thread_done, QtCore.Qt.QueuedConnection)
 
 		# disble the plot area until a file is opened 
 		self.ui.tab_watertxt_matplotlib_widget.setEnabled(False)
@@ -119,9 +119,9 @@ class MainWindow(QtGui.QMainWindow):
 		# disable apply wateruse button until all proper input exists
 		self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(False)
 
-	def thread_done(self):
+	def thread_done(self, msg):
 		""" Display message box when thread is done """
-		QtGui.QMessageBox.information(self, "Thread done!", "Thread is done!")
+		QtGui.QMessageBox.information(self, "Thread done!", msg)
 
 	#-------------------------------- Tab: Process WATER output text file ------------------------------------
 	def process_watertxt_file(self):
