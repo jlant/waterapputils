@@ -10,28 +10,56 @@ from modules import wateruse_processing
 import user_settings
 
 # thread class
-class WorkThread(QtCore.QThread):
-	""" Thread to process water use """
+# class WorkThread(QtCore.QThread):
+# 	""" Thread to process water use """
 
-	def __init__(self, parent = None, settings = None):
-		super(WorkThread, self).__init__(parent)
+# 	def __init__(self, parent = None, settings = None):
+# 		super(WorkThread, self).__init__(parent)
 
-		self.settings = settings
+# 		self.settings = settings
 
-	def __del__(self):
-		""" Make sure thread stops processing before it gets destroyed"""
-		self.wait()
+# 	def __del__(self):
+# 		""" Make sure thread stops processing before it gets destroyed"""
+# 		self.wait()
 
-	def run(self):
-		""" Override the run method on QThread"""
+# 	def run(self):
+# 		""" Override the run method on QThread"""
+
+# 		# apply wateruse
+# 		wateruse_processing.apply_wateruse(settings = self.settings)
+
+# 		# emit custom signal
+# 		self.emit(QtCore.SIGNAL("thread_done(QString)"), "Confirmation that the thread is finished.")
+
+# 		return
+
+
+class Worker(QtCore.QObject):
+	finished = QtCore.pyqtSignal()
+
+	@QtCore.pyqtSlot(dict)
+	def process(self, settings):
+		print "Worker.process()"
 
 		# apply wateruse
-		wateruse_processing.apply_wateruse(settings = self.settings)
+		wateruse_processing.apply_wateruse(settings = settings)			
 
-		# emit custom signal
-		self.emit(QtCore.SIGNAL("thread_done(QString)"), "Confirmation that the thread is finished.")
+		self.finished.emit()
 
-		return
+
+class Thread(QtCore.QThread):
+	def __init__(self, parent = None):
+		QtCore.QThread.__init__(self, parent)
+
+	def __del__(self):
+		""" Make sure thread stops processing before it gets destroyed; does not get garbage collected until finished"""
+		self.wait()
+
+	def start(self):
+		QtCore.QThread.start(self)
+
+	def run(self):
+		QtCore.QThread.run(self)
 
 # main class
 class MainWindow(QtGui.QMainWindow):
@@ -79,7 +107,7 @@ class MainWindow(QtGui.QMainWindow):
 		self.tab_wateruse_centroids_shp_dict = None
 
 		# initialize thread
-		self.work_thread = WorkThread(parent = self)
+		# self.work_thread = WorkThread()
 
 		# set up the ui
 		self.ui = Ui_MainWindow()
@@ -107,7 +135,8 @@ class MainWindow(QtGui.QMainWindow):
 
 		# connect to thread
 		# self.connect(self.work_thread, QtCore.SIGNAL("thread_done()"), self.thread_done, QtCore.Qt.DirectConnection)
-		self.connect(self.work_thread, QtCore.SIGNAL("thread_done(QString)"), self.thread_done, QtCore.Qt.QueuedConnection)
+		# self.connect(self.work_thread, QtCore.SIGNAL("thread_done(QString)"), self.thread_done, QtCore.Qt.QueuedConnection)
+		# self.connect(self.work_thread, QtCore.SIGNAL("thread_done(QString)"), self.thread_done)
 
 		# disble the plot area until a file is opened 
 		self.ui.tab_watertxt_matplotlib_widget.setEnabled(False)
@@ -319,8 +348,19 @@ class MainWindow(QtGui.QMainWindow):
 
 		# apply wateruse
 		# wateruse_processing.apply_wateruse(settings = settings)
-		self.work_thread.settings = settings	# give thread the latest settings
-		self.work_thread.start()
+		# self.work_thread.settings = settings	# give thread the latest settings
+		# self.work_thread.start()
+
+		thread = Thread()
+		obj = Worker()
+		obj.moveToThread(thread)
+
+		obj.finished.connect(thread.quit)
+
+		thread.start()
+
+		QtCore.QMetaObject.invokeMethod(obj, 'process', QtCore.Qt.QueuedConnection, 
+			QtCore.Q_ARG(dict, settings))
 
 		# reset button
 		self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(False)
