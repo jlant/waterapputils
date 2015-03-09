@@ -502,6 +502,13 @@
                  <string>Water use information</string>
                 </property>
                 <layout class="QGridLayout" name="gridLayout_5">
+                 <item row="7" column="0">
+                  <widget class="QLabel" name="label_6">
+                   <property name="text">
+                    <string>Water use shapefile id field</string>
+                   </property>
+                  </widget>
+                 </item>
                  <item row="3" column="1" colspan="2">
                   <widget class="QLineEdit" name="tab_wateruse_line_edit_wateruse_factor_file">
                    <property name="placeholderText">
@@ -530,13 +537,6 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="7" column="0">
-                  <widget class="QLabel" name="label_6">
-                   <property name="text">
-                    <string>Water use shapefile id field</string>
-                   </property>
-                  </widget>
-                 </item>
                  <item row="0" column="1">
                   <widget class="QListWidget" name="tab_wateruse_list_widget_wateruse_files">
                    <property name="sizePolicy">
@@ -562,6 +562,13 @@
                  </item>
                  <item row="7" column="1">
                   <widget class="QComboBox" name="tab_wateruse_combo_box_wateruse_shp_id_field"/>
+                 </item>
+                 <item row="8" column="0">
+                  <widget class="QCheckBox" name="tab_wateruse_checkbox_subwateruse">
+                   <property name="text">
+                    <string>Use substitute water use</string>
+                   </property>
+                  </widget>
                  </item>
                 </layout>
                </widget>
@@ -639,13 +646,6 @@
             </widget>
            </item>
           </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QProgressBar" name="tab_wateruse_progress_bar">
-          <property name="value">
-           <number>24</number>
-          </property>
          </widget>
         </item>
        </layout>

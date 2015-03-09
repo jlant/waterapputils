@@ -16,19 +16,30 @@ class Worker(QtCore.QObject):
 	This warning can be fixed by doing plots with Figure() and FigureCanvas() which are used for gui's.
 	Here, using same plotting code as the command line program, so warning still occurs.  Can fix this in future if need be.
 	"""
-	finished = QtCore.pyqtSignal()
-	data_ready = QtCore.pyqtSignal(dict, str)
+	starting = QtCore.pyqtSignal(["QString"])
+	finished = QtCore.pyqtSignal(["QString"])
 
 	@QtCore.pyqtSlot(dict)
 	def process_wateruse(self, settings):
 		""" Process water use """
 
-		print "Processing water use"
+		self.starting.emit("Processing water use")
 
 		# apply wateruse
 		wateruse_processing.apply_wateruse(settings = settings)			
 
-		self.finished.emit()
+		self.finished.emit("Finished processing water use.")
+
+	@QtCore.pyqtSlot(dict)
+	def process_subwateruse(self, settings):
+		""" Process water use """
+
+		self.starting.emit("Processing substitute water use")
+
+		# apply wateruse
+		wateruse_processing.apply_subwateruse(settings = settings)			
+
+		self.finished.emit("Finished processing substitute water use.")
 
 class Thread(QtCore.QThread):
 	"""
@@ -262,8 +273,8 @@ class MainWindow(QtGui.QMainWindow):
 		item_type = str(self.ui.tab_watertxtcmp_list_widget.currentItem().text())
 		self.plot_on_tab_watertxtcmp_matplotlib_widget(data_list = [self.tab_watertxtcmp_data1, self.tab_watertxtcmp_data2], filenames = [self.filename1, self.filename2], parameter_name = item_type)
 
-	#-------------------------------- Tab: Apply water use to WATER simulation(s) ------------------------------------
 
+	#-------------------------------- Tab: Apply water use to WATER simulation(s) ------------------------------------
 
 	def check_wateruse_inputs(self):
 		""" validate water use inputs """
@@ -299,7 +310,7 @@ class MainWindow(QtGui.QMainWindow):
 		else:
 			self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(True)
 
-	def display_text(self, settings, do_append = False):
+	def display_text(self, settings):
 		""" Display text in text edit area """
 
 		info_dir = settings["info_directory_name"]
@@ -309,16 +320,11 @@ class MainWindow(QtGui.QMainWindow):
 
 		msg = "Please see output directories and files located in chosen simulation directory:<br /><br />{}<br /><br />{}<br /><br />{}<br /><br />{}<br /><br />{}<br /><br />Additional output is located in each respective basin directory within the chosen simulation directory".format(self.tab_wateruse_sim_dir, info_dir, info_file, ecoflow_dir, oasis_dir)
 
-		if do_append:
-			self.ui.tab_wateruse_text_edit.append(msg)
-		else:
-			self.ui.tab_wateruse_text_edit.setHtml(msg)
-			self.ui.tab_wateruse_text_edit.toHtml()
+		self.ui.tab_wateruse_text_edit.setHtml(msg)
+		self.ui.tab_wateruse_text_edit.toHtml()
 
-	def apply_wateruse_to_sim(self, sim_dir, settings, do_append = False):
-		""" Apply water use to a single simulation """
-
-		self.update_status_bar(msg = "Processing water use ... this may take some time ... please wait.")
+	def apply_wateruse_to_sim(self, sim_dir, settings):
+		""" Apply water use to a simulation. Processing is completed in a separate thread from the main gui thread. """
 
 		# over write the settings in user_settings.py with values from gui
 		settings["simulation_directory"] = sim_dir			
@@ -333,30 +339,60 @@ class MainWindow(QtGui.QMainWindow):
 		settings["wateruse_centroids_shapefile"] = self.tab_wateruse_centroids_shp_path
 		settings["wateruse_centroids_shapefile_id_field"] = self.tab_wateruse_centroids_shp_id_field
 
+		# for single simulations, overwrite the basin shapefile field values to empty strings
+		if not settings["is_batch_simulation"]:
+			settings["basin_shapefile_id_field"] = ""			
+			settings["basin_shapefile_area_field"] = ""
+
 		# initiate the thread and worker
 		thread, worker = self.initiate_thread()
 
 		# start the thread
 		thread.start()
 
-		# invoke / call the process method on the worker object and send it the current settings
-		QtCore.QMetaObject.invokeMethod(worker, 'process_wateruse', QtCore.Qt.QueuedConnection, 
-			QtCore.Q_ARG(dict, settings))
+		# if sub water use is checked, then apply substitute water use if proper file exists, otherwise apply water use as normal
+		if self.ui.tab_wateruse_checkbox_subwateruse.isChecked():
+
+			sub_water_use_file = os.path.join(settings["simulation_directory"], settings["info_directory_name"], settings["wateruse_non_intersecting_file_name"])
+
+			if os.path.isfile(sub_water_use_file):
+				# invoke / call the process method on the worker object and send it the current settings
+				QtCore.QMetaObject.invokeMethod(worker, 'process_subwateruse', QtCore.Qt.QueuedConnection, 
+					QtCore.Q_ARG(dict, settings))
+
+				self.update_status_bar(msg = "Processing water use ... this may take some time ... please wait.")
+
+				# display text in text edit
+				self.display_text(settings = settings)
+
+			else:
+				error_msg = "Substitute water use file does not exist. Please make sure the the following file exists: <br /> <br />{}".format(sub_water_use_file)
+				self.popup_error(parent = self, msg = error_msg)
+
+		else:
+			# invoke / call the process method on the worker object and send it the current settings
+			QtCore.QMetaObject.invokeMethod(worker, 'process_wateruse', QtCore.Qt.QueuedConnection, 
+				QtCore.Q_ARG(dict, settings))
+
+			self.update_status_bar(msg = "Processing water use ... this may take some time ... please wait.")
+
+			# reset button
+			self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(False)
+
+			# display text in text edit
+			self.display_text(settings = settings)
 
 		# reset button
 		self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(False)
 
-		# display text in text edit
-		self.display_text(settings = settings, do_append = do_append)
-
 		
-	def apply_multi_sim(self, sim_dirs, settings, do_append):
+	def apply_multi_sim(self, sim_dirs, settings):
 		""" Apply water use to multiple simulations """
 
 		for dir_name in os.listdir(sim_dirs):
 			dir_path = os.path.join(sim_dirs, dir_name)
 			if os.path.isdir(dir_path):
-				self.apply_wateruse_to_sim(dir_path, settings, do_append)
+				self.apply_wateruse_to_sim(dir_path, settings)
 
 	def apply_wateruse(self):
 		""" Apply water use using data provided on water use tab """
@@ -368,7 +404,7 @@ class MainWindow(QtGui.QMainWindow):
 				self.apply_wateruse_to_sim(sim_dir = self.tab_wateruse_sim_dir, settings = settings)
 
 			elif self.ui.tab_wateruse_radio_button_multi_sims.isChecked():
-				self.apply_multi_sim(sim_dirs = self.tab_wateruse_sim_dir, settings = settings, do_append = True)
+				self.apply_multi_sim(sim_dirs = self.tab_wateruse_sim_dir, settings = settings)
 
 		except (IOError, AssertionError, ValueError, TypeError, AttributeError) as error:
 			error_msg = "{}".format(error.message)
@@ -419,6 +455,8 @@ class MainWindow(QtGui.QMainWindow):
 			self.tab_wateruse_basin_shp_dict = spatialvectors.fill_shapefile_dict(shapefile = basin_shapefile)
 
 			fields_str = " ".join(self.tab_wateruse_basin_shp_dict["fields"])
+			self.ui.tab_wateruse_combo_box_shp_id_field.clear()
+			self.ui.tab_wateruse_combo_box_shp_area_field.clear()
 			self.ui.tab_wateruse_combo_box_shp_id_field.addItems(fields_str.split())
 			self.ui.tab_wateruse_combo_box_shp_area_field.addItems(fields_str.split())
 
@@ -463,11 +501,12 @@ class MainWindow(QtGui.QMainWindow):
 
 
 	#-------------------------------- Tab Independent Methods ------------------------------------
-	def thread_done(self):
-		""" Display message box when thread is done """
-		QtGui.QMessageBox.information(self, "Thread done!", "Processing is done.")
 
-		self.update_status_bar(msg = "Processing is done!")
+	def thread_msg(self, msg):
+		""" Display message box about thread """
+
+		QtGui.QMessageBox.information(self, "Thread Message", msg)
+		self.update_status_bar(msg)
 
 	def initiate_thread(self):
 		""" Create the thread and worker. Move the worker object to the thread and make necessary connections """
@@ -479,9 +518,12 @@ class MainWindow(QtGui.QMainWindow):
 		# move the worker object to the thread
 		worker.moveToThread(thread)
 
+		# connect the staring signal to information dialog
+		worker.starting.connect(self.thread_msg)
+
 		# connect the finished signal to quitting the thread
 		worker.finished.connect(thread.quit)
-		worker.finished.connect(self.thread_done)
+		worker.finished.connect(self.thread_msg)
 
 		return thread, worker
 

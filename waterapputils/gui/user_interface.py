@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'user_interface.ui'
 #
-# Created: Mon Mar 02 14:50:37 2015
+# Created: Mon Mar 09 10:09:13 2015
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -277,6 +277,9 @@ class Ui_MainWindow(object):
         self.groupBox_11.setObjectName(_fromUtf8("groupBox_11"))
         self.gridLayout_5 = QtGui.QGridLayout(self.groupBox_11)
         self.gridLayout_5.setObjectName(_fromUtf8("gridLayout_5"))
+        self.label_6 = QtGui.QLabel(self.groupBox_11)
+        self.label_6.setObjectName(_fromUtf8("label_6"))
+        self.gridLayout_5.addWidget(self.label_6, 7, 0, 1, 1)
         self.tab_wateruse_line_edit_wateruse_factor_file = QtGui.QLineEdit(self.groupBox_11)
         self.tab_wateruse_line_edit_wateruse_factor_file.setObjectName(_fromUtf8("tab_wateruse_line_edit_wateruse_factor_file"))
         self.gridLayout_5.addWidget(self.tab_wateruse_line_edit_wateruse_factor_file, 3, 1, 1, 2)
@@ -289,9 +292,6 @@ class Ui_MainWindow(object):
         self.tab_wateruse_push_button_wateruse_shp = QtGui.QPushButton(self.groupBox_11)
         self.tab_wateruse_push_button_wateruse_shp.setObjectName(_fromUtf8("tab_wateruse_push_button_wateruse_shp"))
         self.gridLayout_5.addWidget(self.tab_wateruse_push_button_wateruse_shp, 5, 0, 2, 1)
-        self.label_6 = QtGui.QLabel(self.groupBox_11)
-        self.label_6.setObjectName(_fromUtf8("label_6"))
-        self.gridLayout_5.addWidget(self.label_6, 7, 0, 1, 1)
         self.tab_wateruse_list_widget_wateruse_files = QtGui.QListWidget(self.groupBox_11)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -307,6 +307,9 @@ class Ui_MainWindow(object):
         self.tab_wateruse_combo_box_wateruse_shp_id_field = QtGui.QComboBox(self.groupBox_11)
         self.tab_wateruse_combo_box_wateruse_shp_id_field.setObjectName(_fromUtf8("tab_wateruse_combo_box_wateruse_shp_id_field"))
         self.gridLayout_5.addWidget(self.tab_wateruse_combo_box_wateruse_shp_id_field, 7, 1, 1, 1)
+        self.tab_wateruse_checkbox_subwateruse = QtGui.QCheckBox(self.groupBox_11)
+        self.tab_wateruse_checkbox_subwateruse.setObjectName(_fromUtf8("tab_wateruse_checkbox_subwateruse"))
+        self.gridLayout_5.addWidget(self.tab_wateruse_checkbox_subwateruse, 8, 0, 1, 1)
         self.verticalLayout_10.addWidget(self.groupBox_11)
         self.frame_12 = QtGui.QFrame(self.frame_7)
         self.frame_12.setFrameShape(QtGui.QFrame.StyledPanel)
@@ -409,12 +412,13 @@ class Ui_MainWindow(object):
         self.tab_wateruse_push_button_open_sim.setText(_translate("MainWindow", "Open directory", None))
         self.tab_wateruse_line_edit_open_sim.setPlaceholderText(_translate("MainWindow", "WATER simulation directory", None))
         self.groupBox_11.setTitle(_translate("MainWindow", "Water use information", None))
+        self.label_6.setText(_translate("MainWindow", "Water use shapefile id field", None))
         self.tab_wateruse_line_edit_wateruse_factor_file.setPlaceholderText(_translate("MainWindow", "Water use factor file", None))
         self.tab_wateruse_push_button_wateruse_factor_file.setText(_translate("MainWindow", "Open file", None))
         self.tab_wateruse_line_edit_wateruse_shp.setPlaceholderText(_translate("MainWindow", "Water use shapefile", None))
         self.tab_wateruse_push_button_wateruse_shp.setText(_translate("MainWindow", "Open file", None))
-        self.label_6.setText(_translate("MainWindow", "Water use shapefile id field", None))
         self.tab_wateruse_push_button_wateruse_files.setText(_translate("MainWindow", "Open files", None))
+        self.tab_wateruse_checkbox_subwateruse.setText(_translate("MainWindow", "Use substitute water use", None))
         self.tab_wateruse_push_button_check_inputs.setText(_translate("MainWindow", "Check Inputs", None))
         self.tab_wateruse_push_button_apply_wateruse.setText(_translate("MainWindow", "Apply Water Use", None))
         self.tab_applywateruse.setTabText(self.tab_applywateruse.indexOf(self.tab_applywateruse1), _translate("MainWindow", "Apply water use to WATER simulation(s)", None))
