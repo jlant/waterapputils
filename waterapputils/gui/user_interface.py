@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'user_interface.ui'
 #
-# Created: Mon Mar 09 10:09:13 2015
+# Created: Tue Mar 10 09:43:52 2015
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -346,6 +346,9 @@ class Ui_MainWindow(object):
         self.tab_wateruse_matplotlib_widget = MatplotlibWidget(self.frame_8)
         self.tab_wateruse_matplotlib_widget.setObjectName(_fromUtf8("tab_wateruse_matplotlib_widget"))
         self.verticalLayout_12.addWidget(self.tab_wateruse_matplotlib_widget)
+        self.tab_wateruse_push_button_plot_map = QtGui.QPushButton(self.frame_8)
+        self.tab_wateruse_push_button_plot_map.setObjectName(_fromUtf8("tab_wateruse_push_button_plot_map"))
+        self.verticalLayout_12.addWidget(self.tab_wateruse_push_button_plot_map)
         self.horizontalLayout_5.addWidget(self.frame_8)
         self.verticalLayout_8.addWidget(self.frame_13)
         self.tab_applywateruse.addTab(self.tab_applywateruse1, _fromUtf8(""))
@@ -421,6 +424,7 @@ class Ui_MainWindow(object):
         self.tab_wateruse_checkbox_subwateruse.setText(_translate("MainWindow", "Use substitute water use", None))
         self.tab_wateruse_push_button_check_inputs.setText(_translate("MainWindow", "Check Inputs", None))
         self.tab_wateruse_push_button_apply_wateruse.setText(_translate("MainWindow", "Apply Water Use", None))
+        self.tab_wateruse_push_button_plot_map.setText(_translate("MainWindow", "Plot map", None))
         self.tab_applywateruse.setTabText(self.tab_applywateruse.indexOf(self.tab_applywateruse1), _translate("MainWindow", "Apply water use to WATER simulation(s)", None))
         self.menuExit.setTitle(_translate("MainWindow", "Exit", None))
         self.menuHelp.setTitle(_translate("MainWindow", "Help", None))

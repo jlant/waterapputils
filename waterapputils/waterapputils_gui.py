@@ -7,6 +7,7 @@ from modules import watertxt
 from modules import helpers
 from modules import spatialvectors
 from modules import wateruse_processing
+from modules import map_processing
 import user_settings
 
 class Worker(QtCore.QObject):
@@ -23,7 +24,7 @@ class Worker(QtCore.QObject):
 	def process_wateruse(self, settings):
 		""" Process water use """
 
-		self.starting.emit("Processing water use")
+		self.starting.emit("Processing water use ... this may take some time ... please wait.")
 
 		# apply wateruse
 		wateruse_processing.apply_wateruse(settings = settings)			
@@ -32,14 +33,42 @@ class Worker(QtCore.QObject):
 
 	@QtCore.pyqtSlot(dict)
 	def process_subwateruse(self, settings):
-		""" Process water use """
+		""" Process substitute water use """
 
-		self.starting.emit("Processing substitute water use")
+		self.starting.emit("Processing substitute water use ... this may take some time ... please wait.")
 
-		# apply wateruse
+		# apply substitute wateruse
 		wateruse_processing.apply_subwateruse(settings = settings)			
 
 		self.finished.emit("Finished processing substitute water use.")
+
+	@QtCore.pyqtSlot(dict, object)
+	def plot_basemap(self, settings, map_widget):
+		""" Process water use """
+
+		self.starting.emit("Making map ... this may take some time ... please wait.")
+
+		files_list = [
+			settings["water_shapefiles"]["drbbasin"]["path"],										# path to drb basin
+			os.path.join(settings["simulation_directory"], settings["basin_shapefile_name"]),		# path to basin shapefile for a simulation
+			settings["water_shapefiles"]["strm"]["path"],								    		# path to streams shapefile
+			settings["water_shapefiles"]["rsvr"]["path"],								    		# path to reservoir shapefile
+			settings["water_shapefiles"]["usgsgages"]["path"],							    		# path to usgs gages shapefile
+		]
+
+		shp_info_list, display_fields, colors = map_processing.get_shps_colors_fields(files_list, settings)
+
+		# self.ui.tab_wateruse_matplotlib_widget
+		map_widget.plot_shapefiles_map(
+			shapefiles = shp_info_list, 
+			display_fields = display_fields, 
+			colors = colors, 
+			title = settings["map_title_zoomed"], 
+			shp_name = os.path.splitext(settings["basin_shapefile_name"])[0], 
+			buff = settings["map_buffer_zoomed"],
+		)		
+
+		self.finished.emit("Finished making map.")
 
 class Thread(QtCore.QThread):
 	"""
@@ -59,6 +88,7 @@ class Thread(QtCore.QThread):
 
 	def __del__(self):
 		""" Make sure thread stops processing before it gets destroyed; does not get garbage collected until finished"""
+		self.exiting = True
 		self.wait()
 
 	def start(self):
@@ -113,8 +143,8 @@ class MainWindow(QtGui.QMainWindow):
 		self.tab_wateruse_centroids_shp_id_field = None
 		self.tab_wateruse_centroids_shp_dict = None
 
-		# initialize thread
-		# self.work_thread = WorkThread()
+		# user settings
+		self.settings = user_settings.settings
 
 		# set up the ui
 		self.ui = Ui_MainWindow()
@@ -139,15 +169,18 @@ class MainWindow(QtGui.QMainWindow):
 		self.ui.tab_wateruse_push_button_wateruse_shp.clicked.connect(self.select_wateruse_shp_file)
 		self.ui.tab_wateruse_push_button_apply_wateruse.clicked.connect(self.apply_wateruse)
 		self.ui.tab_wateruse_push_button_check_inputs.clicked.connect(self.check_wateruse_inputs)
+		self.ui.tab_wateruse_push_button_plot_map.clicked.connect(self.plot_map)
 
 		# disble the plot area until a file is opened 
 		self.ui.tab_watertxt_matplotlib_widget.setEnabled(False)
 		self.ui.tab_watertxtcmp_matplotlib_widget.setEnabled(False)
+		self.ui.tab_wateruse_matplotlib_widget.setEnabled(False)
 
 		# disable compare button until both line edit boxes have text
 		self.ui.tab_watertxtcmp_push_button_compare.setEnabled(False)
 
 		# disable apply wateruse button until all proper input exists
+		self.ui.tab_wateruse_push_button_plot_map.setEnabled(False)
 		self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(False)
 
 	#-------------------------------- Tab: Process WATER output text file ------------------------------------
@@ -306,8 +339,28 @@ class MainWindow(QtGui.QMainWindow):
 				valid_list.append(True)
 
 		if False in valid_list:
+			self.ui.tab_wateruse_push_button_plot_map.setEnabled(False)
 			self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(False)
 		else:
+			# over write the settings in user_settings.py with values from gui
+			self.settings["simulation_directory"] = self.tab_wateruse_sim_dir			
+			self.settings["is_batch_simulation"] = self.is_batch_simulation
+
+			self.settings["basin_shapefile_name"] = self.tab_wateruse_basin_shp_file
+			self.settings["basin_shapefile_id_field"] = self.tab_wateruse_basin_shp_id_field			
+			self.settings["basin_shapefile_area_field"] = self.tab_wateruse_basin_shp_area_field
+
+			self.settings["wateruse_files"] = self.tab_wateruse_wateruse_data_files
+			self.settings["wateruse_factor_file"] = self.tab_wateruse_wateruse_factor_file_path
+			self.settings["wateruse_centroids_shapefile"] = self.tab_wateruse_centroids_shp_path
+			self.settings["wateruse_centroids_shapefile_id_field"] = self.tab_wateruse_centroids_shp_id_field
+
+			# for single simulations, overwrite the basin shapefile field values to empty strings
+			if not self.settings["is_batch_simulation"]:
+				self.settings["basin_shapefile_id_field"] = ""			
+				self.settings["basin_shapefile_area_field"] = ""
+
+			self.ui.tab_wateruse_push_button_plot_map.setEnabled(True)
 			self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(True)
 
 	def display_text(self, settings):
@@ -323,26 +376,8 @@ class MainWindow(QtGui.QMainWindow):
 		self.ui.tab_wateruse_text_edit.setHtml(msg)
 		self.ui.tab_wateruse_text_edit.toHtml()
 
-	def apply_wateruse_to_sim(self, sim_dir, settings):
+	def apply_wateruse_to_sim(self, settings):
 		""" Apply water use to a simulation. Processing is completed in a separate thread from the main gui thread. """
-
-		# over write the settings in user_settings.py with values from gui
-		settings["simulation_directory"] = sim_dir			
-		settings["is_batch_simulation"] = self.is_batch_simulation
-
-		settings["basin_shapefile_name"] = self.tab_wateruse_basin_shp_file
-		settings["basin_shapefile_id_field"] = self.tab_wateruse_basin_shp_id_field			
-		settings["basin_shapefile_area_field"] = self.tab_wateruse_basin_shp_area_field
-
-		settings["wateruse_files"] = self.tab_wateruse_wateruse_data_files
-		settings["wateruse_factor_file"] = self.tab_wateruse_wateruse_factor_file_path
-		settings["wateruse_centroids_shapefile"] = self.tab_wateruse_centroids_shp_path
-		settings["wateruse_centroids_shapefile_id_field"] = self.tab_wateruse_centroids_shp_id_field
-
-		# for single simulations, overwrite the basin shapefile field values to empty strings
-		if not settings["is_batch_simulation"]:
-			settings["basin_shapefile_id_field"] = ""			
-			settings["basin_shapefile_area_field"] = ""
 
 		# initiate the thread and worker
 		thread, worker = self.initiate_thread()
@@ -353,17 +388,15 @@ class MainWindow(QtGui.QMainWindow):
 		# if sub water use is checked, then apply substitute water use if proper file exists, otherwise apply water use as normal
 		if self.ui.tab_wateruse_checkbox_subwateruse.isChecked():
 
-			sub_water_use_file = os.path.join(settings["simulation_directory"], settings["info_directory_name"], settings["wateruse_non_intersecting_file_name"])
+			sub_water_use_file = os.path.join(self.settings["simulation_directory"], self.settings["info_directory_name"], self.settings["wateruse_non_intersecting_file_name"])
 
 			if os.path.isfile(sub_water_use_file):
 				# invoke / call the process method on the worker object and send it the current settings
 				QtCore.QMetaObject.invokeMethod(worker, 'process_subwateruse', QtCore.Qt.QueuedConnection, 
-					QtCore.Q_ARG(dict, settings))
-
-				self.update_status_bar(msg = "Processing water use ... this may take some time ... please wait.")
+					QtCore.Q_ARG(dict, self.settings))
 
 				# display text in text edit
-				self.display_text(settings = settings)
+				self.display_text(settings = self.settings)
 
 			else:
 				error_msg = "Substitute water use file does not exist. Please make sure the the following file exists: <br /> <br />{}".format(sub_water_use_file)
@@ -372,9 +405,7 @@ class MainWindow(QtGui.QMainWindow):
 		else:
 			# invoke / call the process method on the worker object and send it the current settings
 			QtCore.QMetaObject.invokeMethod(worker, 'process_wateruse', QtCore.Qt.QueuedConnection, 
-				QtCore.Q_ARG(dict, settings))
-
-			self.update_status_bar(msg = "Processing water use ... this may take some time ... please wait.")
+				QtCore.Q_ARG(dict, self.settings))
 
 			# reset button
 			self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(False)
@@ -385,32 +416,73 @@ class MainWindow(QtGui.QMainWindow):
 		# reset button
 		self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(False)
 
-		
-	def apply_multi_sim(self, sim_dirs, settings):
+	
+	def apply_multi_sim(self, settings):
 		""" Apply water use to multiple simulations """
 
-		for dir_name in os.listdir(sim_dirs):
-			dir_path = os.path.join(sim_dirs, dir_name)
+		for dir_name in os.listdir(settings["simulation_directory"]):
+			dir_path = os.path.join(settings["simulation_directory"], dir_name)
+
 			if os.path.isdir(dir_path):
-				self.apply_wateruse_to_sim(dir_path, settings)
+				self.apply_wateruse_to_sim(settings)
 
 	def apply_wateruse(self):
 		""" Apply water use using data provided on water use tab """
 
 		try:
-			settings = user_settings.settings
 
 			if self.ui.tab_wateruse_radio_button_one_sim.isChecked():
-				self.apply_wateruse_to_sim(sim_dir = self.tab_wateruse_sim_dir, settings = settings)
+				self.apply_wateruse_to_sim(settings = self.settings)
 
 			elif self.ui.tab_wateruse_radio_button_multi_sims.isChecked():
-				self.apply_multi_sim(sim_dirs = self.tab_wateruse_sim_dir, settings = settings)
+				self.apply_multi_sim(settings = self.settings)
 
 		except (IOError, AssertionError, ValueError, TypeError, AttributeError) as error:
 			error_msg = "{}".format(error.message)
 			print(error_msg)
 			self.popup_error(parent = self, msg = error_msg)
 			self.clear_tab_wateruse_widgets()
+
+	def plot_map(self):
+		""" Plot basmap """
+
+		try:
+			# # initiate the thread and worker
+			# thread, worker = self.initiate_thread()
+
+			# # start the thread
+			# thread.start()
+
+			# # invoke / call the process method on the worker object and send it the current settings
+			# QtCore.QMetaObject.invokeMethod(worker, 'plot_basemap', QtCore.Qt.QueuedConnection, 
+			# 	QtCore.Q_ARG(dict, self.settings), QtCore.Q_ARG(object, self.ui.tab_wateruse_matplotlib_widget))
+
+			files_list = [
+				self.settings["water_shapefiles"]["drbbasin"]["path"],										# path to drb basin
+				os.path.join(self.settings["simulation_directory"], self.settings["basin_shapefile_name"]),	# path to basin shapefile for a simulation
+				self.settings["water_shapefiles"]["strm"]["path"],								    		# path to streams shapefile
+				self.settings["water_shapefiles"]["rsvr"]["path"],								    		# path to reservoir shapefile
+				self.settings["water_shapefiles"]["usgsgages"]["path"],							    		# path to usgs gages shapefile
+			]
+
+			shp_info_list, display_fields, colors = map_processing.get_shps_colors_fields(files_list, self.settings)
+
+			self.ui.tab_wateruse_matplotlib_widget.plot_shapefiles_map(
+				shapefiles = shp_info_list, 
+				display_fields = display_fields, 
+				colors = colors, 
+				title = self.settings["map_title_zoomed"], 
+				shp_name = os.path.splitext(self.settings["basin_shapefile_name"])[0], 
+				buff = self.settings["map_buffer_zoomed"],
+			)
+
+			self.ui.tab_wateruse_matplotlib_widget.setEnabled(True)
+
+		except IOError as error:
+			error_msg = "{}".format(error.message)
+			print(error_msg)
+			self.popup_error(parent = self, msg = error_msg)
+			self.ui.tab_wateruse_matplotlib_widget.clear_basemap_plot()
 
 	def select_water_sim(self):
 		""" Open a QtDialog to select a WATER simulation directory and show the directory in the line edit widget """
@@ -724,6 +796,9 @@ class MainWindow(QtGui.QMainWindow):
 		self.ui.tab_wateruse_line_edit_wateruse_factor_file.clear()
 		self.ui.tab_wateruse_line_edit_wateruse_shp.clear()
 		self.ui.tab_wateruse_combo_box_wateruse_shp_id_field.clear()
+		self.ui.tab_wateruse_text_edit.clear()
+		self.ui.tab_wateruse_matplotlib_widget.clear_basemap_plot()
+		self.ui.tab_wateruse_matplotlib_widget.setEnabled(False)
 
 	def about(self):
 		""" Show an message box about the gui."""
