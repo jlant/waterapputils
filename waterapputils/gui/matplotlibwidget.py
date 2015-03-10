@@ -365,6 +365,7 @@ class MatplotlibWidget(QtGui.QWidget):
             
         return extent_coords, center_coords, standard_parallels
 
+
     def plot_shapefiles_map(self, shapefiles, display_fields = [], colors = [], title = None, shp_name = None, buff = 1.0):
         """   
         Generate a map showing all the shapefiles in the shapefile_list.  
@@ -483,10 +484,6 @@ class MatplotlibWidget(QtGui.QWidget):
 
         # draw the plot
         self.canvas.draw()
-
-        # get background to use blit while plotting; makes plotting faster
-        # background = self.canvas.copy_from_bbox(self.basemap_axes.bbox)
-        self.canvas.blit(self.basemap_axes.bbox)
 
 
     def clear_basemap_plot(self):
