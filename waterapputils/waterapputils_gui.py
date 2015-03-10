@@ -52,13 +52,10 @@ class MapWorker(QtCore.QObject):
 	finished = QtCore.pyqtSignal(["QString"])
 
 	@QtCore.pyqtSlot(dict, object)
-	def draw_map(self, settings, basemap):
-		""" Process water use """
+	def draw_overview_map(self, settings, matplotlib_widget):
+		""" Draw overview map """
 
 		self.starting.emit("Drawing map ... this may take a few moments ... please wait.")
-
-		# print("Drawing map ... this may take a few moments ... please wait.")
-		print(settings)
 
 		files_list = [
 			settings["water_shapefiles"]["drbbasin"]["path"],										# path to drb basin
@@ -72,13 +69,42 @@ class MapWorker(QtCore.QObject):
 		display_fields[1] = ""
 
 		# plot
-		basemap.plot_shapefiles_map(
+		matplotlib_widget.plot_shapefiles_map(
 			shapefiles = shp_info_list, 
 			display_fields = display_fields, 
 			colors = colors, 
-			title = settings["map_title_overview"], 
+			title = None, 
 			shp_name = None, 
 			buff = settings["map_buffer_overview"],
+		)
+
+		self.finished.emit("Finished drawing map.")
+
+	@QtCore.pyqtSlot(dict, object)
+	def draw_zoomed_map(self, settings, matplotlib_widget):
+		""" Draw zoomed map """
+
+		self.starting.emit("Drawing map ... this may take a few moments ... please wait.")
+
+		files_list = [
+			settings["water_shapefiles"]["drbbasin"]["path"],										# path to drb basin
+			os.path.join(settings["simulation_directory"], settings["basin_shapefile_name"]),	# path to basin shapefile for a simulation
+			settings["water_shapefiles"]["strm"]["path"],								    		# path to streams shapefile
+			settings["water_shapefiles"]["rsvr"]["path"],								    		# path to reservoir shapefile
+			settings["water_shapefiles"]["usgsgages"]["path"],							    		# path to usgs gages shapefile
+		]
+
+		# get necessary parameters for plot
+		shp_info_list, display_fields, colors = map_processing.get_shps_colors_fields(files_list, settings)
+
+		# plot
+		matplotlib_widget.plot_shapefiles_map(
+			shapefiles = shp_info_list, 
+			display_fields = display_fields, 
+			colors = colors, 
+			title = None, 
+			shp_name = os.path.splitext(settings["basin_shapefile_name"])[0], 
+			buff = settings["map_buffer_zoomed"],
 		)
 
 		self.finished.emit("Finished drawing map.")
@@ -182,7 +208,8 @@ class MainWindow(QtGui.QMainWindow):
 		self.ui.tab_wateruse_push_button_wateruse_shp.clicked.connect(self.select_wateruse_shp_file)
 		self.ui.tab_wateruse_push_button_apply_wateruse.clicked.connect(self.apply_wateruse)
 		self.ui.tab_wateruse_push_button_check_inputs.clicked.connect(self.check_wateruse_inputs)
-		self.ui.tab_wateruse_push_button_plot_map.clicked.connect(self.plot_overview_map)
+		self.ui.tab_wateruse_push_button_plot_overview_map.clicked.connect(self.plot_overview_map)
+		self.ui.tab_wateruse_push_button_plot_zoomed_map.clicked.connect(self.plot_zoomed_map)
 
 		# disble the plot area until a file is opened 
 		self.ui.tab_watertxt_matplotlib_widget.setEnabled(False)
@@ -193,8 +220,9 @@ class MainWindow(QtGui.QMainWindow):
 		self.ui.tab_watertxtcmp_push_button_compare.setEnabled(False)
 
 		# disable apply wateruse button until all proper input exists
-		self.ui.tab_wateruse_push_button_plot_map.setEnabled(False)
 		self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(False)
+		self.ui.tab_wateruse_push_button_plot_overview_map.setEnabled(False)
+		self.ui.tab_wateruse_push_button_plot_zoomed_map.setEnabled(False)
 
 
 	#-------------------------------- Tab: Process WATER output text file ------------------------------------
@@ -353,8 +381,9 @@ class MainWindow(QtGui.QMainWindow):
 				valid_list.append(True)
 
 		if False in valid_list:
-			self.ui.tab_wateruse_push_button_plot_map.setEnabled(False)
 			self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(False)
+			self.ui.tab_wateruse_push_button_plot_overview_map.setEnabled(False)
+			self.ui.tab_wateruse_push_button_plot_zoomed_map.setEnabled(False)
 		else:
 			# over write the settings in user_settings.py with values from gui
 			self.settings["simulation_directory"] = self.tab_wateruse_sim_dir			
@@ -374,8 +403,10 @@ class MainWindow(QtGui.QMainWindow):
 				self.settings["basin_shapefile_id_field"] = ""			
 				self.settings["basin_shapefile_area_field"] = ""
 
-			self.ui.tab_wateruse_push_button_plot_map.setEnabled(True)
+			# enable buttons
 			self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(True)
+			self.ui.tab_wateruse_push_button_plot_overview_map.setEnabled(True)
+			self.ui.tab_wateruse_push_button_plot_zoomed_map.setEnabled(True)
 
 	def display_text(self, settings):
 		""" Display text in text edit area """
@@ -457,76 +488,93 @@ class MainWindow(QtGui.QMainWindow):
 			self.popup_error(parent = self, msg = error_msg)
 			self.clear_tab_wateruse_widgets()
 
-	def map_msg(self, msg):
-		""" """
-		print("in map_msg")
-		QtGui.QMessageBox.information(self, "Map Message", msg)
+	def setup_tab_wateruse_matplotlib_widget(self):
+		""" Setup the matplotlib widget """
 
+		self.ui.tab_wateruse_matplotlib_widget.setup_basemap_plot()
 
 	def plot_overview_map(self):
-		""" Plot basemap """
-
-		thread = Thread()
-		worker = MapWorker()
-
-		# move the worker object to the thread
-		worker.moveToThread(thread)
-
-		# connect the starting signal to information dialog
-		worker.starting.connect(self.thread_msg)
-
-		# connect the finished signal to quitting the thread
-		worker.finished.connect(thread.quit)
-		worker.finished.connect(self.thread_msg)
-
-		# start the thread
-		thread.start()
-
-		# invoke / call the process method on the worker object and send it the current settings
-		QtCore.QMetaObject.invokeMethod(worker, "draw_map", QtCore.Qt.QueuedConnection, 
-			QtCore.Q_ARG(dict, self.settings),
-			QtCore.Q_ARG(object, self.ui.tab_wateruse_matplotlib_widget)
-		)
-
-		# reset button
-		self.ui.tab_wateruse_push_button_plot_map.setEnabled(False)
-
-		# display text in text edit
-		self.update_status_bar(msg = "Drawing map ... this may take a few moments ... please wait.")
-
-
-	def plot_map(self):
-		""" Plot basemap """
+		""" Plot overview map """
 
 		try:
-			QtGui.QMessageBox.information(self, "Map Message", "may take some time ... please wait.")
-			files_list = [
-				self.settings["water_shapefiles"]["drbbasin"]["path"],										# path to drb basin
-				os.path.join(self.settings["simulation_directory"], self.settings["basin_shapefile_name"]),	# path to basin shapefile for a simulation
-				self.settings["water_shapefiles"]["strm"]["path"],								    		# path to streams shapefile
-				self.settings["water_shapefiles"]["rsvr"]["path"],								    		# path to reservoir shapefile
-				self.settings["water_shapefiles"]["usgsgages"]["path"],							    		# path to usgs gages shapefile
-			]
+			self.setup_tab_wateruse_matplotlib_widget()
 
-			shp_info_list, display_fields, colors = map_processing.get_shps_colors_fields(files_list, self.settings)
+			thread = Thread()
+			worker = MapWorker()
 
-			self.ui.tab_wateruse_matplotlib_widget.plot_shapefiles_map(
-				shapefiles = shp_info_list, 
-				display_fields = display_fields, 
-				colors = colors, 
-				title = self.settings["map_title_zoomed"], 
-				shp_name = os.path.splitext(self.settings["basin_shapefile_name"])[0], 
-				buff = self.settings["map_buffer_zoomed"],
+			# move the worker object to the thread
+			worker.moveToThread(thread)
+
+			# connect the starting signal to information dialog
+			worker.starting.connect(self.thread_msg)
+
+			# connect the finished signal to quitting the thread
+			worker.finished.connect(thread.quit)
+			worker.finished.connect(self.thread_msg)
+
+			# start the thread
+			thread.start()
+
+			# invoke / call the process method on the worker object and send it the current settings
+			QtCore.QMetaObject.invokeMethod(worker, "draw_overview_map", QtCore.Qt.QueuedConnection, 
+				QtCore.Q_ARG(dict, self.settings),
+				QtCore.Q_ARG(object, self.ui.tab_wateruse_matplotlib_widget)
 			)
 
-			self.ui.tab_wateruse_matplotlib_widget.setEnabled(True)
-			self.ui.tab_wateruse_push_button_plot_map.setEnabled(False)
+			# reset buttons
+			self.ui.tab_wateruse_push_button_plot_overview_map.setEnabled(False)
+			self.ui.tab_wateruse_push_button_plot_zoomed_map.setEnabled(True)
 
-		except IOError as error:
+			# display text in text edit
+			self.update_status_bar(msg = "Drawing map ... this may take a few moments ... please wait.")
+
+		except (IOError, TypeError) as error:
 			error_msg = "{}".format(error.message)
 			print(error_msg)
 			self.popup_error(parent = self, msg = error_msg)
 			self.ui.tab_wateruse_matplotlib_widget.clear_basemap_plot()
+
+	def plot_zoomed_map(self):
+		""" Plot overview map """
+
+		try:
+			self.setup_tab_wateruse_matplotlib_widget()
+
+			thread = Thread()
+			worker = MapWorker()
+
+			# move the worker object to the thread
+			worker.moveToThread(thread)
+
+			# connect the starting signal to information dialog
+			worker.starting.connect(self.thread_msg)
+
+			# connect the finished signal to quitting the thread
+			worker.finished.connect(thread.quit)
+			worker.finished.connect(self.thread_msg)
+
+			# start the thread
+			thread.start()
+
+			# invoke / call the process method on the worker object and send it the current settings
+			QtCore.QMetaObject.invokeMethod(worker, "draw_zoomed_map", QtCore.Qt.QueuedConnection, 
+				QtCore.Q_ARG(dict, self.settings),
+				QtCore.Q_ARG(object, self.ui.tab_wateruse_matplotlib_widget)
+			)
+
+			# reset buttons
+			self.ui.tab_wateruse_push_button_plot_zoomed_map.setEnabled(False)
+			self.ui.tab_wateruse_push_button_plot_overview_map.setEnabled(True)
+
+			# display text in text edit
+			self.update_status_bar(msg = "Drawing map ... this may take a few moments ... please wait.")
+
+		except (IOError, TypeError) as error:
+			error_msg = "{}".format(error.message)
+			print(error_msg)
+			self.popup_error(parent = self, msg = error_msg)
+			self.ui.tab_wateruse_matplotlib_widget.clear_basemap_plot()
+
 
 	def select_water_sim(self):
 		""" Open a QtDialog to select a WATER simulation directory and show the directory in the line edit widget """
@@ -536,6 +584,7 @@ class MainWindow(QtGui.QMainWindow):
 			dirpath = QtGui.QFileDialog.getExistingDirectory(self, caption = "Please select a WATER simulation directory", directory = "../data/sample-water-simulations/")
 
 			if dirpath:
+				self.clear_tab_wateruse_widgets()
 				self.tab_wateruse_sim_dir = str(dirpath)
 				self.ui.tab_wateruse_line_edit_open_sim.setText(self.tab_wateruse_sim_dir)
 				self.populate_sim_info(sim_dirpath = self.tab_wateruse_sim_dir)
@@ -843,6 +892,8 @@ class MainWindow(QtGui.QMainWindow):
 		self.ui.tab_wateruse_text_edit.clear()
 		self.ui.tab_wateruse_matplotlib_widget.clear_basemap_plot()
 		self.ui.tab_wateruse_matplotlib_widget.setEnabled(False)
+		self.ui.tab_wateruse_push_button_plot_overview_map.setEnabled(False)
+		self.ui.tab_wateruse_push_button_plot_zoomed_map.setEnabled(False)
 
 	def about(self):
 		""" Show an message box about the gui."""

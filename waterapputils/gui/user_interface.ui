@@ -643,10 +643,29 @@
                <widget class="MatplotlibWidget" name="tab_wateruse_matplotlib_widget"/>
               </item>
               <item>
-               <widget class="QPushButton" name="tab_wateruse_push_button_plot_map">
-                <property name="text">
-                 <string>Plot map</string>
+               <widget class="QFrame" name="frame_10">
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
                 </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_6">
+                 <item>
+                  <widget class="QPushButton" name="tab_wateruse_push_button_plot_overview_map">
+                   <property name="text">
+                    <string>Plot Overview Map</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="tab_wateruse_push_button_plot_zoomed_map">
+                   <property name="text">
+                    <string>Plot Zoomed Map</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
              </layout>

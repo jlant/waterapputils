@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'user_interface.ui'
 #
-# Created: Tue Mar 10 09:43:52 2015
+# Created: Tue Mar 10 16:43:42 2015
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -346,9 +346,19 @@ class Ui_MainWindow(object):
         self.tab_wateruse_matplotlib_widget = MatplotlibWidget(self.frame_8)
         self.tab_wateruse_matplotlib_widget.setObjectName(_fromUtf8("tab_wateruse_matplotlib_widget"))
         self.verticalLayout_12.addWidget(self.tab_wateruse_matplotlib_widget)
-        self.tab_wateruse_push_button_plot_map = QtGui.QPushButton(self.frame_8)
-        self.tab_wateruse_push_button_plot_map.setObjectName(_fromUtf8("tab_wateruse_push_button_plot_map"))
-        self.verticalLayout_12.addWidget(self.tab_wateruse_push_button_plot_map)
+        self.frame_10 = QtGui.QFrame(self.frame_8)
+        self.frame_10.setFrameShape(QtGui.QFrame.StyledPanel)
+        self.frame_10.setFrameShadow(QtGui.QFrame.Raised)
+        self.frame_10.setObjectName(_fromUtf8("frame_10"))
+        self.horizontalLayout_6 = QtGui.QHBoxLayout(self.frame_10)
+        self.horizontalLayout_6.setObjectName(_fromUtf8("horizontalLayout_6"))
+        self.tab_wateruse_push_button_plot_overview_map = QtGui.QPushButton(self.frame_10)
+        self.tab_wateruse_push_button_plot_overview_map.setObjectName(_fromUtf8("tab_wateruse_push_button_plot_overview_map"))
+        self.horizontalLayout_6.addWidget(self.tab_wateruse_push_button_plot_overview_map)
+        self.tab_wateruse_push_button_plot_zoomed_map = QtGui.QPushButton(self.frame_10)
+        self.tab_wateruse_push_button_plot_zoomed_map.setObjectName(_fromUtf8("tab_wateruse_push_button_plot_zoomed_map"))
+        self.horizontalLayout_6.addWidget(self.tab_wateruse_push_button_plot_zoomed_map)
+        self.verticalLayout_12.addWidget(self.frame_10)
         self.horizontalLayout_5.addWidget(self.frame_8)
         self.verticalLayout_8.addWidget(self.frame_13)
         self.tab_applywateruse.addTab(self.tab_applywateruse1, _fromUtf8(""))
@@ -424,7 +434,8 @@ class Ui_MainWindow(object):
         self.tab_wateruse_checkbox_subwateruse.setText(_translate("MainWindow", "Use substitute water use", None))
         self.tab_wateruse_push_button_check_inputs.setText(_translate("MainWindow", "Check Inputs", None))
         self.tab_wateruse_push_button_apply_wateruse.setText(_translate("MainWindow", "Apply Water Use", None))
-        self.tab_wateruse_push_button_plot_map.setText(_translate("MainWindow", "Plot map", None))
+        self.tab_wateruse_push_button_plot_overview_map.setText(_translate("MainWindow", "Plot Overview Map", None))
+        self.tab_wateruse_push_button_plot_zoomed_map.setText(_translate("MainWindow", "Plot Zoomed Map", None))
         self.tab_applywateruse.setTabText(self.tab_applywateruse.indexOf(self.tab_applywateruse1), _translate("MainWindow", "Apply water use to WATER simulation(s)", None))
         self.menuExit.setTitle(_translate("MainWindow", "Exit", None))
         self.menuHelp.setTitle(_translate("MainWindow", "Help", None))
