@@ -10,6 +10,8 @@ from modules import wateruse_processing
 from modules import map_processing
 import user_settings
 
+import time
+
 class Worker(QtCore.QObject):
 	""" 
 	Object that does the work of applying water use. 
@@ -41,6 +43,45 @@ class Worker(QtCore.QObject):
 		wateruse_processing.apply_subwateruse(settings = settings)			
 
 		self.finished.emit("Finished processing substitute water use.")
+
+class MapWorker(QtCore.QObject):
+	""" 
+	Object that does the work of drawing map.
+	"""
+	starting = QtCore.pyqtSignal(["QString"])
+	finished = QtCore.pyqtSignal(["QString"])
+
+	@QtCore.pyqtSlot(dict, object)
+	def draw_map(self, settings, basemap):
+		""" Process water use """
+
+		self.starting.emit("Drawing map ... this may take a few moments ... please wait.")
+
+		# print("Drawing map ... this may take a few moments ... please wait.")
+		print(settings)
+
+		files_list = [
+			settings["water_shapefiles"]["drbbasin"]["path"],										# path to drb basin
+			os.path.join(settings["simulation_directory"], settings["basin_shapefile_name"]),	# path to basin shapefile for a simulation
+		]
+
+		# get necessary parameters for plot
+		shp_info_list, display_fields, colors = map_processing.get_shps_colors_fields(files_list, settings)
+
+		# do not display fields for basin shapefile
+		display_fields[1] = ""
+
+		# plot
+		basemap.plot_shapefiles_map(
+			shapefiles = shp_info_list, 
+			display_fields = display_fields, 
+			colors = colors, 
+			title = settings["map_title_overview"], 
+			shp_name = None, 
+			buff = settings["map_buffer_overview"],
+		)
+
+		self.finished.emit("Finished drawing map.")
 
 class Thread(QtCore.QThread):
 	"""
@@ -141,7 +182,7 @@ class MainWindow(QtGui.QMainWindow):
 		self.ui.tab_wateruse_push_button_wateruse_shp.clicked.connect(self.select_wateruse_shp_file)
 		self.ui.tab_wateruse_push_button_apply_wateruse.clicked.connect(self.apply_wateruse)
 		self.ui.tab_wateruse_push_button_check_inputs.clicked.connect(self.check_wateruse_inputs)
-		self.ui.tab_wateruse_push_button_plot_map.clicked.connect(self.plot_map)
+		self.ui.tab_wateruse_push_button_plot_map.clicked.connect(self.plot_overview_map)
 
 		# disble the plot area until a file is opened 
 		self.ui.tab_watertxt_matplotlib_widget.setEnabled(False)
@@ -154,6 +195,7 @@ class MainWindow(QtGui.QMainWindow):
 		# disable apply wateruse button until all proper input exists
 		self.ui.tab_wateruse_push_button_plot_map.setEnabled(False)
 		self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(False)
+
 
 	#-------------------------------- Tab: Process WATER output text file ------------------------------------
 	def process_watertxt_file(self):
@@ -415,11 +457,49 @@ class MainWindow(QtGui.QMainWindow):
 			self.popup_error(parent = self, msg = error_msg)
 			self.clear_tab_wateruse_widgets()
 
+	def map_msg(self, msg):
+		""" """
+		print("in map_msg")
+		QtGui.QMessageBox.information(self, "Map Message", msg)
+
+
+	def plot_overview_map(self):
+		""" Plot basemap """
+
+		thread = Thread()
+		worker = MapWorker()
+
+		# move the worker object to the thread
+		worker.moveToThread(thread)
+
+		# connect the starting signal to information dialog
+		worker.starting.connect(self.thread_msg)
+
+		# connect the finished signal to quitting the thread
+		worker.finished.connect(thread.quit)
+		worker.finished.connect(self.thread_msg)
+
+		# start the thread
+		thread.start()
+
+		# invoke / call the process method on the worker object and send it the current settings
+		QtCore.QMetaObject.invokeMethod(worker, "draw_map", QtCore.Qt.QueuedConnection, 
+			QtCore.Q_ARG(dict, self.settings),
+			QtCore.Q_ARG(object, self.ui.tab_wateruse_matplotlib_widget)
+		)
+
+		# reset button
+		self.ui.tab_wateruse_push_button_plot_map.setEnabled(False)
+
+		# display text in text edit
+		self.update_status_bar(msg = "Drawing map ... this may take a few moments ... please wait.")
+
 
 	def plot_map(self):
-		""" Plot basmap """
+		""" Plot basemap """
 
 		try:
+			QtGui.QMessageBox.information(self, "Map Message", "may take some time ... please wait.")
 			files_list = [
 				self.settings["water_shapefiles"]["drbbasin"]["path"],										# path to drb basin
 				os.path.join(self.settings["simulation_directory"], self.settings["basin_shapefile_name"]),	# path to basin shapefile for a simulation
@@ -554,7 +634,7 @@ class MainWindow(QtGui.QMainWindow):
 		# move the worker object to the thread
 		worker.moveToThread(thread)
 
-		# connect the staring signal to information dialog
+		# connect the starting signal to information dialog
 		worker.starting.connect(self.thread_msg)
 
 		# connect the finished signal to quitting the thread
