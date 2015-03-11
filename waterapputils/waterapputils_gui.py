@@ -375,7 +375,7 @@ class MainWindow(QtGui.QMainWindow):
 		for wateruse_input in wateruse_inputs:
 			if not wateruse_input.values()[0]:
 				valid_list.append(False)
-				error_msg = "Empty input!<br />Need the following input(s):<br /><br />{}<br /><br />Please provide proper inputs.".format(wateruse_input.keys()[0])
+				error_msg = "Empty input!<br />Need the following input:<br /><br />{}<br /><br />Please provide proper input.".format(wateruse_input.keys()[0])
 				self.popup_error(parent = self, msg = error_msg)
 			else:
 				valid_list.append(True)
@@ -405,8 +405,15 @@ class MainWindow(QtGui.QMainWindow):
 
 			# enable buttons
 			self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(True)
-			self.ui.tab_wateruse_push_button_plot_overview_map.setEnabled(True)
-			self.ui.tab_wateruse_push_button_plot_zoomed_map.setEnabled(True)
+
+			if self.ui.tab_wateruse_radio_button_one_sim.isChecked():					# if single sim, enable map plot
+				self.ui.tab_wateruse_push_button_plot_overview_map.setEnabled(True)
+				self.ui.tab_wateruse_push_button_plot_zoomed_map.setEnabled(True)
+			else:																		# if multi sims, disable map plot
+				self.ui.tab_wateruse_matplotlib_widget.clear_basemap_plot()
+				self.ui.tab_wateruse_push_button_plot_overview_map.setEnabled(False)
+				self.ui.tab_wateruse_push_button_plot_zoomed_map.setEnabled(False)
+
 
 	def display_text(self, settings):
 		""" Display text in text edit area """
@@ -425,7 +432,7 @@ class MainWindow(QtGui.QMainWindow):
 		""" Apply water use to a simulation. Processing is completed in a separate thread from the main gui thread. """
 
 		# initiate the thread and worker
-		thread, worker = self.initiate_thread()
+		thread, worker = self.initiate_thread(worker_type = "wateruse")
 
 		# start the thread
 		thread.start()
@@ -467,9 +474,20 @@ class MainWindow(QtGui.QMainWindow):
 
 		for dir_name in os.listdir(settings["simulation_directory"]):
 			dir_path = os.path.join(settings["simulation_directory"], dir_name)
-
 			if os.path.isdir(dir_path):
 				self.apply_wateruse_to_sim(settings)
+
+	def check_multi_sim_dir(self, settings):
+		""" Check that user clicked a valid multi simulations directory """
+
+		valid_list = []
+		for dir_name in os.listdir(settings["simulation_directory"]):
+			dir_path = os.path.join(settings["simulation_directory"], dir_name)
+			filename, fileext = os.path.splitext(dir_path)
+			if fileext:
+				error_msg = "When running multiple simulations, the simulation directory can only contain WATER simulations and no other files! The following file was found in the simulation directory:<br /><br />{}".format(filename + fileext)
+				self.popup_error(parent = self, msg = error_msg)
+				self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(False)
 
 	def apply_wateruse(self):
 		""" Apply water use using data provided on water use tab """
@@ -480,101 +498,15 @@ class MainWindow(QtGui.QMainWindow):
 				self.apply_wateruse_to_sim(settings = self.settings)
 
 			elif self.ui.tab_wateruse_radio_button_multi_sims.isChecked():
+				self.check_multi_sim_dir(settings = self.settings)
 				self.apply_multi_sim(settings = self.settings)
+
 
 		except (IOError, AssertionError, ValueError, TypeError, AttributeError) as error:
 			error_msg = "{}".format(error.message)
 			print(error_msg)
 			self.popup_error(parent = self, msg = error_msg)
 			self.clear_tab_wateruse_widgets()
-
-	def setup_tab_wateruse_matplotlib_widget(self):
-		""" Setup the matplotlib widget """
-
-		self.ui.tab_wateruse_matplotlib_widget.setup_basemap_plot()
-
-	def plot_overview_map(self):
-		""" Plot overview map """
-
-		try:
-			self.setup_tab_wateruse_matplotlib_widget()
-
-			thread = Thread()
-			worker = MapWorker()
-
-			# move the worker object to the thread
-			worker.moveToThread(thread)
-
-			# connect the starting signal to information dialog
-			worker.starting.connect(self.thread_msg)
-
-			# connect the finished signal to quitting the thread
-			worker.finished.connect(thread.quit)
-			worker.finished.connect(self.thread_msg)
-
-			# start the thread
-			thread.start()
-
-			# invoke / call the process method on the worker object and send it the current settings
-			QtCore.QMetaObject.invokeMethod(worker, "draw_overview_map", QtCore.Qt.QueuedConnection, 
-				QtCore.Q_ARG(dict, self.settings),
-				QtCore.Q_ARG(object, self.ui.tab_wateruse_matplotlib_widget)
-			)
-
-			# reset buttons
-			self.ui.tab_wateruse_push_button_plot_overview_map.setEnabled(False)
-			self.ui.tab_wateruse_push_button_plot_zoomed_map.setEnabled(True)
-
-			# display text in text edit
-			self.update_status_bar(msg = "Drawing map ... this may take a few moments ... please wait.")
-
-		except (IOError, TypeError) as error:
-			error_msg = "{}".format(error.message)
-			print(error_msg)
-			self.popup_error(parent = self, msg = error_msg)
-			self.ui.tab_wateruse_matplotlib_widget.clear_basemap_plot()
-
-	def plot_zoomed_map(self):
-		""" Plot overview map """
-
-		try:
-			self.setup_tab_wateruse_matplotlib_widget()
-
-			thread = Thread()
-			worker = MapWorker()
-
-			# move the worker object to the thread
-			worker.moveToThread(thread)
-
-			# connect the starting signal to information dialog
-			worker.starting.connect(self.thread_msg)
-
-			# connect the finished signal to quitting the thread
-			worker.finished.connect(thread.quit)
-			worker.finished.connect(self.thread_msg)
-
-			# start the thread
-			thread.start()
-
-			# invoke / call the process method on the worker object and send it the current settings
-			QtCore.QMetaObject.invokeMethod(worker, "draw_zoomed_map", QtCore.Qt.QueuedConnection, 
-				QtCore.Q_ARG(dict, self.settings),
-				QtCore.Q_ARG(object, self.ui.tab_wateruse_matplotlib_widget)
-			)
-
-			# reset buttons
-			self.ui.tab_wateruse_push_button_plot_zoomed_map.setEnabled(False)
-			self.ui.tab_wateruse_push_button_plot_overview_map.setEnabled(True)
-
-			# display text in text edit
-			self.update_status_bar(msg = "Drawing map ... this may take a few moments ... please wait.")
-
-		except (IOError, TypeError) as error:
-			error_msg = "{}".format(error.message)
-			print(error_msg)
-			self.popup_error(parent = self, msg = error_msg)
-			self.ui.tab_wateruse_matplotlib_widget.clear_basemap_plot()
-
 
 	def select_water_sim(self):
 		""" Open a QtDialog to select a WATER simulation directory and show the directory in the line edit widget """
@@ -664,8 +596,95 @@ class MainWindow(QtGui.QMainWindow):
 			fields_str = " ".join(self.tab_wateruse_centroids_shp_dict["fields"])
 			self.ui.tab_wateruse_combo_box_wateruse_shp_id_field.addItems(fields_str.split())
 
+	def plot_overview_map(self):
+		""" Plot overview map """
+
+		try:
+			self.setup_tab_wateruse_matplotlib_widget()
+
+			# initialize thread and worker
+			thread, worker = self.initiate_thread(worker_type = "map")
+
+			# start the thread
+			thread.start()
+
+			# invoke / call the process method on the worker object and send it the current settings
+			QtCore.QMetaObject.invokeMethod(worker, "draw_overview_map", QtCore.Qt.QueuedConnection, 
+				QtCore.Q_ARG(dict, self.settings),
+				QtCore.Q_ARG(object, self.ui.tab_wateruse_matplotlib_widget)
+			)
+
+			# display text in text edit
+			self.update_status_bar(msg = "Drawing map ... this may take a few moments ... please wait.")
+
+		except (IOError, TypeError) as error:
+			error_msg = "{}".format(error.message)
+			print(error_msg)
+			self.popup_error(parent = self, msg = error_msg)
+			self.ui.tab_wateruse_matplotlib_widget.clear_basemap_plot()
+
+	def plot_zoomed_map(self):
+		""" Plot overview map """
+
+		try:
+			self.setup_tab_wateruse_matplotlib_widget()
+
+			# initialize thread and worker
+			thread, worker = self.initiate_thread(worker_type = "map")
+
+			# start the thread
+			thread.start()
+
+			# invoke / call the process method on the worker object and send it the current settings
+			QtCore.QMetaObject.invokeMethod(worker, "draw_zoomed_map", QtCore.Qt.QueuedConnection, 
+				QtCore.Q_ARG(dict, self.settings),
+				QtCore.Q_ARG(object, self.ui.tab_wateruse_matplotlib_widget)
+			)
+
+			# display text in text edit
+			self.update_status_bar(msg = "Drawing map ... this may take a few moments ... please wait.")
+
+		except (IOError, TypeError) as error:
+			error_msg = "{}".format(error.message)
+			print(error_msg)
+			self.popup_error(parent = self, msg = error_msg)
+			self.ui.tab_wateruse_matplotlib_widget.clear_basemap_plot()
+
+
+	def setup_tab_wateruse_matplotlib_widget(self):
+		""" Setup the matplotlib widget """
+
+		self.ui.tab_wateruse_matplotlib_widget.setup_basemap_plot()
 
 	#-------------------------------- Tab Independent Methods ------------------------------------
+
+	def enable_map_buttons(self):
+		""" Enable map buttons when thread finishes """
+		self.ui.tab_wateruse_push_button_plot_zoomed_map.setEnabled(True)
+		self.ui.tab_wateruse_push_button_plot_overview_map.setEnabled(True)
+
+	def enable_checkinput_button(self):
+		""" Enable map buttons when thread finishes """
+		self.ui.tab_wateruse_push_button_check_inputs.setEnabled(True)
+
+	def disable_map_buttons(self):
+		""" Disable map buttons when thread starts """
+		self.ui.tab_wateruse_push_button_plot_zoomed_map.setEnabled(False)
+		self.ui.tab_wateruse_push_button_plot_overview_map.setEnabled(False)
+
+	def disable_checkinput_button(self):
+		""" Disable map buttons when thread starts """
+		self.ui.tab_wateruse_push_button_check_inputs.setEnabled(False)
+
+	def enable_wateruse_group_boxes(self):
+		""" Disable group boxes when thread starts """
+		self.ui.tab_wateruse_group_box_sim_info.setEnabled(True)
+		self.ui.tab_wateruse_group_box_wateruse_info.setEnabled(True)
+
+	def disable_wateruse_group_boxes(self):
+		""" Disable group boxes when thread starts """
+		self.ui.tab_wateruse_group_box_sim_info.setEnabled(False)
+		self.ui.tab_wateruse_group_box_wateruse_info.setEnabled(False)
 
 	def thread_msg(self, msg):
 		""" Display message box about thread """
@@ -673,12 +692,31 @@ class MainWindow(QtGui.QMainWindow):
 		QtGui.QMessageBox.information(self, "Thread Message", msg)
 		self.update_status_bar(msg)
 
-	def initiate_thread(self):
+	def initiate_thread(self, worker_type):
 		""" Create the thread and worker. Move the worker object to the thread and make necessary connections """
 
 		# create the thread and worker
 		thread = Thread()
-		worker = Worker()
+		if worker_type == "map":
+			worker = MapWorker()
+
+			worker.starting.connect(self.disable_checkinput_button)
+			worker.starting.connect(self.disable_map_buttons)
+
+			worker.finished.connect(self.enable_checkinput_button)
+			worker.finished.connect(self.enable_map_buttons)
+
+		elif worker_type == "wateruse":
+			worker = Worker()
+			
+			worker.starting.connect(self.disable_checkinput_button)
+			worker.starting.connect(self.disable_wateruse_group_boxes)	
+				
+			worker.finished.connect(self.enable_checkinput_button)
+			worker.finished.connect(self.enable_wateruse_group_boxes)
+
+		else:
+			raise TypeError("worker type does not exist: {}".format(worker_type))
 
 		# move the worker object to the thread
 		worker.moveToThread(thread)
