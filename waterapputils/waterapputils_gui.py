@@ -7,6 +7,7 @@ from modules import watertxt
 from modules import helpers
 from modules import spatialvectors
 from modules import wateruse_processing
+from modules import gcm_delta_processing
 from modules import map_processing
 import user_settings
 
@@ -44,6 +45,28 @@ class Worker(QtCore.QObject):
 
 		self.finished.emit("Finished processing substitute water use.")
 
+	@QtCore.pyqtSlot(dict)
+	def process_gcm(self, settings):
+		""" Process global climate model deltas """
+
+		self.starting.emit("Processing global climate model deltas ... this may take some time ... please wait.")
+
+		# apply wateruse
+		wateruse_processing.apply_wateruse(settings = settings)			
+
+		self.finished.emit("Finished processing global climate model deltas.")
+
+	@QtCore.pyqtSlot(dict)
+	def process_subgcm(self, settings):
+		""" Process substitute global climate model deltas """
+
+		self.starting.emit("Processing substitute global climate model deltas ... this may take some time ... please wait.")
+
+		# apply substitute wateruse
+		wateruse_processing.apply_subwateruse(settings = settings)			
+
+		self.finished.emit("Finished processing substitute global climate model deltas.")
+
 class MapWorker(QtCore.QObject):
 	""" 
 	Object that does the work of drawing map.
@@ -59,7 +82,7 @@ class MapWorker(QtCore.QObject):
 
 		files_list = [
 			settings["water_shapefiles"]["drbbasin"]["path"],										# path to drb basin
-			os.path.join(settings["simulation_directory"], settings["basin_shapefile_name"]),	# path to basin shapefile for a simulation
+			os.path.join(settings["simulation_directory"], settings["basin_shapefile_name"]),		# path to basin shapefile for a simulation
 		]
 
 		# get necessary parameters for plot
@@ -88,7 +111,7 @@ class MapWorker(QtCore.QObject):
 
 		files_list = [
 			settings["water_shapefiles"]["drbbasin"]["path"],										# path to drb basin
-			os.path.join(settings["simulation_directory"], settings["basin_shapefile_name"]),	# path to basin shapefile for a simulation
+			os.path.join(settings["simulation_directory"], settings["basin_shapefile_name"]),		# path to basin shapefile for a simulation
 			settings["water_shapefiles"]["strm"]["path"],								    		# path to streams shapefile
 			settings["water_shapefiles"]["rsvr"]["path"],								    		# path to reservoir shapefile
 			settings["water_shapefiles"]["usgsgages"]["path"],							    		# path to usgs gages shapefile
@@ -105,6 +128,37 @@ class MapWorker(QtCore.QObject):
 			title = None, 
 			shp_name = os.path.splitext(settings["basin_shapefile_name"])[0], 
 			buff = settings["map_buffer_zoomed"],
+		)
+
+		self.finished.emit("Finished drawing map.")
+
+
+	@QtCore.pyqtSlot(dict, object)
+	def draw_gcm_overview_map(self, settings, matplotlib_widget):
+		""" Draw overview map """
+
+		self.starting.emit("Drawing map ... this may take a few moments ... please wait.")
+
+		files_list = [
+			settings["water_shapefiles"]["drbbasin"]["path"],										# path to drb basin
+			os.path.join(settings["simulation_directory"], settings["basin_shapefile_name"]),		# path to basin shapefile for a simulation
+			settings["gcm_delta_tile_shapefile"],													# path to chosen gcm delta tile
+		]
+
+		# get necessary parameters for plot
+		shp_info_list, display_fields, colors = map_processing.get_shps_colors_fields(files_list, settings)
+
+		# do not display fields for basin shapefile
+		display_fields[1] = ""
+
+		# plot
+		matplotlib_widget.plot_shapefiles_map(
+			shapefiles = shp_info_list, 
+			display_fields = display_fields, 
+			colors = colors, 
+			title = None, 
+			shp_name = None, 
+			buff = settings["map_buffer_overview"],
 		)
 
 		self.finished.emit("Finished drawing map.")
@@ -182,6 +236,25 @@ class MainWindow(QtGui.QMainWindow):
 		self.tab_wateruse_centroids_shp_id_field = None
 		self.tab_wateruse_centroids_shp_dict = None
 
+		# gcm tab
+		self.tab_wateruse_sim_dir = None
+		self.is_batch_simulation = None
+
+		self.tab_gcm_basin_shp_path = None
+		self.tab_gcm_basin_shp_dir = None		
+		self.tab_gcm_basin_shp_file = None		
+		self.tab_gcm_basin_shp_id_field = None
+		self.tab_gcm_basin_shp_area_field = None
+		self.tab_gcm_basin_shp_dict = None
+
+		self.tab_gcm_gcm_data_files = None
+
+		self.tab_gcm_tiles_shp_path = None
+		self.tab_gcm_tiles_shp_dir = None
+		self.tab_gcm_tiles_shp_file = None
+		self.tab_gcm_tiles_shp_id_field = None
+		self.tab_gcm_tiles_shp_dict = None
+
 		# user settings
 		self.settings = user_settings.settings
 
@@ -189,32 +262,42 @@ class MainWindow(QtGui.QMainWindow):
 		self.ui = Ui_MainWindow()
 		self.ui.setupUi(self) # method in *_ui.py file of the Ui_MainWindow class
 
-		# connections for tab titled Process WATER output text file 
+		# connections for tab - process WATER output text file 
 		self.ui.actionExit.triggered.connect(self.close)
 		self.ui.actionAbout.triggered.connect(self.about)
 		self.ui.tab_watertxt_push_button_open_file.clicked.connect(self.process_watertxt_file)
 		self.ui.tab_watertxt_list_widget.itemSelectionChanged.connect(self.plot_tab_watertxt_list_item)
 
-		# connections for tab titled Compare 2 WATER output text files
+		# connections for tab - compare 2 WATER output text files
 		self.ui.tab_watertxtcmp_push_button_open_file1.clicked.connect(self.select_watertxt_file_cmp)
 		self.ui.tab_watertxtcmp_push_button_open_file2.clicked.connect(self.select_watertxt_file_cmp)
 		self.ui.tab_watertxtcmp_push_button_compare.clicked.connect(self.compare_watertxt_files)
 		self.ui.tab_watertxtcmp_list_widget.itemSelectionChanged.connect(self.plot_tab_watertxtcmp_list_item)
 
-		# connections for tab titled Apply water use to WATER simulation(s)
+		# connections for tab - apply water use to WATER simulations
 		self.ui.tab_wateruse_push_button_open_sim.clicked.connect(self.select_water_sim)
 		self.ui.tab_wateruse_push_button_wateruse_files.clicked.connect(self.select_wateruse_files)
 		self.ui.tab_wateruse_push_button_wateruse_factor_file.clicked.connect(self.select_wateruse_factor_file)
 		self.ui.tab_wateruse_push_button_wateruse_shp.clicked.connect(self.select_wateruse_shp_file)
 		self.ui.tab_wateruse_push_button_apply_wateruse.clicked.connect(self.apply_wateruse)
 		self.ui.tab_wateruse_push_button_check_inputs.clicked.connect(self.check_wateruse_inputs)
-		self.ui.tab_wateruse_push_button_plot_overview_map.clicked.connect(self.plot_overview_map)
-		self.ui.tab_wateruse_push_button_plot_zoomed_map.clicked.connect(self.plot_zoomed_map)
+		self.ui.tab_wateruse_push_button_plot_overview_map.clicked.connect(self.plot_wateruse_overview_map)
+		self.ui.tab_wateruse_push_button_plot_zoomed_map.clicked.connect(self.plot_wateruse_zoomed_map)
+
+		# connections for tab - apply global climate model deltas to WATER simulations
+		self.ui.tab_gcm_push_button_open_sim.clicked.connect(self.select_water_sim)
+		self.ui.tab_gcm_push_button_gcm_files.clicked.connect(self.select_gcm_files)
+		self.ui.tab_gcm_push_button_gcm_shp.clicked.connect(self.select_gcm_shp_file)
+		self.ui.tab_gcm_push_button_apply_gcm.clicked.connect(self.apply_gcm)
+		self.ui.tab_gcm_push_button_check_inputs.clicked.connect(self.check_gcm_inputs)
+		self.ui.tab_gcm_push_button_plot_overview_map.clicked.connect(self.plot_gcm_overview_map)
+		self.ui.tab_gcm_push_button_plot_zoomed_map.clicked.connect(self.plot_gcm_zoomed_map)
 
 		# disble the plot area until a file is opened 
 		self.ui.tab_watertxt_matplotlib_widget.setEnabled(False)
 		self.ui.tab_watertxtcmp_matplotlib_widget.setEnabled(False)
 		self.ui.tab_wateruse_matplotlib_widget.setEnabled(False)
+		self.ui.tab_gcm_matplotlib_widget.setEnabled(False)
 
 		# disable compare button until both line edit boxes have text
 		self.ui.tab_watertxtcmp_push_button_compare.setEnabled(False)
@@ -224,6 +307,9 @@ class MainWindow(QtGui.QMainWindow):
 		self.ui.tab_wateruse_push_button_plot_overview_map.setEnabled(False)
 		self.ui.tab_wateruse_push_button_plot_zoomed_map.setEnabled(False)
 
+		self.ui.tab_gcm_push_button_apply_wateruse.setEnabled(False)
+		self.ui.tab_gcm_push_button_plot_overview_map.setEnabled(False)
+		self.ui.tab_gcm_push_button_plot_zoomed_map.setEnabled(False)
 
 	#-------------------------------- Tab: Process WATER output text file ------------------------------------
 	def process_watertxt_file(self):
@@ -349,7 +435,7 @@ class MainWindow(QtGui.QMainWindow):
 		self.plot_on_tab_watertxtcmp_matplotlib_widget(data_list = [self.tab_watertxtcmp_data1, self.tab_watertxtcmp_data2], filenames = [self.filename1, self.filename2], parameter_name = item_type)
 
 
-	#-------------------------------- Tab: Apply water use to WATER simulation(s) ------------------------------------
+	#-------------------------------- Tab: Apply water use to WATER simulations ------------------------------------
 
 	def check_wateruse_inputs(self):
 		""" validate water use inputs """
@@ -596,14 +682,14 @@ class MainWindow(QtGui.QMainWindow):
 			fields_str = " ".join(self.tab_wateruse_centroids_shp_dict["fields"])
 			self.ui.tab_wateruse_combo_box_wateruse_shp_id_field.addItems(fields_str.split())
 
-	def plot_overview_map(self):
+	def plot_wateruse_overview_map(self):
 		""" Plot overview map """
 
 		try:
 			self.setup_tab_wateruse_matplotlib_widget()
 
 			# initialize thread and worker
-			thread, worker = self.initiate_thread(worker_type = "map")
+			thread, worker = self.initiate_thread(worker_type = "map_wateruse")
 
 			# start the thread
 			thread.start()
@@ -623,14 +709,14 @@ class MainWindow(QtGui.QMainWindow):
 			self.popup_error(parent = self, msg = error_msg)
 			self.ui.tab_wateruse_matplotlib_widget.clear_basemap_plot()
 
-	def plot_zoomed_map(self):
+	def plot_wateruse_zoomed_map(self):
 		""" Plot overview map """
 
 		try:
 			self.setup_tab_wateruse_matplotlib_widget()
 
 			# initialize thread and worker
-			thread, worker = self.initiate_thread(worker_type = "map")
+			thread, worker = self.initiate_thread(worker_type = "map_wateruse")
 
 			# start the thread
 			thread.start()
@@ -658,33 +744,63 @@ class MainWindow(QtGui.QMainWindow):
 
 	#-------------------------------- Tab Independent Methods ------------------------------------
 
-	def enable_map_buttons(self):
+	def enable_tab_wateruse_map_buttons(self):
 		""" Enable map buttons when thread finishes """
 		self.ui.tab_wateruse_push_button_plot_zoomed_map.setEnabled(True)
 		self.ui.tab_wateruse_push_button_plot_overview_map.setEnabled(True)
 
-	def enable_checkinput_button(self):
+	def enable_tab_wateruse_checkinput_button(self):
 		""" Enable map buttons when thread finishes """
 		self.ui.tab_wateruse_push_button_check_inputs.setEnabled(True)
 
-	def disable_map_buttons(self):
-		""" Disable map buttons when thread starts """
-		self.ui.tab_wateruse_push_button_plot_zoomed_map.setEnabled(False)
-		self.ui.tab_wateruse_push_button_plot_overview_map.setEnabled(False)
-
-	def disable_checkinput_button(self):
-		""" Disable map buttons when thread starts """
-		self.ui.tab_wateruse_push_button_check_inputs.setEnabled(False)
-
-	def enable_wateruse_group_boxes(self):
+	def enable_tab_wateruse_wateruse_group_boxes(self):
 		""" Disable group boxes when thread starts """
 		self.ui.tab_wateruse_group_box_sim_info.setEnabled(True)
 		self.ui.tab_wateruse_group_box_wateruse_info.setEnabled(True)
 
-	def disable_wateruse_group_boxes(self):
+	def disable_tab_wateruse_map_buttons(self):
+		""" Enable map buttons when thread finishes """
+		self.ui.tab_wateruse_push_button_plot_zoomed_map.setEnabled(False)
+		self.ui.tab_wateruse_push_button_plot_overview_map.setEnabled(False)
+
+	def disable_tab_wateruse_checkinput_button(self):
+		""" Enable map buttons when thread finishes """
+		self.ui.tab_wateruse_push_button_check_inputs.setEnabled(False)
+
+	def disable_tab_wateruse_wateruse_group_boxes(self):
 		""" Disable group boxes when thread starts """
 		self.ui.tab_wateruse_group_box_sim_info.setEnabled(False)
 		self.ui.tab_wateruse_group_box_wateruse_info.setEnabled(False)
+
+
+	def enable_tab_gcm_map_buttons(self):
+		""" Enable map buttons when thread finishes """
+		self.ui.tab_gcm_push_button_plot_zoomed_map.setEnabled(True)
+		self.ui.tab_gcm_push_button_plot_overview_map.setEnabled(True)
+
+	def enable_tab_gcm_checkinput_button(self):
+		""" Enable map buttons when thread finishes """
+		self.ui.tab_gcm_push_button_check_inputs.setEnabled(True)
+
+	def enable_tab_gcm_gcm_group_boxes(self):
+		""" Disable group boxes when thread starts """
+		self.ui.tab_gcm_group_box_sim_info.setEnabled(True)
+		self.ui.tab_gcm_group_box_gcm_info.setEnabled(True)
+
+	def disable_tab_gcm_map_buttons(self):
+		""" Enable map buttons when thread finishes """
+		self.ui.tab_gcm_push_button_plot_zoomed_map.setEnabled(False)
+		self.ui.tab_gcm_push_button_plot_overview_map.setEnabled(False)
+
+	def disable_tab_gcm_checkinput_button(self):
+		""" Enable map buttons when thread finishes """
+		self.ui.tab_gcm_push_button_check_inputs.setEnabled(False)
+
+	def disable_tab_gcm_gcm_group_boxes(self):
+		""" Disable group boxes when thread starts """
+		self.ui.tab_gcm_group_box_sim_info.setEnabled(False)
+		self.ui.tab_gcm_group_box_gcm_info.setEnabled(False)
+
 
 	def thread_msg(self, msg):
 		""" Display message box about thread """
@@ -697,23 +813,41 @@ class MainWindow(QtGui.QMainWindow):
 
 		# create the thread and worker
 		thread = Thread()
-		if worker_type == "map":
+		if worker_type == "map_wateruse":
 			worker = MapWorker()
 
-			worker.starting.connect(self.disable_checkinput_button)
-			worker.starting.connect(self.disable_map_buttons)
+			worker.starting.connect(self.disable_tab_wateruse_map_buttons)
+			worker.starting.connect(self.disable_tab_wateruse_checkinput_button)
 
-			worker.finished.connect(self.enable_checkinput_button)
-			worker.finished.connect(self.enable_map_buttons)
+			worker.finished.connect(self.enable_tab_wateruse_map_buttons)
+			worker.finished.connect(self.enable_tab_wateruse_checkinput_button)
 
 		elif worker_type == "wateruse":
 			worker = Worker()
 			
-			worker.starting.connect(self.disable_checkinput_button)
-			worker.starting.connect(self.disable_wateruse_group_boxes)	
+			worker.starting.connect(self.disable_tab_wateruse_checkinput_button)
+			worker.starting.connect(self.disable_tab_wateruse_wateruse_group_boxes)	
 				
-			worker.finished.connect(self.enable_checkinput_button)
-			worker.finished.connect(self.enable_wateruse_group_boxes)
+			worker.finished.connect(self.enable_tab_wateruse_checkinput_button)
+			worker.finished.connect(self.enable_tab_wateruse_wateruse_group_boxes)
+
+		elif worker_type == "map_gcm":
+			worker = MapWorker()
+
+			worker.starting.connect(self.disable_tab_gcm_map_buttons)
+			worker.starting.connect(self.disable_tab_gcm_checkinput_button)
+
+			worker.finished.connect(self.enable_tab_gcm_map_buttons)
+			worker.finished.connect(self.enable_tab_gcm_checkinput_button)
+
+		elif worker_type == "gcm":
+			worker = Worker()
+			
+			worker.starting.connect(self.disable_tab_gcm_checkinput_button)
+			worker.starting.connect(self.disable_tab_gcm_wateruse_group_boxes)	
+				
+			worker.finished.connect(self.enable_tab_gcm_checkinput_button)
+			worker.finished.connect(self.enable_tab_gcm_wateruse_group_boxes)
 
 		else:
 			raise TypeError("worker type does not exist: {}".format(worker_type))

@@ -315,7 +315,7 @@
       </widget>
       <widget class="QWidget" name="tab_applywateruse">
        <attribute name="title">
-        <string>Apply water use to WATER simulation(s)</string>
+        <string>Apply water use to WATER simulations</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_8">
         <item>
@@ -857,7 +857,7 @@
       </widget>
       <widget class="QWidget" name="tab_applygcm">
        <attribute name="title">
-        <string>Apply global climate model(s) (GCM) to WATER simulation(s)</string>
+        <string>Apply global climate model (GCM) deltas to WATER simulations</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_6">
         <item>
@@ -1202,14 +1202,14 @@
                     <bool>true</bool>
                    </property>
                    <property name="placeholderText">
-                    <string>Global climate modeshapefile</string>
+                    <string>Global climate model shapefile</string>
                    </property>
                   </widget>
                  </item>
                  <item row="3" column="0" rowspan="2">
                   <widget class="QPushButton" name="tab_gcm_push_button_gcm_shp">
                    <property name="toolTip">
-                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Open a water use shapefile. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Open a global climate model shapefile. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                    </property>
                    <property name="text">
                     <string>Open file</string>
@@ -1235,7 +1235,7 @@
                  <item row="0" column="0">
                   <widget class="QPushButton" name="tab_gcm_push_button_gcm_files">
                    <property name="toolTip">
-                    <string>Open 4 seasonal water use text files.  </string>
+                    <string>Open 3 delta global climate model text files; Ppt.txt, Tmax.txt, PET.txt  </string>
                    </property>
                    <property name="text">
                     <string>Open files</string>
@@ -1252,10 +1252,10 @@
                  <item row="6" column="0">
                   <widget class="QCheckBox" name="tab_gcm_checkbox_subwateruse">
                    <property name="toolTip">
-                    <string>Check if applying substitute water use.</string>
+                    <string>Check if applying substitute global climate model deltas.</string>
                    </property>
                    <property name="text">
-                    <string>Use substitute global climate model</string>
+                    <string>Use substitute global climate model deltas</string>
                    </property>
                   </widget>
                  </item>
@@ -1274,7 +1274,7 @@
                  <item>
                   <widget class="QPushButton" name="tab_gcm_push_button_check_inputs">
                    <property name="toolTip">
-                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Makes sure all inputs were entered. Enables applying water use button and map plotting buttons.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Makes sure all inputs were entered. Enables applying global climate model deltas button and map plotting buttons.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                    </property>
                    <property name="text">
                     <string>Check Inputs</string>
@@ -1287,7 +1287,7 @@
                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Applies water use to provided inputs.  &lt;/p&gt;&lt;p&gt;Process is run in a separate thread allowing interaction with other parts of GUI while processing occurs.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                    </property>
                    <property name="text">
-                    <string>Apply Global Climate Model</string>
+                    <string>Apply Global Climate Model Deltas</string>
                    </property>
                   </widget>
                  </item>
