@@ -1250,7 +1250,7 @@
                   </widget>
                  </item>
                  <item row="6" column="0">
-                  <widget class="QCheckBox" name="tab_gcm_checkbox_subwateruse">
+                  <widget class="QCheckBox" name="tab_gcm_checkbox_subgcm">
                    <property name="toolTip">
                     <string>Check if applying substitute global climate model deltas.</string>
                    </property>

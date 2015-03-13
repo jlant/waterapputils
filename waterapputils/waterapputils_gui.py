@@ -46,13 +46,44 @@ class Worker(QtCore.QObject):
 		self.finished.emit("Finished processing substitute water use.")
 
 	@QtCore.pyqtSlot(dict)
+	def process_multi_wateruse(self, settings):
+		""" Process water use """
+
+		dir_parent = settings["simulation_directory"]
+		for dir_name in os.listdir(dir_parent):
+			dir_path = os.path.join(dir_parent, dir_name)
+			if os.path.isdir(dir_path):
+				settings["simulation_directory"] = dir_path
+				self.starting.emit("Processing water use ... this may take some time ... please wait.")
+				wateruse_processing.apply_wateruse(settings = settings)	
+				self.finished.emit("Finished processing water use.")
+
+	@QtCore.pyqtSlot(dict)
+	def process_multi_subwateruse(self, settings):
+		""" Process water use """
+
+		dir_parent = settings["simulation_directory"]
+		for dir_name in os.listdir(dir_parent):
+			dir_path = os.path.join(dir_parent, dir_name)
+			if os.path.isdir(dir_path):
+				settings["simulation_directory"] = dir_path
+				wateruse_non_intersecting_file_name = os.path.join(settings["simulation_directory"], settings["info_directory_name"], settings["wateruse_non_intersecting_file_name"])
+				if os.path.isfile(wateruse_non_intersecting_file_name):
+					self.starting.emit("Processing substitute water use ... this may take some time ... please wait.")
+					wateruse_processing.apply_subwateruse(settings = settings)
+					self.finished.emit("Finished processing substitute water use.")
+				else:
+					error_msg = "Substitute water use file does not exist. Please make sure the the following file exists: <br /> <br />{}".format(wateruse_non_intersecting_file_name)
+					self.finished.emit(error_msg)				
+	
+	@QtCore.pyqtSlot(dict)
 	def process_gcm(self, settings):
 		""" Process global climate model deltas """
 
 		self.starting.emit("Processing global climate model deltas ... this may take some time ... please wait.")
 
-		# apply wateruse
-		wateruse_processing.apply_wateruse(settings = settings)			
+		# apply global climate deltas
+		gcm_delta_processing.apply_gcm_deltas(settings = settings)			
 
 		self.finished.emit("Finished processing global climate model deltas.")
 
@@ -62,10 +93,42 @@ class Worker(QtCore.QObject):
 
 		self.starting.emit("Processing substitute global climate model deltas ... this may take some time ... please wait.")
 
-		# apply substitute wateruse
-		wateruse_processing.apply_subwateruse(settings = settings)			
+		# apply substitute global climate deltas
+		gcm_delta_processing.apply_sub_gcm_deltas(settings = settings)			
 
 		self.finished.emit("Finished processing substitute global climate model deltas.")
+
+	@QtCore.pyqtSlot(dict)
+	def process_multi_gcm(self, settings):
+		""" Process global climate model deltas """
+
+		dir_parent = settings["simulation_directory"]
+		for dir_name in os.listdir(dir_parent):
+			dir_path = os.path.join(dir_parent, dir_name)
+			if os.path.isdir(dir_path):
+				settings["simulation_directory"] = dir_path
+				self.starting.emit("Processing global climate model deltas ... this may take some time ... please wait.")
+				gcm_delta_processing.apply_gcm_deltas(settings = settings)	
+				self.finished.emit("Finished processing global climate model deltas.")
+
+	@QtCore.pyqtSlot(dict)
+	def process_multi_subwateruse(self, settings):
+		""" Process water use """
+
+		dir_parent = settings["simulation_directory"]
+		for dir_name in os.listdir(dir_parent):
+			dir_path = os.path.join(dir_parent, dir_name)
+			if os.path.isdir(dir_path):
+				settings["simulation_directory"] = dir_path
+				gcm_delta_non_intersecting_file_name = os.path.join(settings["simulation_directory"], settings["info_directory_name"], settings["gcm_delta_non_intersecting_file_name"])
+				if os.path.isfile(gcm_non_intersecting_file_name):
+					self.starting.emit("Processing substitute global climate model deltas ... this may take some time ... please wait.")
+					gcm_delta_processing.apply_sub_gcm_deltas(settings = settings)
+					self.finished.emit("Finished processing substitute global climate model deltas.")
+				else:
+					error_msg = "Substitute water use file does not exist. Please make sure the the following file exists: <br /> <br />{}".format(gcm_delta_non_intersecting_file_name)
+					self.finished.emit(error_msg)	
+
 
 class MapWorker(QtCore.QObject):
 	""" 
@@ -237,7 +300,7 @@ class MainWindow(QtGui.QMainWindow):
 		self.tab_wateruse_centroids_shp_dict = None
 
 		# gcm tab
-		self.tab_wateruse_sim_dir = None
+		self.tab_gcm_sim_dir = None
 		self.is_batch_simulation = None
 
 		self.tab_gcm_basin_shp_path = None
@@ -256,7 +319,8 @@ class MainWindow(QtGui.QMainWindow):
 		self.tab_gcm_tiles_shp_dict = None
 
 		# user settings
-		self.settings = user_settings.settings
+		self.tab_wateruse_settings = user_settings.settings
+		self.tab_gcm_settings = user_settings.settings
 
 		# set up the ui
 		self.ui = Ui_MainWindow()
@@ -275,7 +339,7 @@ class MainWindow(QtGui.QMainWindow):
 		self.ui.tab_watertxtcmp_list_widget.itemSelectionChanged.connect(self.plot_tab_watertxtcmp_list_item)
 
 		# connections for tab - apply water use to WATER simulations
-		self.ui.tab_wateruse_push_button_open_sim.clicked.connect(self.select_water_sim)
+		self.ui.tab_wateruse_push_button_open_sim.clicked.connect(self.select_wateruse_sim)
 		self.ui.tab_wateruse_push_button_wateruse_files.clicked.connect(self.select_wateruse_files)
 		self.ui.tab_wateruse_push_button_wateruse_factor_file.clicked.connect(self.select_wateruse_factor_file)
 		self.ui.tab_wateruse_push_button_wateruse_shp.clicked.connect(self.select_wateruse_shp_file)
@@ -285,7 +349,7 @@ class MainWindow(QtGui.QMainWindow):
 		self.ui.tab_wateruse_push_button_plot_zoomed_map.clicked.connect(self.plot_wateruse_zoomed_map)
 
 		# connections for tab - apply global climate model deltas to WATER simulations
-		self.ui.tab_gcm_push_button_open_sim.clicked.connect(self.select_water_sim)
+		self.ui.tab_gcm_push_button_open_sim.clicked.connect(self.select_gcm_sim)
 		self.ui.tab_gcm_push_button_gcm_files.clicked.connect(self.select_gcm_files)
 		self.ui.tab_gcm_push_button_gcm_shp.clicked.connect(self.select_gcm_shp_file)
 		self.ui.tab_gcm_push_button_apply_gcm.clicked.connect(self.apply_gcm)
@@ -307,7 +371,7 @@ class MainWindow(QtGui.QMainWindow):
 		self.ui.tab_wateruse_push_button_plot_overview_map.setEnabled(False)
 		self.ui.tab_wateruse_push_button_plot_zoomed_map.setEnabled(False)
 
-		self.ui.tab_gcm_push_button_apply_wateruse.setEnabled(False)
+		self.ui.tab_gcm_push_button_apply_gcm.setEnabled(False)
 		self.ui.tab_gcm_push_button_plot_overview_map.setEnabled(False)
 		self.ui.tab_gcm_push_button_plot_zoomed_map.setEnabled(False)
 
@@ -440,6 +504,8 @@ class MainWindow(QtGui.QMainWindow):
 	def check_wateruse_inputs(self):
 		""" validate water use inputs """
 
+		self.ui.tab_wateruse_text_edit.clear()
+
 		self.tab_wateruse_basin_shp_id_field = str(self.ui.tab_wateruse_combo_box_shp_id_field.currentText())
 		self.tab_wateruse_basin_shp_area_field = str(self.ui.tab_wateruse_combo_box_shp_area_field.currentText())
 		self.tab_wateruse_centroids_shp_id_field = str(self.ui.tab_wateruse_combo_box_wateruse_shp_id_field.currentText())
@@ -472,22 +538,22 @@ class MainWindow(QtGui.QMainWindow):
 			self.ui.tab_wateruse_push_button_plot_zoomed_map.setEnabled(False)
 		else:
 			# over write the settings in user_settings.py with values from gui
-			self.settings["simulation_directory"] = self.tab_wateruse_sim_dir			
-			self.settings["is_batch_simulation"] = self.is_batch_simulation
+			self.tab_wateruse_settings["simulation_directory"] = self.tab_wateruse_sim_dir			
+			self.tab_wateruse_settings["is_batch_simulation"] = self.is_batch_simulation
 
-			self.settings["basin_shapefile_name"] = self.tab_wateruse_basin_shp_file
-			self.settings["basin_shapefile_id_field"] = self.tab_wateruse_basin_shp_id_field			
-			self.settings["basin_shapefile_area_field"] = self.tab_wateruse_basin_shp_area_field
+			self.tab_wateruse_settings["basin_shapefile_name"] = self.tab_wateruse_basin_shp_file
+			self.tab_wateruse_settings["basin_shapefile_id_field"] = self.tab_wateruse_basin_shp_id_field			
+			self.tab_wateruse_settings["basin_shapefile_area_field"] = self.tab_wateruse_basin_shp_area_field
 
-			self.settings["wateruse_files"] = self.tab_wateruse_wateruse_data_files
-			self.settings["wateruse_factor_file"] = self.tab_wateruse_wateruse_factor_file_path
-			self.settings["wateruse_centroids_shapefile"] = self.tab_wateruse_centroids_shp_path
-			self.settings["wateruse_centroids_shapefile_id_field"] = self.tab_wateruse_centroids_shp_id_field
+			self.tab_wateruse_settings["wateruse_files"] = self.tab_wateruse_wateruse_data_files
+			self.tab_wateruse_settings["wateruse_factor_file"] = self.tab_wateruse_wateruse_factor_file_path
+			self.tab_wateruse_settings["wateruse_centroids_shapefile"] = self.tab_wateruse_centroids_shp_path
+			self.tab_wateruse_settings["wateruse_centroids_shapefile_id_field"] = self.tab_wateruse_centroids_shp_id_field
 
 			# for single simulations, overwrite the basin shapefile field values to empty strings
-			if not self.settings["is_batch_simulation"]:
-				self.settings["basin_shapefile_id_field"] = ""			
-				self.settings["basin_shapefile_area_field"] = ""
+			if not self.tab_wateruse_settings["is_batch_simulation"]:
+				self.tab_wateruse_settings["basin_shapefile_id_field"] = ""			
+				self.tab_wateruse_settings["basin_shapefile_area_field"] = ""
 
 			# enable buttons
 			self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(True)
@@ -501,7 +567,7 @@ class MainWindow(QtGui.QMainWindow):
 				self.ui.tab_wateruse_push_button_plot_zoomed_map.setEnabled(False)
 
 
-	def display_text(self, settings):
+	def display_wateruse_text(self, settings):
 		""" Display text in text edit area """
 
 		info_dir = settings["info_directory_name"]
@@ -526,47 +592,75 @@ class MainWindow(QtGui.QMainWindow):
 		# if sub water use is checked, then apply substitute water use if proper file exists, otherwise apply water use as normal
 		if self.ui.tab_wateruse_checkbox_subwateruse.isChecked():
 
-			sub_water_use_file = os.path.join(self.settings["simulation_directory"], self.settings["info_directory_name"], self.settings["wateruse_non_intersecting_file_name"])
+			wateruse_non_intersecting_file_name = os.path.join(settings["simulation_directory"], settings["info_directory_name"], settings["wateruse_non_intersecting_file_name"])
 
-			if os.path.isfile(sub_water_use_file):
+			if os.path.isfile(wateruse_non_intersecting_file_name):
 				# invoke / call the process method on the worker object and send it the current settings
 				QtCore.QMetaObject.invokeMethod(worker, "process_subwateruse", QtCore.Qt.QueuedConnection, 
-					QtCore.Q_ARG(dict, self.settings))
+					QtCore.Q_ARG(dict, settings))
 
 				# display text in text edit
-				self.display_text(settings = self.settings)
+				self.display_wateruse_text(settings = settings)
 
 			else:
-				error_msg = "Substitute water use file does not exist. Please make sure the the following file exists: <br /> <br />{}".format(sub_water_use_file)
+				error_msg = "Substitute water use file does not exist. Please make sure the the following file exists: <br /> <br />{}".format(wateruse_non_intersecting_file_name)
 				self.popup_error(parent = self, msg = error_msg)
 
 		else:
 			# invoke / call the process method on the worker object and send it the current settings
 			QtCore.QMetaObject.invokeMethod(worker, "process_wateruse", QtCore.Qt.QueuedConnection, 
-				QtCore.Q_ARG(dict, self.settings))
+				QtCore.Q_ARG(dict, settings))
 
 			# reset button
 			self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(False)
 
 			# display text in text edit
-			self.display_text(settings = settings)
+			self.display_wateruse_text(settings = settings)
 
 		# reset button
 		self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(False)
 
 	
-	def apply_multi_sim(self, settings):
+	def apply_multi_wateruse_sim(self, settings):
 		""" Apply water use to multiple simulations """
 
-		for dir_name in os.listdir(settings["simulation_directory"]):
-			dir_path = os.path.join(settings["simulation_directory"], dir_name)
-			if os.path.isdir(dir_path):
-				self.apply_wateruse_to_sim(settings)
+		# initiate the thread and worker
+		thread, worker = self.initiate_thread(worker_type = "wateruse")
 
-	def check_multi_sim_dir(self, settings):
+		# start the thread
+		thread.start()
+
+		# if sub water use is checked, then apply substitute water use if proper file exists, otherwise apply water use as normal
+		if self.ui.tab_wateruse_checkbox_subwateruse.isChecked():
+
+			# invoke / call the process method on the worker object and send it the current settings
+			QtCore.QMetaObject.invokeMethod(worker, "process_multi_subwateruse", QtCore.Qt.QueuedConnection, 
+				QtCore.Q_ARG(dict, settings))
+
+			# reset button
+			self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(False)
+
+			# display text in text edit
+			self.display_wateruse_text(settings = settings)
+
+		else:
+			# invoke / call the process method on the worker object and send it the current settings
+			QtCore.QMetaObject.invokeMethod(worker, "process_multi_wateruse", QtCore.Qt.QueuedConnection, 
+				QtCore.Q_ARG(dict, settings))
+
+			# reset button
+			self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(False)
+
+			# display text in text edit
+			self.display_wateruse_text(settings = settings)
+
+		# reset button
+		self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(False)
+
+
+	def check_multi_wateruse_sim_dir(self, settings):
 		""" Check that user clicked a valid multi simulations directory """
 
-		valid_list = []
 		for dir_name in os.listdir(settings["simulation_directory"]):
 			dir_path = os.path.join(settings["simulation_directory"], dir_name)
 			filename, fileext = os.path.splitext(dir_path)
@@ -581,12 +675,11 @@ class MainWindow(QtGui.QMainWindow):
 		try:
 
 			if self.ui.tab_wateruse_radio_button_one_sim.isChecked():
-				self.apply_wateruse_to_sim(settings = self.settings)
+				self.apply_wateruse_to_sim(settings = self.tab_wateruse_settings)
 
 			elif self.ui.tab_wateruse_radio_button_multi_sims.isChecked():
-				self.check_multi_sim_dir(settings = self.settings)
-				self.apply_multi_sim(settings = self.settings)
-
+				self.check_multi_wateruse_sim_dir(settings = self.tab_wateruse_settings)
+				self.apply_multi_wateruse_sim(settings = self.tab_wateruse_settings)
 
 		except (IOError, AssertionError, ValueError, TypeError, AttributeError) as error:
 			error_msg = "{}".format(error.message)
@@ -594,7 +687,7 @@ class MainWindow(QtGui.QMainWindow):
 			self.popup_error(parent = self, msg = error_msg)
 			self.clear_tab_wateruse_widgets()
 
-	def select_water_sim(self):
+	def select_wateruse_sim(self):
 		""" Open a QtDialog to select a WATER simulation directory and show the directory in the line edit widget """
 
 		try:
@@ -605,7 +698,7 @@ class MainWindow(QtGui.QMainWindow):
 				self.clear_tab_wateruse_widgets()
 				self.tab_wateruse_sim_dir = str(dirpath)
 				self.ui.tab_wateruse_line_edit_open_sim.setText(self.tab_wateruse_sim_dir)
-				self.populate_sim_info(sim_dirpath = self.tab_wateruse_sim_dir)
+				self.populate_wateruse_sim_info(sim_dirpath = self.tab_wateruse_sim_dir)
 
 		except IOError as error:
 			error_msg = "{}".format(error.message)
@@ -613,7 +706,7 @@ class MainWindow(QtGui.QMainWindow):
 			self.popup_error(parent = self, msg = error_msg)
 			self.ui.tab_wateruse_line_edit_open_sim.clear()
 
-	def populate_sim_info(self, sim_dirpath):
+	def populate_wateruse_sim_info(self, sim_dirpath):
 		""" Populate the widgets in simulation info group box"""
 
 		tmp_shp_file = None
@@ -696,7 +789,7 @@ class MainWindow(QtGui.QMainWindow):
 
 			# invoke / call the process method on the worker object and send it the current settings
 			QtCore.QMetaObject.invokeMethod(worker, "draw_overview_map", QtCore.Qt.QueuedConnection, 
-				QtCore.Q_ARG(dict, self.settings),
+				QtCore.Q_ARG(dict, self.tab_wateruse_settings),
 				QtCore.Q_ARG(object, self.ui.tab_wateruse_matplotlib_widget)
 			)
 
@@ -723,7 +816,7 @@ class MainWindow(QtGui.QMainWindow):
 
 			# invoke / call the process method on the worker object and send it the current settings
 			QtCore.QMetaObject.invokeMethod(worker, "draw_zoomed_map", QtCore.Qt.QueuedConnection, 
-				QtCore.Q_ARG(dict, self.settings),
+				QtCore.Q_ARG(dict, self.tab_wateruse_settings),
 				QtCore.Q_ARG(object, self.ui.tab_wateruse_matplotlib_widget)
 			)
 
@@ -739,10 +832,7 @@ class MainWindow(QtGui.QMainWindow):
 
 	def setup_tab_wateruse_matplotlib_widget(self):
 		""" Setup the matplotlib widget """
-
 		self.ui.tab_wateruse_matplotlib_widget.setup_basemap_plot()
-
-	#-------------------------------- Tab Independent Methods ------------------------------------
 
 	def enable_tab_wateruse_map_buttons(self):
 		""" Enable map buttons when thread finishes """
@@ -773,6 +863,330 @@ class MainWindow(QtGui.QMainWindow):
 		self.ui.tab_wateruse_group_box_wateruse_info.setEnabled(False)
 
 
+	#-------------------------------- Tab: Apply global climate deltas to WATER simulations ------------------------------------
+
+	def check_gcm_inputs(self):
+		""" validate water use inputs """
+
+		self.tab_gcm_basin_shp_id_field = str(self.ui.tab_gcm_combo_box_shp_id_field.currentText())
+		self.tab_gcm_basin_shp_area_field = str(self.ui.tab_gcm_combo_box_shp_area_field.currentText())
+		self.tab_gcm_tiles_shp_id_field = str(self.ui.tab_gcm_combo_box_gcm_shp_id_field.currentText())
+
+		gcm_inputs = [
+			{"Simulation Directory" : self.tab_gcm_sim_dir},
+
+			{"Basin Shapefile": self.tab_gcm_basin_shp_file},
+			{"Basin Shapefile Id Field": self.tab_gcm_basin_shp_id_field},
+			{"Basin Shapefile Area Field": self.tab_gcm_basin_shp_area_field},
+			{"GCM Data Files": self.tab_gcm_gcm_data_files},
+
+			{"GCM Shapefile": self.tab_gcm_tiles_shp_path},
+			{"GCM Shapefile Id Field": self.tab_gcm_tiles_shp_id_field}
+		]
+
+		valid_list = []
+		for gcm_input in gcm_inputs:
+			if not gcm_input.values()[0]:
+				valid_list.append(False)
+				error_msg = "Empty input!<br />Need the following input:<br /><br />{}<br /><br />Please provide proper input.".format(gcm_input.keys()[0])
+				self.popup_error(parent = self, msg = error_msg)
+			else:
+				valid_list.append(True)
+
+		if False in valid_list:
+			self.ui.tab_gcm_push_button_apply_gcm.setEnabled(False)
+			self.ui.tab_gcm_push_button_plot_overview_map.setEnabled(False)
+			self.ui.tab_gcm_push_button_plot_zoomed_map.setEnabled(False)
+		else:
+			# over write the settings in user_settings.py with values from gui
+			self.tab_gcm_settings["simulation_directory"] = self.tab_gcm_sim_dir			
+			self.tab_gcm_settings["is_batch_simulation"] = self.is_batch_simulation
+
+			self.tab_gcm_settings["basin_shapefile_name"] = self.tab_gcm_basin_shp_file
+			self.tab_gcm_settings["basin_shapefile_id_field"] = self.tab_gcm_basin_shp_id_field			
+			self.tab_gcm_settings["basin_shapefile_area_field"] = self.tab_gcm_basin_shp_area_field
+
+			self.tab_gcm_settings["gcm_delta_files"] = self.tab_gcm_gcm_data_files
+			self.tab_gcm_settings["gcm_delta_tile_shapefile"] = self.tab_gcm_tiles_shp_path
+			self.tab_gcm_settings["gcm_delta_tile_shapefile_id_field"] = self.tab_gcm_tiles_shp_id_field
+
+			# for single simulations, overwrite the basin shapefile field values to empty strings
+			if not self.tab_gcm_settings["is_batch_simulation"]:
+				self.tab_gcm_settings["basin_shapefile_id_field"] = ""			
+				self.tab_gcm_settings["basin_shapefile_area_field"] = ""
+
+			# enable buttons
+			self.ui.tab_gcm_push_button_apply_gcm.setEnabled(True)
+
+			if self.ui.tab_gcm_radio_button_one_sim.isChecked():						# if single sim, enable map plot
+				self.ui.tab_gcm_push_button_plot_overview_map.setEnabled(True)
+				self.ui.tab_gcm_push_button_plot_zoomed_map.setEnabled(True)
+			else:																		# if multi sims, disable map plot
+				self.ui.tab_gcm_matplotlib_widget.clear_basemap_plot()
+				self.ui.tab_gcm_push_button_plot_overview_map.setEnabled(False)
+				self.ui.tab_gcm_push_button_plot_zoomed_map.setEnabled(False)
+
+
+	def display_gcm_text(self, settings):
+		""" Display text in text edit area """
+
+		info_dir = settings["info_directory_name"]
+		info_file = info_dir + "/" + settings["gcm_delta_info_file_name"]
+		ecoflow_dir = settings["ecoflow_directory_name"]
+		oasis_dir = settings["oasis_directory_name"]
+
+		msg = "Please see output directories and files located in chosen simulation directory:<br /><br />{}<br /><br />{}<br /><br />{}<br /><br />{}<br /><br />{}<br /><br />Additional output is located in each respective basin directory within the chosen simulation directory".format(self.tab_gcm_sim_dir, info_dir, info_file, ecoflow_dir, oasis_dir)
+
+		self.ui.tab_gcm_text_edit.setHtml(msg)
+		self.ui.tab_gcm_text_edit.toHtml()
+
+	def apply_gcm_to_sim(self, settings):
+		""" Apply water use to a simulation. Processing is completed in a separate thread from the main gui thread. """
+
+		# initiate the thread and worker
+		thread, worker = self.initiate_thread(worker_type = "gcm")
+
+		# start the thread
+		thread.start()
+
+		# if sub water use is checked, then apply substitute water use if proper file exists, otherwise apply water use as normal
+		if self.ui.tab_gcm_checkbox_subgcm.isChecked():
+
+			sub_water_use_file = os.path.join(settings["simulation_directory"], settings["info_directory_name"], settings["gcm_delta_non_intersecting_file_name"])
+
+			if os.path.isfile(sub_water_use_file):
+				# invoke / call the process method on the worker object and send it the current settings
+				QtCore.QMetaObject.invokeMethod(worker, "process_subgcm", QtCore.Qt.QueuedConnection, 
+					QtCore.Q_ARG(dict, settings))
+
+				# display text in text edit
+				self.display_gcm_text(settings = settings)
+
+			else:
+				error_msg = "Substitute global climate delta file does not exist. Please make sure the the following file exists: <br /> <br />{}".format(sub_water_use_file)
+				self.popup_error(parent = self, msg = error_msg)
+
+		else:
+			# invoke / call the process method on the worker object and send it the current settings
+			QtCore.QMetaObject.invokeMethod(worker, "process_gcm", QtCore.Qt.QueuedConnection, 
+				QtCore.Q_ARG(dict, settings))
+
+			# reset button
+			self.ui.tab_gcm_push_button_apply_gcm.setEnabled(False)
+
+			# display text in text edit
+			self.display_gcm_text(settings = settings)
+
+		# reset button
+		self.ui.tab_gcm_push_button_apply_gcm.setEnabled(False)
+
+
+	def apply_multi_gcm_sim(self, settings):
+		""" Apply global climate model deltas to multiple simulations """
+
+		# initiate the thread and worker
+		thread, worker = self.initiate_thread(worker_type = "wateruse")
+
+		# start the thread
+		thread.start()
+
+		# if sub water use is checked, then apply substitute water use if proper file exists, otherwise apply water use as normal
+		if self.ui.tab_wateruse_checkbox_subwateruse.isChecked():
+
+			# invoke / call the process method on the worker object and send it the current settings
+			QtCore.QMetaObject.invokeMethod(worker, "process_multi_subgcm", QtCore.Qt.QueuedConnection, 
+				QtCore.Q_ARG(dict, settings))
+
+			# reset button
+			self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(False)
+
+			# display text in text edit
+			self.display_wateruse_text(settings = settings)
+
+		else:
+			# invoke / call the process method on the worker object and send it the current settings
+			QtCore.QMetaObject.invokeMethod(worker, "process_multi_gcm", QtCore.Qt.QueuedConnection, 
+				QtCore.Q_ARG(dict, settings))
+
+			# reset button
+			self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(False)
+
+			# display text in text edit
+			self.display_wateruse_text(settings = settings)
+
+		# reset button
+		self.ui.tab_wateruse_push_button_apply_wateruse.setEnabled(False)
+
+
+	def check_multi_gcm_sim_dir(self, settings):
+		""" Check that user clicked a valid multi simulations directory """
+
+		valid_list = []
+		for dir_name in os.listdir(settings["simulation_directory"]):
+			dir_path = os.path.join(settings["simulation_directory"], dir_name)
+			filename, fileext = os.path.splitext(dir_path)
+			if fileext:
+				error_msg = "When running multiple simulations, the simulation directory can only contain WATER simulations and no other files! The following file was found in the simulation directory:<br /><br />{}".format(filename + fileext)
+				self.popup_error(parent = self, msg = error_msg)
+				self.ui.tab_gcm_push_button_apply_gcm.setEnabled(False)
+
+	def apply_gcm(self):
+		""" Apply water use using data provided on water use tab """
+
+		try:
+
+			if self.ui.tab_gcm_radio_button_one_sim.isChecked():
+				self.apply_gcm_to_sim(settings = self.tab_gcm_settings)
+
+			elif self.ui.tab_gcm_radio_button_multi_sims.isChecked():
+				self.check_multi_gcm_sim_dir(settings = self.tab_gcm_settings)
+				self.apply_multi_gcm_sim(settings = self.tab_gcm_settings)
+
+
+		except (IOError, AssertionError, ValueError, TypeError, AttributeError) as error:
+			error_msg = "{}".format(error.message)
+			print(error_msg)
+			self.popup_error(parent = self, msg = error_msg)
+			self.clear_tab_gcm_widgets()
+
+	def select_gcm_sim(self):
+		""" Open a QtDialog to select a WATER simulation directory and show the directory in the line edit widget """
+
+		try:
+
+			dirpath = QtGui.QFileDialog.getExistingDirectory(self, caption = "Please select a WATER simulation directory", directory = "../data/sample-water-simulations/")
+
+			if dirpath:
+				self.clear_tab_gcm_widgets()
+				self.tab_gcm_sim_dir = str(dirpath)
+				self.ui.tab_gcm_line_edit_open_sim.setText(self.tab_gcm_sim_dir)
+				self.populate_gcm_sim_info(sim_dirpath = self.tab_gcm_sim_dir)
+
+		except IOError as error:
+			error_msg = "{}".format(error.message)
+			print(error_msg)
+			self.popup_error(parent = self, msg = error_msg)
+			self.ui.tab_gcm_line_edit_open_sim.clear()
+
+	def populate_gcm_sim_info(self, sim_dirpath):
+		""" Populate the widgets in simulation info group box"""
+
+		tmp_shp_file = None
+
+		if self.ui.tab_gcm_radio_button_batch.isChecked():
+			self.is_batch_simulation = True
+			tmp_shp_file = "Watersheds.shp"
+
+		elif self.ui.tab_gcm_radio_button_single.isChecked():
+			self.is_batch_simulation = False
+			tmp_shp_file = "basinMask.shp"
+
+		# find the basin shapefile before populating widgets
+		if tmp_shp_file:
+			self.tab_gcm_basin_shp_path = helpers.find_file(name = tmp_shp_file, path = sim_dirpath)
+			
+			self.tab_gcm_basin_shp_dir, self.tab_gcm_basin_shp_file = helpers.get_file_info(self.tab_gcm_basin_shp_path) 
+			self.ui.tab_gcm_line_edit_basin_shp.setText(self.tab_gcm_basin_shp_file)
+
+			# get fields
+			basin_shapefile = osgeo.ogr.Open(self.tab_gcm_basin_shp_path)  
+			self.tab_gcm_basin_shp_dict = spatialvectors.fill_shapefile_dict(shapefile = basin_shapefile)
+
+			fields_str = " ".join(self.tab_gcm_basin_shp_dict["fields"])
+			self.ui.tab_gcm_combo_box_shp_id_field.clear()
+			self.ui.tab_gcm_combo_box_shp_area_field.clear()
+			self.ui.tab_gcm_combo_box_shp_id_field.addItems(fields_str.split())
+			self.ui.tab_gcm_combo_box_shp_area_field.addItems(fields_str.split())
+
+	def select_gcm_files(self):
+		""" Open a QtDialog to select global climate delta files and show the files in the list widget """
+
+		gcm_files_qtstr_list = QtGui.QFileDialog.getOpenFileNames(self, caption = "Please select 3 global climate files - Ppt.txt, Tmax.txt, PET.txt", directory = "../data/deltas-gcm", filter = "Text files (*.txt);; All files (*.*)")
+		gcm_files_str = str(gcm_files_qtstr_list.join(","))
+		self.tab_gcm_gcm_data_files = gcm_files_str.split(",")		# convert QtStringList to a Python list
+	
+		if len(self.tab_gcm_gcm_data_files) != 3:
+			error_msg = "Need 3 global climate files! - Ppt.txt, Tmax.txt, PET.txt <br />Number of files selected: {}.<br />{}<br />Please select 3 global climate delta files.".format(len(self.tab_gcm_gcm_data_files), self.tab_gcm_gcm_data_files)
+			self.popup_error(parent = self, msg = error_msg)
+		else:
+			self.add_to_list_widgets(widget_names = ["tab_gcm_list_widget_gcm_files"], items = self.tab_gcm_gcm_data_files)
+
+	def select_gcm_shp_file(self):
+		""" Open a QtDialog to select gcm delta shapefile"""
+
+		filepath = QtGui.QFileDialog.getOpenFileName(self, caption = "Please select a global climate model tiled shapefile", directory = "../data/spatial-datafiles/gcm-tiles", filter = "Shapefile (*.shp)")	
+
+		if filepath:
+			self.ui.tab_gcm_line_edit_gcm_shp.setText(filepath)
+			self.tab_gcm_tiles_shp_path = str(filepath)
+			self.tab_gcm_tiles_shp_dir, self.tab_gcm_tiles_shp_file = helpers.get_file_info(self.tab_gcm_tiles_shp_path) 
+
+			# get fields
+			gcm_shapefile = osgeo.ogr.Open(self.tab_gcm_tiles_shp_path)  
+			self.tab_gcm_tiles_shp_dict = spatialvectors.fill_shapefile_dict(shapefile = gcm_shapefile)
+
+			fields_str = " ".join(self.tab_gcm_tiles_shp_dict["fields"])
+			self.ui.tab_gcm_combo_box_gcm_shp_id_field.addItems(fields_str.split())
+
+	def plot_gcm_overview_map(self):
+		""" Plot overview map """
+
+		try:
+			self.setup_tab_gcm_matplotlib_widget()
+
+			# initialize thread and worker
+			thread, worker = self.initiate_thread(worker_type = "map_gcm")
+
+			# start the thread
+			thread.start()
+
+			# invoke / call the process method on the worker object and send it the current settings
+			QtCore.QMetaObject.invokeMethod(worker, "draw_overview_map", QtCore.Qt.QueuedConnection, 
+				QtCore.Q_ARG(dict, self.tab_gcm_settings),
+				QtCore.Q_ARG(object, self.ui.tab_gcm_matplotlib_widget)
+			)
+
+			# display text in text edit
+			self.update_status_bar(msg = "Drawing map ... this may take a few moments ... please wait.")
+
+		except (IOError, TypeError) as error:
+			error_msg = "{}".format(error.message)
+			print(error_msg)
+			self.popup_error(parent = self, msg = error_msg)
+			self.ui.tab_gcm_matplotlib_widget.clear_basemap_plot()
+
+	def plot_gcm_zoomed_map(self):
+		""" Plot overview map """
+
+		try:
+			self.setup_tab_gcm_matplotlib_widget()
+
+			# initialize thread and worker
+			thread, worker = self.initiate_thread(worker_type = "map_gcm")
+
+			# start the thread
+			thread.start()
+
+			# invoke / call the process method on the worker object and send it the current settings
+			QtCore.QMetaObject.invokeMethod(worker, "draw_zoomed_map", QtCore.Qt.QueuedConnection, 
+				QtCore.Q_ARG(dict, self.tab_gcm_settings),
+				QtCore.Q_ARG(object, self.ui.tab_+b_matplotlib_widget)
+			)
+
+			# display text in text edit
+			self.update_status_bar(msg = "Drawing map ... this may take a few moments ... please wait.")
+
+		except (IOError, TypeError) as error:
+			error_msg = "{}".format(error.message)
+			print(error_msg)
+			self.popup_error(parent = self, msg = error_msg)
+			self.ui.tab_gcm_matplotlib_widget.clear_basemap_plot()
+
+
+	def setup_tab_gcm_matplotlib_widget(self):
+		""" Setup the matplotlib widget """
+		self.ui.tab_gcm_matplotlib_widget.setup_basemap_plot()
+
 	def enable_tab_gcm_map_buttons(self):
 		""" Enable map buttons when thread finishes """
 		self.ui.tab_gcm_push_button_plot_zoomed_map.setEnabled(True)
@@ -801,6 +1215,7 @@ class MainWindow(QtGui.QMainWindow):
 		self.ui.tab_gcm_group_box_sim_info.setEnabled(False)
 		self.ui.tab_gcm_group_box_gcm_info.setEnabled(False)
 
+	#-------------------------------- Tab Independent Methods ------------------------------------
 
 	def thread_msg(self, msg):
 		""" Display message box about thread """
@@ -844,10 +1259,10 @@ class MainWindow(QtGui.QMainWindow):
 			worker = Worker()
 			
 			worker.starting.connect(self.disable_tab_gcm_checkinput_button)
-			worker.starting.connect(self.disable_tab_gcm_wateruse_group_boxes)	
+			worker.starting.connect(self.disable_tab_gcm_gcm_group_boxes)	
 				
 			worker.finished.connect(self.enable_tab_gcm_checkinput_button)
-			worker.finished.connect(self.enable_tab_gcm_wateruse_group_boxes)
+			worker.finished.connect(self.enable_tab_gcm_gcm_group_boxes)
 
 		else:
 			raise TypeError("worker type does not exist: {}".format(worker_type))
@@ -1066,6 +1481,22 @@ class MainWindow(QtGui.QMainWindow):
 		self.ui.tab_wateruse_matplotlib_widget.setEnabled(False)
 		self.ui.tab_wateruse_push_button_plot_overview_map.setEnabled(False)
 		self.ui.tab_wateruse_push_button_plot_zoomed_map.setEnabled(False)
+
+	def clear_tab_gcm_widgets(self):
+		""" Clear widgets on gcm tab """
+		self.ui.tab_gcm_push_button_apply_gcm.setEnabled(False)
+		self.ui.tab_gcm_line_edit_open_sim.clear()
+		self.ui.tab_gcm_line_edit_basin_shp.clear()
+		self.ui.tab_gcm_combo_box_shp_id_field.clear()
+		self.ui.tab_gcm_combo_box_shp_area_field.clear()
+		self.ui.tab_gcm_list_widget_gcm_files.clear()
+		self.ui.tab_gcm_line_edit_gcm_shp.clear()
+		self.ui.tab_gcm_combo_box_gcm_shp_id_field.clear()
+		self.ui.tab_gcm_text_edit.clear()
+		self.ui.tab_gcm_matplotlib_widget.clear_basemap_plot()
+		self.ui.tab_gcm_matplotlib_widget.setEnabled(False)
+		self.ui.tab_gcm_push_button_plot_overview_map.setEnabled(False)
+		self.ui.tab_gcm_push_button_plot_zoomed_map.setEnabled(False)
 
 	def about(self):
 		""" Show an message box about the gui."""

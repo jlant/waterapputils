@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'user_interface.ui'
 #
-# Created: Thu Mar 12 13:21:58 2015
+# Created: Fri Mar 13 17:13:09 2015
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -500,9 +500,9 @@ class Ui_MainWindow(object):
         self.tab_gcm_combo_box_gcm_shp_id_field = QtGui.QComboBox(self.tab_gcm_group_box_gcm_info)
         self.tab_gcm_combo_box_gcm_shp_id_field.setObjectName(_fromUtf8("tab_gcm_combo_box_gcm_shp_id_field"))
         self.gridLayout_6.addWidget(self.tab_gcm_combo_box_gcm_shp_id_field, 5, 1, 1, 1)
-        self.tab_gcm_checkbox_subwateruse = QtGui.QCheckBox(self.tab_gcm_group_box_gcm_info)
-        self.tab_gcm_checkbox_subwateruse.setObjectName(_fromUtf8("tab_gcm_checkbox_subwateruse"))
-        self.gridLayout_6.addWidget(self.tab_gcm_checkbox_subwateruse, 6, 0, 1, 1)
+        self.tab_gcm_checkbox_subgcm = QtGui.QCheckBox(self.tab_gcm_group_box_gcm_info)
+        self.tab_gcm_checkbox_subgcm.setObjectName(_fromUtf8("tab_gcm_checkbox_subgcm"))
+        self.gridLayout_6.addWidget(self.tab_gcm_checkbox_subgcm, 6, 0, 1, 1)
         self.verticalLayout_14.addWidget(self.tab_gcm_group_box_gcm_info)
         self.frame_16 = QtGui.QFrame(self.frame_11)
         self.frame_16.setFrameShape(QtGui.QFrame.StyledPanel)
@@ -886,8 +886,8 @@ class Ui_MainWindow(object):
         self.tab_gcm_push_button_gcm_files.setToolTip(_translate("MainWindow", "Open 3 delta global climate model text files; Ppt.txt, Tmax.txt, PET.txt  ", None))
         self.tab_gcm_push_button_gcm_files.setText(_translate("MainWindow", "Open files", None))
         self.tab_gcm_combo_box_gcm_shp_id_field.setToolTip(_translate("MainWindow", "Water use shapefile fields.", None))
-        self.tab_gcm_checkbox_subwateruse.setToolTip(_translate("MainWindow", "Check if applying substitute global climate model deltas.", None))
-        self.tab_gcm_checkbox_subwateruse.setText(_translate("MainWindow", "Use substitute global climate model deltas", None))
+        self.tab_gcm_checkbox_subgcm.setToolTip(_translate("MainWindow", "Check if applying substitute global climate model deltas.", None))
+        self.tab_gcm_checkbox_subgcm.setText(_translate("MainWindow", "Use substitute global climate model deltas", None))
         self.tab_gcm_push_button_check_inputs.setToolTip(_translate("MainWindow", "<html><head/><body><p>Makes sure all inputs were entered. Enables applying global climate model deltas button and map plotting buttons.</p></body></html>", None))
         self.tab_gcm_push_button_check_inputs.setText(_translate("MainWindow", "Check Inputs", None))
         self.tab_gcm_push_button_apply_gcm.setToolTip(_translate("MainWindow", "<html><head/><body><p>Applies water use to provided inputs.  </p><p>Process is run in a separate thread allowing interaction with other parts of GUI while processing occurs.</p></body></html>", None))
