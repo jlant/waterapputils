@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'user_interface.ui'
 #
-# Created: Fri Mar 13 17:13:09 2015
+# Created: Mon Mar 16 09:13:59 2015
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -405,10 +405,10 @@ class Ui_MainWindow(object):
         self.tab_gcm_group_box_num_sims.setObjectName(_fromUtf8("tab_gcm_group_box_num_sims"))
         self.verticalLayout_15 = QtGui.QVBoxLayout(self.tab_gcm_group_box_num_sims)
         self.verticalLayout_15.setObjectName(_fromUtf8("verticalLayout_15"))
-        self.tab_gcm_radio_button_one_sims = QtGui.QRadioButton(self.tab_gcm_group_box_num_sims)
-        self.tab_gcm_radio_button_one_sims.setChecked(True)
-        self.tab_gcm_radio_button_one_sims.setObjectName(_fromUtf8("tab_gcm_radio_button_one_sims"))
-        self.verticalLayout_15.addWidget(self.tab_gcm_radio_button_one_sims)
+        self.tab_gcm_radio_button_one_sim = QtGui.QRadioButton(self.tab_gcm_group_box_num_sims)
+        self.tab_gcm_radio_button_one_sim.setChecked(True)
+        self.tab_gcm_radio_button_one_sim.setObjectName(_fromUtf8("tab_gcm_radio_button_one_sim"))
+        self.verticalLayout_15.addWidget(self.tab_gcm_radio_button_one_sim)
         self.tab_gcm_radio_button_multi_sims = QtGui.QRadioButton(self.tab_gcm_group_box_num_sims)
         self.tab_gcm_radio_button_multi_sims.setObjectName(_fromUtf8("tab_gcm_radio_button_multi_sims"))
         self.verticalLayout_15.addWidget(self.tab_gcm_radio_button_multi_sims)
@@ -753,7 +753,7 @@ class Ui_MainWindow(object):
         self.tab_wateruse_push_button_plot_zoomed_map.setText(_translate("MainWindow", "Plot Zoomed Map", None))
         self.main_tab_widget.setTabText(self.main_tab_widget.indexOf(self.tab_applywateruse), _translate("MainWindow", "Apply water use to WATER simulations", None))
         self.tab_gcm_group_box_num_sims.setTitle(_translate("MainWindow", "Number of simulation(s)", None))
-        self.tab_gcm_radio_button_one_sims.setToolTip(_translate("MainWindow", "<html>\n"
+        self.tab_gcm_radio_button_one_sim.setToolTip(_translate("MainWindow", "<html>\n"
 "<head/>\n"
 "<body>\n"
 "    <p>One batch or single WATER simulation.</p>\n"
@@ -789,7 +789,7 @@ class Ui_MainWindow(object):
 "    </ul>\n"
 "</body>\n"
 "</html>", None))
-        self.tab_gcm_radio_button_one_sims.setText(_translate("MainWindow", "One simulation", None))
+        self.tab_gcm_radio_button_one_sim.setText(_translate("MainWindow", "One simulation", None))
         self.tab_gcm_radio_button_multi_sims.setToolTip(_translate("MainWindow", "<html>\n"
 "<head/>\n"
 "<body>\n"

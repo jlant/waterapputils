@@ -912,7 +912,7 @@
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout_15">
                     <item>
-                     <widget class="QRadioButton" name="tab_gcm_radio_button_one_sims">
+                     <widget class="QRadioButton" name="tab_gcm_radio_button_one_sim">
                       <property name="toolTip">
                        <string>&lt;html&gt;
 &lt;head/&gt;

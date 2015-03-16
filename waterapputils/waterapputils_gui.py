@@ -199,7 +199,7 @@ class MapWorker(QtCore.QObject):
 	@QtCore.pyqtSlot(dict, object)
 	def draw_gcm_overview_map(self, settings, matplotlib_widget):
 		""" Draw overview map """
-
+		print(settings["gcm_delta_tile_shapefile"])
 		self.starting.emit("Drawing map ... this may take a few moments ... please wait.")
 
 		files_list = [
@@ -1101,7 +1101,7 @@ class MainWindow(QtGui.QMainWindow):
 	def select_gcm_files(self):
 		""" Open a QtDialog to select global climate delta files and show the files in the list widget """
 
-		gcm_files_qtstr_list = QtGui.QFileDialog.getOpenFileNames(self, caption = "Please select 3 global climate files - Ppt.txt, Tmax.txt, PET.txt", directory = "../data/deltas-gcm", filter = "Text files (*.txt);; All files (*.*)")
+		gcm_files_qtstr_list = QtGui.QFileDialog.getOpenFileNames(self, caption = "Please select 3 global climate files - PET.txt, Ppt.txt, Tmax.txt", directory = "../data/deltas-gcm", filter = "Text files (*.txt);; All files (*.*)")
 		gcm_files_str = str(gcm_files_qtstr_list.join(","))
 		self.tab_gcm_gcm_data_files = gcm_files_str.split(",")		# convert QtStringList to a Python list
 	
@@ -1141,7 +1141,7 @@ class MainWindow(QtGui.QMainWindow):
 			thread.start()
 
 			# invoke / call the process method on the worker object and send it the current settings
-			QtCore.QMetaObject.invokeMethod(worker, "draw_overview_map", QtCore.Qt.QueuedConnection, 
+			QtCore.QMetaObject.invokeMethod(worker, "draw_gcm_overview_map", QtCore.Qt.QueuedConnection, 
 				QtCore.Q_ARG(dict, self.tab_gcm_settings),
 				QtCore.Q_ARG(object, self.ui.tab_gcm_matplotlib_widget)
 			)
@@ -1170,7 +1170,7 @@ class MainWindow(QtGui.QMainWindow):
 			# invoke / call the process method on the worker object and send it the current settings
 			QtCore.QMetaObject.invokeMethod(worker, "draw_zoomed_map", QtCore.Qt.QueuedConnection, 
 				QtCore.Q_ARG(dict, self.tab_gcm_settings),
-				QtCore.Q_ARG(object, self.ui.tab_+b_matplotlib_widget)
+				QtCore.Q_ARG(object, self.ui.tab_gcm_matplotlib_widget)
 			)
 
 			# display text in text edit
