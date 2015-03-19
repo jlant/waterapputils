@@ -7,7 +7,10 @@ from matplotlib.figure import Figure
 from matplotlib.widgets import SpanSelector
 from matplotlib.widgets import RadioButtons
 from scipy.stats import nanmean 
+from mpl_toolkits.basemap import Basemap
+from matplotlib.patches import Polygon
 
+import os
 import numpy as np
 from textwrap import wrap
 import matplotlib.dates as mdates 
@@ -296,3 +299,201 @@ class MatplotlibWidget(QtGui.QWidget):
         self.canvas.draw()
         self.axes1.grid(True)
         self.axes2.grid(True)
+
+
+    #-------------------------------- Basemap Plot ------------------------------------
+
+    def setup_basemap_plot(self):
+        """ Setup the watertxt plot """
+
+        self.clear_basemap_plot()
+
+        # set up axes and its properties
+        self.basemap_axes = self.figure.add_subplot(111) 
+        self.basemap_axes.grid(True)
+
+    def get_map_extents(self, shapefiles, shp_name = None):
+        """   
+        Get max and min extent coordinates from a list of shapefiles to use as the 
+        extents on the map. Use the map extents to calculate the map center and the 
+        standard parallels.
+
+        Parameters
+        ----------
+        shapefiles : list 
+            List of shapefile_data dictionaries 
+        shp_name : string
+            String name of shapefile to use for getting map extents 
+
+        Returns
+        -------
+        extent_coords : dictionary 
+            Dictionary containing "lon_min", "lon_max", "lat_max", "lat_min" keys with respective calculated values
+        center_coords : dictionary 
+            Dictionary containing "lon", "lat" keys with respective calculated values
+        standard_parallels : dictionary 
+            Dictionary containing "first", "second" keys with respective calculated values (first = min(lat), second = max(lat))   
+        """
+        extent_coords = {}    
+        center_coords = {}
+        standard_parallels = {}
+
+        lons = []
+        lats = []
+
+        if shp_name:
+            for shapefile_data in shapefiles:            
+                if shp_name in shapefile_data["name"].split("_")[0]:
+                    lons.append(shapefile_data["extents"][0:2])
+                    lats.append(shapefile_data["extents"][2:])
+            
+        else:
+            for shapefile_data in shapefiles:
+                lons.append(shapefile_data["extents"][0:2])
+                lats.append(shapefile_data["extents"][2:])
+
+        extent_coords["lon_min"] = np.min(lons)
+        extent_coords["lon_max"] = np.max(lons)
+        extent_coords["lat_min"] = np.min(lats)
+        extent_coords["lat_max"] = np.max(lats)
+
+        center_coords["lon"] = np.mean([extent_coords["lon_min"], extent_coords["lon_max"]])
+        center_coords["lat"] = np.mean([extent_coords["lat_min"], extent_coords["lat_max"]])
+
+        standard_parallels["first"] = extent_coords["lat_min"]
+        standard_parallels["second"] = extent_coords["lat_max"]
+            
+        return extent_coords, center_coords, standard_parallels
+
+
+    def plot_shapefiles_map(self, shapefiles, display_fields = [], colors = [], title = None, shp_name = None, buff = 1.0):
+        """   
+        Generate a map showing all the shapefiles in the shapefile_list.  
+        Shapefiles should be in a Geographic Coordinate System (longitude and 
+        latitude coordinates) such as World WGS84; Matplotlib"s basemap library 
+        does the proper transformation to a projected coordinate system.  The projected
+        coordinate system used is Albers Equal Area.
+        
+        Parameters
+        ----------
+        shapefiles : list 
+            List of dictionaries containing shapefile information
+        title : string 
+            String title for plot
+        display_fields : list 
+            List of strings that correspond to a shapefile field where the corresponding value(s) will be displayed.
+        colors : list
+            List of strings that correspond to colors to be displayed
+        shp_name : string
+            String name of shapefile to use for getting map extents 
+        buff : float
+            Float value in coordinate degrees to buffer the map with
+        """  
+
+        self.setup_basemap_plot()
+
+        extent_coords, center_coords, standard_parallels = self.get_map_extents(shapefiles, shp_name = shp_name)     
+
+        # create the basemap object with Albers Equal Area Conic Projection
+        bmap = Basemap(projection = "aea", 
+                       llcrnrlon = extent_coords["lon_min"] - buff, llcrnrlat = extent_coords["lat_min"] - buff, 
+                       urcrnrlon = extent_coords["lon_max"] + buff, urcrnrlat = extent_coords["lat_max"] + buff, 
+                       lat_1 = standard_parallels["first"], lat_2 = standard_parallels["second"],
+                       lon_0 = center_coords["lon"], lat_0 = center_coords["lat"],
+                       resolution = "h", area_thresh = 10000, ax = self.basemap_axes)    
+        
+        # have basemap object plot background stuff
+        bmap.drawcoastlines()
+        bmap.drawcountries()
+        bmap.drawrivers(linewidth = 1, color = "blue")
+        bmap.drawstates()
+        bmap.drawmapboundary(fill_color = "aqua")
+        bmap.fillcontinents(color = "coral", lake_color = "aqua")
+        bmap.drawparallels(np.arange(-80., 81., 1.), labels = [1, 0, 0, 0], linewidth = 0.5)
+        bmap.drawmeridians(np.arange(-180., 181., 1.), labels = [0, 0, 0, 1], linewidth = 0.5)
+         
+        # plot each shapefile on the basemap    
+        legend_handles = []
+        legend_labels = []
+        colors_index = 0
+        colors_list = ["b", "g", "y", "r", "c", "y", "m", "orange", "aqua", "darksalmon", "gold", "k"]
+        for shapefile_data in shapefiles:
+            
+            # set up colors to use
+            if colors:
+                color = colors[colors_index]        
+            elif colors_index > len(colors_list) - 1:
+                color = np.random.rand(3,)
+            else:
+                color = colors_list[colors_index]         
+            
+            full_path = os.path.join(shapefile_data["path"], shapefile_data["name"].split(".")[0])
+            
+            shp_tuple = bmap.readshapefile(full_path, "shp", drawbounds = False)                            # use basemap shapefile reader for ease of plotting
+            for shape_dict, shape in zip(bmap.shp_info, bmap.shp):                                          # zip the shapefile information and its shape as defined by basemap
+
+                if shapefile_data["type"] == "POLYGON":
+                    p1 = Polygon(shape, facecolor = color, edgecolor = "k",
+                                             linewidth = 1, alpha = 0.7, label = shapefile_data["name"])            
+                    self.basemap_axes.add_patch(p1)
+                    xx, yy = zip(*shape)
+                    txt_x = str(np.mean(xx))
+                    txt_y = str(np.mean(yy))
+                    
+                elif shapefile_data["type"] == "POINT":
+                    x, y = shape
+
+                    if "usgsgages" in shapefile_data["name"].split("_")[0]:
+                        p1 = bmap.plot(x, y, color = color, marker = "^", markersize = 10, label = shapefile_data["name"])
+                    elif "wateruse" in shapefile_data["name"].split("_")[0]:
+                        p1 = bmap.plot(x, y, color = color, marker = "o", markersize = 5, label = shapefile_data["name"])
+                    else:
+                        print("what!!")
+                        p1 = bmap.plot(x, y, color = color, marker = "o", markersize = 10, label = shapefile_data["name"])
+
+                    txt_x = str(x)
+                    txt_y = str(y)
+                    
+                else:
+                    xx, yy = zip(*shape)
+                    p1 = bmap.plot(xx, yy, linewidth = 1, color = color, label = shapefile_data["name"])
+                    txt_x = str(np.mean(xx))
+                    txt_y = str(np.mean(yy))
+                
+                
+                if isinstance(p1, list):
+                    p1 = p1[0]
+
+                # control text display of shapefile fields
+                for display_field in display_fields:
+                    if display_field in shape_dict.keys():
+                        self.basemap_axes.text(txt_x, txt_y, shape_dict[display_field], color = "k", fontsize = 12, fontweight = "bold")
+
+            colors_index += 1    
+            legend_handles.append(p1)    
+            legend_labels.append(shapefile_data["name"].split("_")[0])
+
+        handles, labels = self.basemap_axes.get_legend_handles_labels()
+        
+        # edit the contents of handles and labels to only show 1 legend per shape
+        handles = legend_handles
+        labels = legend_labels
+        legend = self.basemap_axes.legend(handles, labels, fancybox = True, numpoints = 1)
+        legend.get_frame().set_alpha(0.5)
+        legend.draggable(state = True)
+
+        # draw the plot
+        self.canvas.draw()
+
+
+    def clear_basemap_plot(self):
+        """ Clear the plot axes """ 
+
+        self.figure.clear()
+        self.canvas.draw()
+
+    def reset_basemap_plot(self):
+        """ Clear the plot axes """ 
+
+        self.basemap_axes.clear()
+        self.canvas.draw()
