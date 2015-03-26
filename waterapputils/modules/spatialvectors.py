@@ -485,7 +485,7 @@ def reproject_shapefile_to_wgs84(shapefile, out_shapefile_suffix = "_reproj_wgs8
     # make sure projection is NAD_1983_Albers
     projection_str = in_spatial_ref.GetAttrValue("PROJCS")
 
-    assert projection_str == "NAD_1983_Albers", "Projection: {} is not NAD_1983_Albers. To reproject, projection must be NAD_1983_Albers".format(projection_str)
+    assert projection_str == "NAD_1983_Albers", "Projection Error!\n\nShapefile must be NAD_1983_Albers like all other WATER shapefiles to project.\n\nShapefile projection:\n    {}\ndoes not equal\n    NAD_1983_Albers.".format(projection_str)
 
     # create output spatial reference - WGS 84
     out_spatial_ref = osgeo.osr.SpatialReference()
