@@ -212,7 +212,12 @@ def read_factor_file_in(filestream):
         
         # populate data dictionary with clean data sets
         data[parameter["name"]] = parameter["data"]
-            
+
+    water_factor_type_list = ['InSwWL', 'MiSwWL', 'WSunkTR', 'InSwRT', 'ReGwWL', 'AqGwWL', 'DoGwWL', 'STswRT', 'TeSwWL', 'MiGwWL', 'TeGwWL', 'CoGwWL', 'CoSwWL', 'IrGwWL', 'WStrans', 'WsGwWL', 'WSgwRT', 'InGwRT', 'IrSwWL', 'InGwWL', 'AqSwWL', 'LvGwWL', 'WsSwWL']
+    for data_key in data.keys():
+        if data_key not in water_factor_type_list:
+            raise IOError("Error in water factor file!\nBad column found: {}\nThis indicates an incorrect water factor file.".format(data_key))
+
     # return data
     return data
 
@@ -385,7 +390,7 @@ def get_total_wateruse(wateruse_data, id_list, wateruse_factors = None):
     # check that each id in id list is contained in the wateruse_data     
     for id_num in id_list:
         if id_num not in wateruse_data["newhydroid"]:
-            raise ValueError, "newhydroid {} is not contained in wateruse_data".format(id_num)
+            raise ValueError, "Water use centroid '{}' is not contained in wateruse_data.".format(id_num)
   
     # get wateruse values that correspond to a list of ids
     values = get_wateruse_values(wateruse_data, id_list = id_list, wateruse_factors = wateruse_factors) 
@@ -426,6 +431,8 @@ def get_all_total_wateruse(wateruse_files, id_list, wateruse_factor_file = None,
         if wateruse_factor_file:
             # read water use factor file
             wateruse_factors = read_file(wateruse_factor_file, factor_file = True)
+
+            print(wateruse_factors)
         
         # calculate average wateruse for a list of ids
         total_wateruse_dict = get_total_wateruse(wateruse_data = wateruse_data, id_list = id_list, wateruse_factors = wateruse_factors)

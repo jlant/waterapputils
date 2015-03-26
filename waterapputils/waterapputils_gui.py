@@ -1275,7 +1275,7 @@ class MainWindow(QtGui.QMainWindow):
 		QtGui.QMessageBox.information(self, "Thread Exception Message", msg + closing_str + error_log_str)
 		print(msg)
 		self.clear_tab_wateruse_widgets()
-		time.sleep(5)  # wait 5 seconds and then close
+		time.sleep(2)  # wait a few seconds and then close
 		sys.exit(1)
 
 	def gcm_exception_msg(self, msg):
@@ -1286,7 +1286,7 @@ class MainWindow(QtGui.QMainWindow):
 		QtGui.QMessageBox.information(self, "Thread Exception Message", msg + closing_str + error_log_str)
 		print(msg)
 		self.clear_tab_gcm_widgets()
-		time.sleep(5) # wait 5 seconds and then close
+		time.sleep(2) # wait a few seconds and then close
 		sys.exit(1)
 
 	def wateruse_map_exception_msg(self, msg):
