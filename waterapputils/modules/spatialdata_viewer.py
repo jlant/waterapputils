@@ -238,12 +238,12 @@ def _create_shapefile_test_data():
     fixture = {}
 
     # open the shapefiles
-    test_poly_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/test_poly_wgs84.shp"))) 
-    water_basin_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basin_wgs84.shp")))      
-    water_basins_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basins_wgs84.shp")))  
-    water_basin_pourpoint_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basin_pourpoint_wgs84.shp")))      
-    canes_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/gcm-tiles/CanES_wgs84.shp"))) 
-    wateruse_centroids_sample_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/wateruse-centroids/wateruse_centroids_sample_wgs84.shp"))) 
+    test_poly_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../../data/spatial-datafiles/basins/test_poly_wgs84.shp"))) 
+    water_basin_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../../data/spatial-datafiles/basins/water_basin_wgs84.shp")))      
+    water_basins_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../../data/spatial-datafiles/basins/water_basins_wgs84.shp")))  
+    water_basin_pourpoint_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../../data/spatial-datafiles/basins/water_basin_pourpoint_wgs84.shp")))      
+    canes_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../../data/spatial-datafiles/gcm-tiles/CanES_wgs84.shp"))) 
+    wateruse_centroids_sample_wgs84_shapefile = osgeo.ogr.Open(os.path.abspath(os.path.join(os.getcwd(), "../../data/spatial-datafiles/wateruse-centroids/wateruse_centroids_sample_wgs84.shp"))) 
 
     fixture["test_poly_wgs84"] = spatialvectors.fill_shapefile_dict(shapefile = test_poly_wgs84_shapefile)
     fixture["water_basin_wgs84"] = spatialvectors.fill_shapefile_dict(shapefile = water_basin_wgs84_shapefile)

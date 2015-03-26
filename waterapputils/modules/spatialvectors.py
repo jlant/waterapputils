@@ -482,6 +482,11 @@ def reproject_shapefile_to_wgs84(shapefile, out_shapefile_suffix = "_reproj_wgs8
     in_layer = shapefile.GetLayer()
     in_spatial_ref = in_layer.GetSpatialRef()
 
+    # make sure projection is NAD_1983_Albers
+    projection_str = in_spatial_ref.GetAttrValue("PROJCS")
+
+    assert projection_str == "NAD_1983_Albers", "Projection Error!\n\nShapefile must be NAD_1983_Albers like all other WATER shapefiles to project.\n\nShapefile projection:\n    {}\ndoes not equal\n    NAD_1983_Albers.".format(projection_str)
+
     # create output spatial reference - WGS 84
     out_spatial_ref = osgeo.osr.SpatialReference()
     out_spatial_ref.ImportFromEPSG(4326)                # EPSG 4326 = WGS 84
@@ -543,6 +548,7 @@ def reproject_shapefile_to_wgs84(shapefile, out_shapefile_suffix = "_reproj_wgs8
     prj_file = open(prj_filename, 'w')
     prj_file.write(out_spatial_ref.ExportToWkt())
     prj_file.close()
+
 
     return out_shapefile
 
@@ -618,7 +624,7 @@ def test_fill_shapefile_dict():
                 "type": "POLYGON", 
                 "spatialref": "+proj=longlat +datum=WGS84 +no_defs "}
     
-    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/test_poly_wgs84.shp"))
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../../data/spatial-datafiles/basins/test_poly_wgs84.shp"))
             
     # Open the shapefiles
     basin_shapefile = osgeo.ogr.Open(basin_file)  
@@ -648,9 +654,9 @@ def test_get_shapefile_coords():
                                 '4': ([-77.34375226209623, -74.53125137708862, -74.53125123940792, -77.34375210963982, -77.34375226209623], [39.068379795204585, 39.068379891689446, 36.277815301487045, 36.27781521345216, 39.068379795204585]),
                                 '5': ([-74.53125137708862, -71.71875048096074, -71.71875035838741, -74.53125123940792, -74.53125137708862], [39.068379891689446, 39.0683799778016, 36.27781538090664, 36.277815301487045, 39.068379891689446])}
 
-    basin_file_wgs84 = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/test_poly_wgs84.shp"))
-    basin_file_nad83 = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/test_poly_nad83.shp"))
-    canes_file_wgs84 = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/gcm-tiles/canes_wgs84.shp"))
+    basin_file_wgs84 = os.path.abspath(os.path.join(os.getcwd(), "../../data/spatial-datafiles/basins/test_poly_wgs84.shp"))
+    basin_file_nad83 = os.path.abspath(os.path.join(os.getcwd(), "../../data/spatial-datafiles/basins/test_poly_nad83.shp"))
+    canes_file_wgs84 = os.path.abspath(os.path.join(os.getcwd(), "../../data/spatial-datafiles/gcm-tiles/canes_wgs84.shp"))
         
     # Open the shapefiles
     basin_shapefile_wgs84 = osgeo.ogr.Open(basin_file_wgs84) 
@@ -675,7 +681,7 @@ def test_get_shapefile_areas():
     expected = {}
     expected = {'01413500': 422764983.7640325, '01420500': 627820731.9907457, '01414500': 65034817.5157996, '01435000': 172655175.67497352}
 
-    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basins_nad83.shp"))
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../../data/spatial-datafiles/basins/water_basins_nad83.shp"))
 
     # open the shapefiles
     basin_shapefile = osgeo.ogr.Open(basin_file)    
@@ -696,8 +702,8 @@ def test_get_intersected_field_values():
     expected = {}
     expected["newhydroid"] = {'01413500': ['149', '61', '22'], '01420500': ['440', '390', '257'], '01414500': None, '01435000': ['262', '220']}  
 
-    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basins_wgs84.shp"))
-    point_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/wateruse-centroids/wateruse_centroids_sample_wgs84.shp"))
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../../data/spatial-datafiles/basins/water_basins_wgs84.shp"))
+    point_file = os.path.abspath(os.path.join(os.getcwd(), "../../data/spatial-datafiles/wateruse-centroids/wateruse_centroids_sample_wgs84.shp"))
 
     # open the shapefiles
     basin_shapefile = osgeo.ogr.Open(basin_file)    
@@ -770,7 +776,7 @@ def test_get_field_values():
     expected = {}
     expected = {'01413500': '163.229819866', '01420500': '242.401970189', '01414500': '25.109982983', '01435000': '66.6622693618'}
 
-    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basins_wgs84.shp"))
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../../data/spatial-datafiles/basins/water_basins_wgs84.shp"))
 
     # open the shapefiles
     basin_shapefile = osgeo.ogr.Open(basin_file)    
@@ -789,10 +795,10 @@ def test_reproject_shapefile_to_wgs84():
     print("--- Testing reproject_shapefile_to_wgs84() ---")  
     print("")
     expected = {}
-    expected["full_path"] = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basin_nad83_reproj_wgs84.shp"))
+    expected["full_path"] = os.path.abspath(os.path.join(os.getcwd(), "../../data/spatial-datafiles/basins/water_basin_nad83_reproj_wgs84.shp"))
 
     # open the shapefile
-    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../data/spatial-datafiles/basins/water_basin_nad83.shp"))
+    basin_file = os.path.abspath(os.path.join(os.getcwd(), "../../data/spatial-datafiles/basins/water_basin_nad83.shp"))
     basin_shapefile = osgeo.ogr.Open(basin_file)    
 
     actual = {}
@@ -819,11 +825,11 @@ def main():
 
     # test_validate_field_values()
 
-    test_read_field_values_file_in()
+    # test_read_field_values_file_in()
     
     # test_get_field_values()
 
-    # test_reproject_shapefile_to_wgs84()
+    test_reproject_shapefile_to_wgs84()
 
 if __name__ == "__main__":
     main()    
