@@ -47,6 +47,18 @@ based on the spatial intersection of the watershed(s) of interest with the water
 
 * Logs errors and tracebacks.
 
+* A multi-threaded graphical user interface (GUI) called [waterapputils_gui](waterapputils/waterapputils_gui.py).
+
+Some sample images of the GUI:
+
+![Alt text](docs/_static/gui-watertxt.png "Process and analyze WATER output files")
+
+![Alt text](docs/_static/gui-watertxtcmp.png "Compare WATER output files")
+
+![Alt text](docs/_static/gui-wateruse.png "Apply water use to WATER output files")
+
+![Alt text](docs/_static/gui-gcmdelta.png "Apply global climate delta factors to WATER database files")
+
 ***
 
 ## Version
@@ -272,8 +284,8 @@ OK
 
 ## Documentation - overview, guides/tutorials, code
 
-HTML documentation was made using [Sphinx].  At this time the documentation can be viewed locally with a browser.
-The main html page, *index.html*, is located in the *waterapputils/docs/_build/html/* directory.
+Documentation can be found on the [USGS Kentucky Water Science Center's Internal Website](http://ky.water.usgs.gov/usgs/projects/jlant_program_code/waterapputils/html/index.html).  
+HTML documentation was made using [Sphinx].  
    
 ***
 

@@ -76,6 +76,12 @@ Some sample highlights of **waterapputils** include:
 
 -  Logs errors and tracebacks.
 
+-  A multi-threaded graphical user interface (GUI) called waterapputils_gui
+
+A sample image from the GUI - applying water use to WATER output files with waterapputils_gui
+---------------------------------------------------------------------------------------------
+.. image:: _static/gui-wateruse.png
+
 Overview
 ========
 
