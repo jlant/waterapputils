@@ -36,7 +36,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <property name="tabsClosable">
        <bool>false</bool>
@@ -366,7 +366,7 @@
                     <string notr="true"/>
                    </property>
                    <property name="title">
-                    <string>Number of simulation(s)</string>
+                    <string>Number of Simulation(s)</string>
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout_9">
                     <item>
@@ -473,7 +473,7 @@
                     <string notr="true"/>
                    </property>
                    <property name="title">
-                    <string>Type of simulation(s)</string>
+                    <string>Type of Simulation(s)</string>
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout_13">
                     <property name="rightMargin">
@@ -641,7 +641,7 @@
               <item>
                <widget class="QGroupBox" name="tab_wateruse_group_box_wateruse_info">
                 <property name="title">
-                 <string>Water use information</string>
+                 <string>Water Use Information</string>
                 </property>
                 <property name="checkable">
                  <bool>false</bool>
@@ -908,7 +908,7 @@
                     <string notr="true"/>
                    </property>
                    <property name="title">
-                    <string>Number of simulation(s)</string>
+                    <string>Number of Simulation(s)</string>
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout_15">
                     <item>
@@ -1015,7 +1015,7 @@
                     <string notr="true"/>
                    </property>
                    <property name="title">
-                    <string>Type of simulation(s)</string>
+                    <string>Type of Simulation(s)</string>
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout_16">
                     <property name="rightMargin">
@@ -1183,7 +1183,7 @@
               <item>
                <widget class="QGroupBox" name="tab_gcm_group_box_gcm_info">
                 <property name="title">
-                 <string>Global climate model information</string>
+                 <string>Global Climate Model Information</string>
                 </property>
                 <property name="checkable">
                  <bool>false</bool>
