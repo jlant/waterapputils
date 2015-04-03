@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'user_interface.ui'
 #
-# Created: Mon Mar 16 09:13:59 2015
+# Created: Fri Apr 03 15:34:52 2015
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -578,7 +578,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.main_tab_widget.setCurrentIndex(3)
+        self.main_tab_widget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -604,7 +604,7 @@ class Ui_MainWindow(object):
         self.tab_watertxtcmp_table_widget1.setToolTip(_translate("MainWindow", "Table of values for first selected WATER.txt output text file", None))
         self.tab_watertxtcmp_table_widget2.setToolTip(_translate("MainWindow", "Table of values for second selected WATER.txt output text file", None))
         self.main_tab_widget.setTabText(self.main_tab_widget.indexOf(self.tab_watertxtcmp), _translate("MainWindow", "Compare 2 WATER output text files", None))
-        self.tab_wateruse_group_box_num_sims.setTitle(_translate("MainWindow", "Number of simulation(s)", None))
+        self.tab_wateruse_group_box_num_sims.setTitle(_translate("MainWindow", "Number of Simulation(s)", None))
         self.tab_wateruse_radio_button_one_sim.setToolTip(_translate("MainWindow", "<html>\n"
 "<head/>\n"
 "<body>\n"
@@ -675,7 +675,7 @@ class Ui_MainWindow(object):
 "</body>\n"
 "</html>", None))
         self.tab_wateruse_radio_button_multi_sims.setText(_translate("MainWindow", "Multiple simulations", None))
-        self.tab_wateruse_group_box_type_sims.setTitle(_translate("MainWindow", "Type of simulation(s)", None))
+        self.tab_wateruse_group_box_type_sims.setTitle(_translate("MainWindow", "Type of Simulation(s)", None))
         self.tab_wateruse_radio_button_batch.setToolTip(_translate("MainWindow", "<html>\n"
 "<head/>\n"
 "<body>\n"
@@ -730,7 +730,7 @@ class Ui_MainWindow(object):
         self.tab_wateruse_line_edit_open_sim.setPlaceholderText(_translate("MainWindow", "WATER simulation directory", None))
         self.tab_wateruse_combo_box_shp_id_field.setToolTip(_translate("MainWindow", "Basin shapefile fields.", None))
         self.tab_wateruse_combo_box_shp_area_field.setToolTip(_translate("MainWindow", "Basin shapefile fields.", None))
-        self.tab_wateruse_group_box_wateruse_info.setTitle(_translate("MainWindow", "Water use information", None))
+        self.tab_wateruse_group_box_wateruse_info.setTitle(_translate("MainWindow", "Water Use Information", None))
         self.label_6.setText(_translate("MainWindow", "Water use shapefile id field", None))
         self.tab_wateruse_line_edit_wateruse_factor_file.setPlaceholderText(_translate("MainWindow", "Water use factor file", None))
         self.tab_wateruse_push_button_wateruse_factor_file.setToolTip(_translate("MainWindow", "Open a water use factor file.", None))
@@ -752,7 +752,7 @@ class Ui_MainWindow(object):
         self.tab_wateruse_push_button_plot_zoomed_map.setToolTip(_translate("MainWindow", "<html><head/><body><p>Plot a zoomed in map of the basin(s).</p><p>Plotting is done in a separate thread allowing interaction with other parts of GUI while plotting occurs.</p></body></html>", None))
         self.tab_wateruse_push_button_plot_zoomed_map.setText(_translate("MainWindow", "Plot Zoomed Map", None))
         self.main_tab_widget.setTabText(self.main_tab_widget.indexOf(self.tab_applywateruse), _translate("MainWindow", "Apply water use to WATER simulations", None))
-        self.tab_gcm_group_box_num_sims.setTitle(_translate("MainWindow", "Number of simulation(s)", None))
+        self.tab_gcm_group_box_num_sims.setTitle(_translate("MainWindow", "Number of Simulation(s)", None))
         self.tab_gcm_radio_button_one_sim.setToolTip(_translate("MainWindow", "<html>\n"
 "<head/>\n"
 "<body>\n"
@@ -823,7 +823,7 @@ class Ui_MainWindow(object):
 "</body>\n"
 "</html>", None))
         self.tab_gcm_radio_button_multi_sims.setText(_translate("MainWindow", "Multiple simulations", None))
-        self.tab_gcm_group_box_type_sims.setTitle(_translate("MainWindow", "Type of simulation(s)", None))
+        self.tab_gcm_group_box_type_sims.setTitle(_translate("MainWindow", "Type of Simulation(s)", None))
         self.tab_gcm_radio_button_batch.setToolTip(_translate("MainWindow", "<html>\n"
 "<head/>\n"
 "<body>\n"
@@ -878,7 +878,7 @@ class Ui_MainWindow(object):
         self.tab_gcm_line_edit_open_sim.setPlaceholderText(_translate("MainWindow", "WATER simulation directory", None))
         self.tab_gcm_combo_box_shp_id_field.setToolTip(_translate("MainWindow", "Basin shapefile fields.", None))
         self.tab_gcm_combo_box_shp_area_field.setToolTip(_translate("MainWindow", "Basin shapefile fields.", None))
-        self.tab_gcm_group_box_gcm_info.setTitle(_translate("MainWindow", "Global climate model information", None))
+        self.tab_gcm_group_box_gcm_info.setTitle(_translate("MainWindow", "Global Climate Model Information", None))
         self.label_10.setText(_translate("MainWindow", "Global climate model shapefile id field", None))
         self.tab_gcm_line_edit_gcm_shp.setPlaceholderText(_translate("MainWindow", "Global climate model shapefile", None))
         self.tab_gcm_push_button_gcm_shp.setToolTip(_translate("MainWindow", "<html><head/><body><p>Open a global climate model shapefile. </p></body></html>", None))

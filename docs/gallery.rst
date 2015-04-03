@@ -1,6 +1,22 @@
 Gallery
 =======
 
+Process and analyze WATER output files with waterapputils_gui
+-------------------------------------------------------------
+.. image:: _static/gui-watertxt.png
+
+Compare WATER output files with waterapputils_gui
+-------------------------------------------------
+.. image:: _static/gui-watertxtcmp.png
+
+Apply water use to WATER output files with waterapputils_gui
+------------------------------------------------------------
+.. image:: _static/gui-wateruse.png
+
+Apply global climate delta factors to WATER database files with waterapputils_gui
+---------------------------------------------------------------------------------
+.. image:: _static/gui-gcmdelta.png
+
 Discharge from WATER.txt
 ------------------------
 .. image:: _static/txt-discharge.png
