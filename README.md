@@ -374,6 +374,113 @@ the **waterapputils_gui** without interferring with the water use processing.
 > WATER basin shapefile (Watersheds.shp or basinMask.shp) will be plotted in a zoomed out view or the entire modeling domain.  If a user clicks the *Plot Zoomed Map*, a map of 
 > the WATER basin shapefile (Watersheds.shp or basinMask.shp) will be plotted in a zoomed in view with additional shapefiles (i.e. usgs gages).  
 
+### Apply global climate model (GCM) deltas to WATER simulations
+
+Allows a user to apply global climate model (GCM) deltas to WATER simulation database files (WATERSimulation.xml).  
+
+#### Number of simulation(s) - a user selects the number of WATER simulations.
+
+- *One simulation* (default) - one batch or single type WATER simulation.
+- *Multiple simulations* - more than one batch or single type WATER simulations. 
+
+> **NOTE: The directory containing all the WATER simulations to process must *only* contain WATER simulations.  Do not include extraneous files or directories in the parent 
+> directory containing all the WATER simulations to process.**
+
+#### Type of simulation(s) - a user selects the type of WATER simulation.
+
+- *Batch* - more than one basin.  For an example, please see the [Sample Batch Simulation](data/sample-batch-simulations-sample-batch-simulation).
+- *Single* - one basin.  For an example, please see the [Sample Single Simulation](data/sample-batch-simulations-sample-single-simulation).
+
+The following are the directory structures created by WATER for batch and single simulations:
+
+**Batch Simulation:**
+
+```
+simulation/
+            basin1/
+                    amask/
+                    basinmask/
+                    fmask/
+                    info/
+                    rmask/
+                    Temp/
+                    .
+                    .
+                    WATER.txt
+                    WATERSimulation.xml
+            basin2/
+            basin3/
+            .
+            .
+            Water.txt
+            Watersheds.shp
+```
+
+**Single Simulation:**
+
+```
+simulation/
+            amask/
+            basinmask/
+            fmask/
+            info/
+            rmask/
+            Temp/
+            .
+            .
+            basinMask.shp
+            WATER.txt
+            WATERSimulation.xml
+```
+
+#### Simulation Information - a user selects the WATER simulation of interest to apply global climate model deltas too.  
+
+If a valid WATER simulation is selected, the rest of the inputs in the *Simulation Information* section will auto-populate.  A user can select 
+the proper *Basin shapefile id field* that was used when running the WATER application.  The *Basin shapefile id field* is was used by the WATER 
+application to name the output basin directories in the simulation directory structure. The *Basin shapefile area field* is used to get the areas
+of each respective basin for use in an external ecoflow program.
+
+> **NOTE: A batch WATER simulation will contain a shapefile of the basins called *Watersheds.shp*.  A single WATER simulation will contain a 
+> shapefile of the basin called *basinMask.shp*.  A WATER simulation must have an associated *Watersheds.shp* or *basinMask.shp* file.** 
+
+#### Global Climate Model Delta Information - a user selects 3 global climate model delta files and associated information.  
+
+A user selects 3 global climate model delta files:
+
+1. PET.txt
+2. Ppt.txt
+3. Tmax.txt
+
+A user selects the global climate model shapefile which is a shapefile of rectangular tiles for a particular global climate model that covers the entire modeling domain.  
+
+> **NOTE: All WATER application shapefiles are in the Albers NAD83 projection. Please ensure that the global climate model shapefile shapefile is in the same projection as all the other WATER 
+> application shapefiles.** 
+
+A user chooses the id field from the global climate model shapefile that corresponds to the id field used in the 3 global climate model delta files.  
+
+> **NOTE: The sample 
+> global climate model delta files and global climate model shapefile have *Tile* as the id field.**
+
+If the basins in the WATER use simulation do not overlap/intersect with the global climate model shapefile tiles, then the user can choose to apply 
+substitute global climate model deltas.  
+
+> **NOTE: In order to apply substitute global climate model deltas, the user must first apply global climate model deltas without this option.  The 
+> waterapputils program will warn and log any basins in the WATER simulation that do not overlap/intersect with the global climate model deltas shapefile tiles.  
+> The waterapputils program will create a file called *gcm_delta_non_intersecting_tiles.txt* in a directory called *waterapputils-info* with a 
+> list of the basins that do not overlap/intersect.  A user must manually enter the proper global climate model deltas shapefile id (i.e. Tile) values to be 
+> used when applying the substitute global climate model deltas. In order to apply substitute global climate model deltas, the file called *gcm_delta_non_intersecting_tiles.txt* in 
+> a directory called *waterapputils-info* must exist.**
+
+A user clicks the *Check Inputs* button which checks and makes sure that all the fields have been entered.  Upon all the fields being entered and 
+the *ChecK Inputs* button being pressed, the *Apply Water Use*, *Plot Overview Map*, and *Plot Zoomed Map* buttons are enabled.  If a user clicks
+the *Apply Global Climate Model Deltas*, then waterapputils applies global climate model deltas to the WATER simulation given the data provided by the user.  The **waterapputils_gui**
+will apply global climate model deltas in a *separate thread* meaning that the process will be run in the background allowing the user to continue using other parts of 
+the **waterapputils_gui** without interferring with the global climate model deltas processing. 
+
+> **NOTE: When processing global climate model deltas, a warning about a *QPixmap* may appear. This is not an error, but only a warning that can safely be ignored here.  The warning stems from 
+> the use of using the same plotting code used in the command line version of waterapputils when applying global climate model deltas.** If a user clicks the *Plot Overview Map*, a map of the 
+> WATER basin shapefile (Watersheds.shp or basinMask.shp) will be plotted in a zoomed out view or the entire modeling domain.  If a user clicks the *Plot Zoomed Map*, a map of 
+> the WATER basin shapefile (Watersheds.shp or basinMask.shp) will be plotted in a zoomed in view with additional shapefiles (i.e. usgs gages).  
 
 ## Testing
 
