@@ -11,7 +11,8 @@ Indiana and Kentucky Water Science Centers (INKY)] WATER application. **waterapp
 .python.org/), and adds new functionality, outside the WATER application, by allowing users to apply various future climate 
 projections using a change-factor (delta) approach with data from the Coupled Model Intercomparison Project ([CIMP5]), and 
 aggregated water use data to model simulations.  **waterapputils** has a [Command Line Interface](#command-line-interface) and a 
-[Graphical User Interface](#graphical-user-interface).
+[Graphical User Interface](#graphical-user-interface) along with bash scripts, [Run Sample Datasets Shell Script](#run-sample-datasets-shell-script) 
+and [Process Many Simulations Shell Script](#process-many-simulation-shell-script), to help automate processing tasks and run unit tests.
 
 The WATER application is a graphical user interface, written in VB.NET, wrapped around a variant of the rainfall-runoff model 
 called Topmodel (Topography based hydrological mode) by Keith Beven, Professor at Lancaster University. Topmodel estimates 

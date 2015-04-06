@@ -19,7 +19,11 @@ from the Coupled Model Intercomparison Project
 (`CIMP5 <http://cmip-pcmdi.llnl.gov/cmip5/>`__), and aggregated water
 use data to model simulations. **waterapputils** has a `Command Line
 Interface <#command-line-interface>`__ and a `Graphical User
-Interface <#graphical-user-interface>`__.
+Interface <#graphical-user-interface>`__ along with bash scripts, `Run
+Sample Datasets Shell Script <#run-sample-datasets-shell-script>`__ and
+`Process Many Simulations Shell
+Script <#process-many-simulation-shell-script>`__, to help automate
+processing tasks and run unit tests.
 
 The WATER application is a graphical user interface, written in VB.NET,
 wrapped around a variant of the rainfall-runoff model called Topmodel
@@ -90,6 +94,7 @@ A sample image of processing and analyzing WATER output files the GUI:
    :alt: Process and analyze WATER output files
 
    Process and analyze WATER output files
+
 Contents
 --------
 
@@ -793,9 +798,7 @@ Repository layout
 Documentation and Website
 -------------------------
 
-| Documentation can be found on the `USGS Kentucky Water Science
-Center's Internal
-Website <http://ky.water.usgs.gov/usgs/projects/jlant_program_code/waterapputils/html/index.html>`__.
+| Documentation can be found on the `USGS Kentucky Water Science Center's InternalWebsite <http://ky.water.usgs.gov/usgs/projects/jlant_program_code/waterapputils/html/index.html>`__.
 | HTML documentation was made using `Sphinx <http://sphinx-doc.org/>`__.
 
 --------------
