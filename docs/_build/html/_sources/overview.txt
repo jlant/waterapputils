@@ -79,7 +79,10 @@ Some sample highlights of **waterapputils** include:
 
 -  Logs errors and tracebacks.
 
+-  A The multi-threaded graphical user interface (GUI) called `waterapputils\_gui <waterapputils/waterapputils_gui.py>`__
+
 --------------
+
 
 Version
 -------
@@ -100,67 +103,76 @@ started using the command below or by simply double clicking on the
 
     $ python waterapputils_gui.py
 
-The gui consists of 4 tabs with the following titles:
+The GUI consists of 4 tabs:
 
-1. **Process WATER output text file** - allows a user to process a WATER
-   simulation output text file (WATER.txt). A user opens a WATER
-   simulation output text file, and all the paramters and corresponding
-   data are processed. The first parameter in the data file is plotted
-   initially and the user can use the list on the bottom left of the tab
-   to select different parameters to plot. The plot includes a text area
-   showing some simple statistics for the parameter. All the parameters
-   and corresponding data are also placed in a read-only table. A user
-   can interact with the plot using the buttons on the top of the
-   plotting area (zoom, pan, etc.). In addition, a user can enable a
-   **span selector** which allows a user to query the data for specific
-   time periods. Upon using the **span selector**, the simple stats
-   displayed in the text area with the simple statistics updates for the
-   selected time period.
+1. Process WATER output text file
+2. Compare 2 WATER output text files
+3. Apply water use to WATER simulations
+4. Apply global climate model (GCM) deltas to WATER simulations
 
-2. **Compare 2 WATER output text files** - allows a user to compare
-   WATER simulation output text files (WATER.txt). A user opens 2 WATER
-   simulation output text files, and the **Compare** button will be
-   enabled. Upon clicking the **Compare** button, all the parameters and
-   corresponding data are processed and compared. The first parameters
-   in the data file are overlayed together with the first file colored
-   as blue and the second file colored as red. A second plot is made
-   which shows the difference between the respective parameters in each
-   file. The user can use the list on the bottom left of the tab to
-   select different parameters to compare. All the parameters and
-   corresponding data for both files are placed in read-only tables. A
-   user can interact with the plots using the buttons on the top of the
-   plotting area (zoom, pan, etc.). Note that the difference plot is
-   tied to the overlay plot, meaning that when a user pans or zooms on
-   the overlay plot, the difference plot will zoom or pan with the
-   overlay plot.
+Process WATER output text file
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-3. **Apply water use to WATER simulations** - allows a user to apply
-   water use data to WATER simulation output text files (WATER.txt).
+A user opens a WATER simulation output text file (WATER.txt), and all
+the paramters and corresponding data are processed. The first parameter
+in the data file is plotted initially and the user can use the list on
+the bottom left of the tab to select different parameters to plot. The
+plot includes a text area showing some simple statistics for the
+parameter. All the parameters and corresponding data are also placed in
+a read-only table. A user can interact with the plot using the buttons
+on the top of the plotting area (zoom, pan, etc.). In addition, a user
+can enable a **span selector** which allows a user to query the data for
+specific time periods. Upon using the **span selector**, the simple
+stats displayed in the text area with the simple statistics updates for
+the selected time period.
 
-3a. *Number of simulation(s)* - a user selects the number of WATER
-simulations.
+Compare 2 WATER output text files
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A user opens 2 WATER simulation output text files, and the **Compare**
+button will be enabled. Upon clicking the **Compare** button, all the
+parameters and corresponding data are processed and compared. The first
+parameters in the data file are overlayed together with the first file
+colored as blue and the second file colored as red. A second plot is
+made which shows the difference between the respective parameters in
+each file. The user can use the list on the bottom left of the tab to
+select different parameters to compare. All the parameters and
+corresponding data for both files are placed in read-only tables. A user
+can interact with the plots using the buttons on the top of the plotting
+area (zoom, pan, etc.). Note that the difference plot is tied to the
+overlay plot, meaning that when a user pans or zooms on the overlay
+plot, the difference plot will zoom or pan with the overlay plot.
+
+Apply water use to WATER simulations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Allows a user to apply water use data to WATER simulation output text
+files (WATER.txt).
+
+Number of simulation(s) - a user selects the number of WATER simulations.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 -  *One simulation* (default) - one batch or single type WATER
    simulation.
-
 -  *Multiple simulations* - more than one batch or single type WATER
-   simulations. **NOTE: The directory containing all the WATER
-   simulations to process must *only* contain WATER simulations. Do not
-   include extraneous files or directories in the parent directory
-   containing all the WATEr simulations to process.**
+   simulations.
 
-3b. *Type of simulation(s)* - a user selects the type of WATER
-simulation.
+    **NOTE: The directory containing all the WATER simulations to
+    process must *only* contain WATER simulations. Do not include
+    extraneous files or directories in the parent directory containing
+    all the WATER simulations to process.**
+
+Type of simulation(s) - a user selects the type of WATER simulation.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 -  *Batch* - more than one basin. For an example, please see the `Sample
    Batch
    Simulation <data/sample-batch-simulations-sample-batch-simulation>`__.
-
 -  *Single* - one basin. For an example, please see the `Sample Single
    Simulation <data/sample-batch-simulations-sample-single-simulation>`__.
 
-The following are the WATER directory structures for batch and single
-simulations:
+The following are the directory structures created by WATER for batch
+and single simulations:
 
 **Batch Simulation:**
 
@@ -202,8 +214,8 @@ simulations:
                 WATER.txt
                 WATERSimulation.xml
 
-3d. *Simulation Information* - a user selects the WATER simulation of
-interest to apply water use too.
+Simulation Information - a user selects the WATER simulation of interest to apply water use too.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If a valid WATER simulation is selected, the rest of the inputs in the
 *Simulation Information* section will auto-populate. A user can select
@@ -213,13 +225,14 @@ WATER application to name the output basin directories in the simulation
 directory structure. The *Basin shapefile area field* is used to get the
 areas of each respective basin for use in an external ecoflow program.
 
-**NOTE: A batch WATER simulation will contain a shapefile of the basins
-called *Watersheds.shp*. A single WATER simulation will contain a
-shapefile of the basin called *basinMask.shp*. A WATER simulation must
-have an associated *Watersheds.shp* or *basinMask.shp* file.**
+    **NOTE: A batch WATER simulation will contain a shapefile of the
+    basins called *Watersheds.shp*. A single WATER simulation will
+    contain a shapefile of the basin called *basinMask.shp*. A WATER
+    simulation must have an associated *Watersheds.shp* or
+    *basinMask.shp* file.**
 
-3c. *Water Use Information* - a user selects the seasonal water use data
-files and associated information.
+Water Use Information - a user selects the seasonal water use data files and associated information.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A user selects 4 seasonal water use files:
 
@@ -232,31 +245,34 @@ A user selects a water use factor file which can be used to adjust the
 water use data values in the seasonal water use files.
 
 A user selects the water use shapefile which is a shapefile of water use
-points across the entire modeling domain. **NOTE: All WATER application
-shapefiles are in the Albers NAD83 projection. Please ensure that the
-water use shapefile is in the same projection as all the other WATER
-application shapefiles.**
+points across the entire modeling domain.
+
+    **NOTE: All WATER application shapefiles are in the Albers NAD83
+    projection. Please ensure that the water use shapefile is in the
+    same projection as all the other WATER application shapefiles.**
 
 A user chooses the id field from the water use shapefile that
-corresponds to the id field used in the water use data files. **NOTE:
-The sample water use files and water use shapefile have *newhydroid* as
-the id field.**
+corresponds to the id field used in the water use data files.
+
+    **NOTE: The sample water use files and water use shapefile have
+    *newhydroid* as the id field.**
 
 If the basins in the WATER use simulation do not overlap/intersect with
 the water use shapefile points, then the user can choose to apply
-substitute water use. **NOTE: In order to apply substitute water use,
-the user must first apply water use without this option. The
-waterapputils program will warn and log any basins in the WATER
-simulation that do not overlap/intersect with the water use shapefile
-points.
-The waterapputils program will create a file called
-*wateruse\_non\_intersecting\_centroids.txt* in a directory called
-*waterapputils-info* with a list of the basins that do not
-overlap/intersect. A user must manually enter the proper water use
-shapefile id (i.e. newhydroid) values to be used when applying the
-substitute water use. In order to apply substitute water use, the file
-called *wateruse\_non\_intersecting\_centroids.txt* in a directory
-called *waterapputils-info* must exist.**
+substitute water use.
+
+    **NOTE: In order to apply substitute water use, the user must first
+    apply water use without this option. The waterapputils program will
+    warn and log any basins in the WATER simulation that do not
+    overlap/intersect with the water use shapefile points.
+    The waterapputils program will create a file called
+    *wateruse\_non\_intersecting\_centroids.txt* in a directory called
+    *waterapputils-info* with a list of the basins that do not
+    overlap/intersect. A user must manually enter the proper water use
+    shapefile id (i.e. newhydroid) values to be used when applying the
+    substitute water use. In order to apply substitute water use, the
+    file called *wateruse\_non\_intersecting\_centroids.txt* in a
+    directory called *waterapputils-info* must exist.**
 
 A user clicks the *Check Inputs* button which checks and makes sure that
 all the fields have been entered. Upon all the fields being entered and
@@ -267,16 +283,18 @@ the WATER simulation given the data provided by the user. The
 **waterapputils\_gui** will apply water use in a *separate thread*
 meaning that the process will be run in the background allowing the user
 to continue using other parts of the **waterapputils\_gui** without
-interferring with the water use processing. **NOTE: When processing
-water use, a warning about a *QPixmap* may appear. This is not an error,
-but only a warning that can safely be ignored here. The warning stems
-from the use of using the same plotting code used in the command line
-version of waterapputils when applying water use.** If a user clicks the
-*Plot Overview Map*, a map of the WATER basin shapefile (Watersheds.shp
-or basinMask.shp) will be plotted in a zoomed out view or the entire
-modeling domain. If a user clicks the *Plot Zoomed Map*, a map of the
-WATER basin shapefile (Watersheds.shp or basinMask.shp) will be plotted
-in a zoomed in view with additional shapefiles (i.e. usgs gages).
+interferring with the water use processing.
+
+    **NOTE: When processing water use, a warning about a *QPixmap* may
+    appear. This is not an error, but only a warning that can safely be
+    ignored here. The warning stems from the use of using the same
+    plotting code used in the command line version of waterapputils when
+    applying water use.** If a user clicks the *Plot Overview Map*, a
+    map of the WATER basin shapefile (Watersheds.shp or basinMask.shp)
+    will be plotted in a zoomed out view or the entire modeling domain.
+    If a user clicks the *Plot Zoomed Map*, a map of the WATER basin
+    shapefile (Watersheds.shp or basinMask.shp) will be plotted in a
+    zoomed in view with additional shapefiles (i.e. usgs gages).
 
 --------------
 
