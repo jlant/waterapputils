@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Waterapputils by jlant-usgs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Waterapputils</h1>
+      <h2 class="project-tagline">waterapputils is a repository for tool used for analysing, processing, and updating model simulations from the U.S. Geological Survey Indiana and Kentucky Water Science Centers (INKY) WATER application  (http://pubs.usgs.gov/sir/2009/5248/).</h2>
+      <a href="https://github.com/jlant-usgs/waterapputils" class="btn">View on GitHub</a>
+      <a href="https://github.com/jlant-usgs/waterapputils/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/jlant-usgs/waterapputils/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <p><a href="http://www.usgs.gov/"><img src="docs/_static/usgs-logo.png" alt="alt text"></a></p>
+
+<h1>
+<a id="waterapputils" class="anchor" href="#waterapputils" aria-hidden="true"><span class="octicon octicon-link"></span></a>waterapputils</h1>
+
+<hr>
+
+<h2>
+<a id="description" class="anchor" href="#description" aria-hidden="true"><span class="octicon octicon-link"></span></a>Description</h2>
+
+<p><strong>waterapputils</strong> is a tool used for analyzing, processing, and updating model simulations from the <a href="http://ky.water.usgs.gov/">U.S. Geological Survey 
+Indiana and Kentucky Water Science Centers (INKY)</a> WATER application. <strong>waterapputils</strong> is written in <a href="https://www%0A.python.org/">Python</a>, and adds new functionality, outside the WATER application, by allowing users to apply various future climate 
+projections using a change-factor (delta) approach with data from the Coupled Model Intercomparison Project (<a href="http://cmip-pcmdi.llnl.gov/cmip5/">CIMP5</a>), and 
+aggregated water use data to model simulations.  <strong>waterapputils</strong> has a <a href="#command-line-interface">Command Line Interface</a> and a 
+<a href="#graphical-user-interface">Graphical User Interface</a> along with bash scripts, <a href="#run-sample-datasets-shell-script">Run Sample Datasets Shell Script</a> 
+and <a href="#process-many-simulation-shell-script">Process Many Simulations Shell Script</a>, to help automate processing tasks and run unit tests.</p>
+
+<p>The WATER application is a graphical user interface, written in VB.NET, wrapped around a variant of the rainfall-runoff model 
+called Topmodel (Topography based hydrological mode) by Keith Beven, Professor at Lancaster University. Topmodel estimates 
+river discharge and spatial soil water saturation patterns for a particular catchment basin using topographic, climatic, and 
+geological input data parameters. The original WATER application was developed by the <a href="http://ky.water.usgs.gov/">U.S. Geological Survey Indiana and 
+Kentucky Water Science Centers (INKY)</a>. References for the WATER application include:</p>
+
+<ul>
+<li><p><a href="http://pubs.usgs.gov/sir/2009/5248/">Williamson T.N., Odom K.R., Newson J.K., Downs A.C., Nelson Jr. H.L., Cinotto P.J., Ayers M.A. 2009. The Water Availability Tool for Environmental Resources (WATER)—A water-budget modeling approach for managing water-supply resources in Kentucky—Phase I—Data processing, model development, and application to non-karst areas, U.S. Geological Survey Scientific Investigations Report 2009-5248. pp. 34.</a></p></li>
+<li><p><a href="https://www.soils.org/publications/sssaj/abstracts/77/3/877">Williamson T.N., Taylor C.J., Newson J.K. 2013. Significance of Exchanging SSURGO and STATSGO Data When Modeling Hydrology in Diverse Physiographic Terranes. Soil Science Society of America Journal 77:877-889. DOI: 10.2136/sssaj2012.0069.</a></p></li>
+</ul>
+
+<p>Some sample highlights of <strong>waterapputils</strong> include:</p>
+
+<ul>
+<li><p>Processes WATER simulation output files (<code>txt</code> format).</p></li>
+<li><p>Processes WATER simulation database files that store information about a particular model simulation (<code>xml</code> format).</p></li>
+<li><p>Applies various statistically downscaled <strong>global climate models</strong> ([GCMs]) to model simulations for a particular watershed 
+basin or set of watershed basins based on the spatial intersection of the watershed(s) of interest with the global climate 
+change scenario coverage of interest.</p></li>
+<li><p>Applies <strong>water use</strong> data to model simulations for a particular for a particular watershed basin or set of watershed basins 
+based on the spatial intersection of the watershed(s) of interest with the water use coverage.</p></li>
+<li><p>Generates plots of all parameters found in WATER output files (<code>txt</code> format) with simple statistics.</p></li>
+<li><p>Generates plots of timeseries parameters found in WATER simulation database files (<code>xml</code> format).</p></li>
+<li><p>Generates comparison and difference plots between two WATER simulation output files.</p></li>
+<li><p>Generates comparison and difference plots between two WATER simulation database files.</p></li>
+<li><p>Generates maps of study area for a particular model simulation using <a href="http://matplotlib.org/basemap/">basemap</a></p></li>
+<li><p>Logs errors and tracebacks.</p></li>
+<li><p>A multi-threaded graphical user interface (GUI) called <a href="waterapputils/waterapputils_gui.py">waterapputils_gui</a>.</p></li>
+</ul>
+
+<p>A sample image of processing and analyzing WATER output files the GUI:</p>
+
+<p><img src="docs/_static/gui-watertxt.png" alt="Process and analyze WATER output files " title="Process and analyze WATER output files"></p>
+
+<h2>
+<a id="contents" class="anchor" href="#contents" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contents</h2>
+
+<p><a href="#version">Version</a></p>
+
+<p><a href="#command-line-interface">Command Line Interface</a></p>
+
+<p><a href="#run-sample-datasets-shell-script">Run Sample Datasets Shell Script</a></p>
+
+<p><a href="#process-many-simulation-shell-script">Process Many Simulations Shell Script</a></p>
+
+<p><a href="#graphical-user-interface">Graphical User Interface</a></p>
+
+<p><a href="#testing">Testing</a></p>
+
+<p><a href="#repository-layout">Repository Layout</a></p>
+
+<p><a href="#documentation-and-website">Documentation and Website</a></p>
+
+<p><a href="#requirements">Requirements</a></p>
+
+<p><a href="#disclaimer-and-notice">Disclaimer and Notice</a></p>
+
+<p><a href="#author">Author</a></p>
+
+<hr>
+
+<h2>
+<a id="version" class="anchor" href="#version" aria-hidden="true"><span class="octicon octicon-link"></span></a>Version</h2>
+
+<p>1.0.0</p>
+
+<hr>
+
+<h2>
+<a id="command-line-interface" class="anchor" href="#command-line-interface" aria-hidden="true"><span class="octicon octicon-link"></span></a>Command Line Interface</h2>
+
+<h3>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage:</h3>
+
+<div class="highlight highlight-sh"><pre>$ python waterapputils.py [option]</pre></div>
+
+<h3>
+<a id="command-line-arguments" class="anchor" href="#command-line-arguments" aria-hidden="true"><span class="octicon octicon-link"></span></a>Command Line Arguments:</h3>
+
+<table>
+<thead>
+<tr>
+<th>Commands</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-h</code></td>
+<td>show list of available commands</td>
+</tr>
+<tr>
+<td><code>-watertxt</code></td>
+<td>list WATER simulation output file(s) to process; <code>WATER.txt</code>
+</td>
+</tr>
+<tr>
+<td><code>-watertxtfd</code></td>
+<td>open file dialog window to select WATER simulation output file(s) to process; <code>WATER.txt</code>
+</td>
+</tr>
+<tr>
+<td><code>-watertxtcmp</code></td>
+<td>list 2 WATER simulation output file(s) to compare; <code>WATER.txt</code>
+</td>
+</tr>
+<tr>
+<td><code>-watertxtcmpfd</code></td>
+<td>open file dialog window to select 2 WATER simulation output file(s) to compare; <code>WATER.txt</code>
+</td>
+</tr>
+<tr>
+<td><code>-waterxml</code></td>
+<td>list WATER simulation database file(s) to process; <code>WATERSimulation.xml</code>
+</td>
+</tr>
+<tr>
+<td><code>-waterxmlfd</code></td>
+<td>open file dialog window to select WATER simulation database file(s) to process; <code>WATERSimulation.xml</code>
+</td>
+</tr>
+<tr>
+<td><code>-waterxmlcmp</code></td>
+<td>list 2 WATER simulation database file(s) to compare; <code>WATERSimulation.xml</code>
+</td>
+</tr>
+<tr>
+<td><code>-waterxmlcmpfd</code></td>
+<td>open file dialog window to select 2 WATER simulation database files to compare; <code>WATERSimulation.xml</code>
+</td>
+</tr>
+<tr>
+<td><code>-applygcmdeltas</code></td>
+<td>apply global climate change deltas to WATER simulation database file(s); <code>WATERSimulation.xml</code>; details specified in <code>user_settings.py</code>
+</td>
+</tr>
+<tr>
+<td><code>-applysubgcmdeltas</code></td>
+<td>apply updated global climate change deltas from <code>sub_gcm_delta_info_file_name</code> variable in user_settings.py to WATER simulation database file(s); <code>WATERSimulation.xml</code>; details specified in <code>user_settings.py</code>
+</td>
+</tr>
+<tr>
+<td><code>-applywateruse</code></td>
+<td>apply water use data to WATER simulation output file(s); <code>WATER.txt</code>; details specified in <code>user_settings.py</code>
+</td>
+</tr>
+<tr>
+<td><code>-applysubwateruse</code></td>
+<td>apply water use data from <code>sub_wateruse_info_file_name</code> variable in user_settings.py to WATER simulation output file(s); <code>WATER.txt</code>; details specified in <code>user_settings.py</code>
+</td>
+</tr>
+<tr>
+<td><code>-oasis</code></td>
+<td>create output data file(s) for OASIS program; tab delimited file(s) of timeseries of discharge</td>
+</tr>
+<tr>
+<td><code>-ecoflowstationid</code></td>
+<td>create output data file(s) for ecoflow program; comma separated file(s) of timeseries of discharge for a specific basin (station) id</td>
+</tr>
+<tr>
+<td><code>-ecoflowdaxml</code></td>
+<td>create output data file(s) for ecoflow program; comma separated file(s) of basin (station) id and its respective drainage area in square miles calculated using data in the <code>WATERSimulation.xml</code>
+</td>
+</tr>
+<tr>
+<td><code>-ecoflowdashp</code></td>
+<td>create output data file(s) for ecoflow program; comma separated file(s) of basin (station) id and its respective drainage area in square miles calculated from the shapefile(s)</td>
+</tr>
+<tr>
+<td><code>-outfilename</code></td>
+<td>OPTIONAL : output filename to be used with <code>-ecoflowdaxml</code> or <code>-ecoflowdashp</code> commands in writing the drainage area comma separated file</td>
+</tr>
+<tr>
+<td><code>-labelfield</code></td>
+<td>OPTIONAL : label field name (basin number / station id) to be used with <code>-ecoflowdashp</code> command in writing the drainage area comma separated file; Default label field is the FID in the basin(s) shapefile</td>
+</tr>
+<tr>
+<td><code>-areafield</code></td>
+<td>OPTIONAL : area field name in a basin(s) shapefile to be used with <code>-ecoflowdashp</code> command in writing the drainage area comma separated file; Default action is to calculate area from the shapefile(s)</td>
+</tr>
+<tr>
+<td><code>-samplesingle</code></td>
+<td>OPTIONAL : flag used with <code>-applywateruse</code>, <code>-applysubwateruse</code>, <code>-applygcmdeltas</code>, <code>-applysubgcmdeltas</code> to specify the use of the sample single simulation datasets</td>
+</tr>
+<tr>
+<td><code>-samplebatch</code></td>
+<td>OPTIONAL : flag used with <code>-applywateruse</code>, <code>-applysubwateruse</code>, <code>-applygcmdeltas</code>, <code>-applysubgcmdeltas</code> to specify the use of the sample batch simulation datasets</td>
+</tr>
+<tr>
+<td><code>-simdir</code></td>
+<td>OPTIONAL : flag used with <code>-applywateruse</code>, <code>-applysubwateruse</code>, <code>-applygcmdeltas</code>, <code>-applysubgcmdeltas</code> to specify a path to a specific WATER simulation instead of specifying it in <code>user_settings.py</code>
+</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="example---processing-a-watertxt-file" class="anchor" href="#example---processing-a-watertxt-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example - processing a WATER.txt file</h3>
+
+<div class="highlight highlight-sh"><pre>$ python waterapputils.py -watertxt <span class="pl-k">&lt;</span>path-to-WATER.txt-file<span class="pl-k">&gt;</span></pre></div>
+
+<h3>
+<a id="example---running-water-use-using-the-settings-in-user_settingspy" class="anchor" href="#example---running-water-use-using-the-settings-in-user_settingspy" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example - Running water use using the settings in user_settings.py</h3>
+
+<div class="highlight highlight-sh"><pre>$ python waterapputils.py -applywateruse</pre></div>
+
+<h3>
+<a id="example---running-water-use-by-supplying-a-path-to-a-simulations-directory-instead-of-specifying-the-simulations-directory-in-user_settingspy" class="anchor" href="#example---running-water-use-by-supplying-a-path-to-a-simulations-directory-instead-of-specifying-the-simulations-directory-in-user_settingspy" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example - Running water use by supplying a path to a simulations directory instead of specifying the simulations directory in user_settings.py</h3>
+
+<div class="highlight highlight-sh"><pre>$ python waterapputils.py -applywateruse -simdir <span class="pl-k">&lt;</span>path-to-simulations-directory<span class="pl-k">&gt;</span></pre></div>
+
+<hr>
+
+<h2>
+<a id="editing-settings-in-user_settingspy" class="anchor" href="#editing-settings-in-user_settingspy" aria-hidden="true"><span class="octicon octicon-link"></span></a>Editing settings in <a href="waterapputils/user_settings.py">user_settings.py</a>
+</h2>
+
+<p>All the setting for running <strong>waterapputils</strong> are contained in <a href="waterapputils/user_settings.py">user_settings.py</a> file. A user can edit the settings 
+by editing the Python string variables.  Most variables are <em>path</em> variables to required data files and basin shapefile attribute variables. 
+A user will typically only edit the section called <em>WATER simulation information</em>.  This section contains information about a WATER simulation. 
+A WATER simulation can be either a <em>single</em> simulation or a <em>batch</em> simulation.  Each simulation type has a few different outputs along with a different directory structure.</p>
+
+<hr>
+
+<h2>
+<a id="run-sample-datasets-shell-script" class="anchor" href="#run-sample-datasets-shell-script" aria-hidden="true"><span class="octicon octicon-link"></span></a>Run Sample Datasets Shell Script</h2>
+
+<h2>
+<a id="run-sample-datasets-with-run_sample_datasetssh" class="anchor" href="#run-sample-datasets-with-run_sample_datasetssh" aria-hidden="true"><span class="octicon octicon-link"></span></a>Run sample datasets with <a href="run_sample_datasets.sh">run_sample_datasets.sh</a>
+</h2>
+
+<p>The shell script <a href="run_sample_datasets.sh">run_sample_datasets.sh</a> is a shell script that can be used to run automated tests 
+and run many of the command line arguments using the <a href="data/sample-water-simulations">sample datasets</a>.  </p>
+
+<h3>
+<a id="usage-1" class="anchor" href="#usage-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage:</h3>
+
+<div class="highlight highlight-sh"><pre>$ run_sample_datasets.sh [option]
+$ run_sample_datasets.sh [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid] [ecoflowdaxml] [-ecoflowdashp] [-gcmdelta] [-mapsim] [-all] [-tests] -makeclean] <span class="pl-k">|</span> [-h]]</pre></div>
+
+<h3>
+<a id="command-line-arguments-for-the-shell-script-run_sample_datasetssh" class="anchor" href="#command-line-arguments-for-the-shell-script-run_sample_datasetssh" aria-hidden="true"><span class="octicon octicon-link"></span></a>Command line arguments for the shell script <a href="run_sample_datasets.sh">run_sample_datasets.sh</a>:</h3>
+
+<table>
+<thead>
+<tr>
+<th>Commands</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-h</code></td>
+<td>show list of available commands</td>
+</tr>
+<tr>
+<td><code>-txt</code></td>
+<td>run <code>-watertxt</code> and <code>-watertxtcmp</code> using the <a href="data/watertxt-datafiles">sample WATER simulation output TEXT files</a>
+</td>
+</tr>
+<tr>
+<td><code>-xml</code></td>
+<td>run <code>-waterxml</code> and <code>-waterxmlcmp</code> using the <a href="data/waterxml-datafiles">sample WATER simulation output XML files</a>
+</td>
+</tr>
+<tr>
+<td><code>-wateruse</code></td>
+<td>run and apply <a href="data/wateruse-datafiles">water use data</a> to sample WATER simulations; <a href="data/sample-water-simulations">single and batch simulations</a>
+</td>
+</tr>
+<tr>
+<td><code>-subwateruse</code></td>
+<td>run and apply substitute water use data to sample WATER simulations; <a href="data/sample-water-simulations">single and batch simulations</a>
+</td>
+</tr>
+<tr>
+<td><code>-gcmdelta</code></td>
+<td>run and apply <a href="data/gcmdelta-datafiles">global climate model data</a> to sample WATER simulations; <a href="data/sample-water-simulations">single and batch simulations</a>
+</td>
+</tr>
+<tr>
+<td><code>-subgcmdelta</code></td>
+<td>run and apply substitute water use data to sample WATER simulations; <a href="data/sample-water-simulations">single and batch simulations</a>
+</td>
+</tr>
+<tr>
+<td><code>-oasis</code></td>
+<td>create an oasis formated water use output file using the <a href="data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt">sample water use applied WATER TEXT file</a>
+</td>
+</tr>
+<tr>
+<td><code>-ecoflowstationid</code></td>
+<td>create an ecoflow formated water use output file using the <a href="data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt">sample water use applied WATER TEXT file</a>
+</td>
+</tr>
+<tr>
+<td><code>-ecoflowdaxml</code></td>
+<td>create an ecoflow formated drainage area output file using the <a href="data/sample-water-simulations/sample-datafiles/WATERSimulation-basin0.xml">sample WATER XML file</a> to calculate basin area</td>
+</tr>
+<tr>
+<td><code>-ecoflowdashp</code></td>
+<td>create an ecoflow formated drainage area output file using the <a href="data/sample-water-simulations/sample-datafiles/basin0.shp">sample basin shapefiles</a>
+</td>
+</tr>
+<tr>
+<td><code>-mapsim</code></td>
+<td>create maps for <a href="data/sample-water-simulations">single and batch simulations</a>
+</td>
+</tr>
+<tr>
+<td><code>-all</code></td>
+<td>run (mostly) all commands; <code>-tests</code>, <code>-txt</code>, <code>-xml</code>, <code>-wateruse</code>, <code>-gcmdelta</code>, <code>-oasis</code>, <code>-ecoflowstationid</code>, <code>-ecoflowdaxml</code>, <code>-ecoflowdashp</code>, <code>mapsim</code>
+</td>
+</tr>
+<tr>
+<td><code>-tests</code></td>
+<td>run units tests use nosetests</td>
+</tr>
+<tr>
+<td><code>-makeclean</code></td>
+<td>cleans/removes all output of running sample dataset in in the <a href="data/sample-water-simulations">sample-water-simulations directory</a>
+</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="example---apply-water-use-to-single-and-batch-simulations" class="anchor" href="#example---apply-water-use-to-single-and-batch-simulations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example - apply water use to <a href="data/sample-water-simulations">single and batch simulations</a>:</h3>
+
+<div class="highlight highlight-sh"><pre>$ run_sample_datasets.sh -wateruse</pre></div>
+
+<h2>
+<a id="process-many-simulations-shell-script" class="anchor" href="#process-many-simulations-shell-script" aria-hidden="true"><span class="octicon octicon-link"></span></a>Process Many Simulations Shell Script</h2>
+
+<h2>
+<a id="applying-water-use-and-gcm-deltas-to-many-water-simulations-at-one-time-using-run_simulationssh" class="anchor" href="#applying-water-use-and-gcm-deltas-to-many-water-simulations-at-one-time-using-run_simulationssh" aria-hidden="true"><span class="octicon octicon-link"></span></a>Applying water use and gcm deltas to many WATER simulations at one time using <a href="run_simulations.sh">run_simulations.sh</a>
+</h2>
+
+<p>The shell script <a href="run_simulations.sh">run_simulations.sh</a> is a shell script that can be used to automate
+the processing of many WATER simulations. <a href="run_simulations.sh">run_simulations.sh</a> can be used to apply 
+water use and global climate change scenarios to multiple WATER simulations that are contained in the same directory.
+A user will provide a valid option along with the <strong>path to the directory containing all the WATER simulations</strong>
+that need to be processed.  This directory should contain all the same type of WATER simulations <em>single</em> or <em>batch</em>, but not both.
+A user should make sure that the proper settings for processing a <em>single</em> or <em>batch</em> simulation are set in the <em>user_settings.py</em> file.
+Note that the <em>simulation_directory</em> variable will be ignored when using this script, but all the other settings will be used accordingly.</p>
+
+<h3>
+<a id="usage-2" class="anchor" href="#usage-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage:</h3>
+
+<div class="highlight highlight-sh"><pre>$ run_simulations.sh [option] <span class="pl-k">&lt;</span>path-to-simulations-directory<span class="pl-k">&gt;</span>
+$ run_simulations.sh [[[-applywateruse] [-applysubwateruse] [-applygcmdelta] [-applysubgcmdelta]] <span class="pl-k">&lt;</span>path-to-simulations-directory<span class="pl-k">&gt;</span> <span class="pl-k">|</span> [-h]]</pre></div>
+
+<h3>
+<a id="command-line-arguments-for-the-shell-script-run_simulationssh" class="anchor" href="#command-line-arguments-for-the-shell-script-run_simulationssh" aria-hidden="true"><span class="octicon octicon-link"></span></a>Command line arguments for the shell script <a href="run_simulations.sh">run_simulations.sh</a>:</h3>
+
+<table>
+<thead>
+<tr>
+<th>Commands</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-h</code></td>
+<td>show list of available commands</td>
+</tr>
+<tr>
+<td><code>-applywateruse</code></td>
+<td>run and apply <a href="data/wateruse-datafiles">water use data</a> to sample WATER simulations; <a href="data/sample-water-simulations">single and batch simulations</a>
+</td>
+</tr>
+<tr>
+<td><code>-applysubwateruse</code></td>
+<td>run and apply substitute water use data to sample WATER simulations; <a href="data/sample-water-simulations">single and batch simulations</a>
+</td>
+</tr>
+<tr>
+<td><code>-applygcmdelta</code></td>
+<td>run and apply <a href="data/gcmdelta-datafiles">global climate model data</a> to sample WATER simulations; <a href="data/sample-water-simulations">single and batch simulations</a>
+</td>
+</tr>
+<tr>
+<td><code>-applysubgcmdelta</code></td>
+<td>run and apply substitute water use data to sample WATER simulations; <a href="data/sample-water-simulations">single and batch simulations</a>
+</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="example---apply-water-use-to-many-water-simulations-" class="anchor" href="#example---apply-water-use-to-many-water-simulations-" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example - apply water use to many WATER simulations :</h3>
+
+<div class="highlight highlight-sh"><pre>$ run_simulations.sh -applywateruse <span class="pl-k">&lt;</span>path-to-simulations-directory<span class="pl-k">&gt;</span></pre></div>
+
+<hr>
+
+<h2>
+<a id="graphical-user-interface" class="anchor" href="#graphical-user-interface" aria-hidden="true"><span class="octicon octicon-link"></span></a>Graphical user interface</h2>
+
+<p>The multi-threaded graphical user interface (GUI) called <a href="waterapputils/waterapputils_gui.py">waterapputils_gui</a> can be started
+using the command below or by simply double clicking on the <code>waterapputils_gui.py</code> file.  </p>
+
+<div class="highlight highlight-sh"><pre>$ python waterapputils_gui.py</pre></div>
+
+<p>The GUI consists of 4 tabs:</p>
+
+<ol>
+<li>Process WATER output text file</li>
+<li>Compare 2 WATER output text files</li>
+<li>Apply water use to WATER simulations</li>
+<li>Apply global climate model (GCM) deltas to WATER simulations </li>
+</ol>
+
+<h3>
+<a id="process-water-output-text-file" class="anchor" href="#process-water-output-text-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Process WATER output text file</h3>
+
+<p>A user opens a WATER simulation output text file (WATER.txt), and all the paramters and corresponding data are processed.  The first parameter in the data file is 
+plotted initially and the user can use the list on the bottom left of the tab to select different parameters to plot.  The plot includes a text area showing some simple 
+statistics for the parameter.  All the parameters and corresponding data are also placed in a read-only table. A user can interact with the plot using the buttons on the top 
+of the plotting area (zoom, pan, etc.).  In addition, a user can enable a <strong>span selector</strong> which allows a user to query the data for specific time periods.  Upon using the 
+<strong>span selector</strong>, the simple stats displayed in the text area with the simple statistics updates for the selected time period.</p>
+
+<h3>
+<a id="compare-2-water-output-text-files" class="anchor" href="#compare-2-water-output-text-files" aria-hidden="true"><span class="octicon octicon-link"></span></a>Compare 2 WATER output text files</h3>
+
+<p>A user opens 2 WATER simulation output text files, and the <strong>Compare</strong> button will be enabled.  Upon clicking the <strong>Compare</strong> button, all the parameters and corresponding data 
+are processed and compared.  The first parameters in the data file are overlayed together with the first file colored as blue and the second file colored as red.  A second 
+plot is made which shows the difference between the respective parameters in each file. The user can use the list on the bottom left of the tab to select different parameters 
+to compare.  All the parameters and corresponding data for both files are placed in read-only tables.  A user can interact with the plots using the buttons on the top of the 
+plotting area (zoom, pan, etc.).  Note that the difference plot is tied to the overlay plot, meaning that when a user pans or zooms on the overlay plot, the difference 
+plot will zoom or pan with the overlay plot.  </p>
+
+<h3>
+<a id="apply-water-use-to-water-simulations" class="anchor" href="#apply-water-use-to-water-simulations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Apply water use to WATER simulations</h3>
+
+<p>Allows a user to apply water use data to WATER simulation output text files (WATER.txt).  </p>
+
+<h4>
+<a id="number-of-simulations---a-user-selects-the-number-of-water-simulations" class="anchor" href="#number-of-simulations---a-user-selects-the-number-of-water-simulations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Number of simulation(s) - a user selects the number of WATER simulations.</h4>
+
+<ul>
+<li>
+<em>One simulation</em> (default) - one batch or single type WATER simulation.</li>
+<li>
+<em>Multiple simulations</em> - more than one batch or single type WATER simulations. </li>
+</ul>
+
+<blockquote>
+<p><strong>NOTE: The directory containing all the WATER simulations to process must <em>only</em> contain WATER simulations.  Do not include extraneous files or directories in the parent 
+directory containing all the WATER simulations to process.</strong></p>
+</blockquote>
+
+<h4>
+<a id="type-of-simulations---a-user-selects-the-type-of-water-simulation" class="anchor" href="#type-of-simulations---a-user-selects-the-type-of-water-simulation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Type of simulation(s) - a user selects the type of WATER simulation.</h4>
+
+<ul>
+<li>
+<em>Batch</em> - more than one basin.  For an example, please see the <a href="data/sample-batch-simulations-sample-batch-simulation">Sample Batch Simulation</a>.</li>
+<li>
+<em>Single</em> - one basin.  For an example, please see the <a href="data/sample-batch-simulations-sample-single-simulation">Sample Single Simulation</a>.</li>
+</ul>
+
+<p>The following are the directory structures created by WATER for batch and single simulations:</p>
+
+<p><strong>Batch Simulation:</strong></p>
+
+<pre><code>simulation/
+            basin1/
+                    amask/
+                    basinmask/
+                    fmask/
+                    info/
+                    rmask/
+                    Temp/
+                    .
+                    .
+                    WATER.txt
+                    WATERSimulation.xml
+            basin2/
+            basin3/
+            .
+            .
+            Water.txt
+            Watersheds.shp
+</code></pre>
+
+<p><strong>Single Simulation:</strong></p>
+
+<pre><code>simulation/
+            amask/
+            basinmask/
+            fmask/
+            info/
+            rmask/
+            Temp/
+            .
+            .
+            basinMask.shp
+            WATER.txt
+            WATERSimulation.xml
+</code></pre>
+
+<h4>
+<a id="simulation-information---a-user-selects-the-water-simulation-of-interest-to-apply-water-use-too" class="anchor" href="#simulation-information---a-user-selects-the-water-simulation-of-interest-to-apply-water-use-too" aria-hidden="true"><span class="octicon octicon-link"></span></a>Simulation Information - a user selects the WATER simulation of interest to apply water use too.</h4>
+
+<p>If a valid WATER simulation is selected, the rest of the inputs in the <em>Simulation Information</em> section will auto-populate.  A user can select 
+the proper <em>Basin shapefile id field</em> that was used when running the WATER application.  The <em>Basin shapefile id field</em> is was used by the WATER 
+application to name the output basin directories in the simulation directory structure. The <em>Basin shapefile area field</em> is used to get the areas
+of each respective basin for use in an external ecoflow program.</p>
+
+<blockquote>
+<p><strong>NOTE: A batch WATER simulation will contain a shapefile of the basins called <em>Watersheds.shp</em>.  A single WATER simulation will contain a 
+shapefile of the basin called <em>basinMask.shp</em>.  A WATER simulation must have an associated <em>Watersheds.shp</em> or <em>basinMask.shp</em> file.</strong> </p>
+</blockquote>
+
+<h4>
+<a id="water-use-information---a-user-selects-the-seasonal-water-use-data-files-and-associated-information" class="anchor" href="#water-use-information---a-user-selects-the-seasonal-water-use-data-files-and-associated-information" aria-hidden="true"><span class="octicon octicon-link"></span></a>Water Use Information - a user selects the seasonal water use data files and associated information.</h4>
+
+<p>A user selects 4 seasonal water use files:</p>
+
+<ol>
+<li>January, Feburary, March</li>
+<li>April, May, June</li>
+<li>July, August, September</li>
+<li>October, November, December</li>
+</ol>
+
+<p>A user selects a water use factor file which can be used to adjust the water use data values in the seasonal water use files.</p>
+
+<p>A user selects the water use shapefile which is a shapefile of water use points across the entire modeling domain.  </p>
+
+<blockquote>
+<p><strong>NOTE: All WATER application shapefiles are in the Albers NAD83 projection. Please ensure that the water use shapefile is in the same projection as all the other WATER 
+application shapefiles.</strong> </p>
+</blockquote>
+
+<p>A user chooses the id field from the water use shapefile that corresponds to the id field used in the water use data files.  </p>
+
+<blockquote>
+<p><strong>NOTE: The sample 
+water use files and water use shapefile have <em>newhydroid</em> as the id field.</strong></p>
+</blockquote>
+
+<p>If the basins in the WATER use simulation do not overlap/intersect with the water use shapefile points, then the user can choose to apply 
+substitute water use.  </p>
+
+<blockquote>
+<p><strong>NOTE: In order to apply substitute water use, the user must first apply water use without this option.  The 
+waterapputils program will warn and log any basins in the WATER simulation that do not overlap/intersect with the water use shapefile points.<br>
+The waterapputils program will create a file called <em>wateruse_non_intersecting_centroids.txt</em> in a directory called <em>waterapputils-info</em> with a 
+list of the basins that do not overlap/intersect.  A user must manually enter the proper water use shapefile id (i.e. newhydroid) values to be 
+used when applying the substitute water use. In order to apply substitute water use, the file called <em>wateruse_non_intersecting_centroids.txt</em> in 
+a directory called <em>waterapputils-info</em> must exist.</strong></p>
+</blockquote>
+
+<p>A user clicks the <em>Check Inputs</em> button which checks and makes sure that all the fields have been entered.  Upon all the fields being entered and 
+the <em>ChecK Inputs</em> button being pressed, the <em>Apply Water Use</em>, <em>Plot Overview Map</em>, and <em>Plot Zoomed Map</em> buttons are enabled.  If a user clicks
+the <em>Apply Water Use</em>, then waterapputils applies water use to the WATER simulation given the data provided by the user.  The <strong>waterapputils_gui</strong>
+will apply water use in a <em>separate thread</em> meaning that the process will be run in the background allowing the user to continue using other parts of 
+the <strong>waterapputils_gui</strong> without interferring with the water use processing. </p>
+
+<blockquote>
+<p><strong>NOTE: When processing water use, a warning about a <em>QPixmap</em> may appear. This is not an error, but only a warning that can safely be ignored here.  The warning stems from 
+the use of using the same plotting code used in the command line version of waterapputils when applying water use.</strong> If a user clicks the <em>Plot Overview Map</em>, a map of the 
+WATER basin shapefile (Watersheds.shp or basinMask.shp) will be plotted in a zoomed out view or the entire modeling domain.  If a user clicks the <em>Plot Zoomed Map</em>, a map of 
+the WATER basin shapefile (Watersheds.shp or basinMask.shp) will be plotted in a zoomed in view with additional shapefiles (i.e. usgs gages).  </p>
+</blockquote>
+
+<h3>
+<a id="apply-global-climate-model-gcm-deltas-to-water-simulations" class="anchor" href="#apply-global-climate-model-gcm-deltas-to-water-simulations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Apply global climate model (GCM) deltas to WATER simulations</h3>
+
+<p>Allows a user to apply global climate model (GCM) deltas to WATER simulation database files (WATERSimulation.xml).  </p>
+
+<h4>
+<a id="number-of-simulations---a-user-selects-the-number-of-water-simulations-1" class="anchor" href="#number-of-simulations---a-user-selects-the-number-of-water-simulations-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Number of simulation(s) - a user selects the number of WATER simulations.</h4>
+
+<ul>
+<li>
+<em>One simulation</em> (default) - one batch or single type WATER simulation.</li>
+<li>
+<em>Multiple simulations</em> - more than one batch or single type WATER simulations. </li>
+</ul>
+
+<blockquote>
+<p><strong>NOTE: The directory containing all the WATER simulations to process must <em>only</em> contain WATER simulations.  Do not include extraneous files or directories in the parent 
+directory containing all the WATER simulations to process.</strong></p>
+</blockquote>
+
+<h4>
+<a id="type-of-simulations---a-user-selects-the-type-of-water-simulation-1" class="anchor" href="#type-of-simulations---a-user-selects-the-type-of-water-simulation-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Type of simulation(s) - a user selects the type of WATER simulation.</h4>
+
+<ul>
+<li>
+<em>Batch</em> - more than one basin.  For an example, please see the <a href="data/sample-batch-simulations-sample-batch-simulation">Sample Batch Simulation</a>.</li>
+<li>
+<em>Single</em> - one basin.  For an example, please see the <a href="data/sample-batch-simulations-sample-single-simulation">Sample Single Simulation</a>.</li>
+</ul>
+
+<p>The following are the directory structures created by WATER for batch and single simulations:</p>
+
+<p><strong>Batch Simulation:</strong></p>
+
+<pre><code>simulation/
+            basin1/
+                    amask/
+                    basinmask/
+                    fmask/
+                    info/
+                    rmask/
+                    Temp/
+                    .
+                    .
+                    WATER.txt
+                    WATERSimulation.xml
+            basin2/
+            basin3/
+            .
+            .
+            Water.txt
+            Watersheds.shp
+</code></pre>
+
+<p><strong>Single Simulation:</strong></p>
+
+<pre><code>simulation/
+            amask/
+            basinmask/
+            fmask/
+            info/
+            rmask/
+            Temp/
+            .
+            .
+            basinMask.shp
+            WATER.txt
+            WATERSimulation.xml
+</code></pre>
+
+<h4>
+<a id="simulation-information---a-user-selects-the-water-simulation-of-interest-to-apply-global-climate-model-deltas-too" class="anchor" href="#simulation-information---a-user-selects-the-water-simulation-of-interest-to-apply-global-climate-model-deltas-too" aria-hidden="true"><span class="octicon octicon-link"></span></a>Simulation Information - a user selects the WATER simulation of interest to apply global climate model deltas too.</h4>
+
+<p>If a valid WATER simulation is selected, the rest of the inputs in the <em>Simulation Information</em> section will auto-populate.  A user can select 
+the proper <em>Basin shapefile id field</em> that was used when running the WATER application.  The <em>Basin shapefile id field</em> is was used by the WATER 
+application to name the output basin directories in the simulation directory structure. The <em>Basin shapefile area field</em> is used to get the areas
+of each respective basin for use in an external ecoflow program.</p>
+
+<blockquote>
+<p><strong>NOTE: A batch WATER simulation will contain a shapefile of the basins called <em>Watersheds.shp</em>.  A single WATER simulation will contain a 
+shapefile of the basin called <em>basinMask.shp</em>.  A WATER simulation must have an associated <em>Watersheds.shp</em> or <em>basinMask.shp</em> file.</strong> </p>
+</blockquote>
+
+<h4>
+<a id="global-climate-model-delta-information---a-user-selects-3-global-climate-model-delta-files-and-associated-information" class="anchor" href="#global-climate-model-delta-information---a-user-selects-3-global-climate-model-delta-files-and-associated-information" aria-hidden="true"><span class="octicon octicon-link"></span></a>Global Climate Model Delta Information - a user selects 3 global climate model delta files and associated information.</h4>
+
+<p>A user selects 3 global climate model delta files:</p>
+
+<ol>
+<li>PET.txt</li>
+<li>Ppt.txt</li>
+<li>Tmax.txt</li>
+</ol>
+
+<p>A user selects the global climate model shapefile which is a shapefile of rectangular tiles for a particular global climate model that covers the entire modeling domain.  </p>
+
+<blockquote>
+<p><strong>NOTE: All WATER application shapefiles are in the Albers NAD83 projection. Please ensure that the global climate model shapefile shapefile is in the same projection as all the other WATER 
+application shapefiles.</strong> </p>
+</blockquote>
+
+<p>A user chooses the id field from the global climate model shapefile that corresponds to the id field used in the 3 global climate model delta files.  </p>
+
+<blockquote>
+<p><strong>NOTE: The sample 
+global climate model delta files and global climate model shapefile have <em>Tile</em> as the id field.</strong></p>
+</blockquote>
+
+<p>If the basins in the WATER use simulation do not overlap/intersect with the global climate model shapefile tiles, then the user can choose to apply 
+substitute global climate model deltas.  </p>
+
+<blockquote>
+<p><strong>NOTE: In order to apply substitute global climate model deltas, the user must first apply global climate model deltas without this option.  The 
+waterapputils program will warn and log any basins in the WATER simulation that do not overlap/intersect with the global climate model deltas shapefile tiles.<br>
+The waterapputils program will create a file called <em>gcm_delta_non_intersecting_tiles.txt</em> in a directory called <em>waterapputils-info</em> with a 
+list of the basins that do not overlap/intersect.  A user must manually enter the proper global climate model deltas shapefile id (i.e. Tile) values to be 
+used when applying the substitute global climate model deltas. In order to apply substitute global climate model deltas, the file called <em>gcm_delta_non_intersecting_tiles.txt</em> in 
+a directory called <em>waterapputils-info</em> must exist.</strong></p>
+</blockquote>
+
+<p>A user clicks the <em>Check Inputs</em> button which checks and makes sure that all the fields have been entered.  Upon all the fields being entered and 
+the <em>ChecK Inputs</em> button being pressed, the <em>Apply Water Use</em>, <em>Plot Overview Map</em>, and <em>Plot Zoomed Map</em> buttons are enabled.  If a user clicks
+the <em>Apply Global Climate Model Deltas</em>, then waterapputils applies global climate model deltas to the WATER simulation given the data provided by the user.  The <strong>waterapputils_gui</strong>
+will apply global climate model deltas in a <em>separate thread</em> meaning that the process will be run in the background allowing the user to continue using other parts of 
+the <strong>waterapputils_gui</strong> without interferring with the global climate model deltas processing. </p>
+
+<blockquote>
+<p><strong>NOTE: When processing global climate model deltas, a warning about a <em>QPixmap</em> may appear. This is not an error, but only a warning that can safely be ignored here.  The warning stems from 
+the use of using the same plotting code used in the command line version of waterapputils when applying global climate model deltas.</strong> If a user clicks the <em>Plot Overview Map</em>, a map of the 
+WATER basin shapefile (Watersheds.shp or basinMask.shp) will be plotted in a zoomed out view or the entire modeling domain.  If a user clicks the <em>Plot Zoomed Map</em>, a map of 
+the WATER basin shapefile (Watersheds.shp or basinMask.shp) will be plotted in a zoomed in view with additional shapefiles (i.e. usgs gages).  </p>
+</blockquote>
+
+<h2>
+<a id="testing" class="anchor" href="#testing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Testing</h2>
+
+<p>Automated tests for <strong>waterapputils</strong> were written using the <a href="https://nose.readthedocs.org/en/latest/">nose</a> library, and are contained in the <em>tests</em> directory. <a href="https://nose.readthedocs.org/en/latest/">nose</a> must be
+installed in order to run tests. Automated tests can be run using the <code>nosetests</code> command at the project level directory (not 
+within the <em>tests</em> directory, but the <em>waterapputils</em> directory containing the <em>tests</em> directory).  A successful test run 
+will look something like the following:</p>
+
+<div class="highlight highlight-sh"><pre>$ <span class="pl-c1">pwd</span>
+/path/to/waterapputils    
+
+$ nosetests
+SETUP: deltatxt tests
+........TEARDOWN: deltatxt tests
+...
+SETUP: waterxml tests
+........TEARDOWN: waterxml tests
+--------------------------------------------------
+Ran 91 tests <span class="pl-k">in</span> 1.049s
+
+OK</pre></div>
+
+<hr>
+
+<h2>
+<a id="repository-layout" class="anchor" href="#repository-layout" aria-hidden="true"><span class="octicon octicon-link"></span></a>Repository layout</h2>
+
+<pre><code>bin/                                    # executables/scripts
+data/                                   # sample data files to use with software and associated information
+    deltas-gcm/                         # statistically downscaled global climate model data
+    sample-water-simulations            # sample WATER application simulations and datasets
+        sample-batch-simulation         # sample WATER application batch run simulation
+        sample-datasets                 # sample WATER application simulation datasets
+        sample-single-simulation        # sample WATER applicaiton single run simulation
+    spatial-datafiles/                  # spatial data; shapefile format
+    watertxt-datafiles/                 # sample WATER.txt files
+    wateruse-batch-run/                 # sample batch run output from WATER
+    wateruse-datafiles/                 # sample water use files
+    waterxml-datafiles/                 # sample WATERSimulation.xml files
+docs/                                   # Sphinx code documentation
+tests/                                  # tests
+    deltas_tests.py                     # tests for deltas module
+    helpers_tests.py                    # tests for helper module
+    spatialvectors_test.py              # tests for spatialvectors module
+    watertxt_tests.py                   # tests for watertxt module
+    wateruse_tests.py                   # tests for wateruse module
+    waterxml_tests.py                   # tests for waterxml module
+waterapputils/                          # directory containing code modules
+    waterapputils.py                    # main controller; calls respective module
+    user_settings.py                    # user settings to control and specify data inputs for water use and global climate model processing along with control of naming outputs
+    gui/                                    # gui specific files
+    modules/
+        deltas.py                           # handles processing of global climate model data
+        deltas_viewer.py                    # handles view (plotting) of global climate model data
+        gcm_delta_processing.py             # handles the global climate model delta factors processing using settings from the user_settings.py file
+        helpers.py                          # helper functions
+        spatialdata_viewer.py               # handles view (mapping) of spatial data; uses basemap library
+        spatialvectors.py                   # handles spatial data
+        specific_output_file_processing.py  # handles specific output file processing for external OASIS and Ecoflow programs
+        water_files_processing.py           # handles the WATER application output and database file processing using settings from the user_settings.py file
+        waterapputils_logging.py            # handles error logging
+        watertxt.py                         # handles processing of WATER.txt simulation output files
+        watertxt_viewer.py                  # handles view (plotting) of WATER.txt simulation output files
+        wateruse.py                         # handles processing of water use data
+        wateruse_processing.py              # handles the water use processing using settings from the user_settings.py file
+        waterxml.py                         # handles processing of WATERSimulation.xml simulation database files
+        waterxml_viewer.py                  # handles view (plotting) of  WATERSimulation.xml simulation database files
+Makefile                                # makefile to help clean directories
+LICENSE.txt                             # USGS Software User Rights Notice
+README.md                               # README file
+requirements.txt                        # list of requirements/dependencies 
+setup.py                                # code for building, distributing, and installing modules
+run_sample_datasets.sh                  # bash script used to run specific or all sample datasets
+run_simulations.sh                      # bash script used to apply water use and/or climate change factors to multiple WATER simulations
+</code></pre>
+
+<hr>
+
+<h2>
+<a id="documentation-and-website" class="anchor" href="#documentation-and-website" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation and Website</h2>
+
+<p>Documentation can be found on the <a href="http://ky.water.usgs.gov/usgs/projects/jlant_program_code/waterapputils/html/index.html">USGS Kentucky Water Science Center's Internal Website</a>.<br>
+HTML documentation was made using <a href="http://sphinx-doc.org/">Sphinx</a>.  </p>
+
+<hr>
+
+<h2>
+<a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements</h2>
+
+<pre><code>python == 2.7.6
+numpy == 1.8.0
+matplotlib == 1.3.1
+nose == 1.3.0
+basemap == 1.0.2
+</code></pre>
+
+<hr>
+
+<h2>
+<a id="disclaimer-and-notice" class="anchor" href="#disclaimer-and-notice" aria-hidden="true"><span class="octicon octicon-link"></span></a>Disclaimer and Notice</h2>
+
+<p>Please refer to the USGS Software User Rights Notice (LICENSE.txt or <a href="http://water.usgs.gov/software/help/notice/">http://water.usgs.gov/software/help/notice/</a>)
+for complete use, copyright, and distribution information. The USGS provides no warranty, expressed or implied, as to the
+correctness of the furnished software or the suitability for any purpose. The software has been tested, but as with any
+complex software, there could be undetected errors. Users who find errors are requested to report them to the USGS.</p>
+
+<p>References to non-USGS products, trade names, and (or) services are provided for information purposes only and do not
+constitute endorsement or warranty, express or implied, by the USGS, U.S. Department of Interior, or U.S. Government, as 
+to their suitability, content, usefulness, functioning, completeness, or accuracy.</p>
+
+<p>Although this program has been used by the USGS, no warranty, expressed or implied, is made by the USGS or the United
+States Government as to the accuracy and functioning of the program and related program material nor shall the fact of
+distribution constitute any such warranty, and no responsibility is assumed by the USGS in connection therewith.</p>
+
+<hr>
+
+<h2>
+<a id="author" class="anchor" href="#author" aria-hidden="true"><span class="octicon octicon-link"></span></a>Author</h2>
+
+<p>Jeremiah Lant<br>
+Hydrologist / United States Geological Survey<br>
+9818 Bluegrass Parkway Louisville, Kentucky 40222<br>
+Office: 502-493-1949 Fax: 502-493-1909<br>
+<a href="mailto:jlant@usgs.gov">jlant@usgs.gov</a> | <a href="http://www.usgs.gov">www.usgs.gov</a></p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/jlant-usgs/waterapputils">Waterapputils</a> is maintained by <a href="https://github.com/jlant-usgs">jlant-usgs</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
+
