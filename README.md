@@ -488,11 +488,11 @@ distribution constitute any such warranty, and no responsibility is assumed by t
 
 ## Author
 
-Jeremiah Lant
-Hydrologist / United States Geological Survey
-9818 Bluegrass Parkway Louisville, Kentucky 40222
-Office: 502-493-1949 Fax: 502-493-1909
-jlant@usgs.gov | www.usgs.gov
+> Jeremiah Lant
+> Hydrologist / United States Geological Survey
+> 9818 Bluegrass Parkway Louisville, Kentucky 40222
+> Office: 502-493-1949 Fax: 502-493-1909
+> jlant@usgs.gov | www.usgs.gov
 
 [U.S. Geological Survey Indiana and Kentucky Water Science Centers (INKY)]:http://ky.water.usgs.gov/
 [CIMP5]:http://cmip-pcmdi.llnl.gov/cmip5/
