@@ -214,7 +214,8 @@ def read_factor_file_in(filestream):
         data[parameter["name"]] = parameter["data"]
 
     water_factor_type_list = ['InSwWL', 'MiSwWL', 'WSunkTR', 'InSwRT', 'ReGwWL', 'AqGwWL', 'DoGwWL', 'STswRT', 'TeSwWL', 'MiGwWL', 'TeGwWL', 'CoGwWL', 'CoSwWL', 'IrGwWL', 'WStrans', 'WsGwWL', 'WSgwRT', 'InGwRT', 'IrSwWL', 'InGwWL', 'AqSwWL', 'LvGwWL', 'WsSwWL']
-    for data_key in data.keys():
+
+    for data_key in data["column_names"]:
         if data_key not in water_factor_type_list:
             raise IOError("Error in water factor file!\nBad column found: {}\nThis indicates an incorrect water factor file.".format(data_key))
 

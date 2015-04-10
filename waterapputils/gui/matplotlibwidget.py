@@ -50,7 +50,8 @@ class MatplotlibWidget(QtGui.QWidget):
         self.color_str = None
         self.axes_text = None
         self.axes_radio = None
-               
+        self.parent = parent
+
         # create figure
         self.figure = Figure()
 
@@ -196,8 +197,11 @@ class MatplotlibWidget(QtGui.QWidget):
 
         if radio_button_label == "Span On":
             self.span_selector.visible = True
+            self.matplotlib_toolbar.hide()
+
         elif radio_button_label == "Span Off":
             self.span_selector.visible = False
+            self.matplotlib_toolbar.show()         
             self.plot_watertxt_parameter(watertxt_data = self.watertxt_data, name = self.parameter["name"])
 
     def clear_watertxt_plot(self):
