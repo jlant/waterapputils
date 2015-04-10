@@ -72,7 +72,7 @@ A sample image of processing and analyzing WATER output files the GUI:
 
 [Repository Layout](#repository-layout)
 
-[Documentation and Website](#documentation-and-website)
+[Documentation](#documentation)
 
 [Requirements](#requirements)
 
@@ -560,7 +560,7 @@ OK
 
 ***
 
-## Documentation and Website
+## Documentation 
 
 Documentation of the code, guides detailing the processes involved in applying water use and the global climate
 model deltas, additional information about *waterapputils*, and a gallery of output images can be found on the [USGS Kentucky Water Science Center's Internal Website](http://ky.water.usgs.gov/usgs/projects/jlant_program_code/waterapputils/html/index.html).  

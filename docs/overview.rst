@@ -90,7 +90,7 @@ Some sample highlights of **waterapputils** include:
 
 A sample image of processing and analyzing WATER output files the GUI:
 
-.. figure:: docs/_static/gui-watertxt.png
+.. figure:: _static/gui-watertxt.png
    :alt: Process and analyze WATER output files
 
    Process and analyze WATER output files
@@ -112,7 +112,7 @@ Script <#process-many-simulation-shell-script>`__
 
 `Repository Layout <#repository-layout>`__
 
-`Documentation and Website <#documentation-and-website>`__
+`Documentation <#documentation>`__
 
 `Requirements <#requirements>`__
 
@@ -794,8 +794,8 @@ Repository layout
 
 --------------
 
-Documentation and Website
--------------------------
+Documentation
+-------------
 
 Documentation of the code, guides detailing the processes involved in
 applying water use and the global climate model deltas, additional
@@ -858,5 +858,5 @@ Author
 | Office: 502-493-1949 Fax: 502-493-1909
 | jlant@usgs.gov \| www.usgs.gov
 
-.. |alt text| image:: docs/_static/usgs-logo.png
+.. |alt text| image:: _static/usgs-logo.png
    :target: http://www.usgs.gov/
