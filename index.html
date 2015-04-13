@@ -266,11 +266,11 @@ A WATER simulation can be either a <em>single</em> simulation or a <em>batch</em
 <a id="run-sample-datasets-shell-script" class="anchor" href="#run-sample-datasets-shell-script" aria-hidden="true"><span class="octicon octicon-link"></span></a>Run Sample Datasets Shell Script</h2>
 
 <h2>
-<a id="run-sample-datasets-with-run_sample_datasetssh" class="anchor" href="#run-sample-datasets-with-run_sample_datasetssh" aria-hidden="true"><span class="octicon octicon-link"></span></a>Run sample datasets with <a href="run_sample_datasets.sh">run_sample_datasets.sh</a>
+<a id="run-sample-datasets-with-run_sample_datasetssh" class="anchor" href="#run-sample-datasets-with-run_sample_datasetssh" aria-hidden="true"><span class="octicon octicon-link"></span></a>Run sample datasets with <a href="https://github.com/jlant-usgs/waterapputils/blob/master/run_sample_datasets.sh">run_sample_datasets.sh</a>
 </h2>
 
-<p>The shell script <a href="run_sample_datasets.sh">run_sample_datasets.sh</a> is a shell script that can be used to run automated tests 
-and run many of the command line arguments using the <a href="data/sample-water-simulations">sample datasets</a>.  </p>
+<p>The shell script <a href="https://github.com/jlant-usgs/waterapputils/blob/master/run_sample_datasets.sh">run_sample_datasets.sh</a> is a shell script that can be used to run automated tests 
+and run many of the command line arguments using the <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">sample datasets</a>.  </p>
 
 <h3>
 <a id="usage-1" class="anchor" href="#usage-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage:</h3>
@@ -279,7 +279,7 @@ and run many of the command line arguments using the <a href="data/sample-water-
 $ run_sample_datasets.sh [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid] [ecoflowdaxml] [-ecoflowdashp] [-gcmdelta] [-mapsim] [-all] [-tests] -makeclean] <span class="pl-k">|</span> [-h]]</pre></div>
 
 <h3>
-<a id="command-line-arguments-for-the-shell-script-run_sample_datasetssh" class="anchor" href="#command-line-arguments-for-the-shell-script-run_sample_datasetssh" aria-hidden="true"><span class="octicon octicon-link"></span></a>Command line arguments for the shell script <a href="run_sample_datasets.sh">run_sample_datasets.sh</a>:</h3>
+<a id="command-line-arguments-for-the-shell-script-run_sample_datasetssh" class="anchor" href="#command-line-arguments-for-the-shell-script-run_sample_datasetssh" aria-hidden="true"><span class="octicon octicon-link"></span></a>Command line arguments for the shell script <a href="https://github.com/jlant-usgs/waterapputils/blob/master/run_sample_datasets.sh">run_sample_datasets.sh</a>:</h3>
 
 <table>
 <thead>
@@ -295,12 +295,12 @@ $ run_sample_datasets.sh [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid
 </tr>
 <tr>
 <td><code>-txt</code></td>
-<td>run <code>-watertxt</code> and <code>-watertxtcmp</code> using the <a href="data/watertxt-datafiles">sample WATER simulation output TEXT files</a>
+<td>run <code>-watertxt</code> and <code>-watertxtcmp</code> using the <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/watertxt-datafiles">sample WATER simulation output TEXT files</a>
 </td>
 </tr>
 <tr>
 <td><code>-xml</code></td>
-<td>run <code>-waterxml</code> and <code>-waterxmlcmp</code> using the <a href="data/waterxml-datafiles">sample WATER simulation output XML files</a>
+<td>run <code>-waterxml</code> and <code>-waterxmlcmp</code> using the <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/waterxml-datafiles">sample WATER simulation output XML files</a>
 </td>
 </tr>
 <tr>
@@ -310,41 +310,41 @@ $ run_sample_datasets.sh [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid
 </tr>
 <tr>
 <td><code>-subwateruse</code></td>
-<td>run and apply substitute water use data to sample WATER simulations; <a href="data/sample-water-simulations">single and batch simulations</a>
+<td>run and apply substitute water use data to sample WATER simulations; <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">single and batch simulations</a>
 </td>
 </tr>
 <tr>
 <td><code>-gcmdelta</code></td>
-<td>run and apply <a href="data/gcmdelta-datafiles">global climate model data</a> to sample WATER simulations; <a href="data/sample-water-simulations">single and batch simulations</a>
+<td>run and apply <a href="data/gcmdelta-datafiles">global climate model data</a> to sample WATER simulations; <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">single and batch simulations</a>
 </td>
 </tr>
 <tr>
 <td><code>-subgcmdelta</code></td>
-<td>run and apply substitute water use data to sample WATER simulations; <a href="data/sample-water-simulations">single and batch simulations</a>
+<td>run and apply substitute water use data to sample WATER simulations; <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">single and batch simulations</a>
 </td>
 </tr>
 <tr>
 <td><code>-oasis</code></td>
-<td>create an oasis formated water use output file using the <a href="data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt">sample water use applied WATER TEXT file</a>
+<td>create an oasis formated water use output file using the <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt">sample water use applied WATER TEXT file</a>
 </td>
 </tr>
 <tr>
 <td><code>-ecoflowstationid</code></td>
-<td>create an ecoflow formated water use output file using the <a href="data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt">sample water use applied WATER TEXT file</a>
+<td>create an ecoflow formated water use output file using the <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt">sample water use applied WATER TEXT file</a>
 </td>
 </tr>
 <tr>
 <td><code>-ecoflowdaxml</code></td>
-<td>create an ecoflow formated drainage area output file using the <a href="data/sample-water-simulations/sample-datafiles/WATERSimulation-basin0.xml">sample WATER XML file</a> to calculate basin area</td>
+<td>create an ecoflow formated drainage area output file using the <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-datafiles/WATERSimulation-basin0.xml">sample WATER XML file</a> to calculate basin area</td>
 </tr>
 <tr>
 <td><code>-ecoflowdashp</code></td>
-<td>create an ecoflow formated drainage area output file using the <a href="data/sample-water-simulations/sample-datafiles/basin0.shp">sample basin shapefiles</a>
+<td>create an ecoflow formated drainage area output file using the <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-datafiles/basin0.shp">sample basin shapefiles</a>
 </td>
 </tr>
 <tr>
 <td><code>-mapsim</code></td>
-<td>create maps for <a href="data/sample-water-simulations">single and batch simulations</a>
+<td>create maps for <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">single and batch simulations</a>
 </td>
 </tr>
 <tr>
@@ -358,14 +358,14 @@ $ run_sample_datasets.sh [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid
 </tr>
 <tr>
 <td><code>-makeclean</code></td>
-<td>cleans/removes all output of running sample dataset in in the <a href="data/sample-water-simulations">sample-water-simulations directory</a>
+<td>cleans/removes all output of running sample dataset in in the <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">sample-water-simulations directory</a>
 </td>
 </tr>
 </tbody>
 </table>
 
 <h3>
-<a id="example---apply-water-use-to-single-and-batch-simulations" class="anchor" href="#example---apply-water-use-to-single-and-batch-simulations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example - apply water use to <a href="data/sample-water-simulations">single and batch simulations</a>:</h3>
+<a id="example---apply-water-use-to-single-and-batch-simulations" class="anchor" href="#example---apply-water-use-to-single-and-batch-simulations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example - apply water use to <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">single and batch simulations</a>:</h3>
 
 <div class="highlight highlight-sh"><pre>$ run_sample_datasets.sh -wateruse</pre></div>
 
@@ -373,11 +373,11 @@ $ run_sample_datasets.sh [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid
 <a id="process-many-simulations-shell-script" class="anchor" href="#process-many-simulations-shell-script" aria-hidden="true"><span class="octicon octicon-link"></span></a>Process Many Simulations Shell Script</h2>
 
 <h2>
-<a id="applying-water-use-and-gcm-deltas-to-many-water-simulations-at-one-time-using-run_simulationssh" class="anchor" href="#applying-water-use-and-gcm-deltas-to-many-water-simulations-at-one-time-using-run_simulationssh" aria-hidden="true"><span class="octicon octicon-link"></span></a>Applying water use and gcm deltas to many WATER simulations at one time using <a href="run_simulations.sh">run_simulations.sh</a>
+<a id="applying-water-use-and-gcm-deltas-to-many-water-simulations-at-one-time-using-run_simulationssh" class="anchor" href="#applying-water-use-and-gcm-deltas-to-many-water-simulations-at-one-time-using-run_simulationssh" aria-hidden="true"><span class="octicon octicon-link"></span></a>Applying water use and gcm deltas to many WATER simulations at one time using <a href="https://github.com/jlant-usgs/waterapputils/blob/master/run_simulations.sh">run_simulations.sh</a>
 </h2>
 
-<p>The shell script <a href="run_simulations.sh">run_simulations.sh</a> is a shell script that can be used to automate
-the processing of many WATER simulations. <a href="run_simulations.sh">run_simulations.sh</a> can be used to apply 
+<p>The shell script <a href="https://github.com/jlant-usgs/waterapputils/blob/master/run_simulations.sh">run_simulations.sh</a> is a shell script that can be used to automate
+the processing of many WATER simulations. <a href="https://github.com/jlant-usgs/waterapputils/blob/master/run_simulations.sh">run_simulations.sh</a> can be used to apply 
 water use and global climate change scenarios to multiple WATER simulations that are contained in the same directory.
 A user will provide a valid option along with the <strong>path to the directory containing all the WATER simulations</strong>
 that need to be processed.  This directory should contain all the same type of WATER simulations <em>single</em> or <em>batch</em>, but not both.
@@ -391,7 +391,7 @@ Note that the <em>simulation_directory</em> variable will be ignored when using 
 $ run_simulations.sh [[[-applywateruse] [-applysubwateruse] [-applygcmdelta] [-applysubgcmdelta]] <span class="pl-k">&lt;</span>path-to-simulations-directory<span class="pl-k">&gt;</span> <span class="pl-k">|</span> [-h]]</pre></div>
 
 <h3>
-<a id="command-line-arguments-for-the-shell-script-run_simulationssh" class="anchor" href="#command-line-arguments-for-the-shell-script-run_simulationssh" aria-hidden="true"><span class="octicon octicon-link"></span></a>Command line arguments for the shell script <a href="run_simulations.sh">run_simulations.sh</a>:</h3>
+<a id="command-line-arguments-for-the-shell-script-run_simulationssh" class="anchor" href="#command-line-arguments-for-the-shell-script-run_simulationssh" aria-hidden="true"><span class="octicon octicon-link"></span></a>Command line arguments for the shell script <a href="https://github.com/jlant-usgs/waterapputils/blob/master/run_simulations.sh">run_simulations.sh</a>:</h3>
 
 <table>
 <thead>
@@ -407,22 +407,22 @@ $ run_simulations.sh [[[-applywateruse] [-applysubwateruse] [-applygcmdelta] [-a
 </tr>
 <tr>
 <td><code>-applywateruse</code></td>
-<td>run and apply <a href="data/wateruse-datafiles">water use data</a> to sample WATER simulations; <a href="data/sample-water-simulations">single and batch simulations</a>
+<td>run and apply <a href="data/wateruse-datafiles">water use data</a> to sample WATER simulations; <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">single and batch simulations</a>
 </td>
 </tr>
 <tr>
 <td><code>-applysubwateruse</code></td>
-<td>run and apply substitute water use data to sample WATER simulations; <a href="data/sample-water-simulations">single and batch simulations</a>
+<td>run and apply substitute water use data to sample WATER simulations; <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">single and batch simulations</a>
 </td>
 </tr>
 <tr>
 <td><code>-applygcmdelta</code></td>
-<td>run and apply <a href="data/gcmdelta-datafiles">global climate model data</a> to sample WATER simulations; <a href="data/sample-water-simulations">single and batch simulations</a>
+<td>run and apply <a href="data/gcmdelta-datafiles">global climate model data</a> to sample WATER simulations; <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">single and batch simulations</a>
 </td>
 </tr>
 <tr>
 <td><code>-applysubgcmdelta</code></td>
-<td>run and apply substitute water use data to sample WATER simulations; <a href="data/sample-water-simulations">single and batch simulations</a>
+<td>run and apply substitute water use data to sample WATER simulations; <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">single and batch simulations</a>
 </td>
 </tr>
 </tbody>
@@ -438,7 +438,7 @@ $ run_simulations.sh [[[-applywateruse] [-applysubwateruse] [-applygcmdelta] [-a
 <h2>
 <a id="graphical-user-interface" class="anchor" href="#graphical-user-interface" aria-hidden="true"><span class="octicon octicon-link"></span></a>Graphical user interface</h2>
 
-<p>The multi-threaded graphical user interface (GUI) called <a href="waterapputils/waterapputils_gui.py">waterapputils_gui</a> can be started
+<p>The multi-threaded graphical user interface (GUI) called <a href="https://github.com/jlant-usgs/waterapputils/blob/master/waterapputils/waterapputils_gui.py">waterapputils_gui</a> can be started
 using the command below or by simply double clicking on the <code>waterapputils_gui.py</code> file.  </p>
 
 <div class="highlight highlight-sh"><pre>$ python waterapputils_gui.py</pre></div>
@@ -496,9 +496,9 @@ directory containing all the WATER simulations to process.</strong></p>
 
 <ul>
 <li>
-<em>Batch</em> - more than one basin.  For an example, please see the <a href="data/sample-batch-simulations-sample-batch-simulation">Sample Batch Simulation</a>.</li>
+<em>Batch</em> - more than one basin.  For an example, please see the <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-batch-simulations-sample-batch-simulation">Sample Batch Simulation</a>.</li>
 <li>
-<em>Single</em> - one basin.  For an example, please see the <a href="data/sample-batch-simulations-sample-single-simulation">Sample Single Simulation</a>.</li>
+<em>Single</em> - one basin.  For an example, please see the <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-batch-simulations-sample-single-simulation">Sample Single Simulation</a>.</li>
 </ul>
 
 <p>The following are the directory structures created by WATER for batch and single simulations:</p>
@@ -632,9 +632,9 @@ directory containing all the WATER simulations to process.</strong></p>
 
 <ul>
 <li>
-<em>Batch</em> - more than one basin.  For an example, please see the <a href="data/sample-batch-simulations-sample-batch-simulation">Sample Batch Simulation</a>.</li>
+<em>Batch</em> - more than one basin.  For an example, please see the <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-batch-simulations-sample-batch-simulation">Sample Batch Simulation</a>.</li>
 <li>
-<em>Single</em> - one basin.  For an example, please see the <a href="data/sample-batch-simulations-sample-single-simulation">Sample Single Simulation</a>.</li>
+<em>Single</em> - one basin.  For an example, please see the <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-batch-simulations-sample-single-simulation">Sample Single Simulation</a>.</li>
 </ul>
 
 <p>The following are the directory structures created by WATER for batch and single simulations:</p>
