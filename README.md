@@ -15,7 +15,7 @@ aggregated water use data to model simulations.  **waterapputils** has a [Comman
 and [Process Many Simulations Shell Script](#process-many-simulation-shell-script), to help automate processing tasks and run unit tests.
 
 The WATER application is a graphical user interface, written in VB.NET, wrapped around a variant of the rainfall-runoff model 
-called Topmodel (Topography based hydrological mode) by Keith Beven, Professor at Lancaster University. Topmodel estimates 
+called Topmodel (Topography based hydrological model) by Keith Beven, Professor at Lancaster University. Topmodel estimates 
 river discharge and spatial soil water saturation patterns for a particular catchment basin using topographic, climatic, and 
 geological input data parameters. The original WATER application was developed by the [U.S. Geological Survey Indiana and 
 Kentucky Water Science Centers (INKY)]. References for the WATER application include:

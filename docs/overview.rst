@@ -27,7 +27,7 @@ processing tasks and run unit tests.
 
 The WATER application is a graphical user interface, written in VB.NET,
 wrapped around a variant of the rainfall-runoff model called Topmodel
-(Topography based hydrological mode) by Keith Beven, Professor at
+(Topography based hydrological model) by Keith Beven, Professor at
 Lancaster University. Topmodel estimates river discharge and spatial
 soil water saturation patterns for a particular catchment basin using
 topographic, climatic, and geological input data parameters. The
