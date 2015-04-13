@@ -432,9 +432,7 @@ def get_all_total_wateruse(wateruse_files, id_list, wateruse_factor_file = None,
         if wateruse_factor_file:
             # read water use factor file
             wateruse_factors = read_file(wateruse_factor_file, factor_file = True)
-
-            print(wateruse_factors)
-        
+      
         # calculate average wateruse for a list of ids
         total_wateruse_dict = get_total_wateruse(wateruse_data = wateruse_data, id_list = id_list, wateruse_factors = wateruse_factors)
 

@@ -1595,14 +1595,16 @@ class MainWindow(QtGui.QMainWindow):
 
 	def about(self):
 		""" Show an message box about the gui."""
-		
+
 		msg = \
 		"""
-		The waterapputils gui can be used to process and interact with output <br /> 
-		and database files from the WATER application. In addition, water use can <br />
-		be applied to WATER output text files and global climate change factors can <br />
-		be applied to WATER database xml files.  More help and information <br />
-		can be found at the <a href="https://github.com/jlant-usgs/waterapputils/">GitHub site for waterapputils</a>. 
+		<p>The waterapputils gui can be used to process, analyze, and interact with output
+		and database files from the <a href="http://pubs.usgs.gov/sir/2009/5248/">WATER application</a>.</p> 
+
+		<p>In addition, water use can be applied to WATER output text files and global climate change factors can
+		be applied to WATER database xml files.</p>
+
+		<p>More help and information can be found at the <a href="http://jlant-usgs.github.io/waterapputils/">Web site for waterapputils</a>.</p> 
 		"""
 
 		QtGui.QMessageBox.about(self, "About the waterapputils gui", msg.strip())
