@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'user_interface.ui'
 #
-# Created: Fri Apr 03 15:34:52 2015
+# Created: Tue Apr 14 11:26:31 2015
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -582,7 +582,7 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
+        MainWindow.setWindowTitle(_translate("MainWindow", "waterapputils", None))
         self.tab_watertxt_push_button_open_file.setToolTip(_translate("MainWindow", "<html><head/><body><p>Open a WATER.txt output text file</p></body></html>", None))
         self.tab_watertxt_push_button_open_file.setText(_translate("MainWindow", "Open File", None))
         self.tab_watertxt_line_edit_open_file.setPlaceholderText(_translate("MainWindow", "Path to WATER.txt output text file", None))
