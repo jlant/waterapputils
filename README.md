@@ -563,7 +563,8 @@ OK
 ## Documentation 
 
 Documentation of the code, guides detailing the processes involved in applying water use and the global climate
-model deltas, additional information about *waterapputils*, and a gallery of output images can be found on the [USGS Kentucky Water Science Center's Internal Website](http://ky.water.usgs.gov/usgs/projects/jlant_program_code/waterapputils/html/index.html).  
+model deltas, additional information about *waterapputils*, and a gallery of output images can be found [here](http://ky.water.usgs.gov/usgs/projects/jlant_program_code/waterapputils/html/index.html) 
+which is located on the [USGS Kentucky Water Science Center's Internal Website](http://ky.water.usgs.gov/usgs/projects/science_mgt.html).  
 
 For non-USGS users, the documentation pages can be viewed by navigating to the `docs/_build/html` directory and opening the `index.html` file in a web browser (Chrome, Firefox, IE, etc.)
 
