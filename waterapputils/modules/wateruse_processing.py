@@ -194,7 +194,7 @@ def apply_wateruse(settings):
         warn_str = "The following basin(s) do not intersect with the water use centroids shapefile:\n    {}\n\n    centroids shapefile: {}\n    basin shapefile: {}\n".format(nonintersecting_centroids, 
                                                                                                                                                                      settings["wateruse_centroids_shapefile"] , 
                                                                                                                                                                      os.path.join(settings["simulation_directory"], settings["basin_shapefile_name"]))
-        instruction_str1 = "Using water use centriod id: 000.  This special water use centriod id specifies 0 cubic feet per second water use.\n"
+        instruction_str1 = "Using water use centriod id: 000.  This special water use centroid id specifies 0 cubic feet per second water use.\n"
         instruction_str2 = "Writing the following wateruse non intersecting file that specifies the non intersecting basin(s) with the special water use centroid id:\n    {}\n".format(os.path.join(info_dir, settings["wateruse_non_intersecting_file_name"]))
         instruction_str3 = "To apply water use to the non intersecting basin(s), add centroid(s) ids (newhydroid) (separated by commas) that you would like to use for each non intersecting basin to the wateruse non intersecting file."
         logging.warn("\n{}\n{}\n{}\n{}\n".format(warn_str, instruction_str1, instruction_str2, instruction_str3)) 

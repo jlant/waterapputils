@@ -1,0 +1,10 @@
+2015-04-16 13:13:55,322 - ERROR :
+ IO error: 
+Traceback (most recent call last):
+  File "waterapputils.py", line 210, in main
+    specific_output_file_processing.write_ecoflow_file_stationid(file_list = args.ecoflowstationid, dir_name = user_settings.settings["ecoflow_directory_name"], file_name = ecoflow_file_name, parameter_name = parameter)
+  File "c:\Users\jlant\jeremiah\projects\python-projects\waterapputils\waterapputils\modules\specific_output_file_processing.py", line 76, in write_ecoflow_file_stationid
+    watertxt_data = watertxt.read_file(f)
+  File "c:\Users\jlant\jeremiah\projects\python-projects\waterapputils\waterapputils\modules\watertxt.py", line 44, in read_file
+    with open(filepath, "r") as f:
+IOError: [Errno 2] No such file or directory: 'data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt'

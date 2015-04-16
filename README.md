@@ -113,8 +113,8 @@ $ python waterapputils.py [option]
 |`-applysubgcmdeltas`   | apply updated global climate change deltas from `sub_gcm_delta_info_file_name` variable in user_settings.py to WATER simulation database file(s); `WATERSimulation.xml`; details specified in `user_settings.py` | 
 |`-applywateruse`       | apply water use data to WATER simulation output file(s); `WATER.txt`; details specified in `user_settings.py` | 
 |`-applysubwateruse`    | apply water use data from `sub_wateruse_info_file_name` variable in user_settings.py to WATER simulation output file(s); `WATER.txt`; details specified in `user_settings.py` | 
-|`-oasis`               | create output data file(s) for OASIS program; tab delimited file(s) of timeseries of discharge |
-|`-ecoflowstationid`    | create output data file(s) for ecoflow program; comma separated file(s) of timeseries of discharge for a specific basin (station) id |
+|`-oasis`               | list WATER simulation output file(s) to process; creates output data file(s) for OASIS program - a tab delimited file(s) of timeseries of discharge; **NOTE**: WATER simulation output file must have the `Discharge + Water Use` column |
+|`-ecoflowstationid`    | list WATER simulation output file(s) to process; create output data file(s) for ecoflow program - a comma separated file(s) of timeseries of discharge for a specific basin (station) id |
 |`-ecoflowdaxml`        | create output data file(s) for ecoflow program; comma separated file(s) of basin (station) id and its respective drainage area in square miles calculated using data in the `WATERSimulation.xml`  |
 |`-ecoflowdashp`        | create output data file(s) for ecoflow program; comma separated file(s) of basin (station) id and its respective drainage area in square miles calculated from the shapefile(s)  |
 |`-outfilename`         | OPTIONAL : output filename to be used with `-ecoflowdaxml` or `-ecoflowdashp` commands in writing the drainage area comma separated file | 

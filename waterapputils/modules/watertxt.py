@@ -582,7 +582,10 @@ def write_timeseries_file_stationid(watertxt_data, name, save_path, filename, st
         filepath = os.path.join(save_path, stationid.lower().strip() + ".csv")   
 
     with open(filepath, "w") as output_file:
-        output_file.write("{},{},{}\n".format("siteNo", "date", "discharge"))
+        if name in ["Discharge", "discharge"]:
+            output_file.write("{},{},{}\n".format("siteNo", "date", "discharge"))
+        else:
+            output_file.write("{},{},{}\n".format("siteNo", "date", name))            
 
         for i in range(len(watertxt_data["dates"])):
             date_str = watertxt_data["dates"][i].strftime("%Y-%m-%d")
