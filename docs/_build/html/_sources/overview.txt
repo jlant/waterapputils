@@ -114,6 +114,8 @@ Script <#process-many-simulation-shell-script>`__
 
 `Documentation <#documentation>`__
 
+`Tutorials <#tutorials>`__
+
 `Requirements <#requirements>`__
 
 `Disclaimer and Notice <#disclaimer-and-notice>`__
@@ -177,7 +179,7 @@ Command Line Arguments:
 +--------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | ``-ecoflowdaxml``        | list WATER simulation database xml file(s) to process; creates output data file(s) for ecoflow program - a comma separated file(s) of basin (station) id and its respective drainage area in square miles calculated using data in the ``WATERSimulation.xml``   |
 +--------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-ecoflowdashp``        | list basin or watershed shapefile(s) to process; creates output data file(s) for ecoflow program - a comma separated file(s) of basin (station) id and its respective drainage area in square miles calculated from the shapefile(s)                             |
+| ``-ecoflowdashp``        | list basin or watershed shapefiles to process; creates output data file(s) for ecoflow program - a comma separated file(s) of basin (station) id and its respective drainage area in square miles calculated from the shapefile(s)                               |
 +--------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | ``-outfilename``         | OPTIONAL : output filename to be used with ``-ecoflowdaxml`` or ``-ecoflowdashp`` commands in writing the drainage area comma separated file                                                                                                                     |
 +--------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -810,6 +812,26 @@ to the ``docs/_build/html`` directory and opening the ``index.html``
 file in a web browser (Chrome, Firefox, IE, etc.)
 
 Documentation pages were made using `Sphinx <http://sphinx-doc.org/>`__.
+
+--------------
+
+Tutorials
+---------
+
+A series of video tutorials were made that describe and detail how to
+use waterapputils using many of the example sample datasets.
+
+The following are the tutorial topics covered:
+
+1. General Overview
+
+2. Command Line Interface
+
+3. Graphical User Interface
+
+Download the waterapputils video tutorials from:
+
+ftp://ftpext.usgs.gov/pub/er/ky/louisville/jglant/waterapputils/waterapputils-video-tutorials.zip
 
 --------------
 
