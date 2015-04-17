@@ -74,6 +74,8 @@ A sample image of processing and analyzing WATER output files the GUI:
 
 [Documentation](#documentation)
 
+[Tutorials](#tutorials)
+
 [Requirements](#requirements)
 
 [Disclaimer and Notice](#disclaimer-and-notice)
@@ -569,6 +571,24 @@ which is located on the [USGS Kentucky Water Science Center's Internal Website](
 For non-USGS users, the documentation pages can be viewed by navigating to the `docs/_build/html` directory and opening the `index.html` file in a web browser (Chrome, Firefox, IE, etc.)
 
 Documentation pages were made using [Sphinx].  
+
+***
+
+## Tutorials
+
+A series of video tutorials were made that describe and detail how to use waterapputils using many of the example sample datasets.
+
+The following are the tutorial topics covered:
+
+1. General Overview
+
+2. Command Line Interface
+
+3. Graphical User Interface
+
+Download the waterapputils video tutorials from:
+
+ftp://ftpext.usgs.gov/pub/er/ky/louisville/jglant/waterapputils/waterapputils-video-tutorials.zip
    
 ***
 
