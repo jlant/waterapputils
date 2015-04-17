@@ -587,6 +587,8 @@ The following are the tutorial topics covered:
 3. Graphical User Interface
 
 <a href="ftp://ftpint.usgs.gov/pub/er/ky/louisville/jglant/waterapputils/waterapputils-video-tutorials.zip">Download the waterapputils video tutorials</a>
+
+[Download the waterapputils video tutorials](ftp://ftpint.usgs.gov/pub/er/ky/louisville/jglant/waterapputils/waterapputils-video-tutorials.zip)
    
 ***
 
