@@ -588,7 +588,7 @@ The following are the tutorial topics covered:
 
 Download the waterapputils video tutorials from:
 
-ftp://ftpint.usgs.gov/pub/er/ky/louisville/jglant/waterapputils/waterapputils-video-tutorials.zip
+ftp://ftpext.usgs.gov/pub/er/ky/louisville/jglant/waterapputils/waterapputils-video-tutorials.zip
    
 ***
 
