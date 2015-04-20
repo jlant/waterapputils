@@ -594,11 +594,30 @@ ftp://ftpext.usgs.gov/pub/er/ky/louisville/jglant/waterapputils/waterapputils-vi
 
 ## Requirements
 
-	python == 2.7.6
-	numpy == 1.8.0
-	matplotlib == 1.3.1
-	nose == 1.3.0
-    basemap == 1.0.2
+The following are a list of dependencies:
+
+* [Python](https://www.python.org/) == 2.7.*
+
+* [NumPy](http://www.numpy.org/) >= 1.8.0
+
+* [matplotlib](http://matplotlib.org/) >= 1.3.1
+
+* [nose](https://nose.readthedocs.org/en/latest/) >= 1.3.0
+
+* [Basemap](http://matplotlib.org/basemap/) >= 1.0.2
+
+* [GDAL](https://pypi.python.org/pypi/GDAL/) >= 1.11.0
+
+* [PyQt4](http://www.riverbankcomputing.com/software/pyqt/download) >= 4.9.6
+
+Instead of installing the dependencies independently, it may be more convenient to install one of the following scientific
+Python distributions which will come bundled with most, if not all, of the dependencies:
+
+* [pythonxy](https://code.google.com/p/pythonxy/)
+
+* [Anaconda](https://store.continuum.io/cshop/anaconda/)
+
+* [Enthought](https://www.enthought.com/)
 
 *** 
 
