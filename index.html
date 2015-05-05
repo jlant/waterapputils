@@ -30,7 +30,7 @@
 <a id="description" class="anchor" href="#description" aria-hidden="true"><span class="octicon octicon-link"></span></a>Description</h2>
 
 <p><strong>waterapputils</strong> is a tool used for analyzing, processing, and updating model simulations from the <a href="http://ky.water.usgs.gov/">U.S. Geological Survey 
-Indiana and Kentucky Water Science Centers (INKY)</a> WATER application. <strong>waterapputils</strong> is written in <a href="https://www%0A.python.org/">Python</a>, and adds new functionality, outside the WATER application, by allowing users to apply various future climate 
+Indiana and Kentucky Water Science Centers (INKY)</a> WATER application. <strong>waterapputils</strong> is written in <a href="https://www.python.org/">Python</a>, and adds new functionality, outside the WATER application, by allowing users to apply various future climate 
 projections using a change-factor (delta) approach with data from the Coupled Model Intercomparison Project (<a href="http://cmip-pcmdi.llnl.gov/cmip5/">CIMP5</a>), and 
 aggregated water use data to model simulations.  <strong>waterapputils</strong> has a <a href="#command-line-interface">Command Line Interface</a> and a 
 <a href="#graphical-user-interface">Graphical User Interface</a> along with bash scripts, <a href="#run-sample-datasets-shell-script">Run Sample Datasets Shell Script</a> 
@@ -52,9 +52,8 @@ Kentucky Water Science Centers (INKY)</a>. References for the WATER application 
 <ul>
 <li><p>Processes WATER simulation output files (<code>txt</code> format).</p></li>
 <li><p>Processes WATER simulation database files that store information about a particular model simulation (<code>xml</code> format).</p></li>
-<li><p>Applies various statistically downscaled <strong>global climate models</strong> ([GCMs]) to model simulations for a particular watershed 
-basin or set of watershed basins based on the spatial intersection of the watershed(s) of interest with the global climate 
-change scenario coverage of interest.</p></li>
+<li><p>Applies various statistically downscaled <strong>General Circulation Models</strong> ([GCMs]) to model simulations for a particular watershed 
+basin or set of watershed basins based on the spatial intersection of the watershed(s) of interest with the general circulation model scenario coverage of interest.</p></li>
 <li><p>Applies <strong>water use</strong> data to model simulations for a particular for a particular watershed basin or set of watershed basins 
 based on the spatial intersection of the watershed(s) of interest with the water use coverage.</p></li>
 <li><p>Generates plots of all parameters found in WATER output files (<code>txt</code> format) with simple statistics.</p></li>
@@ -173,12 +172,12 @@ based on the spatial intersection of the watershed(s) of interest with the water
 </tr>
 <tr>
 <td><code>-applygcmdeltas</code></td>
-<td>apply global climate change deltas to WATER simulation database file(s); <code>WATERSimulation.xml</code>; details specified in <code>user_settings.py</code>
+<td>apply general circulation model deltas to WATER simulation database file(s); <code>WATERSimulation.xml</code>; details specified in <code>user_settings.py</code>
 </td>
 </tr>
 <tr>
 <td><code>-applysubgcmdeltas</code></td>
-<td>apply updated global climate change deltas from <code>sub_gcm_delta_info_file_name</code> variable in user_settings.py to WATER simulation database file(s); <code>WATERSimulation.xml</code>; details specified in <code>user_settings.py</code>
+<td>apply updated general circulation model deltas from <code>sub_gcm_delta_info_file_name</code> variable in user_settings.py to WATER simulation database file(s); <code>WATERSimulation.xml</code>; details specified in <code>user_settings.py</code>
 </td>
 </tr>
 <tr>
@@ -317,7 +316,7 @@ $ run_sample_datasets.sh [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid
 </tr>
 <tr>
 <td><code>-gcmdelta</code></td>
-<td>run and apply <a href="data/gcmdelta-datafiles">global climate model data</a> to sample WATER simulations; <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">single and batch simulations</a>
+<td>run and apply <a href="data/gcmdelta-datafiles">general circulation model data</a> to sample WATER simulations; <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">single and batch simulations</a>
 </td>
 </tr>
 <tr>
@@ -380,7 +379,7 @@ $ run_sample_datasets.sh [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid
 
 <p>The shell script <a href="https://github.com/jlant-usgs/waterapputils/blob/master/run_simulations.sh">run_simulations.sh</a> is a shell script that can be used to automate
 the processing of many WATER simulations. <a href="https://github.com/jlant-usgs/waterapputils/blob/master/run_simulations.sh">run_simulations.sh</a> can be used to apply 
-water use and global climate change scenarios to multiple WATER simulations that are contained in the same directory.
+water use and general circulation model scenarios to multiple WATER simulations that are contained in the same directory.
 A user will provide a valid option along with the <strong>path to the directory containing all the WATER simulations</strong>
 that need to be processed.  This directory should contain all the same type of WATER simulations <em>single</em> or <em>batch</em>, but not both.
 A user should make sure that the proper settings for processing a <em>single</em> or <em>batch</em> simulation are set in the <em>user_settings.py</em> file.
@@ -419,7 +418,7 @@ $ run_simulations.sh [[[-applywateruse] [-applysubwateruse] [-applygcmdelta] [-a
 </tr>
 <tr>
 <td><code>-applygcmdelta</code></td>
-<td>run and apply <a href="data/gcmdelta-datafiles">global climate model data</a> to sample WATER simulations; <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">single and batch simulations</a>
+<td>run and apply <a href="data/gcmdelta-datafiles">general circulation model data</a> to sample WATER simulations; <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">single and batch simulations</a>
 </td>
 </tr>
 <tr>
@@ -451,7 +450,7 @@ using the command below or by simply double clicking on the <code>waterapputils_
 <li>Process WATER output text file</li>
 <li>Compare 2 WATER output text files</li>
 <li>Apply water use to WATER simulations</li>
-<li>Apply global climate model (GCM) deltas to WATER simulations </li>
+<li>Apply general circulation model (GCM) deltas to WATER simulations </li>
 </ol>
 
 <h3>
@@ -610,9 +609,9 @@ the WATER basin shapefile (Watersheds.shp or basinMask.shp) will be plotted in a
 </blockquote>
 
 <h3>
-<a id="apply-global-climate-model-gcm-deltas-to-water-simulations" class="anchor" href="#apply-global-climate-model-gcm-deltas-to-water-simulations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Apply global climate model (GCM) deltas to WATER simulations</h3>
+<a id="apply-general-circulation-model-gcm-deltas-to-water-simulations" class="anchor" href="#apply-general-circulation-model-gcm-deltas-to-water-simulations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Apply general circulation model (GCM) deltas to WATER simulations</h3>
 
-<p>Allows a user to apply global climate model (GCM) deltas to WATER simulation database files (WATERSimulation.xml).  </p>
+<p>Allows a user to apply general circulation model (GCM) deltas to WATER simulation database files (WATERSimulation.xml).  </p>
 
 <h4>
 <a id="number-of-simulations---a-user-selects-the-number-of-water-simulations-1" class="anchor" href="#number-of-simulations---a-user-selects-the-number-of-water-simulations-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Number of simulation(s) - a user selects the number of WATER simulations.</h4>
@@ -680,7 +679,7 @@ directory containing all the WATER simulations to process.</strong></p>
 </code></pre>
 
 <h4>
-<a id="simulation-information---a-user-selects-the-water-simulation-of-interest-to-apply-global-climate-model-deltas-too" class="anchor" href="#simulation-information---a-user-selects-the-water-simulation-of-interest-to-apply-global-climate-model-deltas-too" aria-hidden="true"><span class="octicon octicon-link"></span></a>Simulation Information - a user selects the WATER simulation of interest to apply global climate model deltas too.</h4>
+<a id="simulation-information---a-user-selects-the-water-simulation-of-interest-to-apply-general-circulation-model-deltas-too" class="anchor" href="#simulation-information---a-user-selects-the-water-simulation-of-interest-to-apply-general-circulation-model-deltas-too" aria-hidden="true"><span class="octicon octicon-link"></span></a>Simulation Information - a user selects the WATER simulation of interest to apply general circulation model deltas too.</h4>
 
 <p>If a valid WATER simulation is selected, the rest of the inputs in the <em>Simulation Information</em> section will auto-populate.  A user can select 
 the proper <em>Basin shapefile id field</em> that was used when running the WATER application.  The <em>Basin shapefile id field</em> is was used by the WATER 
@@ -693,9 +692,9 @@ shapefile of the basin called <em>basinMask.shp</em>.  A WATER simulation must h
 </blockquote>
 
 <h4>
-<a id="global-climate-model-delta-information---a-user-selects-3-global-climate-model-delta-files-and-associated-information" class="anchor" href="#global-climate-model-delta-information---a-user-selects-3-global-climate-model-delta-files-and-associated-information" aria-hidden="true"><span class="octicon octicon-link"></span></a>Global Climate Model Delta Information - a user selects 3 global climate model delta files and associated information.</h4>
+<a id="general-circulation-model-delta-information---a-user-selects-3-general-circulation-model-delta-files-and-associated-information" class="anchor" href="#general-circulation-model-delta-information---a-user-selects-3-general-circulation-model-delta-files-and-associated-information" aria-hidden="true"><span class="octicon octicon-link"></span></a>General Circulation Model Delta Information - a user selects 3 general circulation model delta files and associated information.</h4>
 
-<p>A user selects 3 global climate model delta files:</p>
+<p>A user selects 3 general circulation model delta files:</p>
 
 <ol>
 <li>PET.txt</li>
@@ -703,41 +702,41 @@ shapefile of the basin called <em>basinMask.shp</em>.  A WATER simulation must h
 <li>Tmax.txt</li>
 </ol>
 
-<p>A user selects the global climate model shapefile which is a shapefile of rectangular tiles for a particular global climate model that covers the entire modeling domain.  </p>
+<p>A user selects the general circulation model shapefile which is a shapefile of rectangular tiles for a particular general circulation model that covers the entire modeling domain.  </p>
 
 <blockquote>
-<p><strong>NOTE: All WATER application shapefiles are in the Albers NAD83 projection. Please ensure that the global climate model shapefile shapefile is in the same projection as all the other WATER 
+<p><strong>NOTE: All WATER application shapefiles are in the Albers NAD83 projection. Please ensure that the general circulation model shapefile shapefile is in the same projection as all the other WATER 
 application shapefiles.</strong> </p>
 </blockquote>
 
-<p>A user chooses the id field from the global climate model shapefile that corresponds to the id field used in the 3 global climate model delta files.  </p>
+<p>A user chooses the id field from the general circulation model shapefile that corresponds to the id field used in the 3 general circulation model delta files.  </p>
 
 <blockquote>
 <p><strong>NOTE: The sample 
-global climate model delta files and global climate model shapefile have <em>Tile</em> as the id field.</strong></p>
+general circulation model delta files and general circulation model shapefile have <em>Tile</em> as the id field.</strong></p>
 </blockquote>
 
-<p>If the basins in the WATER use simulation do not overlap/intersect with the global climate model shapefile tiles, then the user can choose to apply 
-substitute global climate model deltas.  </p>
+<p>If the basins in the WATER use simulation do not overlap/intersect with the general circulation model shapefile tiles, then the user can choose to apply 
+substitute general circulation model deltas.  </p>
 
 <blockquote>
-<p><strong>NOTE: In order to apply substitute global climate model deltas, the user must first apply global climate model deltas without this option.  The 
-waterapputils program will warn and log any basins in the WATER simulation that do not overlap/intersect with the global climate model deltas shapefile tiles.<br>
+<p><strong>NOTE: In order to apply substitute general circulation model deltas, the user must first apply general circulation model deltas without this option.  The 
+waterapputils program will warn and log any basins in the WATER simulation that do not overlap/intersect with the general circulation model deltas shapefile tiles.<br>
 The waterapputils program will create a file called <em>gcm_delta_non_intersecting_tiles.txt</em> in a directory called <em>waterapputils-info</em> with a 
-list of the basins that do not overlap/intersect.  A user must manually enter the proper global climate model deltas shapefile id (i.e. Tile) values to be 
-used when applying the substitute global climate model deltas. In order to apply substitute global climate model deltas, the file called <em>gcm_delta_non_intersecting_tiles.txt</em> in 
+list of the basins that do not overlap/intersect.  A user must manually enter the proper general circulation model deltas shapefile id (i.e. Tile) values to be 
+used when applying the substitute general circulation model deltas. In order to apply substitute general circulation model deltas, the file called <em>gcm_delta_non_intersecting_tiles.txt</em> in 
 a directory called <em>waterapputils-info</em> must exist.</strong></p>
 </blockquote>
 
 <p>A user clicks the <em>Check Inputs</em> button which checks and makes sure that all the fields have been entered.  Upon all the fields being entered and 
 the <em>ChecK Inputs</em> button being pressed, the <em>Apply Water Use</em>, <em>Plot Overview Map</em>, and <em>Plot Zoomed Map</em> buttons are enabled.  If a user clicks
-the <em>Apply Global Climate Model Deltas</em>, then waterapputils applies global climate model deltas to the WATER simulation given the data provided by the user.  The <strong>waterapputils_gui</strong>
-will apply global climate model deltas in a <em>separate thread</em> meaning that the process will be run in the background allowing the user to continue using other parts of 
-the <strong>waterapputils_gui</strong> without interferring with the global climate model deltas processing. </p>
+the <em>Apply general circulation model Deltas</em>, then waterapputils applies general circulation model deltas to the WATER simulation given the data provided by the user.  The <strong>waterapputils_gui</strong>
+will apply general circulation model deltas in a <em>separate thread</em> meaning that the process will be run in the background allowing the user to continue using other parts of 
+the <strong>waterapputils_gui</strong> without interferring with the general circulation model deltas processing. </p>
 
 <blockquote>
-<p><strong>NOTE: When processing global climate model deltas, a warning about a <em>QPixmap</em> may appear. This is not an error, but only a warning that can safely be ignored here.  The warning stems from 
-the use of using the same plotting code used in the command line version of waterapputils when applying global climate model deltas.</strong> If a user clicks the <em>Plot Overview Map</em>, a map of the 
+<p><strong>NOTE: When processing general circulation model deltas, a warning about a <em>QPixmap</em> may appear. This is not an error, but only a warning that can safely be ignored here.  The warning stems from 
+the use of using the same plotting code used in the command line version of waterapputils when applying general circulation model deltas.</strong> If a user clicks the <em>Plot Overview Map</em>, a map of the 
 WATER basin shapefile (Watersheds.shp or basinMask.shp) will be plotted in a zoomed out view or the entire modeling domain.  If a user clicks the <em>Plot Zoomed Map</em>, a map of 
 the WATER basin shapefile (Watersheds.shp or basinMask.shp) will be plotted in a zoomed in view with additional shapefiles (i.e. usgs gages).  </p>
 </blockquote>
@@ -771,7 +770,7 @@ OK</pre></div>
 
 <pre><code>bin/                                    # executables/scripts
 data/                                   # sample data files to use with software and associated information
-    deltas-gcm/                         # statistically downscaled global climate model data
+    deltas-gcm/                         # statistically downscaled general circulation model data
     sample-water-simulations            # sample WATER application simulations and datasets
         sample-batch-simulation         # sample WATER application batch run simulation
         sample-datasets                 # sample WATER application simulation datasets
@@ -791,12 +790,12 @@ tests/                                  # tests
     waterxml_tests.py                   # tests for waterxml module
 waterapputils/                          # directory containing code modules
     waterapputils.py                    # main controller; calls respective module
-    user_settings.py                    # user settings to control and specify data inputs for water use and global climate model processing along with control of naming outputs
+    user_settings.py                    # user settings to control and specify data inputs for water use and general circulation model processing along with control of naming outputs
     gui/                                    # gui specific files
     modules/
-        deltas.py                           # handles processing of global climate model data
-        deltas_viewer.py                    # handles view (plotting) of global climate model data
-        gcm_delta_processing.py             # handles the global climate model delta factors processing using settings from the user_settings.py file
+        deltas.py                           # handles processing of general circulation model data
+        deltas_viewer.py                    # handles view (plotting) of general circulation model data
+        gcm_delta_processing.py             # handles the general circulation model delta factors processing using settings from the user_settings.py file
         helpers.py                          # helper functions
         spatialdata_viewer.py               # handles view (mapping) of spatial data; uses basemap library
         spatialvectors.py                   # handles spatial data
@@ -823,7 +822,7 @@ run_simulations.sh                      # bash script used to apply water use an
 <h2>
 <a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation</h2>
 
-<p>Documentation of the code, guides detailing the processes involved in applying water use and the global climate model deltas, additional information about <em>waterapputils</em>, 
+<p>Documentation of the code, guides detailing the processes involved in applying water use and the general circulation model deltas, additional information about <em>waterapputils</em>, 
 and a gallery of output images can be found <a href="http://ky.water.usgs.gov/usgs/projects/jlant_program_code/waterapputils/html/index.html">here</a> which is 
 located on the <a href="http://ky.water.usgs.gov/usgs/projects/science_mgt.html">USGS Kentucky Water Science 
 Center's Internal Website</a>.</p>
@@ -914,9 +913,9 @@ Office: 502-493-1949 Fax: 502-493-1909<br>
 
 <p><img src="images/gui-wateruse.png" alt="Apply water use" title="Apply water use"></p>
 
-<p>Apply global climate model deltas</p>
+<p>Apply general circulation model deltas</p>
 
-<p><img src="images/gui-gcmdelta.png" alt="Apply global climate model deltas" title="Apply global climate model deltas"></p>
+<p><img src="images/gui-gcmdelta.png" alt="Apply general circulation model deltas" title="Apply general circulation model deltas"></p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/jlant-usgs/waterapputils">Waterapputils</a> is maintained by <a href="https://github.com/jlant-usgs">jlant-usgs</a>.</span>
