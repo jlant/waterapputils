@@ -58,9 +58,9 @@ Some sample highlights of **waterapputils** include:
    about a particular model simulation (``xml`` format).
 
 -  Applies various statistically downscaled **General Circulation
-   Models** ([GCMs]) to model simulations for a particular watershed
-   basin or set of watershed basins based on the spatial intersection of
-   the watershed(s) of interest with the general circulation scenario
+   Models** (GCM)s to model simulations for a particular watershed basin
+   or set of watershed basins based on the spatial intersection of the
+   watershed(s) of interest with the general circulation scenario
    coverage of interest.
 
 -  Applies **water use** data to model simulations for a particular for
@@ -217,8 +217,8 @@ Example - Running water use by supplying a path to a simulations directory inste
 
 --------------
 
-Editing settings in `user\_settings.py <waterapputils/user_settings.py>`__
---------------------------------------------------------------------------
+Editing settings in `user\_settings.py <https://github.com/jlant-usgs/waterapputils/blob/master/waterapputils/user_settings.py>`__
+----------------------------------------------------------------------------------------------------------------------------------
 
 All the setting for running **waterapputils** are contained in
 `user\_settings.py <https://github.com/jlant-usgs/waterapputils/blob/master/waterapputils/user_settings.py>`__
@@ -227,8 +227,11 @@ variables. Most variables are *path* variables to required data files
 and basin shapefile attribute variables. A user will typically only edit
 the section called *WATER simulation information*. This section contains
 information about a WATER simulation. A WATER simulation can be either a
-*single* simulation or a *batch* simulation. Each simulation type has a
-few different outputs along with a different directory structure.
+*single* or a *batch* simulation. Each simulation type has a few
+different outputs along with a different directory structure.
+
+    | A *single* simulation corresponds to basins that were *delineated* within the WATER application using a pour point.
+    | A *batch* simulation corresponds to basins that were *pre-delineated* and were used within the WATER application.
 
 --------------
 
@@ -299,8 +302,8 @@ Example - apply water use to `single and batch simulations <https://github.com/j
 Process Many Simulations Shell Script
 -------------------------------------
 
-Applying water use and gcm deltas to many WATER simulations at one time using `run\_simulations.sh <https://github.com/jlant-usgs/waterapputils/blob/master/run_simulations.sh>`__
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Applying water use and gcm deltas to many WATER simulations using `run\_simulations.sh <https://github.com/jlant-usgs/waterapputils/blob/master/run_simulations.sh>`__
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 The shell script
 `run\_simulations.sh <https://github.com/jlant-usgs/waterapputils/blob/master/run_simulations.sh>`__
@@ -426,10 +429,11 @@ Number of simulation(s) - a user selects the number of WATER simulations.
 Type of simulation(s) - a user selects the type of WATER simulation.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
--  *Batch* - more than one basin. For an example, please see the `Sample
-   Batch
+-  *Batch* - more than one pre-delineated basin. For an example, please
+   see the `Sample Batch
    Simulation <https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-batch-simulation>`__.
--  *Single* - one basin. For an example, please see the `Sample Single
+-  *Single* - one delineated basin. For an example, please see the
+   `Sample Single
    Simulation <https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-single-simulation>`__.
 
 The following are the directory structures created by WATER for batch
@@ -755,7 +759,7 @@ Repository layout
         sample-water-simulations            # sample WATER application simulations and datasets
             sample-batch-simulation         # sample WATER application batch run simulation
             sample-datasets                 # sample WATER application simulation datasets
-            sample-single-simulation        # sample WATER applicaiton single run simulation
+            sample-single-simulation        # sample WATER application single run simulation
         spatial-datafiles/                  # spatial data; shapefile format
         watertxt-datafiles/                 # sample WATER.txt files
         wateruse-batch-run/                 # sample batch run output from WATER
