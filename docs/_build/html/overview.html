@@ -104,9 +104,9 @@ Physiographic Terranes. Soil Science Society of America Journal
 <li>Processes WATER simulation database files that store information
 about a particular model simulation (<tt class="docutils literal"><span class="pre">xml</span></tt> format).</li>
 <li>Applies various statistically downscaled <strong>General Circulation
-Models</strong> ([GCMs]) to model simulations for a particular watershed
-basin or set of watershed basins based on the spatial intersection of
-the watershed(s) of interest with the general circulation scenario
+Models</strong> (GCM)s to model simulations for a particular watershed basin
+or set of watershed basins based on the spatial intersection of the
+watershed(s) of interest with the general circulation scenario
 coverage of interest.</li>
 <li>Applies <strong>water use</strong> data to model simulations for a particular for
 a particular watershed basin or set of watershed basins based on the
@@ -268,7 +268,7 @@ Script</a></p>
 </div>
 <hr class="docutils" />
 <div class="section" id="editing-settings-in-user-settings-py">
-<h2>Editing settings in <a class="reference external" href="waterapputils/user_settings.py">user_settings.py</a><a class="headerlink" href="#editing-settings-in-user-settings-py" title="Permalink to this headline">¶</a></h2>
+<h2>Editing settings in <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/blob/master/waterapputils/user_settings.py">user_settings.py</a><a class="headerlink" href="#editing-settings-in-user-settings-py" title="Permalink to this headline">¶</a></h2>
 <p>All the setting for running <strong>waterapputils</strong> are contained in
 <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/blob/master/waterapputils/user_settings.py">user_settings.py</a>
 file. A user can edit the settings by editing the Python string
@@ -276,8 +276,14 @@ variables. Most variables are <em>path</em> variables to required data files
 and basin shapefile attribute variables. A user will typically only edit
 the section called <em>WATER simulation information</em>. This section contains
 information about a WATER simulation. A WATER simulation can be either a
-<em>single</em> simulation or a <em>batch</em> simulation. Each simulation type has a
-few different outputs along with a different directory structure.</p>
+<em>single</em> or a <em>batch</em> simulation. Each simulation type has a few
+different outputs along with a different directory structure.</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">A <em>single</em> simulation corresponds to basins that were <em>delineated</em> within the WATER application using a pour point.</div>
+<div class="line">A <em>batch</em> simulation corresponds to basins that were <em>pre-delineated</em> and were used within the WATER application.</div>
+</div>
+</div></blockquote>
 </div>
 <hr class="docutils" />
 <div class="section" id="run-sample-datasets-shell-script">
@@ -368,8 +374,8 @@ $ run_sample_datasets.sh [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid
 <div class="section" id="process-many-simulations-shell-script">
 <h2>Process Many Simulations Shell Script<a class="headerlink" href="#process-many-simulations-shell-script" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="applying-water-use-and-gcm-deltas-to-many-water-simulations-at-one-time-using-run-simulations-sh">
-<h2>Applying water use and gcm deltas to many WATER simulations at one time using <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/blob/master/run_simulations.sh">run_simulations.sh</a><a class="headerlink" href="#applying-water-use-and-gcm-deltas-to-many-water-simulations-at-one-time-using-run-simulations-sh" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="applying-water-use-and-gcm-deltas-to-many-water-simulations-using-run-simulations-sh">
+<h2>Applying water use and gcm deltas to many WATER simulations using <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/blob/master/run_simulations.sh">run_simulations.sh</a><a class="headerlink" href="#applying-water-use-and-gcm-deltas-to-many-water-simulations-using-run-simulations-sh" title="Permalink to this headline">¶</a></h2>
 <p>The shell script
 <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/blob/master/run_simulations.sh">run_simulations.sh</a>
 is a shell script that can be used to automate the processing of many
@@ -502,10 +508,11 @@ all the WATER simulations to process.</strong></p>
 <div class="section" id="type-of-simulation-s-a-user-selects-the-type-of-water-simulation">
 <h4>Type of simulation(s) - a user selects the type of WATER simulation.<a class="headerlink" href="#type-of-simulation-s-a-user-selects-the-type-of-water-simulation" title="Permalink to this headline">¶</a></h4>
 <ul class="simple">
-<li><em>Batch</em> - more than one basin. For an example, please see the <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-batch-simulation">Sample
-Batch
+<li><em>Batch</em> - more than one pre-delineated basin. For an example, please
+see the <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-batch-simulation">Sample Batch
 Simulation</a>.</li>
-<li><em>Single</em> - one basin. For an example, please see the <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-single-simulation">Sample Single
+<li><em>Single</em> - one delineated basin. For an example, please see the
+<a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-single-simulation">Sample Single
 Simulation</a>.</li>
 </ul>
 <p>The following are the directory structures created by WATER for batch
@@ -811,7 +818,7 @@ data/                                   # sample data files to use with software
     sample-water-simulations            # sample WATER application simulations and datasets
         sample-batch-simulation         # sample WATER application batch run simulation
         sample-datasets                 # sample WATER application simulation datasets
-        sample-single-simulation        # sample WATER applicaiton single run simulation
+        sample-single-simulation        # sample WATER application single run simulation
     spatial-datafiles/                  # spatial data; shapefile format
     watertxt-datafiles/                 # sample WATER.txt files
     wateruse-batch-run/                 # sample batch run output from WATER
