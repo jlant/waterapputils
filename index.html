@@ -52,7 +52,7 @@ Kentucky Water Science Centers (INKY)</a>. References for the WATER application 
 <ul>
 <li><p>Processes WATER simulation output files (<code>txt</code> format).</p></li>
 <li><p>Processes WATER simulation database files that store information about a particular model simulation (<code>xml</code> format).</p></li>
-<li><p>Applies various statistically downscaled <strong>General Circulation Models</strong> ([GCMs]) to model simulations for a particular watershed 
+<li><p>Applies various statistically downscaled <strong>General Circulation Models</strong> (GCM)s) to model simulations for a particular watershed 
 basin or set of watershed basins based on the spatial intersection of the watershed(s) of interest with the general circulation model scenario coverage of interest.</p></li>
 <li><p>Applies <strong>water use</strong> data to model simulations for a particular for a particular watershed basin or set of watershed basins 
 based on the spatial intersection of the watershed(s) of interest with the water use coverage.</p></li>
@@ -261,6 +261,10 @@ by editing the Python string variables.  Most variables are <em>path</em> variab
 A user will typically only edit the section called <em>WATER simulation information</em>.  This section contains information about a WATER simulation. 
 A WATER simulation can be either a <em>single</em> simulation or a <em>batch</em> simulation.  Each simulation type has a few different outputs along with a different directory structure.</p>
 
+<blockquote>
+<p>A <em>single</em> simulation corresponds to basins that were <em>delineated</em> within the WATER application using a pour point.<br>A <em>batch</em> simulation corresponds to basins that were <em>pre-delineated</em> and were used within the WATER application.  </p>
+</blockquote>
+
 <hr>
 
 <h2>
@@ -374,7 +378,7 @@ $ run_sample_datasets.sh [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid
 <a id="process-many-simulations-shell-script" class="anchor" href="#process-many-simulations-shell-script" aria-hidden="true"><span class="octicon octicon-link"></span></a>Process Many Simulations Shell Script</h2>
 
 <h2>
-<a id="applying-water-use-and-gcm-deltas-to-many-water-simulations-at-one-time-using-run_simulationssh" class="anchor" href="#applying-water-use-and-gcm-deltas-to-many-water-simulations-at-one-time-using-run_simulationssh" aria-hidden="true"><span class="octicon octicon-link"></span></a>Applying water use and gcm deltas to many WATER simulations at one time using <a href="https://github.com/jlant-usgs/waterapputils/blob/master/run_simulations.sh">run_simulations.sh</a>
+<a id="applying-water-use-and-gcm-deltas-to-many-water-simulations-at-one-time-using-run_simulationssh" class="anchor" href="#applying-water-use-and-gcm-deltas-to-many-water-simulations-at-one-time-using-run_simulationssh" aria-hidden="true"><span class="octicon octicon-link"></span></a>Applying water use and gcm deltas to many WATER simulations using <a href="https://github.com/jlant-usgs/waterapputils/blob/master/run_simulations.sh">run_simulations.sh</a>
 </h2>
 
 <p>The shell script <a href="https://github.com/jlant-usgs/waterapputils/blob/master/run_simulations.sh">run_simulations.sh</a> is a shell script that can be used to automate
@@ -497,9 +501,9 @@ directory containing all the WATER simulations to process.</strong></p>
 
 <ul>
 <li>
-<em>Batch</em> - more than one basin.  For an example, please see the <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-batch-simulations-sample-batch-simulation">Sample Batch Simulation</a>.</li>
+<em>Batch</em> - more than one pre-delineated basin.  For an example, please see the <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-batch-simulations-sample-batch-simulation">Sample Batch Simulation</a>.</li>
 <li>
-<em>Single</em> - one basin.  For an example, please see the <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-batch-simulations-sample-single-simulation">Sample Single Simulation</a>.</li>
+<em>Single</em> - one delineated basin.  For an example, please see the <a href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-batch-simulations-sample-single-simulation">Sample Single Simulation</a>.</li>
 </ul>
 
 <p>The following are the directory structures created by WATER for batch and single simulations:</p>
