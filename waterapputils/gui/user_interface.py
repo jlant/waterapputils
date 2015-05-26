@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'user_interface.ui'
 #
-# Created: Tue Apr 14 11:26:31 2015
+# Created: Tue May 26 11:31:03 2015
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -878,8 +878,8 @@ class Ui_MainWindow(object):
         self.tab_gcm_line_edit_open_sim.setPlaceholderText(_translate("MainWindow", "WATER simulation directory", None))
         self.tab_gcm_combo_box_shp_id_field.setToolTip(_translate("MainWindow", "Basin shapefile fields.", None))
         self.tab_gcm_combo_box_shp_area_field.setToolTip(_translate("MainWindow", "Basin shapefile fields.", None))
-        self.tab_gcm_group_box_gcm_info.setTitle(_translate("MainWindow", "Global Climate Model Information", None))
-        self.label_10.setText(_translate("MainWindow", "Global climate model shapefile id field", None))
+        self.tab_gcm_group_box_gcm_info.setTitle(_translate("MainWindow", "General Circulation Model Information", None))
+        self.label_10.setText(_translate("MainWindow", "General circulation model shapefile id field", None))
         self.tab_gcm_line_edit_gcm_shp.setPlaceholderText(_translate("MainWindow", "Global climate model shapefile", None))
         self.tab_gcm_push_button_gcm_shp.setToolTip(_translate("MainWindow", "<html><head/><body><p>Open a global climate model shapefile. </p></body></html>", None))
         self.tab_gcm_push_button_gcm_shp.setText(_translate("MainWindow", "Open file", None))
@@ -887,16 +887,16 @@ class Ui_MainWindow(object):
         self.tab_gcm_push_button_gcm_files.setText(_translate("MainWindow", "Open files", None))
         self.tab_gcm_combo_box_gcm_shp_id_field.setToolTip(_translate("MainWindow", "Water use shapefile fields.", None))
         self.tab_gcm_checkbox_subgcm.setToolTip(_translate("MainWindow", "Check if applying substitute global climate model deltas.", None))
-        self.tab_gcm_checkbox_subgcm.setText(_translate("MainWindow", "Use substitute global climate model deltas", None))
+        self.tab_gcm_checkbox_subgcm.setText(_translate("MainWindow", "Use substitute general circulation model deltas", None))
         self.tab_gcm_push_button_check_inputs.setToolTip(_translate("MainWindow", "<html><head/><body><p>Makes sure all inputs were entered. Enables applying global climate model deltas button and map plotting buttons.</p></body></html>", None))
         self.tab_gcm_push_button_check_inputs.setText(_translate("MainWindow", "Check Inputs", None))
         self.tab_gcm_push_button_apply_gcm.setToolTip(_translate("MainWindow", "<html><head/><body><p>Applies water use to provided inputs.  </p><p>Process is run in a separate thread allowing interaction with other parts of GUI while processing occurs.</p></body></html>", None))
-        self.tab_gcm_push_button_apply_gcm.setText(_translate("MainWindow", "Apply Global Climate Model Deltas", None))
+        self.tab_gcm_push_button_apply_gcm.setText(_translate("MainWindow", "Apply General Circulation Model Deltas", None))
         self.tab_gcm_push_button_plot_overview_map.setToolTip(_translate("MainWindow", "<html><head/><body><p>Plot an overview map of the basin(s).</p><p>Plotting is done in a separate thread allowing interaction with other parts of GUI while plotting occurs.</p></body></html>", None))
         self.tab_gcm_push_button_plot_overview_map.setText(_translate("MainWindow", "Plot Overview Map", None))
         self.tab_gcm_push_button_plot_zoomed_map.setToolTip(_translate("MainWindow", "<html><head/><body><p>Plot a zoomed in map of the basin(s).</p><p>Plotting is done in a separate thread allowing interaction with other parts of GUI while plotting occurs.</p></body></html>", None))
         self.tab_gcm_push_button_plot_zoomed_map.setText(_translate("MainWindow", "Plot Zoomed Map", None))
-        self.main_tab_widget.setTabText(self.main_tab_widget.indexOf(self.tab_applygcm), _translate("MainWindow", "Apply global climate model (GCM) deltas to WATER simulations", None))
+        self.main_tab_widget.setTabText(self.main_tab_widget.indexOf(self.tab_applygcm), _translate("MainWindow", "Apply general circulation model (GCM) deltas to WATER simulations", None))
         self.menuExit.setTitle(_translate("MainWindow", "Exit", None))
         self.menuHelp.setTitle(_translate("MainWindow", "Help", None))
         self.actionExit.setText(_translate("MainWindow", "Exit", None))
