@@ -12,10 +12,10 @@ Description
 model simulations from the `U.S. Geological Survey Indiana and Kentucky
 Water Science Centers (INKY) <http://ky.water.usgs.gov/>`__ WATER
 application. **waterapputils** is written in
-`Python <https://www%20.python.org/>`__, and adds new functionality,
-outside the WATER application, by allowing users to apply various future
-climate projections using a change-factor (delta) approach with data
-from the Coupled Model Intercomparison Project
+`Python <https://www.python.org/>`__, and adds new functionality,
+outside the WATER application, by allowing users to apply various
+general circulation model projections using a change-factor (delta)
+approach with data from the Coupled Model Intercomparison Project
 (`CIMP5 <http://cmip-pcmdi.llnl.gov/cmip5/>`__), and aggregated water
 use data to model simulations. **waterapputils** has a `Command Line
 Interface <#command-line-interface>`__ and a `Graphical User
@@ -57,10 +57,10 @@ Some sample highlights of **waterapputils** include:
 -  Processes WATER simulation database files that store information
    about a particular model simulation (``xml`` format).
 
--  Applies various statistically downscaled **global climate models**
-   ([GCMs]) to model simulations for a particular watershed basin or set
-   of watershed basins based on the spatial intersection of the
-   watershed(s) of interest with the global climate change scenario
+-  Applies various statistically downscaled **General Circulation
+   Models** (GCM)s to model simulations for a particular watershed basin
+   or set of watershed basins based on the spatial intersection of the
+   watershed(s) of interest with the general circulation scenario
    coverage of interest.
 
 -  Applies **water use** data to model simulations for a particular for
@@ -86,7 +86,7 @@ Some sample highlights of **waterapputils** include:
 -  Logs errors and tracebacks.
 
 -  A multi-threaded graphical user interface (GUI) called
-   `waterapputils\_gui <waterapputils/waterapputils_gui.py>`__.
+   `waterapputils\_gui <https://github.com/jlant-usgs/waterapputils/blob/master/waterapputils/waterapputils_gui.py>`__.
 
 A sample image of processing and analyzing WATER output files the GUI:
 
@@ -165,9 +165,9 @@ Command Line Arguments:
 +--------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | ``-waterxmlcmpfd``       | open file dialog window to select 2 WATER simulation database files to compare; ``WATERSimulation.xml``                                                                                                                                                          |
 +--------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-applygcmdeltas``      | apply global climate change deltas to WATER simulation database file(s); ``WATERSimulation.xml``; details specified in ``user_settings.py``                                                                                                                      |
+| ``-applygcmdeltas``      | apply general circulation model deltas to WATER simulation database file(s); ``WATERSimulation.xml``; details specified in ``user_settings.py``                                                                                                                  |
 +--------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-applysubgcmdeltas``   | apply updated global climate change deltas from ``sub_gcm_delta_info_file_name`` variable in user\_settings.py to WATER simulation database file(s); ``WATERSimulation.xml``; details specified in ``user_settings.py``                                          |
+| ``-applysubgcmdeltas``   | apply updated general circulation model deltas from ``sub_gcm_delta_info_file_name`` variable in user\_settings.py to WATER simulation database file(s); ``WATERSimulation.xml``; details specified in ``user_settings.py``                                      |
 +--------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | ``-applywateruse``       | apply water use data to WATER simulation output file(s); ``WATER.txt``; details specified in ``user_settings.py``                                                                                                                                                |
 +--------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -217,31 +217,35 @@ Example - Running water use by supplying a path to a simulations directory inste
 
 --------------
 
-Editing settings in `user\_settings.py <waterapputils/user_settings.py>`__
---------------------------------------------------------------------------
+Editing settings in `user\_settings.py <https://github.com/jlant-usgs/waterapputils/blob/master/waterapputils/user_settings.py>`__
+----------------------------------------------------------------------------------------------------------------------------------
 
 All the setting for running **waterapputils** are contained in
-`user\_settings.py <waterapputils/user_settings.py>`__ file. A user can
-edit the settings by editing the Python string variables. Most variables
-are *path* variables to required data files and basin shapefile
-attribute variables. A user will typically only edit the section called
-*WATER simulation information*. This section contains information about
-a WATER simulation. A WATER simulation can be either a *single*
-simulation or a *batch* simulation. Each simulation type has a few
+`user\_settings.py <https://github.com/jlant-usgs/waterapputils/blob/master/waterapputils/user_settings.py>`__
+file. A user can edit the settings by editing the Python string
+variables. Most variables are *path* variables to required data files
+and basin shapefile attribute variables. A user will typically only edit
+the section called *WATER simulation information*. This section contains
+information about a WATER simulation. A WATER simulation can be either a
+*single* or a *batch* simulation. Each simulation type has a few
 different outputs along with a different directory structure.
+
+    | A *single* simulation corresponds to basins that were *delineated* within the WATER application using a pour point.
+    | A *batch* simulation corresponds to basins that were *pre-delineated* and were used within the WATER application.
 
 --------------
 
 Run Sample Datasets Shell Script
 --------------------------------
 
-Run sample datasets with `run\_sample\_datasets.sh <run_sample_datasets.sh>`__
-------------------------------------------------------------------------------
+Run sample datasets with `run\_sample\_datasets.sh <https://github.com/jlant-usgs/waterapputils/blob/master/run_sample_datasets.sh>`__
+--------------------------------------------------------------------------------------------------------------------------------------
 
-The shell script `run\_sample\_datasets.sh <run_sample_datasets.sh>`__
+The shell script
+`run\_sample\_datasets.sh <https://github.com/jlant-usgs/waterapputils/blob/master/run_sample_datasets.sh>`__
 is a shell script that can be used to run automated tests and run many
 of the command line arguments using the `sample
-datasets <data/sample-water-simulations>`__.
+datasets <https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations>`__.
 
 Usage:
 ~~~~~~
@@ -251,45 +255,45 @@ Usage:
     $ run_sample_datasets.sh [option]
     $ run_sample_datasets.sh [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid] [ecoflowdaxml] [-ecoflowdashp] [-gcmdelta] [-mapsim] [-all] [-tests] -makeclean] | [-h]]
 
-Command line arguments for the shell script `run\_sample\_datasets.sh <run_sample_datasets.sh>`__:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Command line arguments for the shell script `run\_sample\_datasets.sh <https://github.com/jlant-usgs/waterapputils/blob/master/run_sample_datasets.sh>`__:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-+-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Commands                | Description                                                                                                                                                                                    |
-+=========================+================================================================================================================================================================================================+
-| ``-h``                  | show list of available commands                                                                                                                                                                |
-+-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-txt``                | run ``-watertxt`` and ``-watertxtcmp`` using the `sample WATER simulation output TEXT files <data/watertxt-datafiles>`__                                                                       |
-+-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-xml``                | run ``-waterxml`` and ``-waterxmlcmp`` using the `sample WATER simulation output XML files <data/waterxml-datafiles>`__                                                                        |
-+-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-wateruse``           | run and apply `water use data <data/wateruse-datafiles>`__ to sample WATER simulations; `single and batch simulations <data/sample-water-simulations>`__                                       |
-+-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-subwateruse``        | run and apply substitute water use data to sample WATER simulations; `single and batch simulations <data/sample-water-simulations>`__                                                          |
-+-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-gcmdelta``           | run and apply `global climate model data <data/gcmdelta-datafiles>`__ to sample WATER simulations; `single and batch simulations <data/sample-water-simulations>`__                            |
-+-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-subgcmdelta``        | run and apply substitute water use data to sample WATER simulations; `single and batch simulations <data/sample-water-simulations>`__                                                          |
-+-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-oasis``              | create an oasis formated water use output file using the `sample water use applied WATER TEXT file <data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt>`__               |
-+-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-ecoflowstationid``   | create an ecoflow formated water use output file using the `sample water use applied WATER TEXT file <data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt>`__             |
-+-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-ecoflowdaxml``       | create an ecoflow formated drainage area output file using the `sample WATER XML file <data/sample-water-simulations/sample-datafiles/WATERSimulation-basin0.xml>`__ to calculate basin area   |
-+-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-ecoflowdashp``       | create an ecoflow formated drainage area output file using the `sample basin shapefiles <data/sample-water-simulations/sample-datafiles/basin0.shp>`__                                         |
-+-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-mapsim``             | create maps for `single and batch simulations <data/sample-water-simulations>`__                                                                                                               |
-+-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-all``                | run (mostly) all commands; ``-tests``, ``-txt``, ``-xml``, ``-wateruse``, ``-gcmdelta``, ``-oasis``, ``-ecoflowstationid``, ``-ecoflowdaxml``, ``-ecoflowdashp``, ``mapsim``                   |
-+-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-tests``              | run units tests use nosetests                                                                                                                                                                  |
-+-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-makeclean``          | cleans/removes all output of running sample dataset in in the `sample-water-simulations directory <data/sample-water-simulations>`__                                                           |
-+-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Commands                | Description                                                                                                                                                                                                                                                                        |
++=========================+====================================================================================================================================================================================================================================================================================+
+| ``-h``                  | show list of available commands                                                                                                                                                                                                                                                    |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``-txt``                | run ``-watertxt`` and ``-watertxtcmp`` using the `sample WATER simulation output TEXT files <https://github.com/jlant-usgs/waterapputils/tree/master/data/watertxt-datafiles>`__                                                                                                   |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``-xml``                | run ``-waterxml`` and ``-waterxmlcmp`` using the `sample WATER simulation output XML files <https://github.com/jlant-usgs/waterapputils/tree/master/data/waterxml-datafiles>`__                                                                                                    |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``-wateruse``           | run and apply `water use data <https://github.com/jlant-usgs/waterapputils/tree/master/data/wateruse-datafiles>`__ to sample WATER simulations; `single and batch simulations <https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations>`__           |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``-subwateruse``        | run and apply substitute water use data to sample WATER simulations; `single and batch simulations <https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations>`__                                                                                      |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``-gcmdelta``           | run and apply `general circulation model data <https://github.com/jlant-usgs/waterapputils/tree/master/data/deltas-gcm>`__ to sample WATER simulations; `single and batch simulations <https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations>`__   |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``-subgcmdelta``        | run and apply substitute water use data to sample WATER simulations; `single and batch simulations <https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations>`__                                                                                      |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``-oasis``              | create an oasis formated water use output file using the `sample water use applied WATER TEXT file <https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt>`__                                           |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``-ecoflowstationid``   | create an ecoflow formated water use output file using the `sample water use applied WATER TEXT file <https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt>`__                                         |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``-ecoflowdaxml``       | create an ecoflow formated drainage area output file using the `sample WATER XML file <https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-datafiles/WATERSimulation-basin0.xml>`__ to calculate basin area                               |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``-ecoflowdashp``       | create an ecoflow formated drainage area output file using the `sample basin shapefiles <https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-datafiles/sample-datafiles/basin0.shp>`__                                                    |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``-mapsim``             | create maps for `single and batch simulations <https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations>`__                                                                                                                                           |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``-all``                | run (mostly) all commands; ``-tests``, ``-txt``, ``-xml``, ``-wateruse``, ``-gcmdelta``, ``-oasis``, ``-ecoflowstationid``, ``-ecoflowdaxml``, ``-ecoflowdashp``, ``mapsim``                                                                                                       |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``-tests``              | run units tests use nosetests                                                                                                                                                                                                                                                      |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``-makeclean``          | cleans/removes all output of running sample dataset in in the `sample-water-simulations directory <https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations>`__                                                                                       |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-Example - apply water use to `single and batch simulations <data/sample-water-simulations>`__:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Example - apply water use to `single and batch simulations <https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations>`__:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code:: sh
 
@@ -298,22 +302,24 @@ Example - apply water use to `single and batch simulations <data/sample-water-si
 Process Many Simulations Shell Script
 -------------------------------------
 
-Applying water use and gcm deltas to many WATER simulations at one time using `run\_simulations.sh <run_simulations.sh>`__
---------------------------------------------------------------------------------------------------------------------------
+Applying water use and gcm deltas to many WATER simulations using `run\_simulations.sh <https://github.com/jlant-usgs/waterapputils/blob/master/run_simulations.sh>`__
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-The shell script `run\_simulations.sh <run_simulations.sh>`__ is a shell
-script that can be used to automate the processing of many WATER
-simulations. `run\_simulations.sh <run_simulations.sh>`__ can be used to
-apply water use and global climate change scenarios to multiple WATER
-simulations that are contained in the same directory. A user will
-provide a valid option along with the **path to the directory containing
-all the WATER simulations** that need to be processed. This directory
-should contain all the same type of WATER simulations *single* or
-*batch*, but not both. A user should make sure that the proper settings
-for processing a *single* or *batch* simulation are set in the
-*user\_settings.py* file. Note that the *simulation\_directory* variable
-will be ignored when using this script, but all the other settings will
-be used accordingly.
+The shell script
+`run\_simulations.sh <https://github.com/jlant-usgs/waterapputils/blob/master/run_simulations.sh>`__
+is a shell script that can be used to automate the processing of many
+WATER simulations.
+`run\_simulations.sh <https://github.com/jlant-usgs/waterapputils/blob/master/run_simulations.sh>`__
+can be used to apply water use and general circulation model scenarios
+to multiple WATER simulations that are contained in the same directory.
+A user will provide a valid option along with the **path to the
+directory containing all the WATER simulations** that need to be
+processed. This directory should contain all the same type of WATER
+simulations *single* or *batch*, but not both. A user should make sure
+that the proper settings for processing a *single* or *batch* simulation
+are set in the *user\_settings.py* file. Note that the
+*simulation\_directory* variable will be ignored when using this script,
+but all the other settings will be used accordingly.
 
 Usage:
 ~~~~~~
@@ -323,22 +329,22 @@ Usage:
     $ run_simulations.sh [option] <path-to-simulations-directory>
     $ run_simulations.sh [[[-applywateruse] [-applysubwateruse] [-applygcmdelta] [-applysubgcmdelta]] <path-to-simulations-directory> | [-h]]
 
-Command line arguments for the shell script `run\_simulations.sh <run_simulations.sh>`__:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Command line arguments for the shell script `run\_simulations.sh <https://github.com/jlant-usgs/waterapputils/blob/master/run_simulations.sh>`__:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-+-------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Commands                | Description                                                                                                                                                           |
-+=========================+=======================================================================================================================================================================+
-| ``-h``                  | show list of available commands                                                                                                                                       |
-+-------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-applywateruse``      | run and apply `water use data <data/wateruse-datafiles>`__ to sample WATER simulations; `single and batch simulations <data/sample-water-simulations>`__              |
-+-------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-applysubwateruse``   | run and apply substitute water use data to sample WATER simulations; `single and batch simulations <data/sample-water-simulations>`__                                 |
-+-------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-applygcmdelta``      | run and apply `global climate model data <data/gcmdelta-datafiles>`__ to sample WATER simulations; `single and batch simulations <data/sample-water-simulations>`__   |
-+-------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-applysubgcmdelta``   | run and apply substitute water use data to sample WATER simulations; `single and batch simulations <data/sample-water-simulations>`__                                 |
-+-------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Commands                | Description                                                                                                                                                                                                                                                                        |
++=========================+====================================================================================================================================================================================================================================================================================+
+| ``-h``                  | show list of available commands                                                                                                                                                                                                                                                    |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``-applywateruse``      | run and apply `water use data <https://github.com/jlant-usgs/waterapputils/tree/master/data/wateruse-datafiles>`__ to sample WATER simulations; `single and batch simulations <https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations>`__           |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``-applysubwateruse``   | run and apply substitute water use data to sample WATER simulations; `single and batch simulations <https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations>`__                                                                                      |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``-applygcmdelta``      | run and apply `general circulation model data <https://github.com/jlant-usgs/waterapputils/tree/master/data/deltas-gcm>`__ to sample WATER simulations; `single and batch simulations <https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations>`__   |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``-applysubgcmdelta``   | run and apply substitute water use data to sample WATER simulations; `single and batch simulations <https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations>`__                                                                                      |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 Example - apply water use to many WATER simulations :
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -366,7 +372,7 @@ The GUI consists of 4 tabs:
 1. Process WATER output text file
 2. Compare 2 WATER output text files
 3. Apply water use to WATER simulations
-4. Apply global climate model (GCM) deltas to WATER simulations
+4. Apply general circulation model (GCM) deltas to WATER simulations
 
 Process WATER output text file
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -423,11 +429,12 @@ Number of simulation(s) - a user selects the number of WATER simulations.
 Type of simulation(s) - a user selects the type of WATER simulation.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
--  *Batch* - more than one basin. For an example, please see the `Sample
-   Batch
-   Simulation <data/sample-batch-simulations-sample-batch-simulation>`__.
--  *Single* - one basin. For an example, please see the `Sample Single
-   Simulation <data/sample-batch-simulations-sample-single-simulation>`__.
+-  *Batch* - more than one pre-delineated basin. For an example, please
+   see the `Sample Batch
+   Simulation <https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-batch-simulation>`__.
+-  *Single* - one delineated basin. For an example, please see the
+   `Sample Single
+   Simulation <https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-single-simulation>`__.
 
 The following are the directory structures created by WATER for batch
 and single simulations:
@@ -554,10 +561,10 @@ interferring with the water use processing.
     shapefile (Watersheds.shp or basinMask.shp) will be plotted in a
     zoomed in view with additional shapefiles (i.e. usgs gages).
 
-Apply global climate model (GCM) deltas to WATER simulations
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Apply general circulation model (GCM) deltas to WATER simulations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Allows a user to apply global climate model (GCM) deltas to WATER
+Allows a user to apply general circulation model (GCM) deltas to WATER
 simulation database files (WATERSimulation.xml).
 
 Number of simulation(s) - a user selects the number of WATER simulations.
@@ -578,9 +585,9 @@ Type of simulation(s) - a user selects the type of WATER simulation.
 
 -  *Batch* - more than one basin. For an example, please see the `Sample
    Batch
-   Simulation <data/sample-batch-simulations-sample-batch-simulation>`__.
+   Simulation <https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-batch-simulation>`__.
 -  *Single* - one basin. For an example, please see the `Sample Single
-   Simulation <data/sample-batch-simulations-sample-single-simulation>`__.
+   Simulation <https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-single-simulation>`__.
 
 The following are the directory structures created by WATER for batch
 and single simulations:
@@ -625,8 +632,8 @@ and single simulations:
                 WATER.txt
                 WATERSimulation.xml
 
-Simulation Information - a user selects the WATER simulation of interest to apply global climate model deltas too.
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Simulation Information - a user selects the WATER simulation of interest to apply general circulation model deltas too.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If a valid WATER simulation is selected, the rest of the inputs in the
 *Simulation Information* section will auto-populate. A user can select
@@ -642,73 +649,73 @@ areas of each respective basin for use in an external ecoflow program.
     simulation must have an associated *Watersheds.shp* or
     *basinMask.shp* file.**
 
-Global Climate Model Delta Information - a user selects 3 global climate model delta files and associated information.
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+General Circulation Model Delta Information - a user selects 3 general circulation model delta files and associated information.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A user selects 3 global climate model delta files:
+A user selects 3 general circulation model delta files:
 
 1. PET.txt
 2. Ppt.txt
 3. Tmax.txt
 
-A user selects the global climate model shapefile which is a shapefile
-of rectangular tiles for a particular global climate model that covers
-the entire modeling domain.
+A user selects the general circulation model shapefile which is a
+shapefile of rectangular tiles for a particular general circulation
+model that covers the entire modeling domain.
 
     **NOTE: All WATER application shapefiles are in the Albers NAD83
-    projection. Please ensure that the global climate model shapefile
-    shapefile is in the same projection as all the other WATER
+    projection. Please ensure that the general circulation model
+    shapefile shapefile is in the same projection as all the other WATER
     application shapefiles.**
 
-A user chooses the id field from the global climate model shapefile that
-corresponds to the id field used in the 3 global climate model delta
-files.
+A user chooses the id field from the general circulation model shapefile
+that corresponds to the id field used in the 3 general circulation model
+delta files.
 
-    **NOTE: The sample global climate model delta files and global
-    climate model shapefile have *Tile* as the id field.**
+    **NOTE: The sample general circulation model delta files and general
+    circulation model shapefile have *Tile* as the id field.**
 
 If the basins in the WATER use simulation do not overlap/intersect with
-the global climate model shapefile tiles, then the user can choose to
-apply substitute global climate model deltas.
+the general circulation model shapefile tiles, then the user can choose
+to apply substitute general circulation model deltas.
 
-    **NOTE: In order to apply substitute global climate model deltas,
-    the user must first apply global climate model deltas without this
-    option. The waterapputils program will warn and log any basins in
-    the WATER simulation that do not overlap/intersect with the global
-    climate model deltas shapefile tiles.
+    **NOTE: In order to apply substitute general circulation model
+    deltas, the user must first apply general circulation model deltas
+    without this option. The waterapputils program will warn and log any
+    basins in the WATER simulation that do not overlap/intersect with
+    the general circulation model deltas shapefile tiles.
     The waterapputils program will create a file called
     *gcm\_delta\_non\_intersecting\_tiles.txt* in a directory called
     *waterapputils-info* with a list of the basins that do not
-    overlap/intersect. A user must manually enter the proper global
-    climate model deltas shapefile id (i.e. Tile) values to be used when
-    applying the substitute global climate model deltas. In order to
-    apply substitute global climate model deltas, the file called
-    *gcm\_delta\_non\_intersecting\_tiles.txt* in a directory called
-    *waterapputils-info* must exist.**
+    overlap/intersect. A user must manually enter the proper general
+    circulation model deltas shapefile id (i.e. Tile) values to be used
+    when applying the substitute general circulation model deltas. In
+    order to apply substitute general circulation model deltas, the file
+    called *gcm\_delta\_non\_intersecting\_tiles.txt* in a directory
+    called *waterapputils-info* must exist.**
 
 A user clicks the *Check Inputs* button which checks and makes sure that
 all the fields have been entered. Upon all the fields being entered and
 the *ChecK Inputs* button being pressed, the *Apply Water Use*, *Plot
 Overview Map*, and *Plot Zoomed Map* buttons are enabled. If a user
-clicks the *Apply Global Climate Model Deltas*, then waterapputils
-applies global climate model deltas to the WATER simulation given the
-data provided by the user. The **waterapputils\_gui** will apply global
-climate model deltas in a *separate thread* meaning that the process
-will be run in the background allowing the user to continue using other
-parts of the **waterapputils\_gui** without interferring with the global
-climate model deltas processing.
+clicks the *Apply General Circulation Model Deltas*, then waterapputils
+applies general circulation model deltas to the WATER simulation given
+the data provided by the user. The **waterapputils\_gui** will apply
+general circulation model deltas in a *separate thread* meaning that the
+process will be run in the background allowing the user to continue
+using other parts of the **waterapputils\_gui** without interferring
+with the general circulation model deltas processing.
 
-    **NOTE: When processing global climate model deltas, a warning about
-    a *QPixmap* may appear. This is not an error, but only a warning
-    that can safely be ignored here. The warning stems from the use of
-    using the same plotting code used in the command line version of
-    waterapputils when applying global climate model deltas.** If a user
-    clicks the *Plot Overview Map*, a map of the WATER basin shapefile
-    (Watersheds.shp or basinMask.shp) will be plotted in a zoomed out
-    view or the entire modeling domain. If a user clicks the *Plot
-    Zoomed Map*, a map of the WATER basin shapefile (Watersheds.shp or
-    basinMask.shp) will be plotted in a zoomed in view with additional
-    shapefiles (i.e. usgs gages).
+    **NOTE: When processing general circulation model deltas, a warning
+    about a *QPixmap* may appear. This is not an error, but only a
+    warning that can safely be ignored here. The warning stems from the
+    use of using the same plotting code used in the command line version
+    of waterapputils when applying general circulation model deltas.**
+    If a user clicks the *Plot Overview Map*, a map of the WATER basin
+    shapefile (Watersheds.shp or basinMask.shp) will be plotted in a
+    zoomed out view or the entire modeling domain. If a user clicks the
+    *Plot Zoomed Map*, a map of the WATER basin shapefile
+    (Watersheds.shp or basinMask.shp) will be plotted in a zoomed in
+    view with additional shapefiles (i.e. usgs gages).
 
 Testing
 -------
@@ -748,11 +755,11 @@ Repository layout
 
     bin/                                    # executables/scripts
     data/                                   # sample data files to use with software and associated information
-        deltas-gcm/                         # statistically downscaled global climate model data
+        deltas-gcm/                         # statistically downscaled general circulation model data
         sample-water-simulations            # sample WATER application simulations and datasets
             sample-batch-simulation         # sample WATER application batch run simulation
             sample-datasets                 # sample WATER application simulation datasets
-            sample-single-simulation        # sample WATER applicaiton single run simulation
+            sample-single-simulation        # sample WATER application single run simulation
         spatial-datafiles/                  # spatial data; shapefile format
         watertxt-datafiles/                 # sample WATER.txt files
         wateruse-batch-run/                 # sample batch run output from WATER
@@ -768,12 +775,12 @@ Repository layout
         waterxml_tests.py                   # tests for waterxml module
     waterapputils/                          # directory containing code modules
         waterapputils.py                    # main controller; calls respective module
-        user_settings.py                    # user settings to control and specify data inputs for water use and global climate model processing along with control of naming outputs
+        user_settings.py                    # user settings to control and specify data inputs for water use and general circulation model processing along with control of naming outputs
         gui/                                    # gui specific files
         modules/
-            deltas.py                           # handles processing of global climate model data
-            deltas_viewer.py                    # handles view (plotting) of global climate model data
-            gcm_delta_processing.py             # handles the global climate model delta factors processing using settings from the user_settings.py file
+            deltas.py                           # handles processing of general circulation model data
+            deltas_viewer.py                    # handles view (plotting) of general circulation model data
+            gcm_delta_processing.py             # handles the general circulation model delta factors processing using settings from the user_settings.py file
             helpers.py                          # helper functions
             spatialdata_viewer.py               # handles view (mapping) of spatial data; uses basemap library
             spatialvectors.py                   # handles spatial data
@@ -800,7 +807,7 @@ Documentation
 -------------
 
 Documentation of the code, guides detailing the processes involved in
-applying water use and the global climate model deltas, additional
+applying water use and the general circulation model deltas, additional
 information about *waterapputils*, and a gallery of output images can be
 found
 `here <http://ky.water.usgs.gov/usgs/projects/jlant_program_code/waterapputils/html/index.html>`__
