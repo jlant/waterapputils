@@ -76,11 +76,11 @@ A sample image of processing and analyzing WATER output files the GUI:
 
 [Tutorials](#tutorials)
 
+[Installation](#installation)
+
 [Requirements](#requirements)
 
 [Disclaimer and Notice](#disclaimer-and-notice)
-
-[Installation](#installation)
 
 [Author](#author)
 
@@ -598,8 +598,8 @@ ftp://ftpext.usgs.gov/pub/er/ky/louisville/jglant/waterapputils/waterapputils-vi
 ***
 
 ## Installation
-At this time, there is not installation required for *waterapputils*.  However, a user needs to run *waterapputils* 
-from within the *waterapputils* directory.
+At this time, there is no installation required for **waterapputils**.  However, a user needs to run **waterapputils** 
+from within the **waterapputils** directory.
 
 The [Requirements](#requirements) listed below do need to be installed.
    
@@ -627,7 +627,7 @@ Instead of installing the dependencies independently, it may be more convenient 
 Python distributions which will come bundled with most, if not all, of the dependencies:
 
 * [pythonxy](https://code.google.com/p/pythonxy/)
-    * need to install the additional plugin *Basemap* which can be downloaded from the [additional plugins page on the PythonXY website](https://code.google.com/p/pythonxy/wiki/AdditionalPlugins).
+    * need to install *Basemap* which can be downloaded from the [additional plugins page on the PythonXY website](https://code.google.com/p/pythonxy/wiki/AdditionalPlugins).
 
 * [Anaconda](https://store.continuum.io/cshop/anaconda/)
     * need to install *GDAL (1.11.1)* and *Basemap* which can be installed using [conda](http://conda.pydata.org/docs/intro.html) which comes with from [Anaconda](https://store.continuum.io/cshop/anaconda/).
