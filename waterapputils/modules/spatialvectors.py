@@ -497,7 +497,7 @@ def reproject_shapefile_to_wgs84(shapefile, out_shapefile_suffix = "_reproj_wgs8
     is not NAD_1983_Albers or Albers_Equal_Area_Conic_USGS_CONUS_NAD83.
     """.format(shapefile_name = shp_file_dict["name"], shapefile_proj = projection_str)
 
-    assert projection_str in ["NAD_1983_Albers", "Albers_Equal_Area_Conic_USGS_CONUS_NAD83"], error_str
+    assert projection_str in ["NAD_1983_Albers", "Albers_Equal_Area_Conic_USGS_CONUS_NAD83", "USA_Contiguous_Albers_Equal_Area_Conic_USGS_version"], error_str
                               
 
     # create output spatial reference - WGS 84
