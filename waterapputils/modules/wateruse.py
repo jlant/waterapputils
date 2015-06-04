@@ -213,7 +213,7 @@ def read_factor_file_in(filestream):
         # populate data dictionary with clean data sets
         data[parameter["name"]] = parameter["data"]
 
-    water_factor_type_list = ['InSwWL', 'MiSwWL', 'WSunkTR', 'InSwRT', 'ReGwWL', 'AqGwWL', 'DoGwWL', 'STswRT', 'TeSwWL', 'MiGwWL', 'TeGwWL', 'CoGwWL', 'CoSwWL', 'IrGwWL', 'WStrans', 'WsGwWL', 'WSgwRT', 'InGwRT', 'IrSwWL', 'InGwWL', 'AqSwWL', 'LvGwWL', 'WsSwWL']
+    water_factor_type_list = ['AqGwWL', 'CoGwWL', 'DoGwWL', 'InGwWL', 'IrGwWL', 'LvGwWL', 'MiGwWL', 'ReGwWL', 'TeGwWL', 'WsGwWL', 'AqSwWL', 'CoSwWL', 'InSwWL', 'IrSwWL', 'LvSwWL', 'MiSwWL', 'TeSwWL', 'WsSwWL', 'InGwRT', 'InSwRT', 'STswRT', 'WSgwRT', 'WSTransRC', 'WStransNY']
 
     for data_key in data["column_names"]:
         if data_key not in water_factor_type_list:
