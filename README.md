@@ -80,6 +80,8 @@ A sample image of processing and analyzing WATER output files the GUI:
 
 [Disclaimer and Notice](#disclaimer-and-notice)
 
+[Installation](#installation)
+
 [Author](#author)
 
 ***
@@ -592,6 +594,14 @@ The following are the tutorial topics covered:
 Download the waterapputils video tutorials from:
 
 ftp://ftpext.usgs.gov/pub/er/ky/louisville/jglant/waterapputils/waterapputils-video-tutorials.zip
+
+***
+
+## Installation
+At this time, there is not installation required for *waterapputils*.  However, a user needs to run *waterapputils* 
+from within the *waterapputils* directory.
+
+The [Requirements](#requirements) listed below do need to be installed.
    
 ***
 
@@ -609,7 +619,7 @@ The following are a list of dependencies:
 
 * [Basemap](http://matplotlib.org/basemap/) >= 1.0.2
 
-* [GDAL](https://pypi.python.org/pypi/GDAL/) >= 1.11.0
+* [GDAL](https://pypi.python.org/pypi/GDAL/) == 1.11.1
 
 * [PyQt4](http://www.riverbankcomputing.com/software/pyqt/download) >= 4.9.6
 
@@ -617,8 +627,18 @@ Instead of installing the dependencies independently, it may be more convenient 
 Python distributions which will come bundled with most, if not all, of the dependencies:
 
 * [pythonxy](https://code.google.com/p/pythonxy/)
+    * need to install the additional plugin *Basemap* which can be downloaded from the [additional plugins page on the PythonXY website](https://code.google.com/p/pythonxy/wiki/AdditionalPlugins).
 
 * [Anaconda](https://store.continuum.io/cshop/anaconda/)
+    * need to install *GDAL (1.11.1)* and *Basemap* which can be installed using [conda](http://conda.pydata.org/docs/intro.html) which comes with from [Anaconda](https://store.continuum.io/cshop/anaconda/).
+
+    ```sh
+    $ conda install Basemap
+    ```
+
+    ```sh
+    $ conda install GDAL=1.11.1
+    ```
 
 * [Enthought](https://www.enthought.com/)
 
