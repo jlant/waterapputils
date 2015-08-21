@@ -621,7 +621,7 @@ The following are a list of dependencies:
 
 * [GDAL](https://pypi.python.org/pypi/GDAL/) == 1.11.0
 
-* [PyQt4](http://www.riverbankcomputing.com/software/pyqt/download) >= 4.9.6
+* [PyQt4](http://www.riverbankcomputing.com/software/pyqt/download) == 4.9.6
 
 Instead of installing the dependencies independently, it may be more convenient to install one of the following scientific
 Python distributions which will come bundled with most, if not all, of the dependencies:
