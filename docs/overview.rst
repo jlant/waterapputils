@@ -847,20 +847,20 @@ Requirements
 
 The following are a list of dependencies:
 
--  `Python <https://www.python.org/>`__ == 2.7.\*
+-  `Python <https://www.python.org/>`__ == 2.7.6.1
 
--  `NumPy <http://www.numpy.org/>`__ >= 1.8.0
+-  `NumPy <http://www.numpy.org/>`__ == 1.8.1
 
--  `matplotlib <http://matplotlib.org/>`__ >= 1.3.1
+-  `matplotlib <http://matplotlib.org/>`__ == 1.3.1
 
--  `nose <https://nose.readthedocs.org/en/latest/>`__ >= 1.3.0
+-  `nose <https://nose.readthedocs.org/en/latest/>`__ == 1.3.3
 
--  `Basemap <http://matplotlib.org/basemap/>`__ >= 1.0.2
+-  `Basemap <http://matplotlib.org/basemap/>`__ == 1.0.2
 
--  `GDAL <https://pypi.python.org/pypi/GDAL/>`__ >= 1.11.0
+-  `GDAL <https://pypi.python.org/pypi/GDAL/>`__ == 1.11.0
 
 -  `PyQt4 <http://www.riverbankcomputing.com/software/pyqt/download>`__
-   >= 4.9.6
+   == 4.9.6
 
 Instead of installing the dependencies independently, it may be more
 convenient to install one of the following scientific Python
@@ -872,6 +872,8 @@ dependencies:
 -  `Anaconda <https://store.continuum.io/cshop/anaconda/>`__
 
 -  `Enthought <https://www.enthought.com/>`__
+
+The PythonXY 2.7.6.1 version (which includes all the requirements listed above) and the Basemap 1.0.2 plugin can be downloaded from the following ftp site: ftp://ftpext.usgs.gov/pub/er/ky/louisville/jglant/waterapputils/waterapputils-pythonxy2.7.6.1-downloads.zip
 
 --------------
 
