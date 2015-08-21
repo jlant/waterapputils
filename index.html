@@ -90,6 +90,8 @@ based on the spatial intersection of the watershed(s) of interest with the water
 
 <p><a href="#tutorials">Tutorials</a></p>
 
+<p><a href="#installation">Installation</a></p>
+
 <p><a href="#requirements">Requirements</a></p>
 
 <p><a href="#disclaimer-and-notice">Disclaimer and Notice</a></p>
@@ -855,6 +857,14 @@ Center's Internal Website</a>.</p>
 <hr>
 
 <h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>At this time, there is no installation required for <strong>waterapputils</strong>. However, a user needs to run <strong>waterapputils</strong> from within the <strong>waterapputils</strong> directory.</p>
+<p>The <a href="#requirements">Requirements</a> listed below do need to be installed.</p>
+
+<hr>
+
+<h2>
 <a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements</h2>
 
 <p>The following are a list of dependencies:</p>
@@ -869,16 +879,26 @@ Center's Internal Website</a>.</p>
 </ul>
 <p>Instead of installing the dependencies independently, it may be more convenient to install one of the following scientific
 Python distributions which will come bundled with most, if not all, of the dependencies:</p>
-<ul>
-  <li><a href="https://code.google.com/p/pythonxy/">pythonxy</a> == 2.7.6.1</li>
-  <li><a href="https://store.continuum.io/cshop/anaconda/">Anaconda</a></li>
-  <li><a href="https://www.enthought.com/">Enthought</a></li>  
+<ul> 
+  <li><a href="https://code.google.com/p/pythonxy/">pythonxy</a> == 2.7.6.1
+    <ul>
+      <li>need to install <em>Basemap</em> which can be downloaded from the <a href="https://code.google.com/p/pythonxy/wiki/AdditionalPlugins">additional plugins page on the PythonXY website</a>.</li>
+    </ul>
+  </li>
+  <li><a href="https://store.continuum.io/cshop/anaconda/">Anaconda</a>
+    <ul>
+      <li>need to install <em>GDAL (1.11.0)</em> and <em>Basemap</em> which can be installed using <a href="http://conda.pydata.org/docs/intro.html">conda</a> which comes with from <a href="https://store.continuum.io/cshop/anaconda/">Anaconda</a>.</li>
+    </ul>
+    <pre class="sh"><code>$ conda install Basemap=1.0.2</code></pre>
+    <pre class="sh"><code>$ conda install GDAL=1.11.1</code></pre></li>
+  </li>
+  <li><a href="https://www.enthought.com/">Enthought</a></li>
+</ul>
 </ul>
 <p>
   The PythonXY 2.7.6.1 version (which includes all the requirements listed above) and the Basemap 1.0.2 plugin can be downloaded from the following ftp site:  
   ftp://ftpext.usgs.gov/pub/er/ky/louisville/jglant/waterapputils/waterapputils-pythonxy2.7.6.1-downloads.zip
 </p>
-
 <hr>
 
 <h2>
