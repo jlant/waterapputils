@@ -609,17 +609,17 @@ The [Requirements](#requirements) listed below do need to be installed.
 
 The following are a list of dependencies:
 
-* [Python](https://www.python.org/) == 2.7.*
+* [Python](https://www.python.org/) == 2.7.6.1
 
-* [NumPy](http://www.numpy.org/) >= 1.8.0
+* [NumPy](http://www.numpy.org/) == 1.8.1
 
-* [matplotlib](http://matplotlib.org/) >= 1.3.1
+* [matplotlib](http://matplotlib.org/) == 1.3.1
 
-* [nose](https://nose.readthedocs.org/en/latest/) >= 1.3.0
+* [nose](https://nose.readthedocs.org/en/latest/) == 1.3.3
 
 * [Basemap](http://matplotlib.org/basemap/) >= 1.0.2
 
-* [GDAL](https://pypi.python.org/pypi/GDAL/) == 1.11.1
+* [GDAL](https://pypi.python.org/pypi/GDAL/) == 1.11.0
 
 * [PyQt4](http://www.riverbankcomputing.com/software/pyqt/download) >= 4.9.6
 
@@ -641,6 +641,8 @@ Python distributions which will come bundled with most, if not all, of the depen
     ```
 
 * [Enthought](https://www.enthought.com/)
+
+The PythonXY 2.7.6.1 version (which includes all the requirements listed above) and the Basemap 1.0.2 plugin can be downloaded from the following ftp site: ftp://ftpext.usgs.gov/pub/er/ky/louisville/jglant/waterapputils/waterapputils-pythonxy2.7.6.1-downloads.zip
 
 *** 
 
