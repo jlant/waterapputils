@@ -27,18 +27,18 @@
     <link rel="next" title="Water Use Guide" href="wateruse-guide.html" />
     <link rel="prev" title="waterapputils" href="overview.html" /> 
   </head>
-  <body>
+  <body role="document">
 
 <div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
 <a href="index.html"><img src="_static/logo.png" border="0" alt="py4sci"/></a>
 </div>
 
 
-      <div class="header"><h1 class="heading"><a href="index.html">
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
           <span>waterapputils 1.0.0 documentation</span></a></h1>
         <h2 class="heading"><span>General Guide and Tutorial</span></h2>
       </div>
-      <div class="topnav">
+      <div class="topnav" role="navigation" aria-label="top navigation">
       
         <p>
         «&#160;&#160;<a href="overview.html">waterapputils</a>
@@ -56,94 +56,94 @@
 <h1>General Guide and Tutorial<a class="headerlink" href="#general-guide-and-tutorial" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="processing-water-simulation-output-files-water-txt">
 <h2>Processing WATER simulation output files - WATER.txt<a class="headerlink" href="#processing-water-simulation-output-files-water-txt" title="Permalink to this headline">¶</a></h2>
-<p>Process WATER simulation output text files (<tt class="docutils literal"><span class="pre">WATER.txt</span></tt>).</p>
+<p>Process WATER simulation output text files (<code class="docutils literal"><span class="pre">WATER.txt</span></code>).</p>
 <p><strong>-watertxt</strong></p>
 <div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -watertxt [file1] [file2] ...
 </pre></div>
 </div>
-<p>Processes <tt class="docutils literal"><span class="pre">WATER.txt</span></tt> file(s) and produces plots of each parameter for
+<p>Processes <code class="docutils literal"><span class="pre">WATER.txt</span></code> file(s) and produces plots of each parameter for
 each file. Plots are saved to an output directory named as
 *waterappputils-watertxt*. The output directory
-is created in the same directory as the respective <tt class="docutils literal"><span class="pre">WATER.txt</span></tt> file.</p>
+is created in the same directory as the respective <code class="docutils literal"><span class="pre">WATER.txt</span></code> file.</p>
 <hr class="docutils" />
 <p><strong>-watertxtfd</strong></p>
 <div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -watertxtfd
 </pre></div>
 </div>
-<p>Spawns a file dialog window to select <tt class="docutils literal"><span class="pre">WATER.txt</span></tt> file(s), then
-processes the <tt class="docutils literal"><span class="pre">WATER.txt</span></tt> file(s) in the same manner as the
-<tt class="docutils literal"><span class="pre">-watertxt</span></tt> flag.</p>
+<p>Spawns a file dialog window to select <code class="docutils literal"><span class="pre">WATER.txt</span></code> file(s), then
+processes the <code class="docutils literal"><span class="pre">WATER.txt</span></code> file(s) in the same manner as the
+<code class="docutils literal"><span class="pre">-watertxt</span></code> flag.</p>
 <hr class="docutils" />
 <p><strong>-watertxtcmp</strong></p>
 <div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -watertxtcmp [file1] [file2]
 </pre></div>
 </div>
 <p>Produces comparison plots of each respective parameter in two
-<tt class="docutils literal"><span class="pre">WATER.txt</span></tt> files. Plots are saved to an output directory named as
+<code class="docutils literal"><span class="pre">WATER.txt</span></code> files. Plots are saved to an output directory named as
 *waterappputils-watertxt*. The output directory is located in the same
-directory as the <tt class="docutils literal"><span class="pre">WATER.txt</span></tt> file.</p>
+directory as the <code class="docutils literal"><span class="pre">WATER.txt</span></code> file.</p>
 <hr class="docutils" />
 <p><strong>-watertxtcmpfd</strong></p>
 <div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -watertxtcmpfd
 </pre></div>
 </div>
-<p>Spawns a file dialog window to select two <tt class="docutils literal"><span class="pre">WATER.txt</span></tt> files, then
-compares and processes the <tt class="docutils literal"><span class="pre">WATER.txt</span></tt> files in the same manner as
-using the <tt class="docutils literal"><span class="pre">-watertxtcmp</span></tt> flag.</p>
+<p>Spawns a file dialog window to select two <code class="docutils literal"><span class="pre">WATER.txt</span></code> files, then
+compares and processes the <code class="docutils literal"><span class="pre">WATER.txt</span></code> files in the same manner as
+using the <code class="docutils literal"><span class="pre">-watertxtcmp</span></code> flag.</p>
 </div>
 <div class="section" id="processing-water-simulation-database-file-watersimulation-xml">
 <h2>Processing WATER simulation database file - WATERSimulation.xml<a class="headerlink" href="#processing-water-simulation-database-file-watersimulation-xml" title="Permalink to this headline">¶</a></h2>
 <p>Process WATER simulation output database files
-(<tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt>).</p>
+(<code class="docutils literal"><span class="pre">WATERSimulation.xml</span></code>).</p>
 <div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -waterxml [file]
 </pre></div>
 </div>
-<p>Processes a <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt> file and produces plots timeseries
+<p>Processes a <code class="docutils literal"><span class="pre">WATERSimulation.xml</span></code> file and produces plots timeseries
 parameters and topographic wetness index values. Plots are saved to an
 output directory named as *waterappputils-watertxt*.
 The output directory is created in the same directory as the
-<tt class="docutils literal"><span class="pre">WATERSimulation.txt</span></tt> file.</p>
+<code class="docutils literal"><span class="pre">WATERSimulation.txt</span></code> file.</p>
 <hr class="docutils" />
 <div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -waterxmlfd
 </pre></div>
 </div>
-<p>Spawns a file dialog window to select a <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt> file,
-then processes the <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt> in the same manner as using
-the <tt class="docutils literal"><span class="pre">-waterxml</span></tt> flag.</p>
+<p>Spawns a file dialog window to select a <code class="docutils literal"><span class="pre">WATERSimulation.xml</span></code> file,
+then processes the <code class="docutils literal"><span class="pre">WATERSimulation.xml</span></code> in the same manner as using
+the <code class="docutils literal"><span class="pre">-waterxml</span></code> flag.</p>
 <hr class="docutils" />
 <p><strong>-waterxmlcmp</strong></p>
 <div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -waterxmlcmp [file1] [file2]
 </pre></div>
 </div>
 <p>Produces comparison plots of each respective parameter in two
-<tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt> files. Plots are saved to an output directory
+<code class="docutils literal"><span class="pre">WATERSimulation.xml</span></code> files. Plots are saved to an output directory
 named as *waterappputils-waterxml*.  The output directory is located
-in the same directory as the <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt> file.</p>
+in the same directory as the <code class="docutils literal"><span class="pre">WATERSimulation.xml</span></code> file.</p>
 <hr class="docutils" />
 <p><strong>-waterxmlcmpfd</strong></p>
 <div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -waterxmlcmpfd
 </pre></div>
 </div>
-<p>Spawns a file dialog window to select two <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt> files,
-then compares and processes the <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt> files in the
-same manner as using the <tt class="docutils literal"><span class="pre">-waterxmlcmp</span></tt> flag.</p>
+<p>Spawns a file dialog window to select two <code class="docutils literal"><span class="pre">WATERSimulation.xml</span></code> files,
+then compares and processes the <code class="docutils literal"><span class="pre">WATERSimulation.xml</span></code> files in the
+same manner as using the <code class="docutils literal"><span class="pre">-waterxmlcmp</span></code> flag.</p>
 </div>
 <div class="section" id="applying-water-use-to-water-simulations">
 <h2>Applying water use to WATER simulations<a class="headerlink" href="#applying-water-use-to-water-simulations" title="Permalink to this headline">¶</a></h2>
-<p>Apply water use to a WATER simulation using the settings in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file.</p>
+<p>Apply water use to a WATER simulation using the settings in the <code class="docutils literal"><span class="pre">user_settings.py</span></code> file.</p>
 <div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -applywateruse
 </pre></div>
 </div>
 <p>Applies water use to a WATER simulation.  Details of the WATER simulation,
-<em>single</em> or <em>batch</em> simulation, are contained in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file.
+<em>single</em> or <em>batch</em> simulation, are contained in the <code class="docutils literal"><span class="pre">user_settings.py</span></code> file.
 Additional output files are created for other software programs, namely,
 OASIS and ecoflow programs.</p>
 <p>To apply water use to a WATER simulation, information regarding
 the location of a series of files and directories must be entered
-in a file called <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> located in the
-<tt class="docutils literal"><span class="pre">waterapputils/waterapputils/</span></tt> directory.
+in a file called <code class="docutils literal"><span class="pre">user_settings.py</span></code> located in the
+<code class="docutils literal"><span class="pre">waterapputils/waterapputils/</span></code> directory.
 The following main variables associated with applying water use that
-are contained in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file:</p>
+are contained in the <code class="docutils literal"><span class="pre">user_settings.py</span></code> file:</p>
 <div class="highlight-python"><div class="highlight"><pre>Variables                       Meaning
 ---------                       -------
 
@@ -158,15 +158,15 @@ wateruse_files                          -   list of paths to water use files
 wateruse_factor_file                    -   path to the water use factor file
 </pre></div>
 </div>
-<p>Instead of specifying the path to a WATER simulation in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file,
+<p>Instead of specifying the path to a WATER simulation in the <code class="docutils literal"><span class="pre">user_settings.py</span></code> file,
 users can supply the path directly on the command line using the following command:
 c</p>
 <div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -applywateruse -simdir &lt;path-to-water-simulation-directory&gt;
 </pre></div>
 </div>
 <p>The above command applies water use to a WATER simulation using a simulation directory path specified on the
-command line instead of using the <tt class="docutils literal"><span class="pre">simulation_directory</span></tt> variable in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file.</p>
-<p>The following is an example of part of the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file for a <em>batch</em> simulation
+command line instead of using the <code class="docutils literal"><span class="pre">simulation_directory</span></code> variable in the <code class="docutils literal"><span class="pre">user_settings.py</span></code> file.</p>
+<p>The following is an example of part of the <code class="docutils literal"><span class="pre">user_settings.py</span></code> file for a <em>batch</em> simulation
 using the sample datasets contained in the data directory:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># ------------------- WATER simulation information ---------------------- #</span>
 <span class="n">simulation_directory</span> <span class="o">=</span> <span class="s">&quot;../data/sample-water-simulations/sample-batch-simulation&quot;</span>
@@ -189,7 +189,7 @@ using the sample datasets contained in the data directory:</p>
 <span class="n">wateruse_factor_file</span> <span class="o">=</span> <span class="s">&quot;../data/wateruse-datafiles/wateruse-factors-sample.txt&quot;</span>
 </pre></div>
 </div>
-<p>The following is an example of part of the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file for a <em>single</em> simulation using the sample datasets:</p>
+<p>The following is an example of part of the <code class="docutils literal"><span class="pre">user_settings.py</span></code> file for a <em>single</em> simulation using the sample datasets:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># ------------------- WATER simulation information ---------------------- #</span>
 <span class="n">simulation_directory</span> <span class="o">=</span> <span class="s">&quot;../data/sample-water-simulations/sample-single-simulation&quot;</span>
 <span class="n">is_batch_simulation</span> <span class="o">=</span> <span class="bp">False</span>
@@ -211,15 +211,15 @@ using the sample datasets contained in the data directory:</p>
 <span class="n">wateruse_factor_file</span> <span class="o">=</span> <span class="s">&quot;../data/wateruse-datafiles/wateruse-factors-sample.txt&quot;</span>
 </pre></div>
 </div>
-<p>The information in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file is used to
+<p>The information in the <code class="docutils literal"><span class="pre">user_settings.py</span></code> file is used to
 apply water use to each respective basin in the respective simulation. The only exception
 here is when a user specifies the path to a WATER simulation on the command line which will
-overwrite the <tt class="docutils literal"><span class="pre">simulation_directory</span></tt> variable in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file.</p>
-<p>The water use point(s), <tt class="docutils literal"><span class="pre">wateruse_centroids_shapefile</span></tt>,
-that are contained within a respective basin, <tt class="docutils literal"><span class="pre">basin_shapefile_name</span></tt>,
+overwrite the <code class="docutils literal"><span class="pre">simulation_directory</span></code> variable in the <code class="docutils literal"><span class="pre">user_settings.py</span></code> file.</p>
+<p>The water use point(s), <code class="docutils literal"><span class="pre">wateruse_centroids_shapefile</span></code>,
+that are contained within a respective basin, <code class="docutils literal"><span class="pre">basin_shapefile_name</span></code>,
 are found from performing a spatial intersection.  The water use points found
 to be contained with a respective basin are mapped to the water use data files
-(<tt class="docutils literal"><span class="pre">wateruse_files</span></tt> variable in <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file) and used to calculate
+(<code class="docutils literal"><span class="pre">wateruse_files</span></code> variable in <code class="docutils literal"><span class="pre">user_settings.py</span></code> file) and used to calculate
 monthly water use totals.</p>
 <p>The following is an example WATER <em>batch</em> simulation <strong>before</strong> applying water use:</p>
 <div class="highlight-python"><div class="highlight"><pre>WATER-batch-run/
@@ -254,49 +254,49 @@ monthly water use totals.</p>
 </pre></div>
 </div>
 <p>Results of applying water use to each basin in a WATER simulations are contained
-within each respective basin directory in the <tt class="docutils literal"><span class="pre">waterapputils-wateruse</span></tt> directory.
-The <tt class="docutils literal"><span class="pre">waterapputils-wateruse/</span></tt> directory contains plots of all the
-parameters in the <tt class="docutils literal"><span class="pre">WATER.txt</span></tt> file.</p>
+within each respective basin directory in the <code class="docutils literal"><span class="pre">waterapputils-wateruse</span></code> directory.
+The <code class="docutils literal"><span class="pre">waterapputils-wateruse/</span></code> directory contains plots of all the
+parameters in the <code class="docutils literal"><span class="pre">WATER.txt</span></code> file.</p>
 <p>Each respective basin directory (basin-1) contains an updated WATER simulation
-output file (<tt class="docutils literal"><span class="pre">WATERUSE-WATER.txt</span></tt>) containing additional
+output file (<code class="docutils literal"><span class="pre">WATERUSE-WATER.txt</span></code>) containing additional
 columns of water use (cfs) and discharge + water use (cfs). In addition,
 the updated WATER simulation file is processed and plots of each
 parameter in the updated WATER simulation file are created and contained
 in the <a href="#id1"><span class="problematic" id="id2">``</span></a>waterapputils-wateruse/ `` directory.</p>
 <p>Detailed information regarding applying water use to a WATER simulation are
-contained in the <tt class="docutils literal"><span class="pre">waterapputils-info</span></tt> directory.
-The <tt class="docutils literal"><span class="pre">waterapputils-info</span></tt> directory contains a file,
-called <tt class="docutils literal"><span class="pre">wateruse_info.txt</span></tt>, that contains details of which water use
+contained in the <code class="docutils literal"><span class="pre">waterapputils-info</span></code> directory.
+The <code class="docutils literal"><span class="pre">waterapputils-info</span></code> directory contains a file,
+called <code class="docutils literal"><span class="pre">wateruse_info.txt</span></code>, that contains details of which water use
 points are contained with which basin with the corresponding (monthly) water use totals
 applied to the the original discharge from the original WATER simulation.</p>
 <p>Water use points that are not contained within any basin in a respective
-WATER simulation are logged to a file called <tt class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></tt>
-(Note: this file name can be edited using the <tt class="docutils literal"><span class="pre">wateruse_non_intersecting_file_name</span></tt> variable
-in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file). The <tt class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></tt> is a
+WATER simulation are logged to a file called <code class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></code>
+(Note: this file name can be edited using the <code class="docutils literal"><span class="pre">wateruse_non_intersecting_file_name</span></code> variable
+in the <code class="docutils literal"><span class="pre">user_settings.py</span></code> file). The <code class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></code> is a
 comma-separated file that lists on each row the basin name (id) that does not contain any
 water use points along with a <em>special</em> water use id of <strong>000</strong> meaning <strong>0 water use</strong> was
 applied.  Users can edit this file by specifying the water use points to be applied to each
 respective basin.</p>
-<p>The following is an example of the <tt class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></tt> file
+<p>The following is an example of the <code class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></code> file
 where <strong>0 water use</strong> was applied to a specific basin:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">basinid</span><span class="p">,</span><span class="n">newhydroid</span>
-<span class="mo">01414500</span><span class="p">,</span><span class="mo">000</span>
+<div class="highlight-python"><div class="highlight"><pre>basinid,newhydroid
+01414500,000
 </pre></div>
 </div>
 <p>To apply water use points (e.g. 100,101,102) to basinid 01414500, then a user would update the
-<tt class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></tt> file to the following:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">basinid</span><span class="p">,</span><span class="n">newhydroid</span>
-<span class="mo">01414500</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">101</span><span class="p">,</span><span class="mi">102</span>
+<code class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></code> file to the following:</p>
+<div class="highlight-python"><div class="highlight"><pre>basinid,newhydroid
+01414500,100,101,102
 </pre></div>
 </div>
-<p>After updating the <tt class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></tt> file, a user can apply the <em>substitute</em> water use
+<p>After updating the <code class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></code> file, a user can apply the <em>substitute</em> water use
 points by applying the following command:</p>
 <div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -applysubwateruse
 </pre></div>
 </div>
-<p>The above command uses the <tt class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></tt> file
+<p>The above command uses the <code class="docutils literal"><span class="pre">wateruse_non_intersecting_centroids.txt</span></code> file
 to apply water use to those basins that originally did not have any water use applied.
-A new file, called <tt class="docutils literal"><span class="pre">sub_wateruse_info.txt</span></tt>, is created in the <tt class="docutils literal"><span class="pre">waterapputils-info</span></tt> directory
+A new file, called <code class="docutils literal"><span class="pre">sub_wateruse_info.txt</span></code>, is created in the <code class="docutils literal"><span class="pre">waterapputils-info</span></code> directory
 that logs the information regarding the substitute water use applied.  The special output files for
 the OASIS and ecoflow programs are updated after applying substitute water use.</p>
 </div>
@@ -308,16 +308,16 @@ the OASIS and ecoflow programs are updated after applying substitute water use.<
 </div>
 <p>Applies GCM deltas (factors) to a WATER simulation batch run.  Specifically, it
 applies climate change factors (precipiation and temperature) to the WATER simulation
-database file <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt>. In addition to updating the <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt> file,
-a timeseries file of potential evapotranspiration (<tt class="docutils literal"><span class="pre">PET</span></tt>) values with the applied climate change
+database file <code class="docutils literal"><span class="pre">WATERSimulation.xml</span></code>. In addition to updating the <code class="docutils literal"><span class="pre">WATERSimulation.xml</span></code> file,
+a timeseries file of potential evapotranspiration (<code class="docutils literal"><span class="pre">PET</span></code>) values with the applied climate change
 factors is created.  Details about the WATER simulation, <em>single</em> or <em>batch</em> simulation, are contained in the
-<tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file.</p>
+<code class="docutils literal"><span class="pre">user_settings.py</span></code> file.</p>
 <p>To apply climate change factors to a WATER simulation, information regarding
 the location of a series of files and directories must be entered
-in a file called <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> located in the
-<tt class="docutils literal"><span class="pre">waterapputils/waterapputils/</span></tt> directory.
+in a file called <code class="docutils literal"><span class="pre">user_settings.py</span></code> located in the
+<code class="docutils literal"><span class="pre">waterapputils/waterapputils/</span></code> directory.
 The following main variables associated with applying climate change factors that
-are contained in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file:</p>
+are contained in the <code class="docutils literal"><span class="pre">user_settings.py</span></code> file:</p>
 <div class="highlight-python"><div class="highlight"><pre>Variables                       Meaning
 ---------                       -------
 
@@ -327,14 +327,14 @@ basin_shapefile_name                    -   name of the basin(s) shapefile creat
 gcm_delta_files                         -   list of the GCM delta factor files to be used; PET = Potential Evapotranspiration, Ppt = Precipitation, Temp = Temperature
 </pre></div>
 </div>
-<p>Instead of specifying the path to a WATER simulation in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file,
+<p>Instead of specifying the path to a WATER simulation in the <code class="docutils literal"><span class="pre">user_settings.py</span></code> file,
 users can supply the path directly on the command line using the following command:</p>
 <div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -applygcmdeltas -simdir &lt;path-to-water-simulation-directory&gt;
 </pre></div>
 </div>
 <p>The above command applies climate change factors to a WATER simulation using a simulation directory path specified on the
-command line instead of using the <tt class="docutils literal"><span class="pre">simulation_directory</span></tt> variable in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file.</p>
-<p>The following is an example of part of the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file for a <em>batch</em> simulation
+command line instead of using the <code class="docutils literal"><span class="pre">simulation_directory</span></code> variable in the <code class="docutils literal"><span class="pre">user_settings.py</span></code> file.</p>
+<p>The following is an example of part of the <code class="docutils literal"><span class="pre">user_settings.py</span></code> file for a <em>batch</em> simulation
 using the sample datasets contained in the data directory:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># ------------------- WATER simulation information ---------------------- #</span>
 <span class="n">simulation_directory</span> <span class="o">=</span> <span class="s">&quot;../data/sample-water-simulations/sample-batch-simulation&quot;</span>
@@ -353,7 +353,7 @@ using the sample datasets contained in the data directory:</p>
 <span class="n">gcm_delta_tile_shapefile_id_field</span> <span class="o">=</span> <span class="s">&quot;Tile&quot;</span>
 </pre></div>
 </div>
-<p>The following is an example of part of the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file for a <em>single</em> simulation using the sample datasets:</p>
+<p>The following is an example of part of the <code class="docutils literal"><span class="pre">user_settings.py</span></code> file for a <em>single</em> simulation using the sample datasets:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># ------------------- WATER simulation information ---------------------- #</span>
 <span class="n">simulation_directory</span> <span class="o">=</span> <span class="s">&quot;../data/sample-water-simulations/sample-single-simulation&quot;</span>
 <span class="n">is_batch_simulation</span> <span class="o">=</span> <span class="bp">False</span>
@@ -371,14 +371,14 @@ using the sample datasets contained in the data directory:</p>
 <span class="n">gcm_delta_tile_shapefile_id_field</span> <span class="o">=</span> <span class="s">&quot;Tile&quot;</span>
 </pre></div>
 </div>
-<p>The information in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file is used to
+<p>The information in the <code class="docutils literal"><span class="pre">user_settings.py</span></code> file is used to
 apply climate change to each respective basin in the respective simulation. The only exception
 here is when a user specifies the path to a WATER simulation on the command line which will
-overwrite the <tt class="docutils literal"><span class="pre">simulation_directory</span></tt> variable in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file.</p>
-<p>The global climate change tiles shapefile(<tt class="docutils literal"><span class="pre">gcm_delta_tile_shapefile</span></tt> variable in <tt class="docutils literal"><span class="pre">user_settings.py</span></tt>)
+overwrite the <code class="docutils literal"><span class="pre">simulation_directory</span></code> variable in the <code class="docutils literal"><span class="pre">user_settings.py</span></code> file.</p>
+<p>The global climate change tiles shapefile(<code class="docutils literal"><span class="pre">gcm_delta_tile_shapefile</span></code> variable in <code class="docutils literal"><span class="pre">user_settings.py</span></code>)
 is used in performing a spatial intersection between the tiles and the respective WATER simulation
 basin(s).  The tiles found to be intersected with a respective basin are mapped to the global climate change
-data files (<tt class="docutils literal"><span class="pre">gcm_delta_files</span></tt> variable in <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file) and used to calculate
+data files (<code class="docutils literal"><span class="pre">gcm_delta_files</span></code> variable in <code class="docutils literal"><span class="pre">user_settings.py</span></code> file) and used to calculate
 monthly climate change factors.</p>
 <p>The following is an example WATER <em>batch</em> simulation <strong>before</strong> applying climate change factors:</p>
 <div class="highlight-python"><div class="highlight"><pre>WATER-batch-run/
@@ -415,54 +415,54 @@ monthly climate change factors.</p>
 </pre></div>
 </div>
 <p>Results of applying climate change factors to each basin in a WATER simulations are contained
-within each respective basin directory in the <tt class="docutils literal"><span class="pre">waterapputils-gcmdelta</span></tt> directory.
-The <tt class="docutils literal"><span class="pre">waterapputils-gcmdelta/</span></tt> directory contains plots of all the relevant
+within each respective basin directory in the <code class="docutils literal"><span class="pre">waterapputils-gcmdelta</span></code> directory.
+The <code class="docutils literal"><span class="pre">waterapputils-gcmdelta/</span></code> directory contains plots of all the relevant
 parameters in the WATERSimulation.xml file.</p>
 <p>Each respective basin directory (basin-1) contains an updated WATER simulation
-database file (<tt class="docutils literal"><span class="pre">GCMDELTA-WATERSimulation.xml</span></tt>) containing climate factored precipitation
+database file (<code class="docutils literal"><span class="pre">GCMDELTA-WATERSimulation.xml</span></code>) containing climate factored precipitation
 and temperature data. In addition, the updated WATER database file is processed and plots of each
 parameter in the updated GCMDELTA-WATERSimulation.xml file are created and contained
 in the <a href="#id3"><span class="problematic" id="id4">``</span></a>waterapputils-gcmdelta/ `` directory.</p>
 <p>Detailed information regarding applying climate change factors to a WATER simulation are
-contained in the <tt class="docutils literal"><span class="pre">waterapputils-info</span></tt> directory. The <tt class="docutils literal"><span class="pre">waterapputils-info</span></tt> directory contains a file,
-called <tt class="docutils literal"><span class="pre">gcmdelta_info.txt</span></tt>, that contains details of which climate change tiles
+contained in the <code class="docutils literal"><span class="pre">waterapputils-info</span></code> directory. The <code class="docutils literal"><span class="pre">waterapputils-info</span></code> directory contains a file,
+called <code class="docutils literal"><span class="pre">gcmdelta_info.txt</span></code>, that contains details of which climate change tiles
 are intersected by each basin with the corresponding (monthly) climate change factors
 applied to the the original precipitation and temperature from the original WATERSimulation.xml file.</p>
 <p>Although unlikely, any global climate change tiles that are not intersected by a basin in a respective
-WATER simulation are logged to a file called <tt class="docutils literal"><span class="pre">gcmdelta_non_intersecting_tiles.txt</span></tt>
-(Note: this file name can be edited using the <tt class="docutils literal"><span class="pre">gcmdelta_non_intersecting_file_name</span></tt> variable
-in the <tt class="docutils literal"><span class="pre">user_settings.py</span></tt> file). The <tt class="docutils literal"><span class="pre">gcmdelta_non_intersecting_centroids.txt</span></tt> is a
+WATER simulation are logged to a file called <code class="docutils literal"><span class="pre">gcmdelta_non_intersecting_tiles.txt</span></code>
+(Note: this file name can be edited using the <code class="docutils literal"><span class="pre">gcmdelta_non_intersecting_file_name</span></code> variable
+in the <code class="docutils literal"><span class="pre">user_settings.py</span></code> file). The <code class="docutils literal"><span class="pre">gcmdelta_non_intersecting_centroids.txt</span></code> is a
 comma-separated file that lists on each row the basin name (id) that does not intersect any
 global climate change tiles along with a <em>special</em> tile id of <strong>000</strong> meaning no climate change factors
 were applied.  Users can edit this file by specifying the tile ids to be applied to each
 respective basin.</p>
-<p>The following is an example of the <tt class="docutils literal"><span class="pre">gcmdelta_non_intersecting_tiles.txt</span></tt> file
+<p>The following is an example of the <code class="docutils literal"><span class="pre">gcmdelta_non_intersecting_tiles.txt</span></code> file
 where no climate change factors were applied to a specific basin:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">basinid</span><span class="p">,</span><span class="n">Tile</span>
-<span class="mo">01414500</span><span class="p">,</span><span class="mo">000</span>
+<div class="highlight-python"><div class="highlight"><pre>basinid,Tile
+01414500,000
 </pre></div>
 </div>
 <p>To apply climate factor tiles (e.g. 10,11,12) to basinid 01414500, then a user would update the
-<tt class="docutils literal"><span class="pre">gcmdelta_non_intersecting_tiles.txt</span></tt> file to the following:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">basinid</span><span class="p">,</span><span class="n">Tile</span>
-<span class="mo">01414500</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span>
+<code class="docutils literal"><span class="pre">gcmdelta_non_intersecting_tiles.txt</span></code> file to the following:</p>
+<div class="highlight-python"><div class="highlight"><pre>basinid,Tile
+01414500,10,11,12
 </pre></div>
 </div>
-<p>After updating the <tt class="docutils literal"><span class="pre">gcmdelta_non_intersecting_tiles.txt</span></tt> file, a user can apply the <em>substitute</em>
+<p>After updating the <code class="docutils literal"><span class="pre">gcmdelta_non_intersecting_tiles.txt</span></code> file, a user can apply the <em>substitute</em>
 climate change tiles by applying the following command:</p>
 <div class="highlight-python"><div class="highlight"><pre>$ python waterapputils.py -applysubgcmdeltas
 </pre></div>
 </div>
-<p>The above command uses the <tt class="docutils literal"><span class="pre">gcmdelta_non_intersecting_tiles.txt</span></tt> file
+<p>The above command uses the <code class="docutils literal"><span class="pre">gcmdelta_non_intersecting_tiles.txt</span></code> file
 to apply climate change factors to those basins that originally did not have any factors applied.
-A new file, called <tt class="docutils literal"><span class="pre">sub_gcmdelta_info.txt</span></tt>, is created in the <tt class="docutils literal"><span class="pre">waterapputils-info</span></tt> directory
+A new file, called <code class="docutils literal"><span class="pre">sub_gcmdelta_info.txt</span></code>, is created in the <code class="docutils literal"><span class="pre">waterapputils-info</span></code> directory
 that logs the information regarding the substitute factors applied.</p>
 </div>
 </div>
 
 
       </div>
-      <div class="bottomnav">
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
       
         <p>
         «&#160;&#160;<a href="overview.html">waterapputils</a>
@@ -474,9 +474,8 @@ that logs the information regarding the substitute factors applied.</p>
 
       </div>
 
-    <div class="footer">
-        &copy; Copyright 2014, Jeremiah Lant.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>
