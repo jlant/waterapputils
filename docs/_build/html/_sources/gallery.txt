@@ -85,7 +85,7 @@ Map of sample Global Climate Model tiles with sample basins - shows basin and ti
 ------------------------------------------------------------------------------------------------
 .. image:: _static/gcm-canes-sample.png
 
-Map of sample water use points (centroids) with sample basins - shows basin and centroid intersections; NOTE: **The map shows synthetic water use points and DO NOT show true location of actual water use locations**
+Map of sample water use points (centroids) with sample basins - shows basin and centroid intersections; NOTE: **The map shows synthetic water use points and DOES NOT show true location of actual water use locations**
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 .. image:: _static/wateruse-sample.png
 

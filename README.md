@@ -575,7 +575,6 @@ which is located on the [USGS Kentucky Water Science Center's Internal Website](
 
 For non-USGS users, the documentation pages can be viewed by navigating to the `docs/_build/html` directory and opening the `index.html` file in a web browser (Chrome, Firefox, IE, etc.)
 
-Documentation pages were made using [Sphinx].  
 
 ***
 
