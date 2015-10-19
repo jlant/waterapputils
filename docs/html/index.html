@@ -1,0 +1,266 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to waterapputils’s documentation! &mdash; waterapputils 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="waterapputils 1.0.0 documentation" href="#" />
+    <link rel="next" title="waterapputils" href="overview.html" /> 
+  </head>
+  <body role="document">
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="#"><img src="_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+
+      <div class="header" role="banner"><h1 class="heading"><a href="#">
+          <span>waterapputils 1.0.0 documentation</span></a></h1>
+        <h2 class="heading"><span>Welcome to waterapputils’s documentation!</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="#">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="overview.html">waterapputils</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <p><a class="reference external" href="http://www.usgs.gov/"><img alt="alt text" src="_images/usgs-logo.png" /></a></p>
+<div class="section" id="welcome-to-waterapputils-s-documentation">
+<h1>Welcome to waterapputils&#8217;s documentation!<a class="headerlink" href="#welcome-to-waterapputils-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p><strong>waterapputils</strong> is a tool used for analyzing, processing, and updating
+model simulations from the <a class="reference external" href="http://ky.water.usgs.gov/">U.S. Geological Survey Indiana and Kentucky
+Water Science Centers (INKY)</a> WATER
+application. <strong>waterapputils</strong> is written in
+<a class="reference external" href="https://www.python.org/">Python</a>, and adds new functionality,
+outside the WATER application, by allowing users to apply various future
+climate projections using a change-factor (delta) approach with data
+from the Coupled Model Intercomparison Project
+(<a class="reference external" href="http://cmip-pcmdi.llnl.gov/cmip5/">CIMP5</a>), and aggregated water
+use data to model simulations.</p>
+<p>The WATER application is a graphical user interface, written in VB.NET,
+wrapped around a variant of the rainfall-runoff model called Topmodel
+(Topography based hydrological mode) by Keith Beven, Professor at
+Lancaster University. Topmodel estimates river discharge and spatial
+soil water saturation patterns for a particular catchment basin using
+topographic, climatic, and geological input data parameters. The
+original WATER application was developed by the <a class="reference external" href="http://ky.water.usgs.gov/">U.S. Geological Survey
+Indiana and Kentucky Water Science Centers
+(INKY)</a>. References for the WATER
+application include:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://pubs.usgs.gov/sir/2009/5248/">Williamson T.N., Odom K.R., Newson J.K., Downs A.C., Nelson Jr.
+H.L., Cinotto P.J., Ayers M.A. 2009. The Water Availability Tool for
+Environmental Resources (WATER)—A water-budget modeling approach for
+managing water-supply resources in Kentucky—Phase I—Data processing,
+model development, and application to non-karst areas, U.S.
+Geological Survey Scientific Investigations Report 2009-5248. pp.
+34.</a></li>
+<li><a class="reference external" href="https://www.soils.org/publications/sssaj/abstracts/77/3/877">Williamson T.N., Taylor C.J., Newson J.K. 2013. Significance of
+Exchanging SSURGO and STATSGO Data When Modeling Hydrology in Diverse
+Physiographic Terranes. Soil Science Society of America Journal
+77:877-889. DOI:
+10.2136/sssaj2012.0069.</a></li>
+</ul>
+<p>Some sample highlights of <strong>waterapputils</strong> include:</p>
+<ul class="simple">
+<li>Processes WATER simulation output files (<code class="docutils literal"><span class="pre">txt</span></code> format).</li>
+<li>Processes WATER simulation database files that store information
+about a particular model simulation (<code class="docutils literal"><span class="pre">xml</span></code> format).</li>
+<li>Applies various statistically downscaled global climate models
+([GCMs]) to model simulations for a particular watershed basin or set
+of watershed basins based on the spatial intersection of the
+watershed(s) of interest with the global climate change scenario
+coverage of interest.</li>
+<li>Applies water use data to model simulations for a particular for a
+particular watershed basin or set of watershed basins based on the
+spatial intersection of the watershed(s) of interest with the water
+use coverage.</li>
+<li>Generates plots of all parameters found in WATER output files
+(<code class="docutils literal"><span class="pre">txt</span></code> format) with simple statistics.</li>
+<li>Generates plots of timeseries parameters found in WATER simulation
+database files (<code class="docutils literal"><span class="pre">xml</span></code> format).</li>
+<li>Generates comparison and difference plots between two WATER
+simulation output files.</li>
+<li>Generates comparison and difference plots between two WATER
+simulation database files.</li>
+<li>Logs errors and tracebacks.</li>
+<li>A multi-threaded graphical user interface (GUI) called waterapputils_gui</li>
+</ul>
+<div class="section" id="a-sample-image-from-the-gui-applying-water-use-to-water-output-files-with-waterapputils-gui">
+<h2>A sample image from the GUI - applying water use to WATER output files with waterapputils_gui<a class="headerlink" href="#a-sample-image-from-the-gui-applying-water-use-to-water-output-files-with-waterapputils-gui" title="Permalink to this headline">¶</a></h2>
+<img alt="_images/gui-wateruse.png" src="_images/gui-wateruse.png" />
+</div>
+</div>
+<div class="section" id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">waterapputils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#contents">Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#version">Version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#command-line-interface">Command Line Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#editing-settings-in-user-settings-py">Editing settings in user_settings.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#run-sample-datasets-shell-script">Run Sample Datasets Shell Script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#run-sample-datasets-with-run-sample-datasets-sh">Run sample datasets with run_sample_datasets.sh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#process-many-simulations-shell-script">Process Many Simulations Shell Script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#applying-water-use-and-gcm-deltas-to-many-water-simulations-using-run-simulations-sh">Applying water use and gcm deltas to many WATER simulations using run_simulations.sh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#graphical-user-interface">Graphical user interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#repository-layout">Repository layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#tutorials">Tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#disclaimer-and-notice">Disclaimer and Notice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#author">Author</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="guides">
+<h1>Guides<a class="headerlink" href="#guides" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guide.html">General Guide and Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guide.html#processing-water-simulation-output-files-water-txt">Processing WATER simulation output files - WATER.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide.html#processing-water-simulation-database-file-watersimulation-xml">Processing WATER simulation database file - WATERSimulation.xml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide.html#applying-water-use-to-water-simulations">Applying water use to WATER simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide.html#applying-climate-change-factors-to-water-batch-runs">Applying climate change factors to WATER batch runs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="wateruse-guide.html">Water Use Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wateruse-guide.html#water-use-data-files">Water use data files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wateruse-guide.html#steps-to-compute-total-water-use-for-each-respective-basin">Steps to Compute Total Water Use For Each Respective Basin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wateruse-guide.html#example-using-sample-randomly-generated-data">Example - using sample randomly generated data</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gcmdeltas-guide.html">GCM Delta Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gcmdeltas-guide.html#gcm-delta-data-files">GCM Delta data files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="documentation">
+<h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="code.html">Code Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code.html#waterapputils-py-main-controller">waterapputils.py - &#8220;main controller&#8221;</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#user-settings-py-user-settings-for-waterapputils">user_settings.py - user settings for waterapputils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#water-files-processing-py-processes-and-implements-watertxt-and-waterxml-processing">water_files_processing.py - processes and implements watertxt and waterxml processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#watertxt-py-reads-and-processes-water-output-simulation-files-water-txt">watertxt.py - reads and processes WATER output simulation files (WATER.txt)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#watertxt-viewer-py-plots-water-output-simulation-files-water-txt">watertxt_viewer.py - plots WATER output simulation files (WATER.txt)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#waterxml-py-reads-and-processes-water-database-simulation-files-watersimulation-xml">waterxml.py - reads and processes WATER database simulation files (WATERSimulation.xml)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#waterxml-viewer-py-plots-water-database-simulation-files-watersimulation-xml">waterxml_viewer.py - plots WATER database simulation files (WATERSimulation.xml)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#wateruse-py-reads-processes-and-computes-water-use-from-water-use-data-files">wateruse.py - reads, processes, and computes water use from water use data files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#wateruse-processing-py-processes-and-implements-water-use-using-settings-in-user-settings-py">wateruse_processing.py - processes and implements water use using settings in user_settings.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#specific-output-file-processing-py-creates-specific-output-files-for-external-programs-oasis-and-ecoflow">specific_output_file_processing.py - creates specific output files for external programs OASIS and Ecoflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#gcm-delta-processing-py-processes-and-implements-global-climate-modeling-delta-factors-using-settings-in-user-settings-py">gcm_delta_processing.py - processes and implements global climate modeling delta factors using settings in user_settings.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#deltas-py-reads-and-processes-global-climate-model-files">deltas.py - reads and processes global climate model files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#deltas-viewer-py-plots-global-climate-model-files">deltas_viewer.py - plots global climate model files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#spatialvectors-py-handles-spatial-data-processing-of-shapefiles-performs-spatial-intersection-between-shapefiles">spatialvectors.py - handles spatial data processing of shapefiles; performs spatial intersection between shapefiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#spatialdata-viewer-py-creates-maps-of-shapefiles">spatialdata_viewer.py - creates maps of shapefiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#module-helpers">helpers.py - mix of helper functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#module-waterapputils_logging">waterapputils_logging.py - handles errors</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="download">
+<h1>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/jlant-usgs/waterapputils">https://github.com/jlant-usgs/waterapputils</a></p>
+</div>
+<div class="section" id="gallery">
+<h1>Gallery<a class="headerlink" href="#gallery" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#process-and-analyze-water-output-files-with-waterapputils-gui">Process and analyze WATER output files with waterapputils_gui</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#compare-water-output-files-with-waterapputils-gui">Compare WATER output files with waterapputils_gui</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#apply-water-use-to-water-output-files-with-waterapputils-gui">Apply water use to WATER output files with waterapputils_gui</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#apply-global-climate-delta-factors-to-water-database-files-with-waterapputils-gui">Apply global climate delta factors to WATER database files with waterapputils_gui</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#discharge-from-water-txt">Discharge from WATER.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#water-use-from-water-txt">Water use from WATER.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#storage-deficit-from-water-txt">Storage deficit from WATER.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#subsurface-flow-from-water-txt">Subsurface flow from WATER.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#aet-from-water-txt">AET from WATER.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#pet-from-water-txt">PET from WATER.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#precipitation-from-water-txt">Precipitation from WATER.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#snowpack-from-water-txt">Snowpack from WATER.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#average-soil-root-zones-from-water-txt">Average Soil Root Zones from WATER.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#temperature-from-watersimulation-xml">Temperature from WATERSimulation.xml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#twi-from-watersimulation-xml">TWI from WATERSimulation.xml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#comparison-of-discharge-between-2-water-txt-files">Comparison of discharge between 2 WATER.txt files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#comparison-of-storage-deficit-between-2-water-txt-files">Comparison of storage deficit between 2 WATER.txt files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#comparison-of-temperature-between-2-watersimulation-xml-files">Comparison of temperature between 2 WATERSimulation.xml files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#sample-global-climate-model-deltas">Sample Global Climate Model deltas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#map-of-sample-global-climate-model-tiles">Map of sample Global Climate Model tiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#map-of-sample-global-climate-model-tiles-with-sample-basins-shows-basin-and-tile-intersections">Map of sample Global Climate Model tiles with sample basins - shows basin and tile intersections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#map-of-sample-water-use-points-centroids-with-sample-basins-shows-basin-and-centroid-intersections-note-the-map-shows-synthetic-water-use-points-and-does-not-show-true-location-of-actual-water-use-locations">Map of sample water use points (centroids) with sample basins - shows basin and centroid intersections; NOTE: <strong>The map shows synthetic water use points and DOES NOT show true location of actual water use locations</strong></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span>Search Page</span></a></li>
+</ul>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="#">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="overview.html">waterapputils</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>
