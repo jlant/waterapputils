@@ -90,7 +90,7 @@ Some sample highlights of **waterapputils** include:
 
 A sample image of processing and analyzing WATER output files the GUI:
 
-.. figure:: _static/gui-watertxt.png
+.. figure:: docs/_static/gui-watertxt.png
    :alt: Process and analyze WATER output files
 
    Process and analyze WATER output files
@@ -115,6 +115,8 @@ Script <#process-many-simulation-shell-script>`__
 `Documentation <#documentation>`__
 
 `Tutorials <#tutorials>`__
+
+`Installation <#installation>`__
 
 `Requirements <#requirements>`__
 
@@ -179,7 +181,7 @@ Command Line Arguments:
 +--------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | ``-ecoflowdaxml``        | list WATER simulation database xml file(s) to process; creates output data file(s) for ecoflow program - a comma separated file(s) of basin (station) id and its respective drainage area in square miles calculated using data in the ``WATERSimulation.xml``   |
 +--------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``-ecoflowdashp``        | list basin or watershed shapefiles to process; creates output data file(s) for ecoflow program - a comma separated file(s) of basin (station) id and its respective drainage area in square miles calculated from the shapefile(s)                               |
+| ``-ecoflowdashp``        | list basin or watershed shapefile(s) to process; creates output data file(s) for ecoflow program - a comma separated file(s) of basin (station) id and its respective drainage area in square miles calculated from the shapefile(s)                             |
 +--------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | ``-outfilename``         | OPTIONAL : output filename to be used with ``-ecoflowdaxml`` or ``-ecoflowdashp`` commands in writing the drainage area comma separated file                                                                                                                     |
 +--------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -230,8 +232,10 @@ information about a WATER simulation. A WATER simulation can be either a
 *single* or a *batch* simulation. Each simulation type has a few
 different outputs along with a different directory structure.
 
-    | A *single* simulation corresponds to basins that were *delineated* within the WATER application using a pour point.
-    | A *batch* simulation corresponds to basins that were *pre-delineated* and were used within the WATER application.
+    | A *single* simulation corresponds to basins that were *delineated*
+    within the WATER application using a pour point.
+    | A *batch* simulation corresponds to basins that were
+    *pre-delineated* and were used within the WATER application.
 
 --------------
 
@@ -840,6 +844,18 @@ ftp://ftpext.usgs.gov/pub/er/ky/louisville/jglant/waterapputils/waterapputils-vi
 
 --------------
 
+Installation
+------------
+
+At this time, there is no installation required for **waterapputils**.
+However, a user needs to run **waterapputils** from within the
+**waterapputils** directory.
+
+The `Requirements <#requirements>`__ listed below do need to be
+installed.
+
+--------------
+
 Requirements
 ------------
 
@@ -853,7 +869,7 @@ The following are a list of dependencies:
 
 -  `nose <https://nose.readthedocs.org/en/latest/>`__ == 1.3.3
 
--  `Basemap <http://matplotlib.org/basemap/>`__ == 1.0.2
+-  `Basemap <http://matplotlib.org/basemap/>`__ >= 1.0.2
 
 -  `GDAL <https://pypi.python.org/pypi/GDAL/>`__ == 1.11.0
 
@@ -867,19 +883,53 @@ dependencies:
 
 -  `pythonxy <https://code.google.com/p/pythonxy/>`__
 
+   -  need to install *Basemap* which can be downloaded from the
+      `additional plugins page on the PythonXY
+      website <https://code.google.com/p/pythonxy/wiki/AdditionalPlugins>`__.
+
 -  `Anaconda <https://store.continuum.io/cshop/anaconda/>`__
+
+   -  need to install *GDAL (1.11.1)* and *Basemap* which can be
+      installed using
+      `conda <http://conda.pydata.org/docs/intro.html>`__ which comes
+      with from
+      `Anaconda <https://store.continuum.io/cshop/anaconda/>`__.
+
+   .. code:: sh
+
+       $ conda install Basemap
+
+   .. code:: sh
+
+       $ conda install GDAL=1.11.1
 
 -  `Enthought <https://www.enthought.com/>`__
 
-The PythonXY 2.7.6.1 version (which includes all the requirements listed above) and the Basemap 1.0.2 plugin can be downloaded from the following ftp site: ftp://ftpext.usgs.gov/pub/er/ky/louisville/jglant/waterapputils/waterapputils-pythonxy2.7.6.1-downloads.zip
+The PythonXY 2.7.6.1 version (which includes all the requirements listed
+above) and the Basemap 1.0.2 plugin can be downloaded from the following
+ftp site:
+ftp://ftpext.usgs.gov/pub/er/ky/louisville/jglant/waterapputils/waterapputils-pythonxy2.7.6.1-downloads.zip
 
 --------------
 
 Disclaimer and Notice
 ---------------------
 
-This software has been approved for release by the U.S. Geological Survey (USGS). Although the software has been subjected to rigorous review, the USGS reserves the right to update the software as needed pursuant to further analysis and review. No warranty, expressed or implied, is made by the USGS or the U.S. Government as to the functionality of the software and related material nor shall the fact of release constitute any such warranty. Furthermore, the software is released on condition that neither the USGS nor the U.S. Government shall be held liable for any damages resulting from its authorized or unauthorized use. Please refer to the USGS Software User Rights Notice (LICENSE.txt or http://water.usgs.gov/software/help/notice/) for complete use, copyright, and distribution information. Users who find errors are requested to report them to the USGS. Any use of trade, firm, or product names is for descriptive purposes only and does not imply
-endorsement by the U.S. Government. 
+This software has been approved for release by the U.S. Geological
+Survey (USGS). Although the software has been subjected to rigorous
+review, the USGS reserves the right to update the software as needed
+pursuant to further analysis and review. No warranty, expressed or
+implied, is made by the USGS or the U.S. Government as to the
+functionality of the software and related material nor shall the fact of
+release constitute any such warranty. Furthermore, the software is
+released on condition that neither the USGS nor the U.S. Government
+shall be held liable for any damages resulting from its authorized or
+unauthorized use. Please refer to the USGS Software User Rights Notice
+(LICENSE.txt or http://water.usgs.gov/software/help/notice/) for
+complete use, copyright, and distribution information. Users who find
+errors are requested to report them to the USGS. Any use of trade, firm,
+or product names is for descriptive purposes only and does not imply
+endorsement by the U.S. Government.
 
 --------------
 
@@ -892,5 +942,5 @@ Author
 | Office: 502-493-1949 Fax: 502-493-1909
 | jlant@usgs.gov \| www.usgs.gov
 
-.. |alt text| image:: _static/usgs-logo.png
+.. |alt text| image:: docs/_static/usgs-logo.png
    :target: http://www.usgs.gov/
