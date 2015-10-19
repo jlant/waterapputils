@@ -27,18 +27,18 @@
     <link rel="next" title="General Guide and Tutorial" href="guide.html" />
     <link rel="prev" title="Welcome to waterapputils’s documentation!" href="index.html" /> 
   </head>
-  <body role="document">
+  <body>
 
 <div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
 <a href="index.html"><img src="_static/logo.png" border="0" alt="py4sci"/></a>
 </div>
 
 
-      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+      <div class="header"><h1 class="heading"><a href="index.html">
           <span>waterapputils 1.0.0 documentation</span></a></h1>
         <h2 class="heading"><span>waterapputils</span></h2>
       </div>
-      <div class="topnav" role="navigation" aria-label="top navigation">
+      <div class="topnav">
       
         <p>
         «&#160;&#160;<a href="index.html">Welcome to waterapputils&#8217;s documentation!</a>
@@ -100,9 +100,9 @@ Physiographic Terranes. Soil Science Society of America Journal
 </ul>
 <p>Some sample highlights of <strong>waterapputils</strong> include:</p>
 <ul class="simple">
-<li>Processes WATER simulation output files (<code class="docutils literal"><span class="pre">txt</span></code> format).</li>
+<li>Processes WATER simulation output files (<tt class="docutils literal"><span class="pre">txt</span></tt> format).</li>
 <li>Processes WATER simulation database files that store information
-about a particular model simulation (<code class="docutils literal"><span class="pre">xml</span></code> format).</li>
+about a particular model simulation (<tt class="docutils literal"><span class="pre">xml</span></tt> format).</li>
 <li>Applies various statistically downscaled <strong>General Circulation
 Models</strong> (GCM)s to model simulations for a particular watershed basin
 or set of watershed basins based on the spatial intersection of the
@@ -113,9 +113,9 @@ a particular watershed basin or set of watershed basins based on the
 spatial intersection of the watershed(s) of interest with the water
 use coverage.</li>
 <li>Generates plots of all parameters found in WATER output files
-(<code class="docutils literal"><span class="pre">txt</span></code> format) with simple statistics.</li>
+(<tt class="docutils literal"><span class="pre">txt</span></tt> format) with simple statistics.</li>
 <li>Generates plots of timeseries parameters found in WATER simulation
-database files (<code class="docutils literal"><span class="pre">xml</span></code> format).</li>
+database files (<tt class="docutils literal"><span class="pre">xml</span></tt> format).</li>
 <li>Generates comparison and difference plots between two WATER
 simulation output files.</li>
 <li>Generates comparison and difference plots between two WATER
@@ -127,9 +127,9 @@ simulation database files.</li>
 <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/blob/master/waterapputils/waterapputils_gui.py">waterapputils_gui</a>.</li>
 </ul>
 <p>A sample image of processing and analyzing WATER output files the GUI:</p>
-<div class="figure" id="id5">
+<div class="figure">
 <img alt="Process and analyze WATER output files" src="_images/gui-watertxt.png" />
-<p class="caption"><span class="caption-text">Process and analyze WATER output files</span></p>
+<p class="caption">Process and analyze WATER output files</p>
 </div>
 </div>
 <div class="section" id="contents">
@@ -144,6 +144,7 @@ Script</a></p>
 <p><a class="reference external" href="#repository-layout">Repository Layout</a></p>
 <p><a class="reference external" href="#documentation">Documentation</a></p>
 <p><a class="reference external" href="#tutorials">Tutorials</a></p>
+<p><a class="reference external" href="#installation">Installation</a></p>
 <p><a class="reference external" href="#requirements">Requirements</a></p>
 <p><a class="reference external" href="#disclaimer-and-notice">Disclaimer and Notice</a></p>
 <p><a class="reference external" href="#author">Author</a></p>
@@ -175,74 +176,74 @@ Script</a></p>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">-h</span></code></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-h</span></tt></td>
 <td>show list of available commands</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">-watertxt</span></code></td>
-<td>list WATER simulation output file(s) to process; <code class="docutils literal"><span class="pre">WATER.txt</span></code></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-watertxt</span></tt></td>
+<td>list WATER simulation output file(s) to process; <tt class="docutils literal"><span class="pre">WATER.txt</span></tt></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">-watertxtfd</span></code></td>
-<td>open file dialog window to select WATER simulation output file(s) to process; <code class="docutils literal"><span class="pre">WATER.txt</span></code></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-watertxtfd</span></tt></td>
+<td>open file dialog window to select WATER simulation output file(s) to process; <tt class="docutils literal"><span class="pre">WATER.txt</span></tt></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">-watertxtcmp</span></code></td>
-<td>list 2 WATER simulation output file(s) to compare; <code class="docutils literal"><span class="pre">WATER.txt</span></code></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-watertxtcmp</span></tt></td>
+<td>list 2 WATER simulation output file(s) to compare; <tt class="docutils literal"><span class="pre">WATER.txt</span></tt></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">-watertxtcmpfd</span></code></td>
-<td>open file dialog window to select 2 WATER simulation output file(s) to compare; <code class="docutils literal"><span class="pre">WATER.txt</span></code></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-watertxtcmpfd</span></tt></td>
+<td>open file dialog window to select 2 WATER simulation output file(s) to compare; <tt class="docutils literal"><span class="pre">WATER.txt</span></tt></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">-waterxml</span></code></td>
-<td>list WATER simulation database file(s) to process; <code class="docutils literal"><span class="pre">WATERSimulation.xml</span></code></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-waterxml</span></tt></td>
+<td>list WATER simulation database file(s) to process; <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">-waterxmlfd</span></code></td>
-<td>open file dialog window to select WATER simulation database file(s) to process; <code class="docutils literal"><span class="pre">WATERSimulation.xml</span></code></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-waterxmlfd</span></tt></td>
+<td>open file dialog window to select WATER simulation database file(s) to process; <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">-waterxmlcmp</span></code></td>
-<td>list 2 WATER simulation database file(s) to compare; <code class="docutils literal"><span class="pre">WATERSimulation.xml</span></code></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-waterxmlcmp</span></tt></td>
+<td>list 2 WATER simulation database file(s) to compare; <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">-waterxmlcmpfd</span></code></td>
-<td>open file dialog window to select 2 WATER simulation database files to compare; <code class="docutils literal"><span class="pre">WATERSimulation.xml</span></code></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-waterxmlcmpfd</span></tt></td>
+<td>open file dialog window to select 2 WATER simulation database files to compare; <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">-applygcmdeltas</span></code></td>
-<td>apply general circulation model deltas to WATER simulation database file(s); <code class="docutils literal"><span class="pre">WATERSimulation.xml</span></code>; details specified in <code class="docutils literal"><span class="pre">user_settings.py</span></code></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-applygcmdeltas</span></tt></td>
+<td>apply general circulation model deltas to WATER simulation database file(s); <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt>; details specified in <tt class="docutils literal"><span class="pre">user_settings.py</span></tt></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">-applysubgcmdeltas</span></code></td>
-<td>apply updated general circulation model deltas from <code class="docutils literal"><span class="pre">sub_gcm_delta_info_file_name</span></code> variable in user_settings.py to WATER simulation database file(s); <code class="docutils literal"><span class="pre">WATERSimulation.xml</span></code>; details specified in <code class="docutils literal"><span class="pre">user_settings.py</span></code></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-applysubgcmdeltas</span></tt></td>
+<td>apply updated general circulation model deltas from <tt class="docutils literal"><span class="pre">sub_gcm_delta_info_file_name</span></tt> variable in user_settings.py to WATER simulation database file(s); <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt>; details specified in <tt class="docutils literal"><span class="pre">user_settings.py</span></tt></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">-applywateruse</span></code></td>
-<td>apply water use data to WATER simulation output file(s); <code class="docutils literal"><span class="pre">WATER.txt</span></code>; details specified in <code class="docutils literal"><span class="pre">user_settings.py</span></code></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-applywateruse</span></tt></td>
+<td>apply water use data to WATER simulation output file(s); <tt class="docutils literal"><span class="pre">WATER.txt</span></tt>; details specified in <tt class="docutils literal"><span class="pre">user_settings.py</span></tt></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">-applysubwateruse</span></code></td>
-<td>apply water use data from <code class="docutils literal"><span class="pre">sub_wateruse_info_file_name</span></code> variable in user_settings.py to WATER simulation output file(s); <code class="docutils literal"><span class="pre">WATER.txt</span></code>; details specified in <code class="docutils literal"><span class="pre">user_settings.py</span></code></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-applysubwateruse</span></tt></td>
+<td>apply water use data from <tt class="docutils literal"><span class="pre">sub_wateruse_info_file_name</span></tt> variable in user_settings.py to WATER simulation output file(s); <tt class="docutils literal"><span class="pre">WATER.txt</span></tt>; details specified in <tt class="docutils literal"><span class="pre">user_settings.py</span></tt></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">-oasis</span></code></td>
-<td>list WATER simulation output file(s) to process; creates output data file(s) for OASIS program - a tab delimited file(s) of timeseries of discharge; <strong>NOTE</strong>: WATER simulation output file must have the <code class="docutils literal"><span class="pre">Discharge</span> <span class="pre">+</span> <span class="pre">Water</span> <span class="pre">Use</span></code> column</td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-oasis</span></tt></td>
+<td>list WATER simulation output file(s) to process; creates output data file(s) for OASIS program - a tab delimited file(s) of timeseries of discharge; <strong>NOTE</strong>: WATER simulation output file must have the <tt class="docutils literal"><span class="pre">Discharge</span> <span class="pre">+</span> <span class="pre">Water</span> <span class="pre">Use</span></tt> column</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">-ecoflowstationid</span></code></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-ecoflowstationid</span></tt></td>
 <td>list WATER simulation output file(s) to process; creates output data file(s) for ecoflow program - a comma separated file(s) of timeseries of discharge for a specific basin (station) id</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">-ecoflowdaxml</span></code></td>
-<td>list WATER simulation database xml file(s) to process; creates output data file(s) for ecoflow program - a comma separated file(s) of basin (station) id and its respective drainage area in square miles calculated using data in the <code class="docutils literal"><span class="pre">WATERSimulation.xml</span></code></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-ecoflowdaxml</span></tt></td>
+<td>list WATER simulation database xml file(s) to process; creates output data file(s) for ecoflow program - a comma separated file(s) of basin (station) id and its respective drainage area in square miles calculated using data in the <tt class="docutils literal"><span class="pre">WATERSimulation.xml</span></tt></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">-ecoflowdashp</span></code></td>
-<td>list basin or watershed shapefiles to process; creates output data file(s) for ecoflow program - a comma separated file(s) of basin (station) id and its respective drainage area in square miles calculated from the shapefile(s)</td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-ecoflowdashp</span></tt></td>
+<td>list basin or watershed shapefile(s) to process; creates output data file(s) for ecoflow program - a comma separated file(s) of basin (station) id and its respective drainage area in square miles calculated from the shapefile(s)</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">-outfilename</span></code></td>
-<td>OPTIONAL : output filename to be used with <code class="docutils literal"><span class="pre">-ecoflowdaxml</span></code> or <code class="docutils literal"><span class="pre">-ecoflowdashp</span></code> commands in writing the drainage area comma separated file</td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-outfilename</span></tt></td>
+<td>OPTIONAL : output filename to be used with <tt class="docutils literal"><span class="pre">-ecoflowdaxml</span></tt> or <tt class="docutils literal"><span class="pre">-ecoflowdashp</span></tt> commands in writing the drainage area comma separated file</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">-labelfield</span></code></td>
-<td>OPTIONAL : label field name (basin number / station id) to be used with <code class="docutils literal"><span class="pre">-ecoflowdashp</span></code> command in writing the drainage area comma separated file; Default label field is the FID in the basin(s) shapefile</td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-labelfield</span></tt></td>
+<td>OPTIONAL : label field name (basin number / station id) to be used with <tt class="docutils literal"><span class="pre">-ecoflowdashp</span></tt> command in writing the drainage area comma separated file; Default label field is the FID in the basin(s) shapefile</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">-areafield</span></code></td>
-<td>OPTIONAL : area field name in a basin(s) shapefile to be used with <code class="docutils literal"><span class="pre">-ecoflowdashp</span></code> command in writing the drainage area comma separated file; Default action is to calculate area from the shapefile(s)</td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-areafield</span></tt></td>
+<td>OPTIONAL : area field name in a basin(s) shapefile to be used with <tt class="docutils literal"><span class="pre">-ecoflowdashp</span></tt> command in writing the drainage area comma separated file; Default action is to calculate area from the shapefile(s)</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">-samplesingle</span></code></td>
-<td>OPTIONAL : flag used with <code class="docutils literal"><span class="pre">-applywateruse</span></code>, <code class="docutils literal"><span class="pre">-applysubwateruse</span></code>, <code class="docutils literal"><span class="pre">-applygcmdeltas</span></code>, <code class="docutils literal"><span class="pre">-applysubgcmdeltas</span></code> to specify the use of the sample single simulation datasets</td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-samplesingle</span></tt></td>
+<td>OPTIONAL : flag used with <tt class="docutils literal"><span class="pre">-applywateruse</span></tt>, <tt class="docutils literal"><span class="pre">-applysubwateruse</span></tt>, <tt class="docutils literal"><span class="pre">-applygcmdeltas</span></tt>, <tt class="docutils literal"><span class="pre">-applysubgcmdeltas</span></tt> to specify the use of the sample single simulation datasets</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">-samplebatch</span></code></td>
-<td>OPTIONAL : flag used with <code class="docutils literal"><span class="pre">-applywateruse</span></code>, <code class="docutils literal"><span class="pre">-applysubwateruse</span></code>, <code class="docutils literal"><span class="pre">-applygcmdeltas</span></code>, <code class="docutils literal"><span class="pre">-applysubgcmdeltas</span></code> to specify the use of the sample batch simulation datasets</td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-samplebatch</span></tt></td>
+<td>OPTIONAL : flag used with <tt class="docutils literal"><span class="pre">-applywateruse</span></tt>, <tt class="docutils literal"><span class="pre">-applysubwateruse</span></tt>, <tt class="docutils literal"><span class="pre">-applygcmdeltas</span></tt>, <tt class="docutils literal"><span class="pre">-applysubgcmdeltas</span></tt> to specify the use of the sample batch simulation datasets</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">-simdir</span></code></td>
-<td>OPTIONAL : flag used with <code class="docutils literal"><span class="pre">-applywateruse</span></code>, <code class="docutils literal"><span class="pre">-applysubwateruse</span></code>, <code class="docutils literal"><span class="pre">-applygcmdeltas</span></code>, <code class="docutils literal"><span class="pre">-applysubgcmdeltas</span></code> to specify a path to a specific WATER simulation instead of specifying it in <code class="docutils literal"><span class="pre">user_settings.py</span></code></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-simdir</span></tt></td>
+<td>OPTIONAL : flag used with <tt class="docutils literal"><span class="pre">-applywateruse</span></tt>, <tt class="docutils literal"><span class="pre">-applysubwateruse</span></tt>, <tt class="docutils literal"><span class="pre">-applygcmdeltas</span></tt>, <tt class="docutils literal"><span class="pre">-applysubgcmdeltas</span></tt> to specify a path to a specific WATER simulation instead of specifying it in <tt class="docutils literal"><span class="pre">user_settings.py</span></tt></td>
 </tr>
 </tbody>
 </table>
@@ -280,9 +281,11 @@ information about a WATER simulation. A WATER simulation can be either a
 different outputs along with a different directory structure.</p>
 <blockquote>
 <div><div class="line-block">
-<div class="line">A <em>single</em> simulation corresponds to basins that were <em>delineated</em> within the WATER application using a pour point.</div>
-<div class="line">A <em>batch</em> simulation corresponds to basins that were <em>pre-delineated</em> and were used within the WATER application.</div>
+<div class="line">A <em>single</em> simulation corresponds to basins that were <em>delineated</em></div>
 </div>
+<p>within the WATER application using a pour point.
+| A <em>batch</em> simulation corresponds to basins that were
+<em>pre-delineated</em> and were used within the WATER application.</p>
 </div></blockquote>
 </div>
 <hr class="docutils" />
@@ -316,49 +319,49 @@ $ run_sample_datasets.sh [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">-h</span></code></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-h</span></tt></td>
 <td>show list of available commands</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">-txt</span></code></td>
-<td>run <code class="docutils literal"><span class="pre">-watertxt</span></code> and <code class="docutils literal"><span class="pre">-watertxtcmp</span></code> using the <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/watertxt-datafiles">sample WATER simulation output TEXT files</a></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-txt</span></tt></td>
+<td>run <tt class="docutils literal"><span class="pre">-watertxt</span></tt> and <tt class="docutils literal"><span class="pre">-watertxtcmp</span></tt> using the <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/watertxt-datafiles">sample WATER simulation output TEXT files</a></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">-xml</span></code></td>
-<td>run <code class="docutils literal"><span class="pre">-waterxml</span></code> and <code class="docutils literal"><span class="pre">-waterxmlcmp</span></code> using the <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/waterxml-datafiles">sample WATER simulation output XML files</a></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-xml</span></tt></td>
+<td>run <tt class="docutils literal"><span class="pre">-waterxml</span></tt> and <tt class="docutils literal"><span class="pre">-waterxmlcmp</span></tt> using the <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/waterxml-datafiles">sample WATER simulation output XML files</a></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">-wateruse</span></code></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-wateruse</span></tt></td>
 <td>run and apply <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/wateruse-datafiles">water use data</a> to sample WATER simulations; <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">single and batch simulations</a></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">-subwateruse</span></code></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-subwateruse</span></tt></td>
 <td>run and apply substitute water use data to sample WATER simulations; <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">single and batch simulations</a></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">-gcmdelta</span></code></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-gcmdelta</span></tt></td>
 <td>run and apply <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/deltas-gcm">general circulation model data</a> to sample WATER simulations; <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">single and batch simulations</a></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">-subgcmdelta</span></code></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-subgcmdelta</span></tt></td>
 <td>run and apply substitute water use data to sample WATER simulations; <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">single and batch simulations</a></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">-oasis</span></code></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-oasis</span></tt></td>
 <td>create an oasis formated water use output file using the <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt">sample water use applied WATER TEXT file</a></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">-ecoflowstationid</span></code></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-ecoflowstationid</span></tt></td>
 <td>create an ecoflow formated water use output file using the <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt">sample water use applied WATER TEXT file</a></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">-ecoflowdaxml</span></code></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-ecoflowdaxml</span></tt></td>
 <td>create an ecoflow formated drainage area output file using the <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-datafiles/WATERSimulation-basin0.xml">sample WATER XML file</a> to calculate basin area</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">-ecoflowdashp</span></code></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-ecoflowdashp</span></tt></td>
 <td>create an ecoflow formated drainage area output file using the <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-datafiles/sample-datafiles/basin0.shp">sample basin shapefiles</a></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">-mapsim</span></code></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-mapsim</span></tt></td>
 <td>create maps for <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">single and batch simulations</a></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">-all</span></code></td>
-<td>run (mostly) all commands; <code class="docutils literal"><span class="pre">-tests</span></code>, <code class="docutils literal"><span class="pre">-txt</span></code>, <code class="docutils literal"><span class="pre">-xml</span></code>, <code class="docutils literal"><span class="pre">-wateruse</span></code>, <code class="docutils literal"><span class="pre">-gcmdelta</span></code>, <code class="docutils literal"><span class="pre">-oasis</span></code>, <code class="docutils literal"><span class="pre">-ecoflowstationid</span></code>, <code class="docutils literal"><span class="pre">-ecoflowdaxml</span></code>, <code class="docutils literal"><span class="pre">-ecoflowdashp</span></code>, <code class="docutils literal"><span class="pre">mapsim</span></code></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-all</span></tt></td>
+<td>run (mostly) all commands; <tt class="docutils literal"><span class="pre">-tests</span></tt>, <tt class="docutils literal"><span class="pre">-txt</span></tt>, <tt class="docutils literal"><span class="pre">-xml</span></tt>, <tt class="docutils literal"><span class="pre">-wateruse</span></tt>, <tt class="docutils literal"><span class="pre">-gcmdelta</span></tt>, <tt class="docutils literal"><span class="pre">-oasis</span></tt>, <tt class="docutils literal"><span class="pre">-ecoflowstationid</span></tt>, <tt class="docutils literal"><span class="pre">-ecoflowdaxml</span></tt>, <tt class="docutils literal"><span class="pre">-ecoflowdashp</span></tt>, <tt class="docutils literal"><span class="pre">mapsim</span></tt></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">-tests</span></code></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-tests</span></tt></td>
 <td>run units tests use nosetests</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">-makeclean</span></code></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-makeclean</span></tt></td>
 <td>cleans/removes all output of running sample dataset in in the <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">sample-water-simulations directory</a></td>
 </tr>
 </tbody>
@@ -411,19 +414,19 @@ $ run_simulations.sh [[[-applywateruse] [-applysubwateruse] [-applygcmdelta] [-a
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">-h</span></code></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-h</span></tt></td>
 <td>show list of available commands</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">-applywateruse</span></code></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-applywateruse</span></tt></td>
 <td>run and apply <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/wateruse-datafiles">water use data</a> to sample WATER simulations; <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">single and batch simulations</a></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">-applysubwateruse</span></code></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-applysubwateruse</span></tt></td>
 <td>run and apply substitute water use data to sample WATER simulations; <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">single and batch simulations</a></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">-applygcmdelta</span></code></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-applygcmdelta</span></tt></td>
 <td>run and apply <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/deltas-gcm">general circulation model data</a> to sample WATER simulations; <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">single and batch simulations</a></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">-applysubgcmdelta</span></code></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-applysubgcmdelta</span></tt></td>
 <td>run and apply substitute water use data to sample WATER simulations; <a class="reference external" href="https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations">single and batch simulations</a></td>
 </tr>
 </tbody>
@@ -442,7 +445,7 @@ $ run_simulations.sh [[[-applywateruse] [-applysubwateruse] [-applygcmdelta] [-a
 <p>The multi-threaded graphical user interface (GUI) called
 <a class="reference external" href="waterapputils/waterapputils_gui.py">waterapputils_gui</a> can be
 started using the command below or by simply double clicking on the
-<code class="docutils literal"><span class="pre">waterapputils_gui.py</span></code> file.</p>
+<tt class="docutils literal"><span class="pre">waterapputils_gui.py</span></tt> file.</p>
 <div class="code sh highlight-python"><div class="highlight"><pre>$ python waterapputils_gui.py
 </pre></div>
 </div>
@@ -788,7 +791,7 @@ view with additional shapefiles (i.e. usgs gages).</div></blockquote>
 <a class="reference external" href="https://nose.readthedocs.org/en/latest/">nose</a> library, and are
 contained in the <em>tests</em> directory.
 <a class="reference external" href="https://nose.readthedocs.org/en/latest/">nose</a> must be installed in
-order to run tests. Automated tests can be run using the <code class="docutils literal"><span class="pre">nosetests</span></code>
+order to run tests. Automated tests can be run using the <tt class="docutils literal"><span class="pre">nosetests</span></tt>
 command at the project level directory (not within the <em>tests</em>
 directory, but the <em>waterapputils</em> directory containing the <em>tests</em>
 directory). A successful test run will look something like the
@@ -869,11 +872,9 @@ run_simulations.sh                      # bash script used to apply water use an
 applying water use and the general circulation model deltas, additional
 information about <em>waterapputils</em>, and a gallery of output images can be
 found
-<a class="reference external" href="http://ky.water.usgs.gov/usgs/projects/jlant_program_code/waterapputils/html/index.html">here</a>
-which is located on the <a class="reference external" href="http://ky.water.usgs.gov/usgs/projects/science_mgt.html">USGS Kentucky Water Science Center&#8217;s Internal
-Website</a>.</p>
-<p>For non-USGS users, the documentation pages can be viewed by navigating
-to the <code class="docutils literal"><span class="pre">docs/_build/html</span></code> directory and opening the <code class="docutils literal"><span class="pre">index.html</span></code>
+<a class="reference external" href="http://jlant-usgs.github.io/waterapputils/docs/html/index.html">here.</a>.</p>
+<p>Additionally, the documentation pages can be viewed by navigating
+to the <tt class="docutils literal"><span class="pre">docs/_build/html</span></tt> directory and opening the <tt class="docutils literal"><span class="pre">index.html</span></tt>
 file in a web browser (Chrome, Firefox, IE, etc.)</p>
 </div>
 <hr class="docutils" />
@@ -883,12 +884,23 @@ file in a web browser (Chrome, Firefox, IE, etc.)</p>
 use waterapputils using many of the example sample datasets.</p>
 <p>The following are the tutorial topics covered:</p>
 <ol class="arabic simple">
-<li>General Overview</li>
-<li>Command Line Interface</li>
-<li>Graphical User Interface</li>
+<li>General Overview (48 minutes) - a general overview and description of waterapputils</li>
 </ol>
+<p>2. Command Line Interface (73 minutes) - a detailed walk through the use of the waterapputils
+command line interface with examples.</p>
+<p>3. Graphical User Interface (46 minutes) - a detailed walk through the use of the waterapputils
+graphical user interface with examples.</p>
 <p>Download the waterapputils video tutorials from:</p>
 <p><a class="reference external" href="ftp://ftpext.usgs.gov/pub/er/ky/louisville/jglant/waterapputils/waterapputils-video-tutorials.zip">ftp://ftpext.usgs.gov/pub/er/ky/louisville/jglant/waterapputils/waterapputils-video-tutorials.zip</a></p>
+</div>
+<hr class="docutils" />
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>At this time, there is no installation required for <strong>waterapputils</strong>.
+However, a user needs to run <strong>waterapputils</strong> from within the
+<strong>waterapputils</strong> directory.</p>
+<p>The <a class="reference external" href="#requirements">Requirements</a> listed below do need to be
+installed.</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="requirements">
@@ -899,7 +911,7 @@ use waterapputils using many of the example sample datasets.</p>
 <li><a class="reference external" href="http://www.numpy.org/">NumPy</a> == 1.8.1</li>
 <li><a class="reference external" href="http://matplotlib.org/">matplotlib</a> == 1.3.1</li>
 <li><a class="reference external" href="https://nose.readthedocs.org/en/latest/">nose</a> == 1.3.3</li>
-<li><a class="reference external" href="http://matplotlib.org/basemap/">Basemap</a> == 1.0.2</li>
+<li><a class="reference external" href="http://matplotlib.org/basemap/">Basemap</a> &gt;= 1.0.2</li>
 <li><a class="reference external" href="https://pypi.python.org/pypi/GDAL/">GDAL</a> == 1.11.0</li>
 <li><a class="reference external" href="http://www.riverbankcomputing.com/software/pyqt/download">PyQt4</a>
 == 4.9.6</li>
@@ -908,17 +920,54 @@ use waterapputils using many of the example sample datasets.</p>
 convenient to install one of the following scientific Python
 distributions which will come bundled with most, if not all, of the
 dependencies:</p>
+<ul>
+<li><p class="first"><a class="reference external" href="https://code.google.com/p/pythonxy/">pythonxy</a></p>
 <ul class="simple">
-<li><a class="reference external" href="https://code.google.com/p/pythonxy/">pythonxy</a></li>
-<li><a class="reference external" href="https://store.continuum.io/cshop/anaconda/">Anaconda</a></li>
-<li><a class="reference external" href="https://www.enthought.com/">Enthought</a></li>
+<li>need to install <em>Basemap</em> which can be downloaded from the
+<a class="reference external" href="https://code.google.com/p/pythonxy/wiki/AdditionalPlugins">additional plugins page on the PythonXY
+website</a>.</li>
 </ul>
-<p>The PythonXY 2.7.6.1 version (which includes all the requirements listed above) and the Basemap 1.0.2 plugin can be downloaded from the following ftp site: <a class="reference external" href="ftp://ftpext.usgs.gov/pub/er/ky/louisville/jglant/waterapputils/waterapputils-pythonxy2.7.6.1-downloads.zip">ftp://ftpext.usgs.gov/pub/er/ky/louisville/jglant/waterapputils/waterapputils-pythonxy2.7.6.1-downloads.zip</a></p>
+</li>
+<li><p class="first"><a class="reference external" href="https://store.continuum.io/cshop/anaconda/">Anaconda</a></p>
+<ul class="simple">
+<li>need to install <em>GDAL (1.11.1)</em> and <em>Basemap</em> which can be
+installed using
+<a class="reference external" href="http://conda.pydata.org/docs/intro.html">conda</a> which comes
+with from
+<a class="reference external" href="https://store.continuum.io/cshop/anaconda/">Anaconda</a>.</li>
+</ul>
+<div class="code sh highlight-python"><div class="highlight"><pre>$ conda install Basemap
+</pre></div>
+</div>
+<div class="code sh highlight-python"><div class="highlight"><pre>$ conda install GDAL=1.11.1
+</pre></div>
+</div>
+</li>
+<li><p class="first"><a class="reference external" href="https://www.enthought.com/">Enthought</a></p>
+</li>
+</ul>
+<p>The PythonXY 2.7.6.1 version (which includes all the requirements listed
+above) and the Basemap 1.0.2 plugin can be downloaded from the following
+ftp site:
+<a class="reference external" href="ftp://ftpext.usgs.gov/pub/er/ky/louisville/jglant/waterapputils/waterapputils-pythonxy2.7.6.1-downloads.zip">ftp://ftpext.usgs.gov/pub/er/ky/louisville/jglant/waterapputils/waterapputils-pythonxy2.7.6.1-downloads.zip</a></p>
 </div>
 <hr class="docutils" />
 <div class="section" id="disclaimer-and-notice">
 <h2>Disclaimer and Notice<a class="headerlink" href="#disclaimer-and-notice" title="Permalink to this headline">¶</a></h2>
-<p>This software has been approved for release by the U.S. Geological Survey (USGS). Although the software has been subjected to rigorous review, the USGS reserves the right to update the software as needed pursuant to further analysis and review. No warranty, expressed or implied, is made by the USGS or the U.S. Government as to the functionality of the software and related material nor shall the fact of release constitute any such warranty. Furthermore, the software is released on condition that neither the USGS nor the U.S. Government shall be held liable for any damages resulting from its authorized or unauthorized use. Please refer to the USGS Software User Rights Notice (LICENSE.txt or <a class="reference external" href="http://water.usgs.gov/software/help/notice/">http://water.usgs.gov/software/help/notice/</a>) for complete use, copyright, and distribution information. Users who find errors are requested to report them to the USGS. Any use of trade, firm, or product names is for descriptive purposes only and does not imply
+<p>This software has been approved for release by the U.S. Geological
+Survey (USGS). Although the software has been subjected to rigorous
+review, the USGS reserves the right to update the software as needed
+pursuant to further analysis and review. No warranty, expressed or
+implied, is made by the USGS or the U.S. Government as to the
+functionality of the software and related material nor shall the fact of
+release constitute any such warranty. Furthermore, the software is
+released on condition that neither the USGS nor the U.S. Government
+shall be held liable for any damages resulting from its authorized or
+unauthorized use. Please refer to the USGS Software User Rights Notice
+(LICENSE.txt or <a class="reference external" href="http://water.usgs.gov/software/help/notice/">http://water.usgs.gov/software/help/notice/</a>) for
+complete use, copyright, and distribution information. Users who find
+errors are requested to report them to the USGS. Any use of trade, firm,
+or product names is for descriptive purposes only and does not imply
 endorsement by the U.S. Government.</p>
 </div>
 <hr class="docutils" />
@@ -936,7 +985,7 @@ endorsement by the U.S. Government.</p>
 
 
       </div>
-      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      <div class="bottomnav">
       
         <p>
         «&#160;&#160;<a href="index.html">Welcome to waterapputils&#8217;s documentation!</a>
@@ -948,8 +997,8 @@ endorsement by the U.S. Government.</p>
 
       </div>
 
-    <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    <div class="footer">
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

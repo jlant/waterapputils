@@ -90,7 +90,7 @@ Some sample highlights of **waterapputils** include:
 
 A sample image of processing and analyzing WATER output files the GUI:
 
-.. figure:: docs/_static/gui-watertxt.png
+.. figure:: _static/gui-watertxt.png
    :alt: Process and analyze WATER output files
 
    Process and analyze WATER output files
@@ -814,11 +814,9 @@ Documentation of the code, guides detailing the processes involved in
 applying water use and the general circulation model deltas, additional
 information about *waterapputils*, and a gallery of output images can be
 found
-`here <http://ky.water.usgs.gov/usgs/projects/jlant_program_code/waterapputils/html/index.html>`__
-which is located on the `USGS Kentucky Water Science Center's Internal
-Website <http://ky.water.usgs.gov/usgs/projects/science_mgt.html>`__.
+`here. <http://jlant-usgs.github.io/waterapputils/docs/html/index.html>`__.
 
-For non-USGS users, the documentation pages can be viewed by navigating
+Additionally, the documentation pages can be viewed by navigating
 to the ``docs/_build/html`` directory and opening the ``index.html``
 file in a web browser (Chrome, Firefox, IE, etc.)
 
@@ -832,11 +830,13 @@ use waterapputils using many of the example sample datasets.
 
 The following are the tutorial topics covered:
 
-1. General Overview
+1. General Overview (48 minutes) - a general overview and description of waterapputils
 
-2. Command Line Interface
+2. Command Line Interface (73 minutes) - a detailed walk through the use of the waterapputils 
+command line interface with examples.
 
-3. Graphical User Interface
+3. Graphical User Interface (46 minutes) - a detailed walk through the use of the waterapputils 
+graphical user interface with examples.
 
 Download the waterapputils video tutorials from:
 
@@ -942,5 +942,5 @@ Author
 | Office: 502-493-1949 Fax: 502-493-1909
 | jlant@usgs.gov \| www.usgs.gov
 
-.. |alt text| image:: docs/_static/usgs-logo.png
+.. |alt text| image:: _static/usgs-logo.png
    :target: http://www.usgs.gov/
