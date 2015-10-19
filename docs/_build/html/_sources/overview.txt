@@ -830,13 +830,13 @@ use waterapputils using many of the example sample datasets.
 
 The following are the tutorial topics covered:
 
-1. General Overview (48 minutes) - a general overview and description of waterapputils
+1. General Overview (48 minutes) - a general overview and description of waterapputils.
 
 2. Command Line Interface (73 minutes) - a detailed walk through the use of the waterapputils 
-command line interface with examples.
+command line interface with examples.  
 
 3. Graphical User Interface (46 minutes) - a detailed walk through the use of the waterapputils 
-graphical user interface with examples.
+graphical user interface with examples.  
 
 Download the waterapputils video tutorials from:
 

@@ -570,10 +570,9 @@ OK
 ## Documentation 
 
 Documentation of the code, guides detailing the processes involved in applying water use and the general circulation
-model deltas, additional information about *waterapputils*, and a gallery of output images can be found [here](http://ky.water.usgs.gov/usgs/projects/jlant_program_code/waterapputils/html/index.html) 
-which is located on the [USGS Kentucky Water Science Center's Internal Website](http://ky.water.usgs.gov/usgs/projects/science_mgt.html).  
+model deltas, additional information about *waterapputils*, and a gallery of output images can be found [here](http://jlant-usgs.github.io/waterapputils/docs/html/index.html).  
 
-For non-USGS users, the documentation pages can be viewed by navigating to the `docs/_build/html` directory and opening the `index.html` file in a web browser (Chrome, Firefox, IE, etc.)
+Additionally, the documentation pages can be viewed by navigating to the `docs/_build/html` directory and opening the `index.html` file in a web browser (Chrome, Firefox, IE, etc.)
 
 
 ***
@@ -584,11 +583,11 @@ A series of video tutorials were made that describe and detail how to use watera
 
 The following are the tutorial topics covered:
 
-1. General Overview
-
-2. Command Line Interface
-
-3. Graphical User Interface
+1. General Overview (48 minutes) - a general overview and description of waterapputils
+2. Command Line Interface (73 minutes) - a detailed walk through the use of the waterapputils 
+command line interface with examples.
+3. Graphical User Interface (46 minutes) - a detailed walk through the use of the waterapputils 
+graphical user interface with examples.
 
 Download the waterapputils video tutorials from:
 
