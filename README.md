@@ -49,7 +49,7 @@ based on the spatial intersection of the watershed(s) of interest with the water
 
 * Logs errors and tracebacks.
 
-* A multi-threaded graphical user interface (GUI) called [waterapputils_gui](https://github.com/jlant-usgs/waterapputils/blob/master/waterapputils/waterapputils_gui.py).
+* A multi-threaded graphical user interface (GUI) called [waterapputils_gui](https://github.com/jlant/waterapputils/blob/master/waterapputils/waterapputils_gui.py).
 
 A sample image of processing and analyzing WATER output files the GUI:
 
@@ -149,9 +149,9 @@ $ python waterapputils.py -applywateruse -simdir <path-to-simulations-directory>
 
 ***
 
-## Editing settings in [user_settings.py](https://github.com/jlant-usgs/waterapputils/blob/master/waterapputils/user_settings.py)
+## Editing settings in [user_settings.py](https://github.com/jlant/waterapputils/blob/master/waterapputils/user_settings.py)
 
-All the setting for running **waterapputils** are contained in [user_settings.py](https://github.com/jlant-usgs/waterapputils/blob/master/waterapputils/user_settings.py) file. A user can edit the settings 
+All the setting for running **waterapputils** are contained in [user_settings.py](https://github.com/jlant/waterapputils/blob/master/waterapputils/user_settings.py) file. A user can edit the settings 
 by editing the Python string variables.  Most variables are *path* variables to required data files and basin shapefile attribute variables. 
 A user will typically only edit the section called *WATER simulation information*.  This section contains information about a WATER simulation. 
 A WATER simulation can be either a *single* or a *batch* simulation.  Each simulation type has a few different outputs along with a different directory structure.
@@ -163,10 +163,10 @@ A WATER simulation can be either a *single* or a *batch* simulation.  Each simul
 
 ## Run Sample Datasets Shell Script
 
-## Run sample datasets with [run_sample_datasets.sh](https://github.com/jlant-usgs/waterapputils/blob/master/run_sample_datasets.sh)
+## Run sample datasets with [run_sample_datasets.sh](https://github.com/jlant/waterapputils/blob/master/run_sample_datasets.sh)
 
-The shell script [run_sample_datasets.sh](https://github.com/jlant-usgs/waterapputils/blob/master/run_sample_datasets.sh) is a shell script that can be used to run automated tests 
-and run many of the command line arguments using the [sample datasets](https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations).  
+The shell script [run_sample_datasets.sh](https://github.com/jlant/waterapputils/blob/master/run_sample_datasets.sh) is a shell script that can be used to run automated tests 
+and run many of the command line arguments using the [sample datasets](https://github.com/jlant/waterapputils/tree/master/data/sample-water-simulations).  
 
 ### Usage:
 
@@ -175,27 +175,27 @@ $ run_sample_datasets.sh [option]
 $ run_sample_datasets.sh [[[-txt] [-xml] [-wateruse] [-oasis] [-ecoflowstationid] [ecoflowdaxml] [-ecoflowdashp] [-gcmdelta] [-mapsim] [-all] [-tests] -makeclean] | [-h]]
 ```
 
-### Command line arguments for the shell script [run_sample_datasets.sh](https://github.com/jlant-usgs/waterapputils/blob/master/run_sample_datasets.sh):
+### Command line arguments for the shell script [run_sample_datasets.sh](https://github.com/jlant/waterapputils/blob/master/run_sample_datasets.sh):
 
 | Commands              | Description |                                                                              
 | --------              | ----------- |                                                                               
 |`-h`                   | show list of available commands |
-|`-txt`                 | run `-watertxt` and `-watertxtcmp` using the [sample WATER simulation output TEXT files](https://github.com/jlant-usgs/waterapputils/tree/master/data/watertxt-datafiles) |
-|`-xml`                 | run `-waterxml` and `-waterxmlcmp` using the [sample WATER simulation output XML files](https://github.com/jlant-usgs/waterapputils/tree/master/data/waterxml-datafiles) |
-|`-wateruse`            | run and apply [water use data](https://github.com/jlant-usgs/waterapputils/tree/master/data/wateruse-datafiles) to sample WATER simulations; [single and batch simulations](https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations) |
-|`-subwateruse`         | run and apply substitute water use data to sample WATER simulations; [single and batch simulations](https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations) |
-|`-gcmdelta`            | run and apply [general circulation model data](https://github.com/jlant-usgs/waterapputils/tree/master/data/deltas-gcm) to sample WATER simulations; [single and batch simulations](https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations) |
-|`-subgcmdelta`         | run and apply substitute water use data to sample WATER simulations; [single and batch simulations](https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations) |
-|`-oasis`               | create an oasis formated water use output file using the [sample water use applied WATER TEXT file](https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt) |
-|`-ecoflowstationid`    | create an ecoflow formated water use output file using the [sample water use applied WATER TEXT file](https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt) |
-|`-ecoflowdaxml`        | create an ecoflow formated drainage area output file using the [sample WATER XML file](https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-datafiles/WATERSimulation-basin0.xml) to calculate basin area |
-|`-ecoflowdashp`        | create an ecoflow formated drainage area output file using the [sample basin shapefiles](https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-datafiles/sample-datafiles/basin0.shp) |
-|`-mapsim`              | create maps for [single and batch simulations](https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations) | 
+|`-txt`                 | run `-watertxt` and `-watertxtcmp` using the [sample WATER simulation output TEXT files](https://github.com/jlant/waterapputils/tree/master/data/watertxt-datafiles) |
+|`-xml`                 | run `-waterxml` and `-waterxmlcmp` using the [sample WATER simulation output XML files](https://github.com/jlant/waterapputils/tree/master/data/waterxml-datafiles) |
+|`-wateruse`            | run and apply [water use data](https://github.com/jlant/waterapputils/tree/master/data/wateruse-datafiles) to sample WATER simulations; [single and batch simulations](https://github.com/jlant/waterapputils/tree/master/data/sample-water-simulations) |
+|`-subwateruse`         | run and apply substitute water use data to sample WATER simulations; [single and batch simulations](https://github.com/jlant/waterapputils/tree/master/data/sample-water-simulations) |
+|`-gcmdelta`            | run and apply [general circulation model data](https://github.com/jlant/waterapputils/tree/master/data/deltas-gcm) to sample WATER simulations; [single and batch simulations](https://github.com/jlant/waterapputils/tree/master/data/sample-water-simulations) |
+|`-subgcmdelta`         | run and apply substitute water use data to sample WATER simulations; [single and batch simulations](https://github.com/jlant/waterapputils/tree/master/data/sample-water-simulations) |
+|`-oasis`               | create an oasis formated water use output file using the [sample water use applied WATER TEXT file](https://github.com/jlant/waterapputils/tree/master/data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt) |
+|`-ecoflowstationid`    | create an ecoflow formated water use output file using the [sample water use applied WATER TEXT file](https://github.com/jlant/waterapputils/tree/master/data/sample-water-simulations/sample-datafiles/WATERUSE-WATER-basin0.txt) |
+|`-ecoflowdaxml`        | create an ecoflow formated drainage area output file using the [sample WATER XML file](https://github.com/jlant/waterapputils/tree/master/data/sample-water-simulations/sample-datafiles/WATERSimulation-basin0.xml) to calculate basin area |
+|`-ecoflowdashp`        | create an ecoflow formated drainage area output file using the [sample basin shapefiles](https://github.com/jlant/waterapputils/tree/master/data/sample-water-simulations/sample-datafiles/sample-datafiles/basin0.shp) |
+|`-mapsim`              | create maps for [single and batch simulations](https://github.com/jlant/waterapputils/tree/master/data/sample-water-simulations) | 
 |`-all`                 | run (mostly) all commands; `-tests`, `-txt`, `-xml`, `-wateruse`, `-gcmdelta`, `-oasis`, `-ecoflowstationid`, `-ecoflowdaxml`, `-ecoflowdashp`, `mapsim` |
 |`-tests`               | run units tests use nosetests |
-|`-makeclean`           | cleans/removes all output of running sample dataset in in the [sample-water-simulations directory](https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations) |
+|`-makeclean`           | cleans/removes all output of running sample dataset in in the [sample-water-simulations directory](https://github.com/jlant/waterapputils/tree/master/data/sample-water-simulations) |
 
-### Example - apply water use to [single and batch simulations](https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations):
+### Example - apply water use to [single and batch simulations](https://github.com/jlant/waterapputils/tree/master/data/sample-water-simulations):
 
 ```sh
 $ run_sample_datasets.sh -wateruse
@@ -203,10 +203,10 @@ $ run_sample_datasets.sh -wateruse
 
 ## Process Many Simulations Shell Script
 
-## Applying water use and gcm deltas to many WATER simulations using [run_simulations.sh](https://github.com/jlant-usgs/waterapputils/blob/master/run_simulations.sh)
+## Applying water use and gcm deltas to many WATER simulations using [run_simulations.sh](https://github.com/jlant/waterapputils/blob/master/run_simulations.sh)
 
-The shell script [run_simulations.sh](https://github.com/jlant-usgs/waterapputils/blob/master/run_simulations.sh) is a shell script that can be used to automate
-the processing of many WATER simulations. [run_simulations.sh](https://github.com/jlant-usgs/waterapputils/blob/master/run_simulations.sh) can be used to apply 
+The shell script [run_simulations.sh](https://github.com/jlant/waterapputils/blob/master/run_simulations.sh) is a shell script that can be used to automate
+the processing of many WATER simulations. [run_simulations.sh](https://github.com/jlant/waterapputils/blob/master/run_simulations.sh) can be used to apply 
 water use and general circulation model scenarios to multiple WATER simulations that are contained in the same directory.
 A user will provide a valid option along with the **path to the directory containing all the WATER simulations**
 that need to be processed.  This directory should contain all the same type of WATER simulations *single* or *batch*, but not both.
@@ -220,15 +220,15 @@ $ run_simulations.sh [option] <path-to-simulations-directory>
 $ run_simulations.sh [[[-applywateruse] [-applysubwateruse] [-applygcmdelta] [-applysubgcmdelta]] <path-to-simulations-directory> | [-h]]
 ```
 
-### Command line arguments for the shell script [run_simulations.sh](https://github.com/jlant-usgs/waterapputils/blob/master/run_simulations.sh):
+### Command line arguments for the shell script [run_simulations.sh](https://github.com/jlant/waterapputils/blob/master/run_simulations.sh):
 
 | Commands              | Description |                                                                              
 | --------              | ----------- |                                                                               
 |`-h`                   | show list of available commands |
-|`-applywateruse`       | run and apply [water use data](https://github.com/jlant-usgs/waterapputils/tree/master/data/wateruse-datafiles) to sample WATER simulations; [single and batch simulations](https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations) |
-|`-applysubwateruse`    | run and apply substitute water use data to sample WATER simulations; [single and batch simulations](https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations) |
-|`-applygcmdelta`       | run and apply [general circulation model data](https://github.com/jlant-usgs/waterapputils/tree/master/data/deltas-gcm) to sample WATER simulations; [single and batch simulations](https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations) |
-|`-applysubgcmdelta`    | run and apply substitute water use data to sample WATER simulations; [single and batch simulations](https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations) |
+|`-applywateruse`       | run and apply [water use data](https://github.com/jlant/waterapputils/tree/master/data/wateruse-datafiles) to sample WATER simulations; [single and batch simulations](https://github.com/jlant/waterapputils/tree/master/data/sample-water-simulations) |
+|`-applysubwateruse`    | run and apply substitute water use data to sample WATER simulations; [single and batch simulations](https://github.com/jlant/waterapputils/tree/master/data/sample-water-simulations) |
+|`-applygcmdelta`       | run and apply [general circulation model data](https://github.com/jlant/waterapputils/tree/master/data/deltas-gcm) to sample WATER simulations; [single and batch simulations](https://github.com/jlant/waterapputils/tree/master/data/sample-water-simulations) |
+|`-applysubgcmdelta`    | run and apply substitute water use data to sample WATER simulations; [single and batch simulations](https://github.com/jlant/waterapputils/tree/master/data/sample-water-simulations) |
 
 ### Example - apply water use to many WATER simulations :
 
@@ -285,8 +285,8 @@ Allows a user to apply water use data to WATER simulation output text files (WAT
 
 #### Type of simulation(s) - a user selects the type of WATER simulation.
 
-- *Batch* - more than one pre-delineated basin.  For an example, please see the [Sample Batch Simulation](https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-batch-simulation).
-- *Single* - one delineated basin.  For an example, please see the [Sample Single Simulation](https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-single-simulation).
+- *Batch* - more than one pre-delineated basin.  For an example, please see the [Sample Batch Simulation](https://github.com/jlant/waterapputils/tree/master/data/sample-water-simulations/sample-batch-simulation).
+- *Single* - one delineated basin.  For an example, please see the [Sample Single Simulation](https://github.com/jlant/waterapputils/tree/master/data/sample-water-simulations/sample-single-simulation).
 
 The following are the directory structures created by WATER for batch and single simulations:
 
@@ -396,8 +396,8 @@ Allows a user to apply general circulation model (GCM) deltas to WATER simulatio
 
 #### Type of simulation(s) - a user selects the type of WATER simulation.
 
-- *Batch* - more than one basin.  For an example, please see the [Sample Batch Simulation](https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-batch-simulation).
-- *Single* - one basin.  For an example, please see the [Sample Single Simulation](https://github.com/jlant-usgs/waterapputils/tree/master/data/sample-water-simulations/sample-single-simulation).
+- *Batch* - more than one basin.  For an example, please see the [Sample Batch Simulation](https://github.com/jlant/waterapputils/tree/master/data/sample-water-simulations/sample-batch-simulation).
+- *Single* - one basin.  For an example, please see the [Sample Single Simulation](https://github.com/jlant/waterapputils/tree/master/data/sample-water-simulations/sample-single-simulation).
 
 The following are the directory structures created by WATER for batch and single simulations:
 
@@ -570,7 +570,7 @@ OK
 ## Documentation 
 
 Documentation of the code, guides detailing the processes involved in applying water use and the general circulation
-model deltas, additional information about *waterapputils*, and a gallery of output images can be found [here](http://jlant-usgs.github.io/waterapputils/docs/html/index.html).  
+model deltas, additional information about *waterapputils*, and a gallery of output images can be found [here](http://jlant.github.io/waterapputils/docs/html/index.html).  
 
 Additionally, the documentation pages can be viewed by navigating to the `docs/_build/html` directory and opening the `index.html` file in a web browser (Chrome, Firefox, IE, etc.)
 
